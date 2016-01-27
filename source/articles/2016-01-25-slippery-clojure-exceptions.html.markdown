@@ -2,6 +2,7 @@
 title: Slippery exceptions in clojure
 date: 2016-01-25
 tags: Getting Started
+author: phillmv
 layout: post
 ---
 

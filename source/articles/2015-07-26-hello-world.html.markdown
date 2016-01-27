@@ -1,6 +1,7 @@
 ---
 title: Hello World
 date: 2015-07-26
+author: team
 layout: post
 ---
 
