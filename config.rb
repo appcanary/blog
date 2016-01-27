@@ -4,12 +4,12 @@
 
 config[:casper] = {
   blog: {
-    url: 'http://www.example.com',
-    name: 'Middleman',
-    description: 'Makes developing websites simple.',
+    url: 'http://blog.appcanary.com',
+    name: 'Appcanary',
+    description: '<a href="https://appcanary.com">Appcanary</a> makes sure you never run vulnerable software in your apps.',
     date_format: '%d %B %Y',
-    navigation: true,
-    logo: nil # Optional
+    navigation: false,
+    logo: 'appcanary.png' # Optional
   },
   author: {
     name: 'Middleman',
@@ -20,7 +20,9 @@ config[:casper] = {
     twitter: nil # Optional
   },
   navigation: {
-    "Home" => "/"
+    "Home" => "/",
+    "Archive" => "archive.html",
+    "Github" => "https://github.com/appcanary"
   }
 }
 
@@ -68,6 +70,8 @@ tags.each do |tag, articles|
     locals: { tag: tag, articles: articles[0..5] }, layout: false
 end
 
+proxy "/rss", "/feed.xml"
+
 proxy "/author/#{config.casper[:author][:name].parameterize}.html",
   '/author.html', ignore: true
 
@@ -85,7 +89,7 @@ activate :blog do |blog|
   # This will add a prefix to all links, template references and source paths
   # blog.prefix = "blog"
 
-  # blog.permalink = "{year}/{month}/{day}/{title}.html"
+  blog.permalink = "{year}/{title}.html"
   # Matcher for blog source files
   blog.sources = "articles/{year}-{month}-{day}-{title}.html"
   blog.taglink = "tag/{tag}.html"
