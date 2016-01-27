@@ -107,7 +107,7 @@ activate :blog do |blog|
 end
 
 # Pretty URLs - https://middlemanapp.com/advanced/pretty_urls/
-activate :directory_indexes
+# activate :directory_indexes
 
 # Middleman-Syntax - https://github.com/middleman/middleman-syntax
 set :haml, { ugly: true }

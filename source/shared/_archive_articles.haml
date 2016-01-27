@@ -4,9 +4,11 @@
 - page_articles.each do |article|
   %article.post
     %header.post-header
-      %h1.post-title= link_to article.title, article
-    %section.post-content
-      = article.body
+      %h2.post-title= link_to article.title, article
+    %section.post-excerpt
+      %p
+        = summary(article)
+        = link_to '&raquo;', article, class: 'read-more'
     %footer.post-meta
       - if gravatar?
         %img.author-thumb{src: gravatar(24), alt: blog_author.name, nopin: 'nopin'}
