@@ -1,0 +1,10 @@
+//= require vendor/casper
+//= require _syntax
+
+// Overwrite some styles from casper.css
+pre.highlight {
+  word-wrap: normal;
+  code {
+    white-space: pre;
+  }
+}
