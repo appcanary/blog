@@ -26,16 +26,17 @@
           %figure.author-image
             %a.img{href: author_path, style: "background-image: url(#{gravatar})"}
               %span.hidden #{blog_author.name}'s Picture
+        
         %section.author
           %h4
-            %a{href: author_path}= blog_author.name
+            %a{href: author_path(current_article)}= blog_author.name
 
           %p
           - if blog_author.bio.present?
             = blog_author.bio
           - else
             Read
-            %a{href: author_path} more posts
+            %a{href: author_path(current_article)} more posts
             by this author.
 
           - if blog_author.location.present? || blog_author.website.present?

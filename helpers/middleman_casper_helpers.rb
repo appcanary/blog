@@ -43,8 +43,9 @@ module MiddlemanCasperHelpers
     truncate_words(body, length: words, omission: '')
   end
 
-  def blog_author
-    OpenStruct.new(config.casper[:author])
+  def blog_author(article = current_article)
+    author = article.metadata[:page][:author]
+    OpenStruct.new(config.casper[:authors][author])
   end
 
   def blog_settings
@@ -86,11 +87,13 @@ module MiddlemanCasperHelpers
   end
 
   def gravatar(size = 68)
-    md5 = Digest::MD5.hexdigest(blog_author.gravatar_email.downcase)
-    "https://www.gravatar.com/avatar/#{md5}?size=#{size}"
+    # md5 = Digest::MD5.hexdigest(blog_author.gravatar_email.downcase)
+    # "https://www.gravatar.com/avatar/#{md5}?size=#{size}"
+    false
   end
   def gravatar?
-    blog_author.gravatar_email.present?
+    # blog_author.gravatar_email.present?
+    false
   end
 
   def twitter_url
@@ -114,8 +117,8 @@ module MiddlemanCasperHelpers
   def home_path
     "#{blog.options.prefix.to_s}/"
   end
-  def author_path
-    "#{blog.options.prefix.to_s}/author/#{blog_author.name.parameterize}/"
+  def author_path(article)
+    "#{blog.options.prefix.to_s}/author/#{blog_author(article).name.parameterize}.html"
   end
 
   def og_type

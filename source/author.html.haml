@@ -2,34 +2,33 @@
 pageable: true
 per_page: 6
 ---
-
-%header.main-header.author-head{cover}
-  %nav.main-nav.overlay.clearfix
-    - if blog_settings.logo.present?
-      %a.blog-logo{href: home_path}
-        = image_tag blog_settings.logo, alt: blog_settings.name
-    - if blog_settings.navigation
-      %a.menu-button.icon-menu{href: '#'}
-        %span.word Menu
+= partial "shared/main_header"
+-# %header.main-header.author-head{cover}
+-#   %nav.main-nav.overlay.clearfix
+-#     - if blog_settings.logo.present?
+-#       %a.blog-logo{href: home_path}
+-#         = image_tag blog_settings.logo, alt: blog_settings.name
+-#     - if blog_settings.navigation
+-#       %a.menu-button.icon-menu{href: '#'}
+-#         %span.word Menu
 
 %section.author-profile.inner
-  - if gravatar?
+  -# if gravatar?
     %figure.author-image
       .img{style: "background-image: url(#{gravatar(114)})"}
-        %span.hidden #{blog_author.name}'s Picture
-  %h1.author-title= blog_author.name
-  - if blog_author.bio.present?
-    %h2.author-bio= blog_author.bio
+        %span.hidden #{blog_author(current_article).name}'s Picture
+  %h1.author-title= blog_author(current_article).name
+  - if blog_author(current_article).bio.present?
+    %h2.author-bio= blog_author(current_article).bio
   .author-meta
-    - if blog_author.location.present?
-      %span.author-location.icon-location= blog_author.location
-    - if blog_author.website.present?
+    - if blog_author(current_article).location.present?
+      %span.author-location.icon-location= blog_author(current_article).location
+    - if blog_author(current_article).website.present?
       %span.author-link.icon-link
-        %a{href: blog_author.website}= blog_author.website
+        %a{href: blog_author(current_article).website}= blog_author(current_article).website
     %span.author-stats
       %i.icon-stats
-      = pluralize(blog.articles.count, 'post')
-
+      = pluralize(blog.articles.select { |a| a.metadata[:page][:author] == current_article.metadata[:page][:author] }.count, 'post')
 %main#content.content{role: :main}
   = partial('shared/page_articles',
-            locals: { page_articles: page_articles, paginate: paginate })
+            locals: { page_articles: page_articles.select { |a| a.metadata[:page][:author] == current_article.metadata[:page][:author] }, paginate: paginate })

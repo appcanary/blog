@@ -11,13 +11,31 @@ config[:casper] = {
     navigation: false,
     logo: 'appcanary.png' # Optional
   },
-  author: {
-    name: 'Middleman',
-    bio: nil, # Optional
-    location: nil, # Optional
-    website: nil, # Optional
-    gravatar_email: nil, # Optional
-    twitter: nil # Optional
+  authors: {
+    "phillmv" => {
+      name: 'Phillip Mendonça-Vieira',
+      bio: nil, # Optional
+      location: nil, # Optional
+      website: nil, # Optional
+      gravatar_email: nil, # Optional
+      twitter: "phillmv" # Optional
+    },
+    "mveytsman" => {
+      name: "Max Veytsman",
+      bio: nil,
+      location: nil,
+      website: nil,
+      gravatar_email: nil,
+      twitter: "mveytsman"
+    },
+    "team" => {
+      name: "Team Appcanary",
+      bio: nil,
+      location: nil,
+      website: nil,
+      gravatar_email: nil,
+      twitter: nil
+    }
   },
   navigation: {
     "Home" => "/",
@@ -72,8 +90,10 @@ end
 
 proxy "/rss", "/feed.xml"
 
-proxy "/author/#{config.casper[:author][:name].parameterize}.html",
-  '/author.html', ignore: true
+config.casper[:authors].each do |k, author|
+  proxy "/author/#{author[:name].parameterize}.html",
+    '/author.html', ignore: true, :locals => { :current_article => OpenStruct.new({:metadata => {:page => { :author => k }}}) }
+end
 
 # General configuration
 # Reload the browser automatically whenever files change

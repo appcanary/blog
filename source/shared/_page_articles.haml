@@ -9,8 +9,8 @@
       = article.body
     %footer.post-meta
       - if gravatar?
-        %img.author-thumb{src: gravatar(24), alt: blog_author.name, nopin: 'nopin'}
-      %a{href: author_path}= blog_author.name
+        %img.author-thumb{src: gravatar(24), alt: blog_author(article).name, nopin: 'nopin'}
+      %a{href: author_path(article)}= blog_author(article).name
       - if tags?(article)
         on #{tags(article)}
       %time.post-date{datetime: article.date.strftime('%Y-%m-%d')}
