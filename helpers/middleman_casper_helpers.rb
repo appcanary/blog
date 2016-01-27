@@ -29,7 +29,7 @@ module MiddlemanCasperHelpers
     elsif current_resource.metadata[:locals]['page_number'].to_i > 1
       'archive-template'
     else
-      'home-template'
+      'post-template home-post-template'
     end
   end
 
