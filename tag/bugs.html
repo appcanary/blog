@@ -1,22 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Appcanary: Slippery exceptions in clojure</title>
-<meta content='Recently I spent a couple of hours banging my head against code that looks like this: (defn parse-file [contents] (filter identity (code-that th...' name='description'>
+<title>Appcanary: Bugs</title>
+<meta content='&lt;a href="https://appcanary.com"&gt;Appcanary&lt;/a&gt; makes sure you never run vulnerable software in your apps.' name='description'>
 <meta charset='utf-8'>
 <meta content='width=device-width, initial-scale=1.0' name='viewport'>
 <meta content='IE=edge' http-equiv='X-UA-Compatible'>
 <meta content='True' name='HandheldFriendly'>
 <meta content='Appcanary' property='og:site_name'>
-<meta content='article' property='og:type'>
-<meta content='Slippery exceptions in clojure' property='og:title'>
-<meta content='Recently I spent a couple of hours banging my head against code that looks like this: (defn parse-file [contents] (filter identity (code-that th...' property='og:description'>
-<meta content='http://blog.appcanary.com/2016/slippery-clojure-exceptions.html' property='og:url'>
-<meta content='2016-01-25' property='article:published_time'>
+<meta content='website' property='og:type'>
+<meta content='Bugs' property='og:title'>
+<meta content='&lt;a href="https://appcanary.com"&gt;Appcanary&lt;/a&gt; makes sure you never run vulnerable software in your apps.' property='og:description'>
+<meta content='http://blog.appcanary.com/tag/bugs.html' property='og:url'>
 <meta content='summary' name='twitter:card'>
-<meta content='Slippery exceptions in clojure' name='twitter:title'>
-<meta content='Recently I spent a couple of hours banging my head against code that looks like this: (defn parse-file [contents] (filter identity (code-that th...' name='twitter:description'>
-<meta content='http://blog.appcanary.com/2016/slippery-clojure-exceptions.html' name='twitter:url'>
+<meta content='Bugs' name='twitter:title'>
+<meta content='&lt;a href="https://appcanary.com"&gt;Appcanary&lt;/a&gt; makes sure you never run vulnerable software in your apps.' name='twitter:description'>
+<meta content='http://blog.appcanary.com/tag/bugs.html' name='twitter:url'>
 <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="/feed.xml" />
 <link href="/images/favicon.ico" rel="icon" type="image/ico" />
 <link href="../stylesheets/application.css" rel="stylesheet" />
@@ -24,7 +23,7 @@
 <script>try{Typekit.load({ async: false });}catch(e){}</script>
 
 </head>
-<body class='post-template nav-closed'>
+<body class='post-template home-post-template nav-closed'>
 <div class='topbar'></div>
 <div class='nav'>
 <h3 class='nav-title'>Menu</h3>
@@ -42,50 +41,37 @@
 <a href='https://github.com/appcanary'>Github</a>
 </li>
 </ul>
-<a class='subscribe-button icon-feed' href='/feed.xml'>Subscribe</a>
+<a class='subscribe-button icon-feed' href='/tag/bugs.htmlfeed.xml'>Subscribe</a>
 </div>
 <span class='nav-cover'></span>
 
 <div class='site-wrapper'>
-<header class='main-header no-cover'>
+<header class='main-header no-cover tag-head'>
 <nav class='main-nav overlay clearfix'>
+<a class='blog-logo' href='/'>
+<img alt="Appcanary" src="../images/appcanary.png" />
+</a>
 </nav>
 <div class='vertical'>
 <div class='main-header-content inner'>
-<a class='appcanary-logo' href='/'>
-<img alt="Appcanary" src="../images/appcanary.png" />
-</a>
-<h2 class='page-description'><a href="https://appcanary.com">Appcanary</a> makes sure you never run vulnerable software in your apps.</h2>
-<div class='more-icons'>
-<a alt='Github' href='https://github.com/appcanary.com' title='Github'>
-<i class='fa fa-github-square'></i>
-</a>
-<a alt='Archive' href='/archive.html' title='Archive'>
-<i class='fa fa-archive'></i>
-</a>
-<a alt='Feed' href='/feed.xml' title='Feed'>
-<i class='fa fa-rss-square'></i>
-</a>
+<h1 class='page-title'>Bugs</h1>
+<h2 class='page-description'>A 1-post collection</h2>
 </div>
 </div>
-</div>
-<a class='scroll-down icon-arrow-left' data-offset='-45' href='#content'>
-<span class='hidden'>Scroll Down</span>
-</a>
 </header>
+<main class='content' id='content' role='main'>
+<div class='extra-pagination inner'>
+<nav class='pagination' role='pagination'>
+<span class='page-number'>Page 1 of 1</span>
+</nav>
 
-<main class='content' role='main'>
+</div>
 <article class='post'>
 <header class='post-header'>
-<h1 class='post-title'>Slippery exceptions in clojure</h1>
-<section class='post-meta'>
-<time class='post-date' datetime='2016-01-25'>
-25 January 2016
-</time>
-on <a href='/tag/clojure.html'>Clojure</a>, <a href='/tag/programming.html'>Programming</a>, <a href='/tag/bugs.html'>Bugs</a>
-</section>
+<h1 class='post-title'><a href="../2016/slippery-clojure-exceptions.html">Slippery exceptions in clojure</a></h1>
 </header>
-<section class='post-content'><p>Recently I spent a couple of hours banging my head against code that looks like this:</p>
+<section class='post-content'>
+<p>Recently I spent a couple of hours banging my head against code that looks like this:</p>
 <pre class="highlight clojure"><code><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">parse-file</span><span class="w">
   </span><span class="p">[</span><span class="n">contents</span><span class="p">]</span><span class="w">
   </span><span class="p">(</span><span class="nb">filter</span><span class="w"> </span><span class="nb">identity</span><span class="w">
@@ -157,40 +143,22 @@ on <a href='/tag/clojure.html'>Clojure</a>, <a href='/tag/programming.html'>Prog
 </span></code></pre>
 
 <p>And now, things behave as intended.</p>
+
 </section>
-<footer class='post-footer'>
-<section class='author'>
-<h4>
+<footer class='post-meta'>
 <a href='/author/phillip-mendonca-vieira.html'>Phillip Mendonça-Vieira</a>
-</h4>
-<p></p>
-Read
-<a href='/author/phillip-mendonca-vieira.html'>more posts</a>
-by this author.
-</section>
-<section class='share'>
-<h4>Share this post</h4>
-<a class='icon-twitter' href='https://twitter.com/intent/tweet?text=Slippery exceptions in clojure&amp;amp;url=http://blog.appcanary.com/2016/slippery-clojure-exceptions.html' onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-<span class='hidden'>Twitter</span>
-</a>
-<a class='icon-facebook' href='https://www.facebook.com/sharer/sharer.php?u=http://blog.appcanary.com/2016/slippery-clojure-exceptions.html' onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-<span class='hidden'>Facebook</span>
-</a>
-<a class='icon-google-plus' href='https://plus.google.com/share?url=http://blog.appcanary.com/2016/slippery-clojure-exceptions.html' onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-<span class='hidden'>Google+</span>
-</a>
-</section>
+on <a href='/tag/clojure.html'>Clojure</a>, <a href='/tag/programming.html'>Programming</a>, <a href='/tag/bugs.html'>Bugs</a>
+<time class='post-date' datetime='2016-01-25'>
+25 January 2016
+</time>
 </footer>
 </article>
+<nav class='pagination' role='pagination'>
+<span class='page-number'>Page 1 of 1</span>
+</nav>
+
+
 </main>
-<aside class='read-next'>
-<a class='no-cover read-next-story' href='/2015/hello-appcanary.html'>
-<section class='post'>
-<h2>Hello Appcanary</h2>
-<p>Dear friends,&nbsp; tl;dr We launched Appcanary, we’re shutting down Gemcanary Dec 31st 2015, we have great plans for the&hellip;</p>
-</section>
-</a>
-</aside>
 
 <footer class='site-footer clearfix'>
 <section class='copyright'>
