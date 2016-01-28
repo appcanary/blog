@@ -25,7 +25,7 @@ end
 task :deploy => [:not_dirty, :build] do
   cd PROJECT_ROOT do
     head = `git log --pretty="%h" -n1`.strip
-    message = ["Site updated to #{head}", suffix].compact.join("\n\n")
+    message = ["Site updated to #{head}"].compact.join("\n\n")
 
     cd BUILD_DIR do
       sh 'git add --all'
