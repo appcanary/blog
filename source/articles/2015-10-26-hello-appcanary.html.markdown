@@ -9,7 +9,7 @@ Dear friends,&nbsp;
 
 **tl;dr** We launched [Appcanary](https://appcanary.com), we’re shutting down Gemcanary Dec 31st 2015, we have great plans for the future, we love you.
 
-![image](http://41.media.tumblr.com/10949a6314b28888fb74bdee4064d759/tumblr_inline_nwue6g2uO51tz854s_1280.png)
+![image](gemcanary_comic.jpg)
 
 We’ve been busy. We got to spend the summer in sunny California attending Y Combinator. We learned a lot, it was well worth it.
 
@@ -21,8 +21,9 @@ We also released [isitvulnerable.com](https://isitvulnerable.com). It’s a free
 
 Once, we even managed to go to the beach.
 
+
 [](https://instagram.com/p/5Y8-dqSz3u)
-![image](http://41.media.tumblr.com/aa06537e1a82851a33ab4c35577154a6/tumblr_inline_nww87s7HXd1tz854s_500.png)
+![image](big_sur.jpg)
 
 In a nutshell, we want to change the way software and operation engineers engage with security. Right now people largely don’t, or have to deal with lots of snakeoil. It’s hard to know what to think. We think we can drastically improve how we keep our systems safe. We have lots of things to share with you soon!
 

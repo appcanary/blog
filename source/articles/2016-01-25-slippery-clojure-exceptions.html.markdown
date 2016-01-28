@@ -8,7 +8,7 @@ layout: post
 
 Recently I spent a couple of hours banging my head against code that looks like this:
 
-```
+```clojure
 (defn parse-file
   [contents]
   (filter identity
@@ -30,8 +30,6 @@ Recently I spent a couple of hours banging my head against code that looks like 
         … etc
 ```
 
-
-<br>
 And much to my surprise, I kept getting the kind of exception `parse-file` generates deep within the `check` function, right up against `(not-empty artifacts)`.
 
 I've grown somewhat used to Clojure exceptions being unhelpful, but this was taking the cake. Coming from Ruby and pretty much every other language, this brushed up rudely against my expectations. 
@@ -53,24 +51,25 @@ Well. I would expect a `catch java.lang.Exception` to _catch every exception_. T
 "Right, well, hear me out. What if you had the following Ruby?"
 
 
+```ruby
+def lazy_parse(filename)
+  File.open(filename).each_line.each_with_index.lazy.map do |line, i|
+    raise "You can't catch me, I'm the exception man" if i == 5
+    line
+  end
+end
 
-    def lazy_parse(filename)
-      File.open(filename).each_line.each_with_index.lazy.map do |line, i|
-        raise "You can't catch me, I'm the exception man" if i == 5
-        line
-      end
-    end
+def consume_file
+  begin
+    lazy_parse("Gemfile.lock")
+  rescue
+    puts "Woops, an exception. Good thing we caught it."
+  end
+end
 
-    def consume_file
-      begin
-        lazy_parse("Gemfile.lock")
-      rescue
-        puts "Woops, an exception. Good thing we caught it."
-      end
-    end
-
-    file = consume_file
-    puts file.first(10)
+file = consume_file
+puts file.first(10)
+```
     
     
 
@@ -80,11 +79,12 @@ That shut me up good. And in case you were wondering, the stack trace is also ga
 
 It's hard to reason about this. I want to write wrapper functions that make my code safe to consume downstream. This isn't feasible for any functions iterating over [`(/ 1.0 0.0)`](http://rosettacode.org/wiki/Infinity#Clojure), but fortunately for us we need to fit this file into memory anyways. In Ruby we'd have to force iterate over the whole sequence, but Clojure makes this easy with [`doall`](https://clojuredocs.org/clojure.core/doall):
 
-
-    (defn parse-file
-      [contents]
-      (doall (filter identity
-                     (code-that throws-an-exception))))
+```clojure
+(defn parse-file
+  [contents]
+  (doall (filter identity
+                 (code-that throws-an-exception))))
+```
 
 
 And now, things behave as intended.
