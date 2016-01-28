@@ -112,6 +112,7 @@ GEM
       rack
     rack-test (0.6.3)
       rack (>= 1.0)
+    rake (10.5.0)
     rb-fsevent (0.9.7)
     rb-inotify (0.9.5)
       ffi (>= 0.5.0)
@@ -144,6 +145,7 @@ DEPENDENCIES
   middleman-syntax (~> 2.1.0)
   nokogiri (~> 1.6.7.1)
   pry
+  rake
   redcarpet (~> 3.3.4)
   tzinfo-data
   wdm (~> 0.1.0)
