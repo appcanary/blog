@@ -80,33 +80,6 @@
 </div>
 <article class='post'>
 <header class='post-header'>
-<h2 class='post-title'><a href="2016/slippery-clojure-exceptions.html">Slippery exceptions in clojure</a></h2>
-</header>
-<section class='post-excerpt'>
-<p>
-Recently I spent a couple of hours banging my head against code that looks like this:
-(defn parse-file
-  [contents]
-  (filter identity
-          (code-that throws-an-exception)))
-
-(defn consume-manifest
-  [contents kind]
-  (try+
-    (app/parse-file kind
-<a class="read-more" href="2016/slippery-clojure-exceptions.html">&raquo;</a>
-</p>
-</section>
-<footer class='post-meta'>
-<a href='/author/phillip-mendonca-vieira.html'>Phillip Mendonça-Vieira</a>
-on <a href='/tag/clojure.html'>Clojure</a>, <a href='/tag/programming.html'>Programming</a>, <a href='/tag/bugs.html'>Bugs</a>
-<time class='post-date' datetime='2016-01-25'>
-25 January 2016
-</time>
-</footer>
-</article>
-<article class='post'>
-<header class='post-header'>
 <h2 class='post-title'><a href="2015/hello-appcanary.html">Hello Appcanary</a></h2>
 </header>
 <section class='post-excerpt'>
