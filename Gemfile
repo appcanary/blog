@@ -13,6 +13,7 @@ gem 'middleman-livereload'
 gem 'middleman', '~> 4.0.0'
 gem 'middleman-blog', '~> 4.0.0'
 gem 'middleman-sprockets', '~> 4.0.0.rc'
+gem 'middleman-gh-pages'
 
 # For feed.xml.builder
 gem 'builder', '~> 3.2.2'
