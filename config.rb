@@ -150,6 +150,7 @@ activate :syntax, line_numbers: false
 #   end
 # end
 
+set :relative_links, true
 # Build-specific configuration
 configure :build do
   # Minify CSS on build
@@ -162,7 +163,7 @@ configure :build do
   # activate :asset_hash
 
   # Use relative URLs
-  # activate :relative_assets
+  activate :relative_assets
 
   # Ignoring Files
   ignore 'javascripts/_*'
