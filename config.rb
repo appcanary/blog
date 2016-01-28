@@ -130,6 +130,9 @@ activate :blog do |blog|
   # blog.page_link = "page/{num}"
 end
 
+redirect 'post/131974777156/hello-appcanary', to: '/2015/hello-appcanary.html'
+redirect 'post/125101503771/hello-world', to: '/2015/hello-world.html'
+
 # Pretty URLs - https://middlemanapp.com/advanced/pretty_urls/
 # activate :directory_indexes
 
@@ -167,3 +170,4 @@ configure :build do
   ignore 'stylesheets/_*'
   ignore 'stylesheets/vendor/*'
 end
+

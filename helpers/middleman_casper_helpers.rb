@@ -114,9 +114,11 @@ module MiddlemanCasperHelpers
       "#{blog.options.prefix.to_s}/feed.xml"
     end
   end
+
   def home_path
     "#{blog.options.prefix.to_s}/"
   end
+
   def author_path(article)
     "#{blog.options.prefix.to_s}/author/#{blog_author(article).name.parameterize}.html"
   end
