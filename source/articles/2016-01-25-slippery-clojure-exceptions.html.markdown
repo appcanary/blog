@@ -3,6 +3,7 @@ title: Slippery exceptions in clojure
 date: 2016-01-25
 tags: Clojure, Programming, Bugs
 author: phillmv
+published: false
 layout: post
 ---
 
