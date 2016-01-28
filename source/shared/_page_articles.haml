@@ -1,0 +1,19 @@
+.extra-pagination.inner
+  = partial('shared/pagination') if paginate
+
+- page_articles.each do |article|
+  %article.post
+    %header.post-header
+      %h1.post-title= link_to article.title, article
+    %section.post-content
+      = article.body
+    %footer.post-meta
+      - if gravatar?
+        %img.author-thumb{src: gravatar(24), alt: blog_author(article).name, nopin: 'nopin'}
+      %a{href: author_path(article)}= blog_author(article).name
+      - if tags?(article)
+        on #{tags(article)}
+      %time.post-date{datetime: article.date.strftime('%Y-%m-%d')}
+        = article.date.strftime(blog_settings.date_format)
+
+= partial('shared/pagination') if paginate

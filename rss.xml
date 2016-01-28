@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Appcanary</title>
+  <subtitle>&lt;a href="https://appcanary.com"&gt;Appcanary&lt;/a&gt; makes sure you never run vulnerable software in your apps.</subtitle>
+  <id>http://blog.appcanary.com</id>
+  <link href="http://blog.appcanary.com"/>
+  <link href="http://blog.appcanary.com/rss.xml" rel="self"/>
+  <updated>2016-01-24T19:00:00-05:00</updated>
+  <entry>
+    <title>Slippery exceptions in clojure</title>
+    <link rel="alternate" href="http://blog.appcanary.com/2016/slippery-clojure-exceptions.html"/>
+    <id>http://blog.appcanary.com/2016/slippery-clojure-exceptions.html</id>
+    <published>2016-01-24T19:00:00-05:00</published>
+    <updated>2016-01-27T16:29:09-05:00</updated>
+    <author>
+      <name>Phillip Mendonça-Vieira</name>
+    </author>
+    <summary type="html">Recently I spent a couple of hours banging my head against code that looks like this:
+(defn parse-file
+  [contents]
+  (filter identity
+          (code-that throws-an-exception)))
+
+(defn consume-manifest
+  [contents kind]
+  (try+
+    (app/parse-file kind</summary>
+  </entry>
+  <entry>
+    <title>Hello Appcanary</title>
+    <link rel="alternate" href="http://blog.appcanary.com/2015/hello-appcanary.html"/>
+    <id>http://blog.appcanary.com/2015/hello-appcanary.html</id>
+    <published>2015-10-25T20:00:00-04:00</published>
+    <updated>2016-01-27T17:30:45-05:00</updated>
+    <author>
+      <name>Team Appcanary</name>
+    </author>
+    <summary type="html">Dear friends, 
+
+tl;dr We launched Appcanary, we’re shutting down Gemcanary Dec 31st 2015, we have great plans for the future, we love you.
+
+
+
+We’ve been busy. We got to spend the summer in sunny California attending Y Combinator. We learned a lot, it</summary>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <link rel="alternate" href="http://blog.appcanary.com/2015/hello-world.html"/>
+    <id>http://blog.appcanary.com/2015/hello-world.html</id>
+    <published>2015-07-25T20:00:00-04:00</published>
+    <updated>2016-01-27T17:02:04-05:00</updated>
+    <author>
+      <name>Team Appcanary</name>
+    </author>
+    <summary type="html">
+In 2015, building web aplications involves more moving parts than ever before. The average web app depends on the interaction of hundreds of distinct open source software libraries.
+The easiest way to hack someone is through publically disclosed vulnerabilities
+</summary>
+  </entry>
+</feed>

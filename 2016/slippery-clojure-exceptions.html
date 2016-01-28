@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Appcanary: Slippery exceptions in clojure</title>
+<meta content='Recently I spent a couple of hours banging my head against code that looks like this: (defn parse-file [contents] (filter identity (code-that th...' name='description'>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1.0' name='viewport'>
+<meta content='IE=edge' http-equiv='X-UA-Compatible'>
+<meta content='True' name='HandheldFriendly'>
+<meta content='Appcanary' property='og:site_name'>
+<meta content='article' property='og:type'>
+<meta content='Slippery exceptions in clojure' property='og:title'>
+<meta content='Recently I spent a couple of hours banging my head against code that looks like this: (defn parse-file [contents] (filter identity (code-that th...' property='og:description'>
+<meta content='http://blog.appcanary.com/2016/slippery-clojure-exceptions.html' property='og:url'>
+<meta content='2016-01-25' property='article:published_time'>
+<meta content='summary' name='twitter:card'>
+<meta content='Slippery exceptions in clojure' name='twitter:title'>
+<meta content='Recently I spent a couple of hours banging my head against code that looks like this: (defn parse-file [contents] (filter identity (code-that th...' name='twitter:description'>
+<meta content='http://blog.appcanary.com/2016/slippery-clojure-exceptions.html' name='twitter:url'>
+<link rel="alternate" type="application/atom+xml" title="Atom Feed" href="/feed.xml" />
+<link href="/images/favicon.ico" rel="icon" type="image/ico" />
+<link href="/stylesheets/application.css" rel="stylesheet" />
+<script src="//use.typekit.net/dkz5zwp.js"></script>
+<script>try{Typekit.load({ async: false });}catch(e){}</script>
+
+</head>
+<body class='post-template nav-closed'>
+<div class='topbar'></div>
+<div class='nav'>
+<h3 class='nav-title'>Menu</h3>
+<a class='nav-close' href='#'>
+<span class='hidden'>Close</span>
+</a>
+<ul>
+<li class='nav-home' role='presentation'>
+<a href='/'>Home</a>
+</li>
+<li class='nav-archive' role='presentation'>
+<a href='archive.html'>Archive</a>
+</li>
+<li class='nav-github' role='presentation'>
+<a href='https://github.com/appcanary'>Github</a>
+</li>
+</ul>
+<a class='subscribe-button icon-feed' href='/feed.xml'>Subscribe</a>
+</div>
+<span class='nav-cover'></span>
+
+<div class='site-wrapper'>
+<header class='main-header no-cover'>
+<nav class='main-nav overlay clearfix'>
+</nav>
+<div class='vertical'>
+<div class='main-header-content inner'>
+<a class='appcanary-logo' href='/'>
+<img alt="Appcanary" src="/images/appcanary.png" />
+</a>
+<h2 class='page-description'><a href="https://appcanary.com">Appcanary</a> makes sure you never run vulnerable software in your apps.</h2>
+<div class='more-icons'>
+<a alt='Github' href='https://github.com/appcanary.com' title='Github'>
+<i class='fa fa-github-square'></i>
+</a>
+<a alt='Archive' href='/archive.html' title='Archive'>
+<i class='fa fa-archive'></i>
+</a>
+<a alt='Feed' href='/feed.xml' title='Feed'>
+<i class='fa fa-rss-square'></i>
+</a>
+</div>
+</div>
+</div>
+<a class='scroll-down icon-arrow-left' data-offset='-45' href='#content'>
+<span class='hidden'>Scroll Down</span>
+</a>
+</header>
+
+<main class='content' role='main'>
+<article class='post'>
+<header class='post-header'>
+<h1 class='post-title'>Slippery exceptions in clojure</h1>
+<section class='post-meta'>
+<time class='post-date' datetime='2016-01-25'>
+25 January 2016
+</time>
+on <a href='/tag/getting-started.html'>Getting Started</a>
+</section>
+</header>
+<section class='post-content'><p>Recently I spent a couple of hours banging my head against code that looks like this:</p>
+<pre class="highlight plaintext"><code>(defn parse-file
+  [contents]
+  (filter identity
+          (code-that throws-an-exception)))
+
+(defn consume-manifest
+  [contents kind]
+  (try+
+    (app/parse-file kind contents)    
+
+    (catch java.lang.Exception e
+      (throw+ {:type ::bad-parse :message "Invalid file."}))))
+
+(defn check
+  [file kind]
+  (try+
+    (let [artifacts (consume-manifest (slurp file) kind]
+      (if (not-empty artifacts)
+        … etc
+</code></pre>
+
+<p><br>
+And much to my surprise, I kept getting the kind of exception <code>parse-file</code> generates deep within the <code>check</code> function, right up against <code>(not-empty artifacts)</code>.</p>
+
+<p>I&rsquo;ve grown somewhat used to Clojure exceptions being unhelpful, but this was taking the cake. Coming from Ruby and pretty much every other language, this brushed up rudely against my expectations. </p>
+
+<p>We&rsquo;d had some trouble in the past getting <a rel="nofollow" href="https://github.com/scgilardi/slingshot">slingshot</a> to behave properly, so I zero&#39;ed in on there. Don&rsquo;t all exceptions in Java descend from Exception? You can tell that exceptions in Clojure are unloved, given how cumbersome handling them natively is.</p>
+
+<p>Stepping through <code>check</code> in the <a rel="nofollow" href="cursive-ide.com">Cursive</a> debugger, I could see that the exception generated didn&rsquo;t have the <code>type</code> &ldquo;annotation&rdquo; being set in <code>consume-manifest</code>, which meant that the exception was slipping straight through it. But calling <code>consume-manifest</code> directly in my repl was causing it to work as intended.</p>
+
+<p>What the hell was going on?</p>
+
+<p><a rel="nofollow" href="https://twitter.com/mveytsman">Max</a> took one look at it and set me straight. &ldquo;Oh. <a rel="nofollow" href="https://clojuredocs.org/clojure.core/filter">filter</a> is lazy, so the exception isn&rsquo;t being throw until the lazy sequence is accessed.&rdquo;</p>
+
+<p>Excuse me? I had an angry expression on my face. He looked sheepish.</p>
+
+<p>&ldquo;How else would a lazy data structure work?&rdquo;</p>
+
+<p>Well. I would expect a <code>catch java.lang.Exception</code> to <em>catch every exception</em>. This is some outrageous shit right here.</p>
+
+<p>&ldquo;Right, well, hear me out. What if you had the following Ruby?&rdquo;</p>
+<pre class="highlight plaintext"><code>def lazy_parse(filename)
+  File.open(filename).each_line.each_with_index.lazy.map do |line, i|
+    raise "You can't catch me, I'm the exception man" if i == 5
+    line
+  end
+end
+
+def consume_file
+  begin
+    lazy_parse("Gemfile.lock")
+  rescue
+    puts "Woops, an exception. Good thing we caught it."
+  end
+end
+
+file = consume_file
+puts file.first(10)
+</code></pre>
+
+<p>(Did you know that Ruby has had <a rel="nofollow" href="http://railsware.com/blog/2012/03/13/ruby-2-0-enumerablelazy/">lazy enumerables</a> for almost four years now? Worth reading <a rel="nofollow" href="http://patshaughnessy.net/2013/4/3/ruby-2-0-works-hard-so-you-can-be-lazy">Shaughnessy as well</a>)</p>
+
+<p>That shut me up good. And in case you were wondering, the stack trace is also garbage in Ruby; there simply isn&rsquo;t any context for it to preserve. Frankly, I&rsquo;ve just never had to think about lazy data structures in Rubbyland; they&rsquo;ve not been super popular. </p>
+
+<p>It&rsquo;s hard to reason about this. I want to write wrapper functions that make my code safe to consume downstream. This isn&rsquo;t feasible for any functions iterating over <a rel="nofollow" href="http://rosettacode.org/wiki/Infinity#Clojure"><code>(/ 1.0 0.0)</code></a>, but fortunately for us we need to fit this file into memory anyways. In Ruby we&rsquo;d have to force iterate over the whole sequence, but Clojure makes this easy with <a rel="nofollow" href="https://clojuredocs.org/clojure.core/doall"><code>doall</code></a>:</p>
+<pre class="highlight plaintext"><code>(defn parse-file
+  [contents]
+  (doall (filter identity
+                 (code-that throws-an-exception))))
+</code></pre>
+
+<p>And now, things behave as intended.</p>
+</section>
+<footer class='post-footer'>
+<section class='author'>
+<h4>
+<a href='/author/phillip-mendonca-vieira.html'>Phillip Mendonça-Vieira</a>
+</h4>
+<p></p>
+Read
+<a href='/author/phillip-mendonca-vieira.html'>more posts</a>
+by this author.
+</section>
+<section class='share'>
+<h4>Share this post</h4>
+<a class='icon-twitter' href='https://twitter.com/intent/tweet?text=Slippery exceptions in clojure&amp;amp;url=http://blog.appcanary.com/2016/slippery-clojure-exceptions.html' onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+<span class='hidden'>Twitter</span>
+</a>
+<a class='icon-facebook' href='https://www.facebook.com/sharer/sharer.php?u=http://blog.appcanary.com/2016/slippery-clojure-exceptions.html' onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+<span class='hidden'>Facebook</span>
+</a>
+<a class='icon-google-plus' href='https://plus.google.com/share?url=http://blog.appcanary.com/2016/slippery-clojure-exceptions.html' onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+<span class='hidden'>Google+</span>
+</a>
+</section>
+</footer>
+</article>
+</main>
+<aside class='read-next'>
+<a class='no-cover read-next-story' href='/2015/hello-appcanary.html'>
+<section class='post'>
+<h2>Hello Appcanary</h2>
+<p>Dear friends,&nbsp; tl;dr We launched Appcanary, we’re shutting down Gemcanary Dec 31st 2015, we have great plans for the&hellip;</p>
+</section>
+</a>
+</aside>
+
+<footer class='site-footer clearfix'>
+<section class='copyright'>
+<a href='/'>Appcanary</a>
+&copy;
+2016
+</section>
+<section class='poweredby'>
+Casper theme powered by
+<a href='https://ghost.org'>Ghost</a>
+</section>
+</footer>
+</div>
+<script src="/javascripts/application.js"></script>
+</body>
+</html>

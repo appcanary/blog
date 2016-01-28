@@ -1,0 +1,10 @@
+---
+pageable: true
+per_page: 6
+---
+
+= partial 'shared/main_header'
+
+%main#content.content{role: :main}
+  = partial('shared/page_articles',
+            locals: { page_articles: page_articles, paginate: paginate })
