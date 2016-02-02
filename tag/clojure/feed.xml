@@ -7,11 +7,11 @@
   <link href="http://blog.appcanary.com/tag/clojure/feed.xml" rel="self"/>
   <updated>2016-02-01T19:00:00-05:00</updated>
   <entry>
-    <title>How being lazy about state management caused downtime</title>
+    <title>How being lazy about state management in Clojure caused us downtime</title>
     <link rel="alternate" href="http://blog.appcanary.com/2016/state-management-downtime.html"/>
     <id>http://blog.appcanary.com/2016/state-management-downtime.html</id>
     <published>2016-02-01T19:00:00-05:00</published>
-    <updated>2016-02-02T10:18:47-05:00</updated>
+    <updated>2016-02-02T10:25:59-05:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
