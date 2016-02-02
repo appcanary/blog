@@ -122,7 +122,7 @@ I saw three downsides here:
 
 The above three things aren't intrinsically bad, and it seemed like optimizing the performance of your analytics engine early on was a wasteful thing to do in a fast-paced startup environment.
 
-What I didn't consider is that the java library uses `[ExecutorService](http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ExecutorService.html)` to manage a threadpool, and `shutdown` must be called explicitly. Otherwise, the threads are put on hold instead of being marked for GC (see also [this stackoverflow](http://stackoverflow.com/questions/16122987/reason-for-calling-shutdown-on-executorservice)).
+What I didn't consider is that the java library uses [`ExecutorService`](http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ExecutorService.html) to manage a threadpool, and `shutdown` must be called explicitly. Otherwise, the threads are put on hold instead of being marked for GC (see also [this stackoverflow](http://stackoverflow.com/questions/16122987/reason-for-calling-shutdown-on-executorservice)).
 
 ### Outcome
 
