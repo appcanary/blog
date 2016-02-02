@@ -1,9 +1,9 @@
 ---
 title: "How being lazy about state management caused downtime"
-date: 2016-01-29
+date: 2016-02-02
 tags:  Clojure, Programming, Developer Diary
 author: mveytsman
-published: false
+published: true
 layout: post
 ---
 
