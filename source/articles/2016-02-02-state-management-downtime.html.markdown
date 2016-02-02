@@ -124,6 +124,8 @@ The above three things aren't intrinsically bad, and it seemed like optimizing t
 
 What I didn't consider is that the java library uses [`ExecutorService`](http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ExecutorService.html) to manage a threadpool, and `shutdown` must be called explicitly. Otherwise, the threads are put on hold instead of being marked for GC (see also [this stackoverflow](http://stackoverflow.com/questions/16122987/reason-for-calling-shutdown-on-executorservice)).
 
+The fact that each client spawns a thread that isn't cleaned up by garbage collection was not [documented](https://segment.com/docs/libraries/java/) unfortunately.
+
 ### Outcome
 
 Every analytics call we made spawned another threadpool, which caused the thread count to grow proportionally with user activity. We hit 40,000 threads before our application crashed.
