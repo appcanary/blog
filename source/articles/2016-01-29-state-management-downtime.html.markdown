@@ -126,12 +126,7 @@ What I didn't consider is that the java library uses `[ExecutorService](http://d
 
 ### Outcome
 
-Every analytics call we made spawned another threadpool, which caused the thread count to grow proportionally with user activity.
-
-This is what it looked like right up to the momement when the app went down due to too many threads. We hit 40,000 before it completely died:
-
-
-
+Every analytics call we made spawned another threadpool, which caused the thread count to grow proportionally with user activity. We hit 40,000 threads before our application crashed.
 
 ### TL;DR:
-I spawned a new client object on every analytics call, not realizing that the underlying library uses a thread pool that's not shutdown on garbage collection. This is how we ended up killing the server by hitting 30,000 threads
+We spawned a new client object on every analytics call, not realizing that the underlying library uses a thread pool that's not shutdown on garbage collection. This is how we ended up killing the server by hitting 40,000 threads
