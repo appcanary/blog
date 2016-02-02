@@ -68,88 +68,132 @@
 </div>
 <article class='post'>
 <header class='post-header'>
-<h1 class='post-title'><a href="../2016/slippery-clojure-exceptions.html">Slippery exceptions in clojure</a></h1>
+<h1 class='post-title'><a href="../2016/state-management-downtime.html">How being lazy about state management caused downtime</a></h1>
 </header>
 <section class='post-content'>
-<p>Recently I spent a couple of hours banging my head against code that looks like this:</p>
-<pre class="highlight clojure"><code><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">parse-file</span><span class="w">
-  </span><span class="p">[</span><span class="n">contents</span><span class="p">]</span><span class="w">
-  </span><span class="p">(</span><span class="nb">filter</span><span class="w"> </span><span class="nb">identity</span><span class="w">
-          </span><span class="p">(</span><span class="nf">code-that</span><span class="w"> </span><span class="n">throws-an-exception</span><span class="p">)))</span><span class="w">
+<p>On November 10th, we suffered some downtime as our backend application mysteriously crashed and had to be restarted. After looking at our process monitoring service, I found a very suspicious graph:</p>
 
-</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">consume-manifest</span><span class="w">
-  </span><span class="p">[</span><span class="n">contents</span><span class="w"> </span><span class="n">kind</span><span class="p">]</span><span class="w">
-  </span><span class="p">(</span><span class="nf">try+</span><span class="w">
-    </span><span class="p">(</span><span class="nf">app/parse-file</span><span class="w"> </span><span class="n">kind</span><span class="w"> </span><span class="n">contents</span><span class="p">)</span><span class="w">    
+<p><img alt="image" src="../images/system.process.threads.png" /></p>
 
-    </span><span class="p">(</span><span class="nf">catch</span><span class="w"> </span><span class="n">java.lang.Exception</span><span class="w"> </span><span class="n">e</span><span class="w">
-      </span><span class="p">(</span><span class="nf">throw+</span><span class="w"> </span><span class="p">{</span><span class="no">:type</span><span class="w"> </span><span class="no">::bad-parse</span><span class="w"> </span><span class="no">:message</span><span class="w"> </span><span class="s">"Invalid file."</span><span class="p">}))))</span><span class="w">
+<p>Somehow, we managed to spin up more then 30,000 threads right before the application crashed. This was very likely the cause of the failure, but how did it happen?</p>
 
-</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">check</span><span class="w">
-  </span><span class="p">[</span><span class="n">file</span><span class="w"> </span><span class="n">kind</span><span class="p">]</span><span class="w">
-  </span><span class="p">(</span><span class="nf">try+</span><span class="w">
-    </span><span class="p">(</span><span class="k">let</span><span class="w"> </span><span class="p">[</span><span class="n">artifacts</span><span class="w"> </span><span class="p">(</span><span class="nf">consume-manifest</span><span class="w"> </span><span class="p">(</span><span class="nb">slurp</span><span class="w"> </span><span class="n">file</span><span class="p">)</span><span class="w"> </span><span class="n">kind</span><span class="p">]</span><span class="w">
-      </span><span class="p">(</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nf">not-empty</span><span class="w"> </span><span class="n">artifacts</span><span class="p">)</span><span class="w">
-        </span><span class="err">…</span><span class="w"> </span><span class="n">etc</span><span class="w">
-</span></code></pre>
+<p>An easy way to get an idea of where a thread leak is coming from is to look at the thread names. In Java you can do this with <code>jstack -l $PID</code>.</p>
 
-<p>And much to my surprise, I kept getting the kind of exception <code>parse-file</code> generates deep within the <code>check</code> function, right up against <code>(not-empty artifacts)</code>.</p>
-
-<p>I&rsquo;ve grown somewhat used to Clojure exceptions being unhelpful, but this was taking the cake. Coming from Ruby and pretty much every other language, this brushed up rudely against my expectations. </p>
-
-<p>We&rsquo;d had some trouble in the past getting <a href="https://github.com/scgilardi/slingshot">slingshot</a> to behave properly, so I zero&#39;ed in on there. Don&rsquo;t all exceptions in Java descend from Exception? You can tell that exceptions in Clojure are unloved, given how cumbersome handling them natively is.</p>
-
-<p>Stepping through <code>check</code> in the <a href="cursive-ide.com">Cursive</a> debugger, I could see that the exception generated didn&rsquo;t have the <code>type</code> &ldquo;annotation&rdquo; being set in <code>consume-manifest</code>, which meant that the exception was slipping straight through it. But calling <code>consume-manifest</code> directly in my repl was causing it to work as intended.</p>
-
-<p>What the hell was going on?</p>
-
-<p><a href="https://twitter.com/mveytsman">Max</a> took one look at it and set me straight. &ldquo;Oh. <a href="https://clojuredocs.org/clojure.core/filter">filter</a> is lazy, so the exception isn&rsquo;t being throw until the lazy sequence is accessed.&rdquo;</p>
-
-<p>Excuse me? I had an angry expression on my face. He looked sheepish.</p>
-
-<p>&ldquo;How else would a lazy data structure work?&rdquo;</p>
-
-<p>Well. I would expect a <code>catch java.lang.Exception</code> to <em>catch every exception</em>. This is some outrageous shit right here.</p>
-
-<p>&ldquo;Right, well, hear me out. What if you had the following Ruby?&rdquo;</p>
-<pre class="highlight ruby"><code><span class="k">def</span> <span class="nf">lazy_parse</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-  <span class="no">File</span><span class="p">.</span><span class="nf">open</span><span class="p">(</span><span class="n">filename</span><span class="p">).</span><span class="nf">each_line</span><span class="p">.</span><span class="nf">each_with_index</span><span class="p">.</span><span class="nf">lazy</span><span class="p">.</span><span class="nf">map</span> <span class="k">do</span> <span class="o">|</span><span class="n">line</span><span class="p">,</span> <span class="n">i</span><span class="o">|</span>
-    <span class="k">raise</span> <span class="s2">"You can't catch me, I'm the exception man"</span> <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">5</span>
-    <span class="n">line</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-
-<span class="k">def</span> <span class="nf">consume_file</span>
-  <span class="k">begin</span>
-    <span class="n">lazy_parse</span><span class="p">(</span><span class="s2">"Gemfile.lock"</span><span class="p">)</span>
-  <span class="k">rescue</span>
-    <span class="nb">puts</span> <span class="s2">"Woops, an exception. Good thing we caught it."</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-
-<span class="n">file</span> <span class="o">=</span> <span class="n">consume_file</span>
-<span class="nb">puts</span> <span class="n">file</span><span class="p">.</span><span class="nf">first</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<p>To get a list of all thread names of a Java application sorted by most common name, you can do:</p>
+<pre class="highlight plaintext"><code>jstack -l $PID | grep daemon |  awk '{ print $1 }' | sort | uniq -c |   sort -nr
 </code></pre>
 
-<p>(Did you know that Ruby has had <a href="http://railsware.com/blog/2012/03/13/ruby-2-0-enumerablelazy/">lazy enumerables</a> for almost four years now? Worth reading <a href="http://patshaughnessy.net/2013/4/3/ruby-2-0-works-hard-so-you-can-be-lazy">Shaughnessy as well</a>)</p>
+<p>Which on our end yielded something like this:</p>
+<pre class="highlight plaintext"><code>  30000 "Analytics"
+      2 "Datomic
+      2 "C2
+      1 "worker-4"
+      1 "worker-3"
+      1 "worker-2"
+      1 "worker-1"
+      1 "Timer-0"
+      1 "Thread-5"
+      1 "Thread-4
+      1 "Thread-3
+      1 "Thread-2
+      1 "Thread-1
+      1 "Thread-0
+</code></pre>
 
-<p>That shut me up good. And in case you were wondering, the stack trace is also garbage in Ruby; there simply isn&rsquo;t any context for it to preserve. Frankly, I&rsquo;ve just never had to think about lazy data structures in Rubbyland; they&rsquo;ve not been super popular. </p>
+<p>Hmm&hellip;</p>
 
-<p>It&rsquo;s hard to reason about this. I want to write wrapper functions that make my code safe to consume downstream. This isn&rsquo;t feasible for any functions iterating over <a href="http://rosettacode.org/wiki/Infinity#Clojure"><code>(/ 1.0 0.0)</code></a>, but fortunately for us we need to fit this file into memory anyways. In Ruby we&rsquo;d have to force iterate over the whole sequence, but Clojure makes this easy with <a href="https://clojuredocs.org/clojure.core/doall"><code>doall</code></a>:</p>
-<pre class="highlight clojure"><code><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">parse-file</span><span class="w">
-  </span><span class="p">[</span><span class="n">contents</span><span class="p">]</span><span class="w">
-  </span><span class="p">(</span><span class="nb">doall</span><span class="w"> </span><span class="p">(</span><span class="nb">filter</span><span class="w"> </span><span class="nb">identity</span><span class="w">
-                 </span><span class="p">(</span><span class="nf">code-that</span><span class="w"> </span><span class="n">throws-an-exception</span><span class="p">))))</span><span class="w">
+<h3>Background</h3>
+
+<p>Our backend is written in Clojure and we use Stuart Sierra&rsquo;s <a href="https://github.com/stuartsierra/component">component</a> framework to manage most of our application&rsquo;s state and lifecycle. Normally this should prevent runaway threads, but unfortunately for us our analytics client&rsquo;s state was managed independently of the framework. To explain why, I need to first delve a little in to how component works.</p>
+
+<p>Regardless of how beautiful and functional it may be, any application that talks to the outside world will need to manage some state representing these external resources. We need to manage our database connections, our clients for external APIs, our background workers, etc.</p>
+
+<p>One way to deal with this in Clojureland is to create a global singleton object for representing each stateful piece, possibly wrapped in an <code>atom</code>. This feels lacking, though. You still need a way to initialize all these singletons on startup, and having mutable singletons everywhere goes against what I would consider good Clojure style.</p>
+
+<p>Component solves this problem by implementing dependency injection in a Clojurelike way. You define a graph that represents each stateful piece, how they depend on each other, and how each piece starts and stops. On system start, component boots each piece in the right order, passing along references to dependencies when they&rsquo;re needed.</p>
+
+<p>For example, Appcanary&rsquo;s dependency graph looks (something) like this:</p>
+<pre class="highlight clojure"><code><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">canary-system</span><span class="w">
+  </span><span class="p">[]</span><span class="w">
+  </span><span class="c1">;;Initialize logging
+</span><span class="w">  </span><span class="p">(</span><span class="nf">component/system-map</span><span class="w">
+   </span><span class="no">:datomic</span><span class="w"> </span><span class="p">(</span><span class="nf">new-datomic</span><span class="w"> </span><span class="p">(</span><span class="nf">env</span><span class="w"> </span><span class="no">:datomic-uri</span><span class="p">))</span><span class="w">
+   </span><span class="no">:scheduler</span><span class="w"> </span><span class="p">(</span><span class="nf">new-scheduler</span><span class="p">)</span><span class="w">
+   </span><span class="no">:mailer</span><span class="w"> </span><span class="p">(</span><span class="nf">component/using</span><span class="w">  </span><span class="p">(</span><span class="nf">new-mailer</span><span class="w"> </span><span class="p">(</span><span class="nf">env</span><span class="w"> </span><span class="no">:mandrill-key</span><span class="p">))</span><span class="w">
+                             </span><span class="p">[</span><span class="no">:datomic</span><span class="w"> </span><span class="no">:scheduler</span><span class="p">])</span><span class="w">
+   </span><span class="no">:web-server</span><span class="w"> </span><span class="p">(</span><span class="nf">component/using</span><span class="w"> </span><span class="p">(</span><span class="nf">new-web-server</span><span class="w"> </span><span class="p">(</span><span class="nf">env</span><span class="w"> </span><span class="no">:http-ip</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nf">Integer.</span><span class="w"> </span><span class="p">(</span><span class="nf">env</span><span class="w"> </span><span class="no">:http-port</span><span class="p">))</span><span class="w"> </span><span class="n">canary-api</span><span class="p">)</span><span class="w">
+                             </span><span class="p">[</span><span class="no">:datomic</span><span class="p">])))</span><span class="w">
 </span></code></pre>
 
-<p>And now, things behave as intended.</p>
+<p>The <code>mailer</code> depends on <code>datomic</code> and the <code>scheduler</code>, the web server depends on <code>datomic</code>, and both <code>datomic</code> and the <code>scheduler</code> don&rsquo;t depend on anything.</p>
+
+<p>Like all the other components, the <code>new-datomic</code> function is a constructor for a record that knows how to start and stop itself. On system start, all the components are started, and the dependencies are filled in.</p>
+
+<h3>Sometimes component feels like overkill</h3>
+
+<p>Component is great, but it didn&rsquo;t fit our analytics engine usecase. We use <a href="https://segment.io">segment.io</a> to handle our app analytics, and we needed to maintain a client to talk to it. An analytics event can potentially be called from anywhere in the app, but it&rsquo;s cumbersome to pass an analytics client reference to every component, and into every analytics call. If every component depends on something, it feels like maybe it should be a global singleton. Futhermore, I don&rsquo;t want my components to know much about the analytics client at all; I just want them to know how to trigger events.</p>
+
+<p>What I want to have is an analytics namespace which contains all the events I may want to trigger, and wraps the client inside all of them. This lets me  do something like <code>(analytics/user-added-server user)</code> inside of the code that handles server creation.</p>
+
+<p>(One thing to note is that while there is a clojure segment.io <a href="https://github.com/ardoq/analytics-clj">client</a>, it&rsquo;s based off a 1.x release of the underlying <a href="https://github.com/segmentio/analytics-java">java library</a>, while we wanted to use features only available in the 2.0 release. Because of that, I wrote an analytics namespace that called the java library directly).</p>
+
+<p>The first pass of creating the client looked something like this:</p>
+<pre class="highlight clojure"><code><span class="p">(</span><span class="nf">defonce</span><span class="w"> </span><span class="n">client</span><span class="w">
+  </span><span class="p">(</span><span class="nf">.build</span><span class="w"> </span><span class="p">(</span><span class="nf">Analytics/builder</span><span class="w"> </span><span class="p">(</span><span class="nf">env</span><span class="w"> </span><span class="no">:segment-api-key</span><span class="p">))))</span><span class="w">
+
+</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">track</span><span class="w">
+  </span><span class="s">"Wrapper for analytics/track"</span><span class="w">
+  </span><span class="p">[</span><span class="n">id</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="n">properties</span><span class="w"> </span><span class="p">{</span><span class="no">:keys</span><span class="w"> </span><span class="p">[</span><span class="n">timestamp</span><span class="p">]</span><span class="w"> </span><span class="no">:as</span><span class="w"> </span><span class="n">options</span><span class="p">}]</span><span class="w">
+  </span><span class="p">(</span><span class="nb">when</span><span class="w"> </span><span class="p">(</span><span class="nf">production?</span><span class="p">)</span><span class="w">
+    </span><span class="p">(</span><span class="nf">.enqueue</span><span class="w"> </span><span class="n">client</span><span class="w">
+              </span><span class="c1">;; Java interop to build the analytics message here)))
+</span></code></pre>
+
+<p>There&rsquo;s only one problem with the above code: the segment api key is loaded from an environment variable. </p>
+
+<p>We deploy appcanary in a pretty standard way &ndash; we compile an uberjar and rsync it to the server. API keys live in environment variables, and the production API key is only going to live on the production server. So, at compile time, we have no way of knowing what the segment api key is. As a result, the analytics client needs to be built at runtime and not compile time in order to have access to the api key.</p>
+
+<h3>This is where I get lazy</h3>
+
+<p>The obvious thing to do to build the analytics client at runtime is to wrap it as a function:</p>
+<pre class="highlight clojure"><code><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">client</span><span class="w">
+  </span><span class="p">[]</span><span class="w">
+  </span><span class="p">(</span><span class="nf">.build</span><span class="w"> </span><span class="p">(</span><span class="nf">Analytics/builder</span><span class="w"> </span><span class="p">(</span><span class="nf">env</span><span class="w"> </span><span class="no">:segment-api-key</span><span class="p">))))</span><span class="w">
+
+</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">track</span><span class="w">
+  </span><span class="s">"Wrapper for analytics/track"</span><span class="w">
+  </span><span class="p">[</span><span class="n">id</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="n">properties</span><span class="w"> </span><span class="p">{</span><span class="no">:keys</span><span class="w"> </span><span class="p">[</span><span class="n">timestamp</span><span class="p">]</span><span class="w"> </span><span class="no">:as</span><span class="w"> </span><span class="n">options</span><span class="p">}]</span><span class="w">
+  </span><span class="p">(</span><span class="nb">when</span><span class="w"> </span><span class="p">(</span><span class="nf">production?</span><span class="p">)</span><span class="w">
+    </span><span class="p">(</span><span class="nf">.enqueue</span><span class="w"> </span><span class="p">(</span><span class="nf">client</span><span class="p">)</span><span class="w">
+              </span><span class="c1">;; Java interop to build the analytics message here)))
+</span></code></pre>
+
+<p>I saw three downsides here:</p>
+
+<ol>
+<li>We&rsquo;ll lose some efficiency from not reusing the TCP connection to segment.io</li>
+<li>It&rsquo;s possible that we&rsquo;ll have to waste a bit of time authenticating the analytics client on each call</li>
+<li>We&rsquo;ll spawn an extra client object per call, which will be garbage collected right away as it goes out of scope immediately after the <code>track</code> call</li>
+</ol>
+
+<p>The above three things aren&rsquo;t intrinsically bad, and it seemed like optimizing the performance of your analytics engine early on was a wasteful thing to do in a fast-paced startup environment.</p>
+
+<p>What I didn&rsquo;t consider is that the java library uses <code>[ExecutorService](http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ExecutorService.html)</code> to manage a threadpool, and <code>shutdown</code> must be called explicitly. Otherwise, the threads are put on hold instead of being marked for GC (see also <a href="http://stackoverflow.com/questions/16122987/reason-for-calling-shutdown-on-executorservice">this stackoverflow</a>).</p>
+
+<h3>Outcome</h3>
+
+<p>Every analytics call we made spawned another threadpool, which caused the thread count to grow proportionally with user activity. We hit 40,000 threads before our application crashed.</p>
+
+<h3>TL;DR:</h3>
+
+<p>We spawned a new client object on every analytics call, not realizing that the underlying library uses a thread pool that&rsquo;s not shutdown on garbage collection. This is how we ended up killing the server by hitting 40,000 threads</p>
 
 </section>
 <footer class='post-meta'>
-<a href='/author/phillip-mendonca-vieira.html'>Phillip Mendonça-Vieira</a>
-on <a href='/tag/clojure.html'>Clojure</a>, <a href='/tag/programming.html'>Programming</a>, <a href='/tag/bugs.html'>Bugs</a>
-<time class='post-date' datetime='2016-01-25'>
-25 January 2016
+<a href='/author/max-veytsman.html'>Max Veytsman</a>
+on <a href='/tag/clojure.html'>Clojure</a>, <a href='/tag/programming.html'>Programming</a>, <a href='/tag/developer-diary.html'>Developer Diary</a>
+<time class='post-date' datetime='2016-02-02'>
+02 February 2016
 </time>
 </footer>
 </article>
@@ -173,5 +217,16 @@ Casper theme powered by
 </footer>
 </div>
 <script src="../javascripts/application.js"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61163522-3', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
 </body>
 </html>

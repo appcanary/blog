@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Appcanary</title>
-<meta content='&lt;a href="https://appcanary.com"&gt;Appcanary&lt;/a&gt; makes sure you never run vulnerable software in your apps.' name='description'>
+<title>Appcanary: How being lazy about state management caused downtime</title>
+<meta content='On November 10th, we suffered some downtime as our backend application mysteriously crashed and had to be restarted. After looking at our proces...' name='description'>
 <meta charset='utf-8'>
 <meta content='width=device-width, initial-scale=1.0' name='viewport'>
 <meta content='IE=edge' http-equiv='X-UA-Compatible'>
 <meta content='True' name='HandheldFriendly'>
 <meta content='Appcanary' property='og:site_name'>
-<meta content='website' property='og:type'>
-<meta content='&lt;a href="https://appcanary.com"&gt;Appcanary&lt;/a&gt; makes sure you never run vulnerable software in your apps.' property='og:description'>
-<meta content='http://blog.appcanary.com/author/max-veytsman.html' property='og:url'>
+<meta content='article' property='og:type'>
+<meta content='How being lazy about state management caused downtime' property='og:title'>
+<meta content='On November 10th, we suffered some downtime as our backend application mysteriously crashed and had to be restarted. After looking at our proces...' property='og:description'>
+<meta content='http://blog.appcanary.com/2016/state-management-downtime.html' property='og:url'>
+<meta content='2016-02-02' property='article:published_time'>
 <meta content='summary' name='twitter:card'>
-<meta content='&lt;a href="https://appcanary.com"&gt;Appcanary&lt;/a&gt; makes sure you never run vulnerable software in your apps.' name='twitter:description'>
-<meta content='http://blog.appcanary.com/author/max-veytsman.html' name='twitter:url'>
+<meta content='How being lazy about state management caused downtime' name='twitter:title'>
+<meta content='On November 10th, we suffered some downtime as our backend application mysteriously crashed and had to be restarted. After looking at our proces...' name='twitter:description'>
+<meta content='http://blog.appcanary.com/2016/state-management-downtime.html' name='twitter:url'>
 <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="/feed.xml" />
 <link href="/images/favicon.ico" rel="icon" type="image/ico" />
 <link href="../stylesheets/application.css" rel="stylesheet" />
@@ -21,7 +24,7 @@
 <script>try{Typekit.load({ async: false });}catch(e){}</script>
 
 </head>
-<body class='post-template home-post-template nav-closed'>
+<body class='post-template nav-closed'>
 <div class='topbar'></div>
 <div class='nav'>
 <h3 class='nav-title'>Menu</h3>
@@ -71,28 +74,18 @@
 </a>
 </header>
 
-<section class='author-profile inner'>
-<h1 class='author-title'>Max Veytsman</h1>
-<div class='author-meta'>
-<span class='author-stats'>
-<i class='icon-stats'></i>
-1 post
-</span>
-</div>
-</section>
-<main class='content' id='content' role='main'>
-<div class='extra-pagination inner'>
-<nav class='pagination' role='pagination'>
-<span class='page-number'>Page 1 of 1</span>
-</nav>
-
-</div>
+<main class='content' role='main'>
 <article class='post'>
 <header class='post-header'>
-<h1 class='post-title'><a href="../2016/state-management-downtime.html">How being lazy about state management caused downtime</a></h1>
+<h1 class='post-title'>How being lazy about state management caused downtime</h1>
+<section class='post-meta'>
+<time class='post-date' datetime='2016-02-02'>
+02 February 2016
+</time>
+on <a href='/tag/clojure.html'>Clojure</a>, <a href='/tag/programming.html'>Programming</a>, <a href='/tag/developer-diary.html'>Developer Diary</a>
+</section>
 </header>
-<section class='post-content'>
-<p>On November 10th, we suffered some downtime as our backend application mysteriously crashed and had to be restarted. After looking at our process monitoring service, I found a very suspicious graph:</p>
+<section class='post-content'><p>On November 10th, we suffered some downtime as our backend application mysteriously crashed and had to be restarted. After looking at our process monitoring service, I found a very suspicious graph:</p>
 
 <p><img alt="image" src="../images/system.process.threads.png" /></p>
 
@@ -208,22 +201,40 @@
 <h3>TL;DR:</h3>
 
 <p>We spawned a new client object on every analytics call, not realizing that the underlying library uses a thread pool that&rsquo;s not shutdown on garbage collection. This is how we ended up killing the server by hitting 40,000 threads</p>
-
 </section>
-<footer class='post-meta'>
+<footer class='post-footer'>
+<section class='author'>
+<h4>
 <a href='/author/max-veytsman.html'>Max Veytsman</a>
-on <a href='/tag/clojure.html'>Clojure</a>, <a href='/tag/programming.html'>Programming</a>, <a href='/tag/developer-diary.html'>Developer Diary</a>
-<time class='post-date' datetime='2016-02-02'>
-02 February 2016
-</time>
+</h4>
+<p></p>
+Read
+<a href='/author/max-veytsman.html'>more posts</a>
+by this author.
+</section>
+<section class='share'>
+<h4>Share this post</h4>
+<a class='icon-twitter' href='https://twitter.com/intent/tweet?text=How being lazy about state management caused downtime&amp;amp;url=http://blog.appcanary.com/2016/state-management-downtime.html' onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+<span class='hidden'>Twitter</span>
+</a>
+<a class='icon-facebook' href='https://www.facebook.com/sharer/sharer.php?u=http://blog.appcanary.com/2016/state-management-downtime.html' onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+<span class='hidden'>Facebook</span>
+</a>
+<a class='icon-google-plus' href='https://plus.google.com/share?url=http://blog.appcanary.com/2016/state-management-downtime.html' onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+<span class='hidden'>Google+</span>
+</a>
+</section>
 </footer>
 </article>
-<nav class='pagination' role='pagination'>
-<span class='page-number'>Page 1 of 1</span>
-</nav>
-
-
 </main>
+<aside class='read-next'>
+<a class='no-cover read-next-story' href='/2015/hello-appcanary.html'>
+<section class='post'>
+<h2>Hello Appcanary</h2>
+<p>Dear friends,&nbsp; tl;dr We launched Appcanary, we’re shutting down Gemcanary Dec 31st 2015, we have great plans for the&hellip;</p>
+</section>
+</a>
+</aside>
 
 <footer class='site-footer clearfix'>
 <section class='copyright'>

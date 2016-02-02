@@ -5,13 +5,140 @@
   <id>http://blog.appcanary.com</id>
   <link href="http://blog.appcanary.com"/>
   <link href="http://blog.appcanary.com/rss" rel="self"/>
-  <updated>2015-10-25T20:00:00-04:00</updated>
+  <updated>2016-02-01T19:00:00-05:00</updated>
+  <entry>
+    <title>How being lazy about state management caused downtime</title>
+    <link rel="alternate" href="http://blog.appcanary.com/2016/state-management-downtime.html"/>
+    <id>http://blog.appcanary.com/2016/state-management-downtime.html</id>
+    <published>2016-02-01T19:00:00-05:00</published>
+    <updated>2016-02-02T10:18:47-05:00</updated>
+    <author>
+      <name>Max Veytsman</name>
+    </author>
+    <content type="html">&lt;p&gt;On November 10th, we suffered some downtime as our backend application mysteriously crashed and had to be restarted. After looking at our process monitoring service, I found a very suspicious graph:&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="image" src="/images/system.process.threads.png" /&gt;&lt;/p&gt;
+
+&lt;p&gt;Somehow, we managed to spin up more then 30,000 threads right before the application crashed. This was very likely the cause of the failure, but how did it happen?&lt;/p&gt;
+
+&lt;p&gt;An easy way to get an idea of where a thread leak is coming from is to look at the thread names. In Java you can do this with &lt;code&gt;jstack -l $PID&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;To get a list of all thread names of a Java application sorted by most common name, you can do:&lt;/p&gt;
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;jstack -l $PID | grep daemon |  awk '{ print $1 }' | sort | uniq -c |   sort -nr
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Which on our end yielded something like this:&lt;/p&gt;
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;  30000 "Analytics"
+      2 "Datomic
+      2 "C2
+      1 "worker-4"
+      1 "worker-3"
+      1 "worker-2"
+      1 "worker-1"
+      1 "Timer-0"
+      1 "Thread-5"
+      1 "Thread-4
+      1 "Thread-3
+      1 "Thread-2
+      1 "Thread-1
+      1 "Thread-0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Hmm&amp;hellip;&lt;/p&gt;
+
+&lt;h3&gt;Background&lt;/h3&gt;
+
+&lt;p&gt;Our backend is written in Clojure and we use Stuart Sierra&amp;rsquo;s &lt;a href="https://github.com/stuartsierra/component"&gt;component&lt;/a&gt; framework to manage most of our application&amp;rsquo;s state and lifecycle. Normally this should prevent runaway threads, but unfortunately for us our analytics client&amp;rsquo;s state was managed independently of the framework. To explain why, I need to first delve a little in to how component works.&lt;/p&gt;
+
+&lt;p&gt;Regardless of how beautiful and functional it may be, any application that talks to the outside world will need to manage some state representing these external resources. We need to manage our database connections, our clients for external APIs, our background workers, etc.&lt;/p&gt;
+
+&lt;p&gt;One way to deal with this in Clojureland is to create a global singleton object for representing each stateful piece, possibly wrapped in an &lt;code&gt;atom&lt;/code&gt;. This feels lacking, though. You still need a way to initialize all these singletons on startup, and having mutable singletons everywhere goes against what I would consider good Clojure style.&lt;/p&gt;
+
+&lt;p&gt;Component solves this problem by implementing dependency injection in a Clojurelike way. You define a graph that represents each stateful piece, how they depend on each other, and how each piece starts and stops. On system start, component boots each piece in the right order, passing along references to dependencies when they&amp;rsquo;re needed.&lt;/p&gt;
+
+&lt;p&gt;For example, Appcanary&amp;rsquo;s dependency graph looks (something) like this:&lt;/p&gt;
+&lt;pre class="highlight clojure"&gt;&lt;code&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;defn&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;canary-system&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="p"&gt;[]&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="c1"&gt;;;Initialize logging
+&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;component/system-map&lt;/span&gt;&lt;span class="w"&gt;
+   &lt;/span&gt;&lt;span class="no"&gt;:datomic&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;new-datomic&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;env&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="no"&gt;:datomic-uri&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;&lt;span class="w"&gt;
+   &lt;/span&gt;&lt;span class="no"&gt;:scheduler&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;new-scheduler&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt;
+   &lt;/span&gt;&lt;span class="no"&gt;:mailer&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;component/using&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;new-mailer&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;env&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="no"&gt;:mandrill-key&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;&lt;span class="w"&gt;
+                             &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="no"&gt;:datomic&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="no"&gt;:scheduler&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;&lt;span class="w"&gt;
+   &lt;/span&gt;&lt;span class="no"&gt;:web-server&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;component/using&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;new-web-server&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;env&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="no"&gt;:http-ip&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;Integer.&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;env&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="no"&gt;:http-port&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;canary-api&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt;
+                             &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="no"&gt;:datomic&lt;/span&gt;&lt;span class="p"&gt;])))&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code&gt;mailer&lt;/code&gt; depends on &lt;code&gt;datomic&lt;/code&gt; and the &lt;code&gt;scheduler&lt;/code&gt;, the web server depends on &lt;code&gt;datomic&lt;/code&gt;, and both &lt;code&gt;datomic&lt;/code&gt; and the &lt;code&gt;scheduler&lt;/code&gt; don&amp;rsquo;t depend on anything.&lt;/p&gt;
+
+&lt;p&gt;Like all the other components, the &lt;code&gt;new-datomic&lt;/code&gt; function is a constructor for a record that knows how to start and stop itself. On system start, all the components are started, and the dependencies are filled in.&lt;/p&gt;
+
+&lt;h3&gt;Sometimes component feels like overkill&lt;/h3&gt;
+
+&lt;p&gt;Component is great, but it didn&amp;rsquo;t fit our analytics engine usecase. We use &lt;a href="https://segment.io"&gt;segment.io&lt;/a&gt; to handle our app analytics, and we needed to maintain a client to talk to it. An analytics event can potentially be called from anywhere in the app, but it&amp;rsquo;s cumbersome to pass an analytics client reference to every component, and into every analytics call. If every component depends on something, it feels like maybe it should be a global singleton. Futhermore, I don&amp;rsquo;t want my components to know much about the analytics client at all; I just want them to know how to trigger events.&lt;/p&gt;
+
+&lt;p&gt;What I want to have is an analytics namespace which contains all the events I may want to trigger, and wraps the client inside all of them. This lets me  do something like &lt;code&gt;(analytics/user-added-server user)&lt;/code&gt; inside of the code that handles server creation.&lt;/p&gt;
+
+&lt;p&gt;(One thing to note is that while there is a clojure segment.io &lt;a href="https://github.com/ardoq/analytics-clj"&gt;client&lt;/a&gt;, it&amp;rsquo;s based off a 1.x release of the underlying &lt;a href="https://github.com/segmentio/analytics-java"&gt;java library&lt;/a&gt;, while we wanted to use features only available in the 2.0 release. Because of that, I wrote an analytics namespace that called the java library directly).&lt;/p&gt;
+
+&lt;p&gt;The first pass of creating the client looked something like this:&lt;/p&gt;
+&lt;pre class="highlight clojure"&gt;&lt;code&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;defonce&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;client&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;.build&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;Analytics/builder&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;env&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="no"&gt;:segment-api-key&lt;/span&gt;&lt;span class="p"&gt;))))&lt;/span&gt;&lt;span class="w"&gt;
+
+&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;defn&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;track&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="s"&gt;"Wrapper for analytics/track"&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;id&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;event&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;properties&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="no"&gt;:keys&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;timestamp&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="no"&gt;:as&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;options&lt;/span&gt;&lt;span class="p"&gt;}]&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;when&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;production?&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;.enqueue&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;client&lt;/span&gt;&lt;span class="w"&gt;
+              &lt;/span&gt;&lt;span class="c1"&gt;;; Java interop to build the analytics message here)))
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;There&amp;rsquo;s only one problem with the above code: the segment api key is loaded from an environment variable. &lt;/p&gt;
+
+&lt;p&gt;We deploy appcanary in a pretty standard way &amp;ndash; we compile an uberjar and rsync it to the server. API keys live in environment variables, and the production API key is only going to live on the production server. So, at compile time, we have no way of knowing what the segment api key is. As a result, the analytics client needs to be built at runtime and not compile time in order to have access to the api key.&lt;/p&gt;
+
+&lt;h3&gt;This is where I get lazy&lt;/h3&gt;
+
+&lt;p&gt;The obvious thing to do to build the analytics client at runtime is to wrap it as a function:&lt;/p&gt;
+&lt;pre class="highlight clojure"&gt;&lt;code&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;defn&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;client&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="p"&gt;[]&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;.build&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;Analytics/builder&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;env&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="no"&gt;:segment-api-key&lt;/span&gt;&lt;span class="p"&gt;))))&lt;/span&gt;&lt;span class="w"&gt;
+
+&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;defn&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;track&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="s"&gt;"Wrapper for analytics/track"&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;id&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;event&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;properties&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="no"&gt;:keys&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;timestamp&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="no"&gt;:as&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;options&lt;/span&gt;&lt;span class="p"&gt;}]&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;when&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;production?&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;.enqueue&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;client&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt;
+              &lt;/span&gt;&lt;span class="c1"&gt;;; Java interop to build the analytics message here)))
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I saw three downsides here:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;We&amp;rsquo;ll lose some efficiency from not reusing the TCP connection to segment.io&lt;/li&gt;
+&lt;li&gt;It&amp;rsquo;s possible that we&amp;rsquo;ll have to waste a bit of time authenticating the analytics client on each call&lt;/li&gt;
+&lt;li&gt;We&amp;rsquo;ll spawn an extra client object per call, which will be garbage collected right away as it goes out of scope immediately after the &lt;code&gt;track&lt;/code&gt; call&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The above three things aren&amp;rsquo;t intrinsically bad, and it seemed like optimizing the performance of your analytics engine early on was a wasteful thing to do in a fast-paced startup environment.&lt;/p&gt;
+
+&lt;p&gt;What I didn&amp;rsquo;t consider is that the java library uses &lt;code&gt;[ExecutorService](http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ExecutorService.html)&lt;/code&gt; to manage a threadpool, and &lt;code&gt;shutdown&lt;/code&gt; must be called explicitly. Otherwise, the threads are put on hold instead of being marked for GC (see also &lt;a href="http://stackoverflow.com/questions/16122987/reason-for-calling-shutdown-on-executorservice"&gt;this stackoverflow&lt;/a&gt;).&lt;/p&gt;
+
+&lt;h3&gt;Outcome&lt;/h3&gt;
+
+&lt;p&gt;Every analytics call we made spawned another threadpool, which caused the thread count to grow proportionally with user activity. We hit 40,000 threads before our application crashed.&lt;/p&gt;
+
+&lt;h3&gt;TL;DR:&lt;/h3&gt;
+
+&lt;p&gt;We spawned a new client object on every analytics call, not realizing that the underlying library uses a thread pool that&amp;rsquo;s not shutdown on garbage collection. This is how we ended up killing the server by hitting 40,000 threads&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Hello Appcanary</title>
     <link rel="alternate" href="http://blog.appcanary.com/2015/hello-appcanary.html"/>
     <id>http://blog.appcanary.com/2015/hello-appcanary.html</id>
     <published>2015-10-25T20:00:00-04:00</published>
-    <updated>2016-01-28T11:13:08-05:00</updated>
+    <updated>2016-01-29T16:22:53-05:00</updated>
     <author>
       <name>Team Appcanary</name>
     </author>
@@ -54,7 +181,7 @@
     <link rel="alternate" href="http://blog.appcanary.com/2015/hello-world.html"/>
     <id>http://blog.appcanary.com/2015/hello-world.html</id>
     <published>2015-07-25T20:00:00-04:00</published>
-    <updated>2016-01-27T17:02:04-05:00</updated>
+    <updated>2016-01-29T16:22:53-05:00</updated>
     <author>
       <name>Team Appcanary</name>
     </author>

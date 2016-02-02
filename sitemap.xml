@@ -2,49 +2,73 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>http://blog.appcanary.com/archive.html</loc>
-    <lastmod>2016-02-01T10:39:17-05:00</lastmod>
+    <lastmod>2016-02-02T10:23:06-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/2015/hello-world.html</loc>
-    <lastmod>2016-01-27T17:02:04-05:00</lastmod>
+    <lastmod>2016-01-29T16:22:53-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/2015/hello-appcanary.html</loc>
-    <lastmod>2016-01-28T11:13:08-05:00</lastmod>
+    <lastmod>2016-01-29T16:22:53-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>http://blog.appcanary.com/2016/state-management-downtime.html</loc>
+    <lastmod>2016-02-02T10:18:47-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/index.html</loc>
-    <lastmod>2016-02-01T10:39:17-05:00</lastmod>
+    <lastmod>2016-02-02T10:23:06-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/author/phillip-mendonca-vieira.html</loc>
-    <lastmod>2016-02-01T10:39:17-05:00</lastmod>
+    <lastmod>2016-02-02T10:23:06-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/author/max-veytsman.html</loc>
-    <lastmod>2016-02-01T10:39:17-05:00</lastmod>
+    <lastmod>2016-02-02T10:23:06-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/author/team-appcanary.html</loc>
-    <lastmod>2016-02-01T10:39:17-05:00</lastmod>
+    <lastmod>2016-02-02T10:23:06-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/tag/retrospective.html</loc>
-    <lastmod>2016-02-01T10:39:17-05:00</lastmod>
+    <lastmod>2016-02-02T10:23:06-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>http://blog.appcanary.com/tag/clojure.html</loc>
+    <lastmod>2016-02-02T10:23:06-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>http://blog.appcanary.com/tag/programming.html</loc>
+    <lastmod>2016-02-02T10:23:06-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>http://blog.appcanary.com/tag/developer-diary.html</loc>
+    <lastmod>2016-02-02T10:23:06-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
