@@ -1,5 +1,5 @@
 ---
-title: "How being lazy about state management caused downtime"
+title: "How being lazy about state management in Clojure caused us downtime"
 date: 2016-02-02
 tags:  Clojure, Programming, Developer Diary
 author: mveytsman
