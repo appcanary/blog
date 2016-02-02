@@ -11,7 +11,7 @@
     <link rel="alternate" href="http://blog.appcanary.com/2016/state-management-downtime.html"/>
     <id>http://blog.appcanary.com/2016/state-management-downtime.html</id>
     <published>2016-02-01T19:00:00-05:00</published>
-    <updated>2016-02-02T10:40:14-05:00</updated>
+    <updated>2016-02-02T16:54:57-05:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
@@ -123,6 +123,8 @@
 &lt;p&gt;The above three things aren&amp;rsquo;t intrinsically bad, and it seemed like optimizing the performance of your analytics engine early on was a wasteful thing to do in a fast-paced startup environment.&lt;/p&gt;
 
 &lt;p&gt;What I didn&amp;rsquo;t consider is that the java library uses &lt;a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ExecutorService.html"&gt;&lt;code&gt;ExecutorService&lt;/code&gt;&lt;/a&gt; to manage a threadpool, and &lt;code&gt;shutdown&lt;/code&gt; must be called explicitly. Otherwise, the threads are put on hold instead of being marked for GC (see also &lt;a href="http://stackoverflow.com/questions/16122987/reason-for-calling-shutdown-on-executorservice"&gt;this stackoverflow&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;The fact that each client spawns a thread that isn&amp;rsquo;t cleaned up by garbage collection was not &lt;a href="https://segment.com/docs/libraries/java/"&gt;documented&lt;/a&gt; unfortunately.&lt;/p&gt;
 
 &lt;h3&gt;Outcome&lt;/h3&gt;
 
