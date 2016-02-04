@@ -183,12 +183,12 @@
     <link rel="alternate" href="http://blog.appcanary.com/2015/hello-world.html"/>
     <id>http://blog.appcanary.com/2015/hello-world.html</id>
     <published>2015-07-25T20:00:00-04:00</published>
-    <updated>2016-01-29T16:22:53-05:00</updated>
+    <updated>2016-02-04T13:22:52-05:00</updated>
     <author>
       <name>Team Appcanary</name>
     </author>
     <content type="html">&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;In 2015, building web aplications involves more moving parts than ever before. The average web app depends on the interaction of hundreds of distinct open source software libraries.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;In 2015, building web applications involves more moving parts than ever before. The average web app depends on the interaction of hundreds of distinct open source software libraries.&lt;/p&gt;&lt;/li&gt;
 &lt;li&gt;&lt;p&gt;The easiest way to hack someone is through publically disclosed vulnerabilities they never patched.&lt;/p&gt;&lt;/li&gt;
 &lt;li&gt;&lt;p&gt;Due to a variety of technological but mostly social problems, it is really time consuming and expensive to find out about new vulns that affect us and keep our web apps patched. We mostly rely on email, twitter and hacker news as distribution channels.&lt;/p&gt;&lt;/li&gt;
 &lt;li&gt;&lt;p&gt;This sucks.&lt;/p&gt;&lt;/li&gt;
