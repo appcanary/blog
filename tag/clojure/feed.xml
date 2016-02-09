@@ -11,7 +11,7 @@
     <link rel="alternate" href="http://blog.appcanary.com/2016/state-management-downtime.html"/>
     <id>http://blog.appcanary.com/2016/state-management-downtime.html</id>
     <published>2016-02-01T19:00:00-05:00</published>
-    <updated>2016-02-02T16:54:57-05:00</updated>
+    <updated>2016-02-09T15:21:34-05:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
@@ -133,6 +133,24 @@
 &lt;h3&gt;TL;DR:&lt;/h3&gt;
 
 &lt;p&gt;We spawned a new client object on every analytics call, not realizing that the underlying library uses a thread pool that&amp;rsquo;s not shutdown on garbage collection. This is how we ended up killing the server by hitting 40,000 threads&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>A Gentle Intro to Datomic</title>
+    <link rel="alternate" href="http://blog.appcanary.com/2016/datomic-intro-talk.html"/>
+    <id>http://blog.appcanary.com/2016/datomic-intro-talk.html</id>
+    <published>2016-02-08T19:00:00-05:00</published>
+    <updated>2016-02-09T14:52:06-05:00</updated>
+    <author>
+      <name>Max Veytsman</name>
+    </author>
+    <content type="html">&lt;p&gt;We use &lt;a href="http://www.datomic.com/"&gt;Datomic&lt;/a&gt; as one of our datastores, and have been really enjoying it so far.&lt;/p&gt;
+
+&lt;p&gt;I gave a talk to my local &lt;a href="http://www.meetup.com/Clojure-Toronto/"&gt;Clojure meetup&lt;/a&gt; that provided a gentle introduction to Datomic and highlighted some cool features.&lt;/p&gt;
+
+&lt;p&gt;The slides are below:&lt;/p&gt;
+
+&lt;script async="" class="speakerdeck-embed" data-id="dd426e5c924f44eb9050c554137ae030" data-ratio="1.77777777777778" src="//speakerdeck.com/assets/embed.js"&gt;&lt;/script&gt;
 </content>
   </entry>
 </feed>
