@@ -5,7 +5,7 @@ author: team
 layout: post
 ---
 
-0. In 2015, building web aplications involves more moving parts than ever before. The average web app depends on the interaction of hundreds of distinct open source software libraries.
+0. In 2015, building web applications involves more moving parts than ever before. The average web app depends on the interaction of hundreds of distinct open source software libraries.
 
 1. The easiest way to hack someone is through publically disclosed vulnerabilities they never patched.
 
