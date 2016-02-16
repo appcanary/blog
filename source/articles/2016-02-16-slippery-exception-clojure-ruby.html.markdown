@@ -1,7 +1,7 @@
 ---
 title: Slippery exceptions in Clojure and Ruby
 date: 2016-02-16
-tags: Clojure, Ruby, Programming, Bugs
+tags: Clojure, Ruby, Programming, Bugs, Developer Diary
 author: phillmv
 published: true
 layout: post
