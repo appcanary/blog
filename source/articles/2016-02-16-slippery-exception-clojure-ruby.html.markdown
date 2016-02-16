@@ -3,7 +3,7 @@ title: Slippery exceptions in Clojure and Ruby
 date: 2016-02-16
 tags: Clojure, Ruby, Programming, Bugs
 author: phillmv
-published: false
+published: true
 layout: post
 ---
 
