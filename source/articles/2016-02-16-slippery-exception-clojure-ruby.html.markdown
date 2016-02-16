@@ -18,7 +18,7 @@ Recently I spent a couple of hours banging my head against code that looks like 
 (defn consume-manifest
   [contents kind]
   (try+
-    (app/parse-file kind contents)
+    (parse-file kind contents)
     
     (catch java.lang.Exception e
       (throw+ {:type ::bad-parse :message "Invalid file."}))))
