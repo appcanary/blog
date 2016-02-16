@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>Appcanary: Bugs</title>
-  <subtitle>Posts tagged with Bugs</subtitle>
+  <title>Appcanary: Ruby</title>
+  <subtitle>Posts tagged with Ruby</subtitle>
   <id>http://blog.appcanary.com</id>
   <link href="http://blog.appcanary.com"/>
-  <link href="http://blog.appcanary.com/tag/bugs/feed.xml" rel="self"/>
+  <link href="http://blog.appcanary.com/tag/ruby/feed.xml" rel="self"/>
   <updated>2016-02-15T19:00:00-05:00</updated>
   <entry>
     <title>Slippery exceptions in Clojure and Ruby</title>
