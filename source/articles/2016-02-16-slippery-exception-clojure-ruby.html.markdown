@@ -74,7 +74,7 @@ puts file.first(10)
     
     
 
-(Did you know that Ruby has had [lazy enumerables](http://railsware.com/blog/2012/03/13/ruby-2-0-enumerablelazy/) for almost four years now? Worth reading [Shaughnessy as well](http://patshaughnessy.net/2013/4/3/ruby-2-0-works-hard-so-you-can-be-lazy))
+(Did you know that Ruby has had [lazy enumerables](http://railsware.com/blog/2012/03/13/ruby-2-0-enumerablelazy/) for almost four years now? Worth reading [Shaughnessy as well](http://patshaughnessy.net/2013/4/3/ruby-2-0-works-hard-so-you-can-be-lazy).)
 
 That shut me up good. And in case you were wondering, the stack trace is also useless in Ruby; there simply isn't any context for it to preserve. Frankly, I've just never had to think about lazy data structures in Rubbyland; they've not been super popular. 
 
