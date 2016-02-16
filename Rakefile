@@ -12,6 +12,7 @@ end
 
 task :build => GH_PAGES_REF do
   cd PROJECT_ROOT do
+    sh "git pul"
     sh "bundle exec middleman build --no-clean"
   end
 end
