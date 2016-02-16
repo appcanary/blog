@@ -76,7 +76,7 @@ puts file.first(10)
 
 (Did you know that Ruby has had [lazy enumerables](http://railsware.com/blog/2012/03/13/ruby-2-0-enumerablelazy/) for almost four years now? Worth reading [Shaughnessy as well](http://patshaughnessy.net/2013/4/3/ruby-2-0-works-hard-so-you-can-be-lazy))
 
-That shut me up good. And in case you were wondering, the stack trace is also garbage in Ruby; there simply isn't any context for it to preserve. Frankly, I've just never had to think about lazy data structures in Rubbyland; they've not been super popular. 
+That shut me up good. And in case you were wondering, the stack trace is also useless in Ruby; there simply isn't any context for it to preserve. Frankly, I've just never had to think about lazy data structures in Rubbyland; they've not been super popular. 
 
 It's hard to reason about this. I want to write wrapper functions that make my code safe to consume downstream. This isn't feasible for any functions iterating over [`(/ 1.0 0.0)`](http://rosettacode.org/wiki/Infinity#Clojure), but fortunately for us we need to fit this file into memory anyways. In Ruby we'd have to force iterate over the whole sequence, but Clojure makes this easy with [`doall`](https://clojuredocs.org/clojure.core/doall):
 
