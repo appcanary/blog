@@ -147,7 +147,7 @@ on <a href='/tag/clojure.html'>Clojure</a>, <a href='/tag/ruby.html'>Ruby</a>, <
 
 <p>(Did you know that Ruby has had <a href="http://railsware.com/blog/2012/03/13/ruby-2-0-enumerablelazy/">lazy enumerables</a> for almost four years now? Worth reading <a href="http://patshaughnessy.net/2013/4/3/ruby-2-0-works-hard-so-you-can-be-lazy">Shaughnessy as well</a>.)</p>
 
-<p>That shut me up good. And in case you were wondering, the stack trace is also useless in Ruby; there simply isn&rsquo;t any context for it to preserve. Frankly, I&rsquo;ve just never had to think about lazy data structures in Rubbyland; they&rsquo;ve not been super popular. </p>
+<p>That shut me up good. And in case you were wondering, the stack trace is also useless in Ruby; there simply isn&rsquo;t any context for it to preserve. Frankly, I&rsquo;ve just never had to think about lazy data structures in Rubyland; they&rsquo;ve not been super popular. </p>
 
 <p>It&rsquo;s hard to reason about this. I want to write wrapper functions that make my code safe to consume downstream. This isn&rsquo;t feasible for any functions iterating over potentially infinite lazy sequences, but fortunately for us we need to fit this file into memory anyways. In Ruby we&rsquo;d have to forcibly iterate over every element of the sequence and check for exceptions, but Clojure makes this easy with <a href="https://clojuredocs.org/clojure.core/doall"><code>doall</code></a>:</p>
 <pre class="highlight clojure"><code><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">parse-file</span><span class="w">

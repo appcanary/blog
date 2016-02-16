@@ -11,7 +11,7 @@
     <link rel="alternate" href="http://blog.appcanary.com/2016/slippery-exception-clojure-ruby.html"/>
     <id>http://blog.appcanary.com/2016/slippery-exception-clojure-ruby.html</id>
     <published>2016-02-15T19:00:00-05:00</published>
-    <updated>2016-02-16T10:58:52-05:00</updated>
+    <updated>2016-02-16T11:06:47-05:00</updated>
     <author>
       <name>Phillip Mendonça-Vieira</name>
     </author>
@@ -77,7 +77,7 @@
 
 &lt;p&gt;(Did you know that Ruby has had &lt;a href="http://railsware.com/blog/2012/03/13/ruby-2-0-enumerablelazy/"&gt;lazy enumerables&lt;/a&gt; for almost four years now? Worth reading &lt;a href="http://patshaughnessy.net/2013/4/3/ruby-2-0-works-hard-so-you-can-be-lazy"&gt;Shaughnessy as well&lt;/a&gt;.)&lt;/p&gt;
 
-&lt;p&gt;That shut me up good. And in case you were wondering, the stack trace is also useless in Ruby; there simply isn&amp;rsquo;t any context for it to preserve. Frankly, I&amp;rsquo;ve just never had to think about lazy data structures in Rubbyland; they&amp;rsquo;ve not been super popular. &lt;/p&gt;
+&lt;p&gt;That shut me up good. And in case you were wondering, the stack trace is also useless in Ruby; there simply isn&amp;rsquo;t any context for it to preserve. Frankly, I&amp;rsquo;ve just never had to think about lazy data structures in Rubyland; they&amp;rsquo;ve not been super popular. &lt;/p&gt;
 
 &lt;p&gt;It&amp;rsquo;s hard to reason about this. I want to write wrapper functions that make my code safe to consume downstream. This isn&amp;rsquo;t feasible for any functions iterating over potentially infinite lazy sequences, but fortunately for us we need to fit this file into memory anyways. In Ruby we&amp;rsquo;d have to forcibly iterate over every element of the sequence and check for exceptions, but Clojure makes this easy with &lt;a href="https://clojuredocs.org/clojure.core/doall"&gt;&lt;code&gt;doall&lt;/code&gt;&lt;/a&gt;:&lt;/p&gt;
 &lt;pre class="highlight clojure"&gt;&lt;code&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;defn&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;parse-file&lt;/span&gt;&lt;span class="w"&gt;
