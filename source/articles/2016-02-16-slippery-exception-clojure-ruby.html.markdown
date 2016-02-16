@@ -1,7 +1,7 @@
 ---
-title: Slippery exceptions in clojure
-date: 2016-01-25
-tags: Clojure, Programming, Bugs
+title: Slippery exceptions in Clojure and Ruby
+date: 2016-02-16
+tags: Clojure, Ruby, Programming, Bugs
 author: phillmv
 published: false
 layout: post
@@ -12,7 +12,7 @@ Recently I spent a couple of hours banging my head against code that looks like 
 ```clojure
 (defn parse-file
   [contents]
-  (filter identity
+  (remove nil?
           (code-that throws-an-exception)))
 
 (defn consume-manifest
@@ -35,13 +35,13 @@ And much to my surprise, I kept getting the kind of exception `parse-file` gener
 
 I've grown somewhat used to Clojure exceptions being unhelpful, but this was taking the cake. Coming from Ruby and pretty much every other language, this brushed up rudely against my expectations. 
 
-We'd had some trouble in the past getting [slingshot](https://github.com/scgilardi/slingshot) to behave properly, so I zero'ed in on there. Don't all exceptions in Java descend from Exception? You can tell that exceptions in Clojure are unloved, given how cumbersome handling them natively is.
+You can tell that exceptions in Clojure are unloved, given how cumbersome handling them natively is. We'd had some trouble in the past getting [slingshot](https://github.com/scgilardi/slingshot) to behave properly, so I zero'ed in on there. Don't all exceptions in Java descend from `Exception`?
 
-Stepping through `check` in the [Cursive](cursive-ide.com) debugger, I could see that the exception generated didn't have the `type` "annotation" being set in `consume-manifest`, which meant that the exception was slipping straight through it. But calling `consume-manifest` directly in my repl was causing it to work as intended.
+Stepping through `check` in the [Cursive](cursive-ide.com) debugger, I could see that the exception generated didn't have the `:type` "annotation" being set in `consume-manifest`. This meant that the exception was slipping straight through uncaught. But calling `consume-manifest` directly in my repl was causing it to work as intended.
 
 What the hell was going on?
 
-[Max](https://twitter.com/mveytsman) took one look at it and set me straight. "Oh. [filter](https://clojuredocs.org/clojure.core/filter) is lazy, so the exception isn't being throw until the lazy sequence is accessed."
+[Max](https://twitter.com/mveytsman) took one look at it and set me straight. "Oh. [`remove`](https://clojuredocs.org/clojure.core/remove) is lazy, so the exception isn't being throw until the lazy sequence is accessed."
 
 Excuse me? I had an angry expression on my face. He looked sheepish.
 
@@ -83,7 +83,7 @@ It's hard to reason about this. I want to write wrapper functions that make my c
 ```clojure
 (defn parse-file
   [contents]
-  (doall (filter identity
+  (doall (remove nil?
                  (code-that throws-an-exception))))
 ```
 
