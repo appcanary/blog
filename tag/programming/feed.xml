@@ -11,7 +11,7 @@
     <link rel="alternate" href="http://blog.appcanary.com/2016/state-management-downtime.html"/>
     <id>http://blog.appcanary.com/2016/state-management-downtime.html</id>
     <published>2016-02-01T19:00:00-05:00</published>
-    <updated>2016-02-16T10:53:06-05:00</updated>
+    <updated>2016-02-16T10:55:40-05:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
@@ -140,7 +140,7 @@
     <link rel="alternate" href="http://blog.appcanary.com/2016/datomic-intro-talk.html"/>
     <id>http://blog.appcanary.com/2016/datomic-intro-talk.html</id>
     <published>2016-02-08T19:00:00-05:00</published>
-    <updated>2016-02-09T14:52:06-05:00</updated>
+    <updated>2016-02-16T10:31:39-05:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
@@ -158,7 +158,7 @@
     <link rel="alternate" href="http://blog.appcanary.com/2016/slippery-exception-clojure-ruby.html"/>
     <id>http://blog.appcanary.com/2016/slippery-exception-clojure-ruby.html</id>
     <published>2016-02-15T19:00:00-05:00</published>
-    <updated>2016-02-16T10:52:24-05:00</updated>
+    <updated>2016-02-16T10:58:52-05:00</updated>
     <author>
       <name>Phillip Mendonça-Vieira</name>
     </author>
@@ -171,7 +171,7 @@
 &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;defn&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;consume-manifest&lt;/span&gt;&lt;span class="w"&gt;
   &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;contents&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;kind&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="w"&gt;
   &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;try+&lt;/span&gt;&lt;span class="w"&gt;
-    &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;app/parse-file&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;kind&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;contents&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;parse-file&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;kind&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;contents&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt;
 
     &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;catch&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;java.lang.Exception&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="w"&gt;
       &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;throw+&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="no"&gt;:type&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="no"&gt;::bad-parse&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="no"&gt;:message&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;"Invalid file."&lt;/span&gt;&lt;span class="p"&gt;}))))&lt;/span&gt;&lt;span class="w"&gt;
@@ -222,7 +222,7 @@
 &lt;span class="nb"&gt;puts&lt;/span&gt; &lt;span class="n"&gt;file&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nf"&gt;first&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;(Did you know that Ruby has had &lt;a href="http://railsware.com/blog/2012/03/13/ruby-2-0-enumerablelazy/"&gt;lazy enumerables&lt;/a&gt; for almost four years now? Worth reading &lt;a href="http://patshaughnessy.net/2013/4/3/ruby-2-0-works-hard-so-you-can-be-lazy"&gt;Shaughnessy as well&lt;/a&gt;)&lt;/p&gt;
+&lt;p&gt;(Did you know that Ruby has had &lt;a href="http://railsware.com/blog/2012/03/13/ruby-2-0-enumerablelazy/"&gt;lazy enumerables&lt;/a&gt; for almost four years now? Worth reading &lt;a href="http://patshaughnessy.net/2013/4/3/ruby-2-0-works-hard-so-you-can-be-lazy"&gt;Shaughnessy as well&lt;/a&gt;.)&lt;/p&gt;
 
 &lt;p&gt;That shut me up good. And in case you were wondering, the stack trace is also useless in Ruby; there simply isn&amp;rsquo;t any context for it to preserve. Frankly, I&amp;rsquo;ve just never had to think about lazy data structures in Rubbyland; they&amp;rsquo;ve not been super popular. &lt;/p&gt;
 

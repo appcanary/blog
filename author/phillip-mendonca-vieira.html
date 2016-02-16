@@ -101,7 +101,7 @@
 </span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">consume-manifest</span><span class="w">
   </span><span class="p">[</span><span class="n">contents</span><span class="w"> </span><span class="n">kind</span><span class="p">]</span><span class="w">
   </span><span class="p">(</span><span class="nf">try+</span><span class="w">
-    </span><span class="p">(</span><span class="nf">app/parse-file</span><span class="w"> </span><span class="n">kind</span><span class="w"> </span><span class="n">contents</span><span class="p">)</span><span class="w">
+    </span><span class="p">(</span><span class="nf">parse-file</span><span class="w"> </span><span class="n">kind</span><span class="w"> </span><span class="n">contents</span><span class="p">)</span><span class="w">
 
     </span><span class="p">(</span><span class="nf">catch</span><span class="w"> </span><span class="n">java.lang.Exception</span><span class="w"> </span><span class="n">e</span><span class="w">
       </span><span class="p">(</span><span class="nf">throw+</span><span class="w"> </span><span class="p">{</span><span class="no">:type</span><span class="w"> </span><span class="no">::bad-parse</span><span class="w"> </span><span class="no">:message</span><span class="w"> </span><span class="s">"Invalid file."</span><span class="p">}))))</span><span class="w">
@@ -152,7 +152,7 @@
 <span class="nb">puts</span> <span class="n">file</span><span class="p">.</span><span class="nf">first</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 </code></pre>
 
-<p>(Did you know that Ruby has had <a href="http://railsware.com/blog/2012/03/13/ruby-2-0-enumerablelazy/">lazy enumerables</a> for almost four years now? Worth reading <a href="http://patshaughnessy.net/2013/4/3/ruby-2-0-works-hard-so-you-can-be-lazy">Shaughnessy as well</a>)</p>
+<p>(Did you know that Ruby has had <a href="http://railsware.com/blog/2012/03/13/ruby-2-0-enumerablelazy/">lazy enumerables</a> for almost four years now? Worth reading <a href="http://patshaughnessy.net/2013/4/3/ruby-2-0-works-hard-so-you-can-be-lazy">Shaughnessy as well</a>.)</p>
 
 <p>That shut me up good. And in case you were wondering, the stack trace is also useless in Ruby; there simply isn&rsquo;t any context for it to preserve. Frankly, I&rsquo;ve just never had to think about lazy data structures in Rubbyland; they&rsquo;ve not been super popular. </p>
 
