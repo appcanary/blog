@@ -1,5 +1,5 @@
 ---
-title: Two major announcements (API & CentOS Support) 
+title: Announcing CentOS support and an API 
 date: 2016-03-07
 tags: Announcements, Product
 author: mveytsman
