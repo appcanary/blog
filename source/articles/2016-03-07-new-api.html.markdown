@@ -1,28 +1,19 @@
 ---
-title: Announcing CentOS support and an API 
+title: Announcing: the new Appcanary API
 date: 2016-03-07
 tags: Announcements, Product
 author: mveytsman
 published: true
 layout: post
 ---
-We've got two big announcements this month.
 
-## CentOS 7 Support
+A lot of our users have told us, "gosh, I'd love to know exactly which packages I have to update in order to keep my apps and servers secure - but we can't use your agent for Good Reasons. What about an API?".
 
-Appcanary now fully supports **CentoOS 7**. If you install our agent on a CentOS 7
-server, we will email you notifications whenever any rpm package you have
-installed on your system has a known vulnerability.
+We listened carefully to that feedback, and it is with pride and pleasure that we're announcing our new API beta! We're still busy improving it, so we won't charge you for it for now.
 
-## We're betaing an API
+Once you <a href="https://appcanary.com/sign_up">sign up</a>, all you have to do is issue a curl:
 
-We've gotten a lot of feedback from our users that they want to use Appcanary as an API, so we put one out! 
-
-We're running a free beta of it for now, so we won't charge you for it if you're just using the API.
-
-All you have to do is 
-
-```
+```bash
 curl -H "Authorization: Token YOURTOKENHERE" \
      -X POST -F file=@./Gemfile.lock \
      https://appcanary.com/api/v2/check/ruby
@@ -30,7 +21,7 @@ curl -H "Authorization: Token YOURTOKENHERE" \
 
 and you'll get a response like:
 
-```
+```json
 {
   "vulnerable": true,
   "data": [
@@ -71,4 +62,6 @@ Our API fully supports **Ruby**, **Ubuntu**, and **CentOS 7**! You can learn mor
 
 If you're not a current user and want to try out Appcanary's API and/or use us to monitor your CentOS 7 servers, you can [sign up](https://appcanary.com/signup)!
 
-You can always let us know what you think at [hello@appcanary.com](mailto:hello@appcanary.com)!
+You can always let us know what you think at [hello@appcanary.com](mailto:hello@appcanary.com).
+
+Have a good one,
