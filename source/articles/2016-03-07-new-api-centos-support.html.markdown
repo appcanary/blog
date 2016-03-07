@@ -1,5 +1,5 @@
 ---
-title: Hello, new Appcanary API!
+title: Hello, new Appcanary API and CentOS support!
 date: 2016-03-07
 tags: Announcements, Product
 author: mveytsman
@@ -9,7 +9,7 @@ layout: post
 
 A lot of our users have told us, 
 
->"Gosh, I'd love to know exactly which packages I have to update in order to keep my apps and servers secure - but we can't use your agent for Good Reasons. Have you thought about an API?"
+>"Gosh, I love knowing exactly which packages I have to update in order to keep my apps and servers secure. Have you thought about an API?"
 
 We listened carefully to that feedback, and it is with pride and pleasure that we're announcing our new beta! We're still busy improving it, so we won't charge you for it for now.
 
@@ -62,8 +62,15 @@ and you'll get a response like:
 
 Our API fully supports **Ruby**, **Ubuntu**, and **CentOS 7**! You can learn more about how to use it by visiting [the docs page](https://appcanary.com/docs).
 
+
+Which reminds us,
+
+## We now support CentOS 7!
+
+Appcanary now fully supports **CentoOS 7**. If you install our agent on a CentOS 7 server, we will email you notifications whenever any rpm package you have installed on your system has a known vulnerability.
+
+
 If you're not a current user and want to try out Appcanary's API and/or use us to monitor your CentOS 7 servers, you can [sign up](https://appcanary.com/signup)!
 
-You can always let us know what you think at [hello@appcanary.com](mailto:hello@appcanary.com).
 
-Have a good one,
+You can always let us know what you think at [hello@appcanary.com](mailto:hello@appcanary.com).
