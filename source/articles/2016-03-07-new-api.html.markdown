@@ -1,5 +1,5 @@
 ---
-title: Announcing: the new Appcanary API
+title: Hello, new Appcanary API!
 date: 2016-03-07
 tags: Announcements, Product
 author: mveytsman
@@ -7,9 +7,11 @@ published: true
 layout: post
 ---
 
-A lot of our users have told us, "gosh, I'd love to know exactly which packages I have to update in order to keep my apps and servers secure - but we can't use your agent for Good Reasons. What about an API?".
+A lot of our users have told us, 
 
-We listened carefully to that feedback, and it is with pride and pleasure that we're announcing our new API beta! We're still busy improving it, so we won't charge you for it for now.
+>"Gosh, I'd love to know exactly which packages I have to update in order to keep my apps and servers secure - but we can't use your agent for Good Reasons. Have you thought about an API?"
+
+We listened carefully to that feedback, and it is with pride and pleasure that we're announcing our new beta! We're still busy improving it, so we won't charge you for it for now.
 
 Once you <a href="https://appcanary.com/sign_up">sign up</a>, all you have to do is issue a curl:
 
@@ -58,7 +60,7 @@ and you'll get a response like:
 }
 ```
 
-Our API fully supports **Ruby**, **Ubuntu**, and **CentOS 7**! You can learn more about how to use it [https://appcanary.com/docs](https://appcanary.com/docs)
+Our API fully supports **Ruby**, **Ubuntu**, and **CentOS 7**! You can learn more about how to use it by visiting [the docs page](https://appcanary.com/docs).
 
 If you're not a current user and want to try out Appcanary's API and/or use us to monitor your CentOS 7 servers, you can [sign up](https://appcanary.com/signup)!
 
