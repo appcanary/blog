@@ -35,7 +35,7 @@ task :deploy => [:not_dirty, :build] do
       else
         sh "git commit -m \"#{message}\""
       end
-      sh "git push origin gh-pages"
+      sh "git push -f origin gh-pages"
     end
   end
 end
