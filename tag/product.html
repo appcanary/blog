@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Appcanary</title>
+<title>Appcanary: Product</title>
 <meta content='&lt;a href="https://appcanary.com"&gt;Appcanary&lt;/a&gt; makes sure you never run vulnerable software in your apps.' name='description'>
 <meta charset='utf-8'>
 <meta content='width=device-width, initial-scale=1.0' name='viewport'>
@@ -9,11 +9,13 @@
 <meta content='True' name='HandheldFriendly'>
 <meta content='Appcanary' property='og:site_name'>
 <meta content='website' property='og:type'>
+<meta content='Product' property='og:title'>
 <meta content='&lt;a href="https://appcanary.com"&gt;Appcanary&lt;/a&gt; makes sure you never run vulnerable software in your apps.' property='og:description'>
-<meta content='http://blog.appcanary.com/author/max-veytsman.html' property='og:url'>
+<meta content='http://blog.appcanary.com/tag/product.html' property='og:url'>
 <meta content='summary' name='twitter:card'>
+<meta content='Product' name='twitter:title'>
 <meta content='&lt;a href="https://appcanary.com"&gt;Appcanary&lt;/a&gt; makes sure you never run vulnerable software in your apps.' name='twitter:description'>
-<meta content='http://blog.appcanary.com/author/max-veytsman.html' name='twitter:url'>
+<meta content='http://blog.appcanary.com/tag/product.html' name='twitter:url'>
 <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="/feed.xml" />
 <link href="/images/favicon.ico" rel="icon" type="image/ico" />
 <link href="../stylesheets/application.css" rel="stylesheet" />
@@ -39,52 +41,28 @@
 <a href='https://github.com/appcanary'>Github</a>
 </li>
 </ul>
-<a class='subscribe-button icon-feed' href='/feed.xml'>Subscribe</a>
+<a class='subscribe-button icon-feed' href='/tag/product.htmlfeed.xml'>Subscribe</a>
 </div>
 <span class='nav-cover'></span>
 
 <div class='site-wrapper'>
-<header class='main-header no-cover'>
+<header class='main-header no-cover tag-head'>
 <nav class='main-nav overlay clearfix'>
+<a class='blog-logo' href='/'>
+<img alt="Appcanary" src="../images/appcanary.png" />
+</a>
 </nav>
 <div class='vertical'>
 <div class='main-header-content inner'>
-<a class='appcanary-logo' href='/'>
-<img alt="Appcanary" src="../images/appcanary.png" />
-</a>
-<h2 class='page-description'><a href="https://appcanary.com">Appcanary</a> makes sure you never run vulnerable software in your apps.</h2>
-<div class='more-icons'>
-<a alt='Github' href='https://github.com/appcanary' title='Github'>
-<i class='fa fa-github-square'></i>
-</a>
-<a alt='Archive' href='/archive.html' title='Archive'>
-<i class='fa fa-archive'></i>
-</a>
-<a alt='Feed' href='/feed.xml' title='Feed'>
-<i class='fa fa-rss-square'></i>
-</a>
+<h1 class='page-title'>Product</h1>
+<h2 class='page-description'>A 2-post collection</h2>
 </div>
 </div>
-</div>
-<a class='scroll-down icon-arrow-left' data-offset='-45' href='#content'>
-<span class='hidden'>Scroll Down</span>
-</a>
 </header>
-
-<section class='author-profile inner'>
-<h1 class='author-title'>Max Veytsman</h1>
-<div class='author-meta'>
-<span class='author-stats'>
-<i class='icon-stats'></i>
-4 posts
-</span>
-</div>
-</section>
 <main class='content' id='content' role='main'>
 <div class='extra-pagination inner'>
 <nav class='pagination' role='pagination'>
-<span class='page-number'>Page 1 of 2</span>
-<a class="older-posts" href="max-veytsman/page/2.html">Older Posts →</a>
+<span class='page-number'>Page 1 of 1</span>
 </nav>
 
 </div>
@@ -287,164 +265,8 @@ on <a href='/tag/announcements.html'>Announcements</a>, <a href='/tag/product.ht
 </time>
 </footer>
 </article>
-<article class='post'>
-<header class='post-header'>
-<h1 class='post-title'><a href="../2016/datomic-intro-talk.html">A Gentle Intro to Datomic</a></h1>
-</header>
-<section class='post-content'>
-<p>We use <a href="http://www.datomic.com/">Datomic</a> as one of our datastores, and have been really enjoying it so far.</p>
-
-<p>I gave a talk to my local <a href="http://www.meetup.com/Clojure-Toronto/">Clojure meetup</a> that provided a gentle introduction to Datomic and highlighted some cool features.</p>
-
-<p>The slides are below:</p>
-
-<script async="" class="speakerdeck-embed" data-id="dd426e5c924f44eb9050c554137ae030" data-ratio="1.77777777777778" src="//speakerdeck.com/assets/embed.js"></script>
-
-</section>
-<footer class='post-meta'>
-<a href='/author/max-veytsman.html'>Max Veytsman</a>
-on <a href='/tag/clojure.html'>Clojure</a>, <a href='/tag/datomic.html'>Datomic</a>, <a href='/tag/programming.html'>Programming</a>, <a href='/tag/talks.html'>Talks</a>
-<time class='post-date' datetime='2016-02-09'>
-09 February 2016
-</time>
-</footer>
-</article>
-<article class='post'>
-<header class='post-header'>
-<h1 class='post-title'><a href="../2016/state-management-downtime.html">How being lazy about state management in Clojure caused us downtime</a></h1>
-</header>
-<section class='post-content'>
-<p>On November 10th, we suffered some downtime as our backend application mysteriously crashed and had to be restarted. After looking at our process monitoring service, I found a very suspicious graph:</p>
-
-<p><img alt="image" src="../images/system.process.threads.png" /></p>
-
-<p>Somehow, we managed to spin up more then 30,000 threads right before the application crashed. This was very likely the cause of the failure, but how did it happen?</p>
-
-<p>An easy way to get an idea of where a thread leak is coming from is to look at the thread names. In Java you can do this with <code>jstack -l $PID</code>.</p>
-
-<p>To get a list of all thread names of a Java application sorted by most common name, you can do:</p>
-<pre class="highlight plaintext"><code>jstack -l $PID | grep daemon |  awk '{ print $1 }' | sort | uniq -c |   sort -nr
-</code></pre>
-
-<p>Which on our end yielded something like this:</p>
-<pre class="highlight plaintext"><code>  30000 "Analytics"
-      2 "Datomic
-      2 "C2
-      1 "worker-4"
-      1 "worker-3"
-      1 "worker-2"
-      1 "worker-1"
-      1 "Timer-0"
-      1 "Thread-5"
-      1 "Thread-4
-      1 "Thread-3
-      1 "Thread-2
-      1 "Thread-1
-      1 "Thread-0
-</code></pre>
-
-<p>Hmm&hellip;</p>
-
-<h3>Background</h3>
-
-<p>Our backend is written in Clojure and we use Stuart Sierra&rsquo;s <a href="https://github.com/stuartsierra/component">component</a> framework to manage most of our application&rsquo;s state and lifecycle. Normally this should prevent runaway threads, but unfortunately for us our analytics client&rsquo;s state was managed independently of the framework. To explain why, I need to first delve a little in to how component works.</p>
-
-<p>Regardless of how beautiful and functional it may be, any application that talks to the outside world will need to manage some state representing these external resources. We need to manage our database connections, our clients for external APIs, our background workers, etc.</p>
-
-<p>One way to deal with this in Clojureland is to create a global singleton object for representing each stateful piece, possibly wrapped in an <code>atom</code>. This feels lacking, though. You still need a way to initialize all these singletons on startup, and having mutable singletons everywhere goes against what I would consider good Clojure style.</p>
-
-<p>Component solves this problem by implementing dependency injection in a Clojurelike way. You define a graph that represents each stateful piece, how they depend on each other, and how each piece starts and stops. On system start, component boots each piece in the right order, passing along references to dependencies when they&rsquo;re needed.</p>
-
-<p>For example, Appcanary&rsquo;s dependency graph looks (something) like this:</p>
-<pre class="highlight clojure"><code><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">canary-system</span><span class="w">
-  </span><span class="p">[]</span><span class="w">
-  </span><span class="c1">;;Initialize logging
-</span><span class="w">  </span><span class="p">(</span><span class="nf">component/system-map</span><span class="w">
-   </span><span class="no">:datomic</span><span class="w"> </span><span class="p">(</span><span class="nf">new-datomic</span><span class="w"> </span><span class="p">(</span><span class="nf">env</span><span class="w"> </span><span class="no">:datomic-uri</span><span class="p">))</span><span class="w">
-   </span><span class="no">:scheduler</span><span class="w"> </span><span class="p">(</span><span class="nf">new-scheduler</span><span class="p">)</span><span class="w">
-   </span><span class="no">:mailer</span><span class="w"> </span><span class="p">(</span><span class="nf">component/using</span><span class="w">  </span><span class="p">(</span><span class="nf">new-mailer</span><span class="w"> </span><span class="p">(</span><span class="nf">env</span><span class="w"> </span><span class="no">:mandrill-key</span><span class="p">))</span><span class="w">
-                             </span><span class="p">[</span><span class="no">:datomic</span><span class="w"> </span><span class="no">:scheduler</span><span class="p">])</span><span class="w">
-   </span><span class="no">:web-server</span><span class="w"> </span><span class="p">(</span><span class="nf">component/using</span><span class="w"> </span><span class="p">(</span><span class="nf">new-web-server</span><span class="w"> </span><span class="p">(</span><span class="nf">env</span><span class="w"> </span><span class="no">:http-ip</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nf">Integer.</span><span class="w"> </span><span class="p">(</span><span class="nf">env</span><span class="w"> </span><span class="no">:http-port</span><span class="p">))</span><span class="w"> </span><span class="n">canary-api</span><span class="p">)</span><span class="w">
-                             </span><span class="p">[</span><span class="no">:datomic</span><span class="p">])))</span><span class="w">
-</span></code></pre>
-
-<p>The <code>mailer</code> depends on <code>datomic</code> and the <code>scheduler</code>, the web server depends on <code>datomic</code>, and both <code>datomic</code> and the <code>scheduler</code> don&rsquo;t depend on anything.</p>
-
-<p>Like all the other components, the <code>new-datomic</code> function is a constructor for a record that knows how to start and stop itself. On system start, all the components are started, and the dependencies are filled in.</p>
-
-<h3>Sometimes component feels like overkill</h3>
-
-<p>Component is great, but it didn&rsquo;t fit our analytics engine usecase. We use <a href="https://segment.io">segment.io</a> to handle our app analytics, and we needed to maintain a client to talk to it. An analytics event can potentially be called from anywhere in the app, but it&rsquo;s cumbersome to pass an analytics client reference to every component, and into every analytics call. If every component depends on something, it feels like maybe it should be a global singleton. Futhermore, I don&rsquo;t want my components to know much about the analytics client at all; I just want them to know how to trigger events.</p>
-
-<p>What I want to have is an analytics namespace which contains all the events I may want to trigger, and wraps the client inside all of them. This lets me  do something like <code>(analytics/user-added-server user)</code> inside of the code that handles server creation.</p>
-
-<p>(One thing to note is that while there is a clojure segment.io <a href="https://github.com/ardoq/analytics-clj">client</a>, it&rsquo;s based off a 1.x release of the underlying <a href="https://github.com/segmentio/analytics-java">java library</a>, while we wanted to use features only available in the 2.0 release. Because of that, I wrote an analytics namespace that called the java library directly).</p>
-
-<p>The first pass of creating the client looked something like this:</p>
-<pre class="highlight clojure"><code><span class="p">(</span><span class="nf">defonce</span><span class="w"> </span><span class="n">client</span><span class="w">
-  </span><span class="p">(</span><span class="nf">.build</span><span class="w"> </span><span class="p">(</span><span class="nf">Analytics/builder</span><span class="w"> </span><span class="p">(</span><span class="nf">env</span><span class="w"> </span><span class="no">:segment-api-key</span><span class="p">))))</span><span class="w">
-
-</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">track</span><span class="w">
-  </span><span class="s">"Wrapper for analytics/track"</span><span class="w">
-  </span><span class="p">[</span><span class="n">id</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="n">properties</span><span class="w"> </span><span class="p">{</span><span class="no">:keys</span><span class="w"> </span><span class="p">[</span><span class="n">timestamp</span><span class="p">]</span><span class="w"> </span><span class="no">:as</span><span class="w"> </span><span class="n">options</span><span class="p">}]</span><span class="w">
-  </span><span class="p">(</span><span class="nb">when</span><span class="w"> </span><span class="p">(</span><span class="nf">production?</span><span class="p">)</span><span class="w">
-    </span><span class="p">(</span><span class="nf">.enqueue</span><span class="w"> </span><span class="n">client</span><span class="w">
-              </span><span class="c1">;; Java interop to build the analytics message here)))
-</span></code></pre>
-
-<p>There&rsquo;s only one problem with the above code: the segment api key is loaded from an environment variable. </p>
-
-<p>We deploy appcanary in a pretty standard way &ndash; we compile an uberjar and rsync it to the server. API keys live in environment variables, and the production API key is only going to live on the production server. So, at compile time, we have no way of knowing what the segment api key is. As a result, the analytics client needs to be built at runtime and not compile time in order to have access to the api key.</p>
-
-<h3>This is where I get lazy</h3>
-
-<p>The obvious thing to do to build the analytics client at runtime is to wrap it as a function:</p>
-<pre class="highlight clojure"><code><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">client</span><span class="w">
-  </span><span class="p">[]</span><span class="w">
-  </span><span class="p">(</span><span class="nf">.build</span><span class="w"> </span><span class="p">(</span><span class="nf">Analytics/builder</span><span class="w"> </span><span class="p">(</span><span class="nf">env</span><span class="w"> </span><span class="no">:segment-api-key</span><span class="p">))))</span><span class="w">
-
-</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">track</span><span class="w">
-  </span><span class="s">"Wrapper for analytics/track"</span><span class="w">
-  </span><span class="p">[</span><span class="n">id</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="n">properties</span><span class="w"> </span><span class="p">{</span><span class="no">:keys</span><span class="w"> </span><span class="p">[</span><span class="n">timestamp</span><span class="p">]</span><span class="w"> </span><span class="no">:as</span><span class="w"> </span><span class="n">options</span><span class="p">}]</span><span class="w">
-  </span><span class="p">(</span><span class="nb">when</span><span class="w"> </span><span class="p">(</span><span class="nf">production?</span><span class="p">)</span><span class="w">
-    </span><span class="p">(</span><span class="nf">.enqueue</span><span class="w"> </span><span class="p">(</span><span class="nf">client</span><span class="p">)</span><span class="w">
-              </span><span class="c1">;; Java interop to build the analytics message here)))
-</span></code></pre>
-
-<p>I saw three downsides here:</p>
-
-<ol>
-<li>We&rsquo;ll lose some efficiency from not reusing the TCP connection to segment.io</li>
-<li>It&rsquo;s possible that we&rsquo;ll have to waste a bit of time authenticating the analytics client on each call</li>
-<li>We&rsquo;ll spawn an extra client object per call, which will be garbage collected right away as it goes out of scope immediately after the <code>track</code> call</li>
-</ol>
-
-<p>The above three things aren&rsquo;t intrinsically bad, and it seemed like optimizing the performance of your analytics engine early on was a wasteful thing to do in a fast-paced startup environment.</p>
-
-<p>What I didn&rsquo;t consider is that the java library uses <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ExecutorService.html"><code>ExecutorService</code></a> to manage a threadpool, and <code>shutdown</code> must be called explicitly. Otherwise, the threads are put on hold instead of being marked for GC (see also <a href="http://stackoverflow.com/questions/16122987/reason-for-calling-shutdown-on-executorservice">this stackoverflow</a>).</p>
-
-<p>The fact that each client spawns a thread that isn&rsquo;t cleaned up by garbage collection was not <a href="https://segment.com/docs/libraries/java/">documented</a> unfortunately.</p>
-
-<h3>Outcome</h3>
-
-<p>Every analytics call we made spawned another threadpool, which caused the thread count to grow proportionally with user activity. We hit 40,000 threads before our application crashed.</p>
-
-<h3>TL;DR:</h3>
-
-<p>We spawned a new client object on every analytics call, not realizing that the underlying library uses a thread pool that&rsquo;s not shutdown on garbage collection. This is how we ended up killing the server by hitting 40,000 threads</p>
-
-</section>
-<footer class='post-meta'>
-<a href='/author/max-veytsman.html'>Max Veytsman</a>
-on <a href='/tag/clojure.html'>Clojure</a>, <a href='/tag/programming.html'>Programming</a>, <a href='/tag/developer-diary.html'>Developer Diary</a>, <a href='/tag/bugs.html'>Bugs</a>
-<time class='post-date' datetime='2016-02-02'>
-02 February 2016
-</time>
-</footer>
-</article>
 <nav class='pagination' role='pagination'>
-<span class='page-number'>Page 1 of 2</span>
-<a class="older-posts" href="max-veytsman/page/2.html">Older Posts →</a>
+<span class='page-number'>Page 1 of 1</span>
 </nav>
 
 
