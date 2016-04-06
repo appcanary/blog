@@ -7,17 +7,17 @@ published: true
 layout: post
 ---
 
-After the success of our [check](http://blog.appcanary.com/2016/new-api-centos-support.html) API, we found that our users told us:
+After the success of our [Check API](http://blog.appcanary.com/2016/new-api-centos-support.html), we found that our users told us:
 
->"I love your API so much! But can I use it register the packages my app uses and get emailed if new vulnerabilities that affect me come out? Oh, and it would be nice if I could pragmatically query the servers I have agents running on too!"
+>"I really like your API! But what if I could... register the packages my app uses and get a notification when I'm affected by vulnerabilities? While you're at it, it'd be nice if I could progamatically query the servers I have agents running on!"
 
 So we went ahead and built both.
 
 ## The Monitor API
 
-The "Monitor" API lets you register a Gemfile or an Ubuntu/CentOS package list to be emailed when new vulnerabilities are discovered. It like what our agent does, but in situations where it doesn't make sense like when you use Docker or deploy on a PaaS like Heroku.
+The Monitor API lets you register a Gemfile or an Ubuntu/CentOS package list. Whenever they're affected by a new vulnerability, you get an email. It's just like running our agent, but with the flexibility to mold it to your deployment process - i.e. for those of you who use Docker or a PaaS like Heroku.
 
-You can register a new monitor by:
+You can register a new monitor by simply issuing a POST:
 
 ```bash
 curl -H "Authorization: Token YOURTOKENHERE" \
@@ -40,16 +40,17 @@ and you'll get a response like:
 }
 ```
 
-And, you'll be emailed about any vulnerabilities that affect your app as soon as we find out about them!
+That's all it takes. From here on, you'll be emailed about any vulnerabilities that affect your app as soon as we find out about them!
 
 You can also list, inspect, or delete monitors via the API. More information [here](https://appcanary.com/docs#create-monitor).
 
 
 ## The Server API
 
-The "Server" API allows you to navigate the servers you have the Appcanary agent running on via API, and list any vulnerabilities that affect them!
+The Server API allows you to inspect the servers running the Appcanary agent, and list any vulnerabilities that affect them!
 
 I can see the servers I have agents running on with:
+
 ```bash
 curl -H "Authorization: Token YOURTOKENHERE" \
       https://appcanary.com/api/v2/servers
