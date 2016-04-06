@@ -2,7 +2,7 @@
 <html>
 <head>
 <title>Appcanary: Two new APIs from Appcanary</title>
-<meta content='After the success of our Check API, we found that our users told us: &amp;ldquo;I really like your API! But what if I could&amp;hellip; register the pac...' name='description'>
+<meta content='After the success of our check API, we found that our users told us: &amp;ldquo;I love your API so much! But can I use it register the packages my a...' name='description'>
 <meta charset='utf-8'>
 <meta content='width=device-width, initial-scale=1.0' name='viewport'>
 <meta content='IE=edge' http-equiv='X-UA-Compatible'>
@@ -10,12 +10,12 @@
 <meta content='Appcanary' property='og:site_name'>
 <meta content='article' property='og:type'>
 <meta content='Two new APIs from Appcanary' property='og:title'>
-<meta content='After the success of our Check API, we found that our users told us: &amp;ldquo;I really like your API! But what if I could&amp;hellip; register the pac...' property='og:description'>
+<meta content='After the success of our check API, we found that our users told us: &amp;ldquo;I love your API so much! But can I use it register the packages my a...' property='og:description'>
 <meta content='http://blog.appcanary.com/2016/two-new-apis.html' property='og:url'>
-<meta content='2016-04-05' property='article:published_time'>
+<meta content='2016-04-06' property='article:published_time'>
 <meta content='summary' name='twitter:card'>
 <meta content='Two new APIs from Appcanary' name='twitter:title'>
-<meta content='After the success of our Check API, we found that our users told us: &amp;ldquo;I really like your API! But what if I could&amp;hellip; register the pac...' name='twitter:description'>
+<meta content='After the success of our check API, we found that our users told us: &amp;ldquo;I love your API so much! But can I use it register the packages my a...' name='twitter:description'>
 <meta content='http://blog.appcanary.com/2016/two-new-apis.html' name='twitter:url'>
 <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="/feed.xml" />
 <link href="/images/favicon.ico" rel="icon" type="image/ico" />
@@ -79,25 +79,25 @@
 <header class='post-header'>
 <h1 class='post-title'>Two new APIs from Appcanary</h1>
 <section class='post-meta'>
-<time class='post-date' datetime='2016-04-05'>
-05 April 2016
+<time class='post-date' datetime='2016-04-06'>
+06 April 2016
 </time>
 on <a href='/tag/announcements.html'>Announcements</a>, <a href='/tag/product.html'>Product</a>
 </section>
 </header>
-<section class='post-content'><p>After the success of our <a href="http://blog.appcanary.com/2016/new-api-centos-support.html">Check API</a>, we found that our users told us:</p>
+<section class='post-content'><p>After the success of our <a href="http://blog.appcanary.com/2016/new-api-centos-support.html">check</a> API, we found that our users told us:</p>
 
 <blockquote>
-<p>&ldquo;I really like your API! But what if I could&hellip; register the packages my app uses and get a notification when I&rsquo;m affected by vulnerabilities? While you&rsquo;re at it, it&rsquo;d be nice if I could progamatically query the servers I have agents running on!&rdquo;</p>
+<p>&ldquo;I love your API so much! But can I use it register the packages my app uses and get emailed if new vulnerabilities that affect me come out? Oh, and it would be nice if I could pragmatically query the servers I have agents running on too!&rdquo;</p>
 </blockquote>
 
 <p>So we went ahead and built both.</p>
 
 <h2>The Monitor API</h2>
 
-<p>The Monitor API lets you register a Gemfile or an Ubuntu/CentOS package list. Whenever they&rsquo;re affected by a new vulnerability, you get an email. It&rsquo;s just like running our agent, but with the flexibility to mold it to your deployment process - i.e. for those of you who use Docker or a PaaS like Heroku.</p>
+<p>The &ldquo;Monitor&rdquo; API lets you register a Gemfile or an Ubuntu/CentOS package list to be emailed when new vulnerabilities are discovered. It like what our agent does, but in situations where it doesn&rsquo;t make sense like when you use Docker or deploy on a PaaS like Heroku.</p>
 
-<p>You can register a new monitor by simply issuing a POST:</p>
+<p>You can register a new monitor by:</p>
 <pre class="highlight shell"><code>curl -H <span class="s2">"Authorization: Token YOURTOKENHERE"</span> <span class="se">\</span>
      -X POST -F <span class="nv">file</span><span class="o">=</span>@./Gemfile.lock <span class="se">\</span>
      https://appcanary.com/api/v2/monitors/my-great-app?platform<span class="o">=</span>ruby
@@ -116,18 +116,19 @@ on <a href='/tag/announcements.html'>Announcements</a>, <a href='/tag/product.ht
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 
-<p>That&rsquo;s all it takes. From here on, you&rsquo;ll be emailed about any vulnerabilities that affect your app as soon as we find out about them!</p>
+<p>And, you&rsquo;ll be emailed about any vulnerabilities that affect your app as soon as we find out about them!</p>
 
 <p>You can also list, inspect, or delete monitors via the API. More information <a href="https://appcanary.com/docs#create-monitor">here</a>.</p>
 
 <h2>The Server API</h2>
 
-<p>The Server API allows you to inspect the servers running the Appcanary agent, and list any vulnerabilities that affect them!</p>
+<p>The &ldquo;Server&rdquo; API allows you to navigate the servers you have the Appcanary agent running on via API, and list any vulnerabilities that affect them!</p>
 
-<p>I can see the servers I have agents running on with:</p>
-<pre class="highlight shell"><code>curl -H <span class="s2">"Authorization: Token YOURTOKENHERE"</span> <span class="se">\</span>
+<p>I can see the servers I have agents running on with:
+<code>bash
+curl -H &quot;Authorization: Token YOURTOKENHERE&quot; \
       https://appcanary.com/api/v2/servers
-</code></pre>
+</code></p>
 
 <p>and you&rsquo;ll get a response like:</p>
 <pre class="highlight json"><code><span class="p">{</span><span class="w">
@@ -189,9 +190,9 @@ on <a href='/tag/announcements.html'>Announcements</a>, <a href='/tag/product.ht
 
 <p>You can also inspect or delete any server with an agent on it via the API.</p>
 
-<p>Our API fully supports <strong>Ruby</strong>, <strong>Ubuntu</strong>, and <strong>CentOS 7</strong>! You can learn more about how to use it by visiting <a href="https://appcanary.com/docs">the docs page</a>.</p>
+<p>Our API fully supports <strong>Ruby</strong>, <strong>Ubuntu</strong>, and <strong>CentOS 7</strong>! Learn more about how to use it by visiting <a href="https://appcanary.com/docs">the docs page</a>.</p>
 
-<p>You&rsquo;ll have to <a href="https://appcanary.com/sign_up">sign up</a> to use our APIs. We&rsquo;re currently not charging for them as we keep them in beta, but you can expect pricing similar to our pricing for agents.</p>
+<p>You can <a href="https://appcanary.com/sign_up">sign up</a> for Appcanary to use our APIs today!</p>
 </section>
 <footer class='post-footer'>
 <section class='author'>

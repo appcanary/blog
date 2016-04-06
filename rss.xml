@@ -5,29 +5,29 @@
   <id>http://blog.appcanary.com</id>
   <link href="http://blog.appcanary.com"/>
   <link href="http://blog.appcanary.com/rss.xml" rel="self"/>
-  <updated>2016-04-04T20:00:00-04:00</updated>
+  <updated>2016-04-05T20:00:00-04:00</updated>
   <entry>
     <title>Two new APIs from Appcanary</title>
     <link rel="alternate" href="http://blog.appcanary.com/2016/two-new-apis.html"/>
     <id>http://blog.appcanary.com/2016/two-new-apis.html</id>
-    <published>2016-04-04T20:00:00-04:00</published>
-    <updated>2016-04-06T13:47:17-04:00</updated>
+    <published>2016-04-05T20:00:00-04:00</published>
+    <updated>2016-04-06T15:10:47-04:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
-    <content type="html">&lt;p&gt;After the success of our &lt;a href="http://blog.appcanary.com/2016/new-api-centos-support.html"&gt;Check API&lt;/a&gt;, we found that our users told us:&lt;/p&gt;
+    <content type="html">&lt;p&gt;After the success of our &lt;a href="http://blog.appcanary.com/2016/new-api-centos-support.html"&gt;check&lt;/a&gt; API, we found that our users told us:&lt;/p&gt;
 
 &lt;blockquote&gt;
-&lt;p&gt;&amp;ldquo;I really like your API! But what if I could&amp;hellip; register the packages my app uses and get a notification when I&amp;rsquo;m affected by vulnerabilities? While you&amp;rsquo;re at it, it&amp;rsquo;d be nice if I could progamatically query the servers I have agents running on!&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;I love your API so much! But can I use it register the packages my app uses and get emailed if new vulnerabilities that affect me come out? Oh, and it would be nice if I could pragmatically query the servers I have agents running on too!&amp;rdquo;&lt;/p&gt;
 &lt;/blockquote&gt;
 
 &lt;p&gt;So we went ahead and built both.&lt;/p&gt;
 
 &lt;h2&gt;The Monitor API&lt;/h2&gt;
 
-&lt;p&gt;The Monitor API lets you register a Gemfile or an Ubuntu/CentOS package list. Whenever they&amp;rsquo;re affected by a new vulnerability, you get an email. It&amp;rsquo;s just like running our agent, but with the flexibility to mold it to your deployment process - i.e. for those of you who use Docker or a PaaS like Heroku.&lt;/p&gt;
+&lt;p&gt;The &amp;ldquo;Monitor&amp;rdquo; API lets you register a Gemfile or an Ubuntu/CentOS package list to be emailed when new vulnerabilities are discovered. It like what our agent does, but in situations where it doesn&amp;rsquo;t make sense like when you use Docker or deploy on a PaaS like Heroku.&lt;/p&gt;
 
-&lt;p&gt;You can register a new monitor by simply issuing a POST:&lt;/p&gt;
+&lt;p&gt;You can register a new monitor by:&lt;/p&gt;
 &lt;pre class="highlight shell"&gt;&lt;code&gt;curl -H &lt;span class="s2"&gt;"Authorization: Token YOURTOKENHERE"&lt;/span&gt; &lt;span class="se"&gt;\&lt;/span&gt;
      -X POST -F &lt;span class="nv"&gt;file&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;@./Gemfile.lock &lt;span class="se"&gt;\&lt;/span&gt;
      https://appcanary.com/api/v2/monitors/my-great-app?platform&lt;span class="o"&gt;=&lt;/span&gt;ruby
@@ -46,18 +46,19 @@
 &lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;That&amp;rsquo;s all it takes. From here on, you&amp;rsquo;ll be emailed about any vulnerabilities that affect your app as soon as we find out about them!&lt;/p&gt;
+&lt;p&gt;And, you&amp;rsquo;ll be emailed about any vulnerabilities that affect your app as soon as we find out about them!&lt;/p&gt;
 
 &lt;p&gt;You can also list, inspect, or delete monitors via the API. More information &lt;a href="https://appcanary.com/docs#create-monitor"&gt;here&lt;/a&gt;.&lt;/p&gt;
 
 &lt;h2&gt;The Server API&lt;/h2&gt;
 
-&lt;p&gt;The Server API allows you to inspect the servers running the Appcanary agent, and list any vulnerabilities that affect them!&lt;/p&gt;
+&lt;p&gt;The &amp;ldquo;Server&amp;rdquo; API allows you to navigate the servers you have the Appcanary agent running on via API, and list any vulnerabilities that affect them!&lt;/p&gt;
 
-&lt;p&gt;I can see the servers I have agents running on with:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;code&gt;curl -H &lt;span class="s2"&gt;"Authorization: Token YOURTOKENHERE"&lt;/span&gt; &lt;span class="se"&gt;\&lt;/span&gt;
+&lt;p&gt;I can see the servers I have agents running on with:
+&lt;code&gt;bash
+curl -H &amp;quot;Authorization: Token YOURTOKENHERE&amp;quot; \
       https://appcanary.com/api/v2/servers
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/code&gt;&lt;/p&gt;
 
 &lt;p&gt;and you&amp;rsquo;ll get a response like:&lt;/p&gt;
 &lt;pre class="highlight json"&gt;&lt;code&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;
@@ -119,9 +120,9 @@
 
 &lt;p&gt;You can also inspect or delete any server with an agent on it via the API.&lt;/p&gt;
 
-&lt;p&gt;Our API fully supports &lt;strong&gt;Ruby&lt;/strong&gt;, &lt;strong&gt;Ubuntu&lt;/strong&gt;, and &lt;strong&gt;CentOS 7&lt;/strong&gt;! You can learn more about how to use it by visiting &lt;a href="https://appcanary.com/docs"&gt;the docs page&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Our API fully supports &lt;strong&gt;Ruby&lt;/strong&gt;, &lt;strong&gt;Ubuntu&lt;/strong&gt;, and &lt;strong&gt;CentOS 7&lt;/strong&gt;! Learn more about how to use it by visiting &lt;a href="https://appcanary.com/docs"&gt;the docs page&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;You&amp;rsquo;ll have to &lt;a href="https://appcanary.com/sign_up"&gt;sign up&lt;/a&gt; to use our APIs. We&amp;rsquo;re currently not charging for them as we keep them in beta, but you can expect pricing similar to our pricing for agents.&lt;/p&gt;
+&lt;p&gt;You can &lt;a href="https://appcanary.com/sign_up"&gt;sign up&lt;/a&gt; for Appcanary to use our APIs today!&lt;/p&gt;
 </content>
   </entry>
   <entry>
