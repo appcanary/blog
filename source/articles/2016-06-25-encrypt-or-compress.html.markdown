@@ -20,6 +20,8 @@ You blast through the first part of the interview. You give a great explanation 
 
 Gary looks you in the eyes and says: "You're designing a network protocol. Do you compress the data and then encrypt it, or do you encrypt and then compress?" And then he clasps his hands together and smiles to himself.
 
+A classic security interview question!
+
 - - -
 
 Take a second and think about it. 
