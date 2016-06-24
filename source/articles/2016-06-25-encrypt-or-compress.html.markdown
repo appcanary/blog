@@ -8,7 +8,7 @@ published: true
 
 Imagine this:
 
-You work for a big company. Your job is pretty boring, and frankly your talents are wasted writing boilerplate Java code for an application who's only users are 3 people in accounting who can't stand the sight of you.
+You work for a big company. Your job is pretty boring, and frankly your talents are wasted writing boilerplate code for an application who's only users are 3 people in accounting who can't stand the sight of you.
 
 Your real passion is security. You read [r/netsec](www.reddit.com/r/netsec) every day and participate in bug bounties after work. For the past 3 months, you've been playing a baroque stock trading game that you're winning because you found a heap-based buffer overflow and wrote some AVR shellcode to help you pick stocks.
 
