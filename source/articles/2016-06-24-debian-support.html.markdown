@@ -1,6 +1,6 @@
 ---
 title: Appcanary now supports Debian!
-date: 2016-06-03
+date: 2016-06-24
 tags: Announcements, Product
 author: mveytsman
 published: true
