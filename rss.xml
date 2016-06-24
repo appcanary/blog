@@ -5,7 +5,32 @@
   <id>http://blog.appcanary.com</id>
   <link href="http://blog.appcanary.com"/>
   <link href="http://blog.appcanary.com/rss.xml" rel="self"/>
-  <updated>2016-04-05T20:00:00-04:00</updated>
+  <updated>2016-06-02T20:00:00-04:00</updated>
+  <entry>
+    <title>Appcanary now supports Debian!</title>
+    <link rel="alternate" href="http://blog.appcanary.com/2016/debian-support.html"/>
+    <id>http://blog.appcanary.com/2016/debian-support.html</id>
+    <published>2016-06-02T20:00:00-04:00</published>
+    <updated>2016-06-24T11:20:48-04:00</updated>
+    <author>
+      <name>Max Veytsman</name>
+    </author>
+    <content type="html">&lt;p&gt;I&amp;rsquo;m excited to announce that Appcanary now fully supports &lt;strong&gt;Debian&lt;/strong&gt;. If you
+install our agent on a Debian server, we will email you notifications whenever
+any package you have installed on your system has a known vulnerability. We track over 24,000 vulnerabilities already!&lt;/p&gt;
+
+&lt;p&gt;You can also use our &lt;a href="https://appcanary.com/docs#check-endpoint"&gt;Check API&lt;/a&gt; to
+verify if your Debian server has any vulnerable packages, and our
+&lt;a href="https://appcanary.com/docs#create-monitor"&gt;Monitor API&lt;/a&gt; to register to receive
+notifications if a set of Debian packages ever has new vulnerabilities.&lt;/p&gt;
+
+&lt;p&gt;If you&amp;rsquo;re not a current user and want to try out Appcanary for Debian, you can
+&lt;a href="https://appcanary.com/signup"&gt;sign up&lt;/a&gt;!&lt;/p&gt;
+
+&lt;p&gt;You can always let us know what you think at
+&lt;a href="mailto:hello@appcanary.com"&gt;hello@appcanary.com&lt;/a&gt;.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Two new APIs from Appcanary</title>
     <link rel="alternate" href="http://blog.appcanary.com/2016/two-new-apis.html"/>
@@ -426,49 +451,6 @@ curl -H &amp;quot;Authorization: Token YOURTOKENHERE&amp;quot; \
 &lt;h3&gt;TL;DR:&lt;/h3&gt;
 
 &lt;p&gt;We spawned a new client object on every analytics call, not realizing that the underlying library uses a thread pool that&amp;rsquo;s not shutdown on garbage collection. This is how we ended up killing the server by hitting 40,000 threads&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Hello Appcanary</title>
-    <link rel="alternate" href="http://blog.appcanary.com/2015/hello-appcanary.html"/>
-    <id>http://blog.appcanary.com/2015/hello-appcanary.html</id>
-    <published>2015-10-25T20:00:00-04:00</published>
-    <updated>2016-01-29T16:22:53-05:00</updated>
-    <author>
-      <name>Team Appcanary</name>
-    </author>
-    <content type="html">&lt;p&gt;Dear friends,&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;tl;dr&lt;/strong&gt; We launched &lt;a href="https://appcanary.com"&gt;Appcanary&lt;/a&gt;, we’re shutting down Gemcanary Dec 31st 2015, we have great plans for the future, we love you.&lt;/p&gt;
-
-&lt;p&gt;&lt;img alt="image" src="/images/gemcanary_comic.jpg" /&gt;&lt;/p&gt;
-
-&lt;p&gt;We’ve been busy. We got to spend the summer in sunny California attending Y Combinator. We learned a lot, it was well worth it.&lt;/p&gt;
-
-&lt;p&gt;During the summer, we launched the first version of our product, &lt;a href="https://appcanary.com"&gt;Appcanary&lt;/a&gt;. We help companies to track the security of the software components they rely on. Simply run our agent on your servers, and keep tabs on the packages on your systems. It’s pretty cool! There are a lot of moving parts.&lt;/p&gt;
-
-&lt;p&gt;In the meantime, we courted a small cadre of investors who believe in our ideas about the future. We’re pretty excited for what we’ll be able to do over the next couple of years.&lt;/p&gt;
-
-&lt;p&gt;We also released &lt;a href="https://isitvulnerable.com"&gt;isitvulnerable.com&lt;/a&gt;. It’s a free tool that lets you drag and drop your gemfile and check for vulnerable dependencies. &lt;/p&gt;
-
-&lt;p&gt;Once, we even managed to go to the beach.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="https://instagram.com/p/5Y8-dqSz3u"&gt;&lt;/a&gt;
-&lt;img alt="image" src="/images/big_sur.jpg" /&gt;&lt;/p&gt;
-
-&lt;p&gt;In a nutshell, we want to change the way software and operation engineers engage with security. Right now people largely don’t, or have to deal with lots of snakeoil. It’s hard to know what to think. We think we can drastically improve how we keep our systems safe. We have lots of things to share with you soon!&lt;/p&gt;
-
-&lt;p&gt;For now though, we’d like to announce that we’re sunsetting&amp;nbsp;&lt;a href="https://gemcanary.com"&gt;Gemcanary&lt;/a&gt;, the free, Ruby-only, Github-only service we created in 2013. The service will shut down December 31st, 2015.&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;We started Gemcanary all the way back in February 2013. Things were different back then; we ran a fledgeling consultancy, Edward Snowden was about to book a flight to Hong Kong, and Heartbleed was still hidden away in our openssls.&lt;/p&gt;
-
-&lt;p&gt;We’ve since spent a lot of time breaking and building apps. We became a real startup. And, frankly, we think our customers will be better served by not requiring such tight integration with Github.&lt;/p&gt;
-
-&lt;p&gt;If you enjoyed the service, you’ll be happy to note that we provide the same value and more via&amp;nbsp;&lt;a href="https://appcanary.com"&gt;Appcanary&lt;/a&gt;. While Gemcanary could never tell you about Heartbleed, Appcanary will let you keep tabs on all of your infrastructure’s dependencies.&lt;/p&gt;
-
-&lt;p&gt;Regards,&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="https://twitter.com/phillmv"&gt;@phillmv&lt;/a&gt; and &lt;a href="https://twitter.com/mveytsman"&gt;@mveytsman&lt;/a&gt;. Comic by &lt;a href="https://twitter.com/0sn"&gt;Nick Wolfe&lt;/a&gt;.&lt;/p&gt;
 </content>
   </entry>
 </feed>
