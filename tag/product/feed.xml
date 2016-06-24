@@ -203,7 +203,32 @@ curl -H &amp;quot;Authorization: Token YOURTOKENHERE&amp;quot; \
     <link rel="alternate" href="http://blog.appcanary.com/2016/debian-support.html"/>
     <id>http://blog.appcanary.com/2016/debian-support.html</id>
     <published>2016-06-02T20:00:00-04:00</published>
-    <updated>2016-06-24T11:20:48-04:00</updated>
+    <updated>2016-06-24T11:23:13-04:00</updated>
+    <author>
+      <name>Max Veytsman</name>
+    </author>
+    <content type="html">&lt;p&gt;I&amp;rsquo;m excited to announce that Appcanary now fully supports &lt;strong&gt;Debian&lt;/strong&gt;. If you
+install our agent on a Debian server, we will email you notifications whenever
+any package you have installed on your system has a known vulnerability. We track over 24,000 vulnerabilities already!&lt;/p&gt;
+
+&lt;p&gt;You can also use our &lt;a href="https://appcanary.com/docs#check-endpoint"&gt;Check API&lt;/a&gt; to
+verify if your Debian server has any vulnerable packages, and our
+&lt;a href="https://appcanary.com/docs#create-monitor"&gt;Monitor API&lt;/a&gt; to register to receive
+notifications if a set of Debian packages ever has new vulnerabilities.&lt;/p&gt;
+
+&lt;p&gt;If you&amp;rsquo;re not a current user and want to try out Appcanary for Debian, you can
+&lt;a href="https://appcanary.com/signup"&gt;sign up&lt;/a&gt;!&lt;/p&gt;
+
+&lt;p&gt;You can always let us know what you think at
+&lt;a href="mailto:hello@appcanary.com"&gt;hello@appcanary.com&lt;/a&gt;.&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>Appcanary now supports Debian!</title>
+    <link rel="alternate" href="http://blog.appcanary.com/2016/debian-support.html"/>
+    <id>http://blog.appcanary.com/2016/debian-support.html</id>
+    <published>2016-06-23T20:00:00-04:00</published>
+    <updated>2016-06-24T11:23:20-04:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
