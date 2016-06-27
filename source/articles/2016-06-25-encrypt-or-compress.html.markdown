@@ -1,5 +1,5 @@
 ---
-title: "Paper of the month: should you encrypt or compress first?"
+title: "Should you encrypt or compress first?"
 date: 2016-06-25
 author: mveytsman
 layout: post
@@ -99,3 +99,13 @@ The crazy thing is that this whole rigmarole works! They used a metric called [M
 You end up getting the job, but 6 months later, Mont Piper is sold to a large conglomerate. Gary refuses to trade in his Norwegian metal t-shirts for a button-down and is summarily fired. You now spend your days going on-site to a big bank, "advising" a team that hates your guts.
 
 But recently, you've picked up machine learning and found this really cool online game where you try to make a 6-legged robot walk in a 3d physics simulation...
+
+- - -
+
+#### Paying the Bills
+
+Vulnerabilities come out every day, and most don't get blog posts like this written about them.
+
+Our product, [Appcanary](https://appcanary.com/?utm_source=blog&utm_medium=web&utm_campaign=compress), monitors your apps and servers, and notifies you whenever a new vulnerability is discovered in a package you rely on. 
+
+[Sign up](https://appcanary.com/sign_up?utm_source=blog&utm_medium=web&utm_campaign=compress) today!
