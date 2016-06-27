@@ -5,6 +5,12 @@
   %article.post
     %header.post-header
       %h1.post-title= link_to article.title, article
+      %section.post-meta
+        -# %time.post-date{datetime: article.date.strftime('%Y-%m-%d')}
+          = current_article.date.strftime(blog_settings.date_format)
+          - if tags?
+            on #{tags}
+ 
     %section.post-content
       = article.body
     %footer.post-meta
