@@ -11,7 +11,7 @@
     <link rel="alternate" href="http://blog.appcanary.com/2016/encrypt-or-compress.html"/>
     <id>http://blog.appcanary.com/2016/encrypt-or-compress.html</id>
     <published>2016-06-24T20:00:00-04:00</published>
-    <updated>2016-06-27T13:10:28-04:00</updated>
+    <updated>2016-06-28T13:30:48-04:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
@@ -19,7 +19,7 @@
 
 &lt;p&gt;You work for a big company. Your job is pretty boring. Frankly, your talents are wasted writing boilerplate code for an application whose only users are three people in accounting who can&amp;rsquo;t stand the sight of you.&lt;/p&gt;
 
-&lt;p&gt;Your real passion is security. You read &lt;a href="www.reddit.com/r/netsec"&gt;r/netsec&lt;/a&gt; every day and participate in bug bounties after work. For the past three months, you&amp;rsquo;ve been playing a baroque stock trading game that you&amp;rsquo;re winning because you found a heap-based buffer overflow and wrote some AVR shellcode to help you pick stocks.&lt;/p&gt;
+&lt;p&gt;Your real passion is security. You read &lt;a href="https://www.reddit.com/r/netsec"&gt;r/netsec&lt;/a&gt; every day and participate in bug bounties after work. For the past three months, you&amp;rsquo;ve been playing a baroque stock trading game that you&amp;rsquo;re winning because you found a heap-based buffer overflow and wrote some AVR shellcode to help you pick stocks.&lt;/p&gt;
 
 &lt;p&gt;Everything changes when you discover that what you had thought was a video game was actually a cleverly disguised recruitment tool. Mont Piper, the best security consultancy in the world, is hiring &amp;mdash; and you just landed an interview!&lt;/p&gt;
 
