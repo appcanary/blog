@@ -10,7 +10,7 @@ Imagine this:
 
 You work for a big company. Your job is pretty boring. Frankly, your talents are wasted writing boilerplate code for an application whose only users are three people in accounting who can't stand the sight of you.
 
-Your real passion is security. You read [r/netsec](www.reddit.com/r/netsec) every day and participate in bug bounties after work. For the past three months, you've been playing a baroque stock trading game that you're winning because you found a heap-based buffer overflow and wrote some AVR shellcode to help you pick stocks.
+Your real passion is security. You read [r/netsec](https://www.reddit.com/r/netsec) every day and participate in bug bounties after work. For the past three months, you've been playing a baroque stock trading game that you're winning because you found a heap-based buffer overflow and wrote some AVR shellcode to help you pick stocks.
 
 Everything changes when you discover that what you had thought was a video game was actually a cleverly disguised recruitment tool. Mont Piper, the best security consultancy in the world, is hiring &mdash; and you just landed an interview!
 
