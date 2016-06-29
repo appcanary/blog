@@ -125,9 +125,9 @@
 
 <hr>
 
-<p>CRIME was a very cool demonstration of how compress-then-encrypt isn&rsquo;t always the right decision, but my favorite compress-then-encrypt attack was published a year earlier by Andrew M. White, Austin R. Matthews, Kevin Z. Snow, and Fabian Monrose. The paper <a href="http://www.cs.unc.edu/~fabian/papers/foniks-oak11.pdf">Phonotactic Reconstruction of Encrypted VoIP Conversations</a> gives a technique for reconstructing speach from an encrypted VoIP call.</p>
+<p>CRIME was a very cool demonstration of how compress-then-encrypt isn&rsquo;t always the right decision, but my favorite compress-then-encrypt attack was published a year earlier by Andrew M. White, Austin R. Matthews, Kevin Z. Snow, and Fabian Monrose. The paper <a href="http://www.cs.unc.edu/~fabian/papers/foniks-oak11.pdf">Phonotactic Reconstruction of Encrypted VoIP Conversations</a> gives a technique for reconstructing speech from an encrypted VoIP call.</p>
 
-<p>Basically, the idea is this: VoIP compression isn&rsquo;t going to be a generic audio compression algorithm, because we can rely on some assumptions about human speach in order to compress more efficiently. From the paper:</p>
+<p>Basically, the idea is this: VoIP compression isn&rsquo;t going to be a generic audio compression algorithm, because we can rely on some assumptions about human speech in order to compress more efficiently. From the paper:</p>
 
 <blockquote>
 <p>Many modern speech codecs are based on variants of a well-known speech coding
@@ -169,7 +169,7 @@ exactly this correlation that our approach leverages to model
 phonemes as sequences of lengths of encrypted packets.</p>
 </blockquote>
 
-<p>That pretty much summarizes the paper. CELP + VBR means that message length is going to depend on complexity. Due to how linear prediction works, more information is needed to encode a drastic change in sound &mdash; like the pause between phonemes! This allows the authors to build a model that can break an <strong>encrypted</strong> audio signal into phonemes: that is, deciding which audio frames belong to which unit of speach.</p>
+<p>That pretty much summarizes the paper. CELP + VBR means that message length is going to depend on complexity. Due to how linear prediction works, more information is needed to encode a drastic change in sound &mdash; like the pause between phonemes! This allows the authors to build a model that can break an <strong>encrypted</strong> audio signal into phonemes: that is, deciding which audio frames belong to which unit of speech.</p>
 
 <p>They then built a classifier that, still only using the packet length information they started with, decides which segmented units of encrypted audio represent which actual phonemes. They then use a language model to correct the previous step&rsquo;s output and segment the phoneme stream into words and then phrases.</p>
 
