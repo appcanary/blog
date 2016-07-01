@@ -96,7 +96,7 @@ The crazy thing is that this whole rigmarole works! They used a metric called [M
 
 ## Epilogue
 
-You end up getting the job, but 6 months later, Mont Piper is sold to a large conglomerate. Gary refuses to trade in his Norwegian metal t-shirts for a button-down and is summarily fired. You now spend your days going on-site to a big bank, "advising" a team that hates your guts.
+After passing the rigorous all-night culture fit screening, you end up getting the job. Six months later, Mont Piper is sold to a large conglomerate. Gary refuses to trade in his Norwegian metal t-shirts for a button-down and is summarily fired. You now spend your days going on-site to a big bank, "advising" a team that hates your guts.
 
 But recently, you've picked up machine learning and found this really cool online game where you try to make a 6-legged robot walk in a 3d physics simulation...
 
