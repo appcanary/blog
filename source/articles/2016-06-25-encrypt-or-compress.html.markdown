@@ -4,6 +4,7 @@ date: 2016-06-25
 author: mveytsman
 layout: post
 published: true
+tags: security, crypto
 ---
 
 Imagine this:
