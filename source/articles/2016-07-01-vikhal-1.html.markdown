@@ -39,7 +39,7 @@ Last week Tavis Ormandy delivered 8 of them against every single Symantec/Norton
 If you're using something that Symantec or Norton in its name and haven't done so already, then I can't stress this enough, **stop what you're doing and [upgrade](https://www.symantec.com/support-center/upgrades)**.
 
 The writeup is on the Google Project Zero
-[blog](http://googleprojectzero.blogspot.ca/2016/06/how-to-compromise-enterprise-endpoint.html), and the issues for all 8 vulnerabilities are [here](https://bugs.chromium.org/p/project-zero/issues/list?q=label:Vendor-Symantec). They're a doozy, all are remotely exploitable, and all should give an attacker remote code execution as root/SYSTEM (and in ring 0 for one of them to boot!)
+[blog](http://googleprojectzero.blogspot.ca/2016/06/how-to-compromise-enterprise-endpoint.html), and the issues for all 8 vulnerabilities are [here](https://bugs.chromium.org/p/project-zero/issues/list?q=label:Vendor-Symantec). They're a doozy, all are remotely exploitable[^2], and all should give an attacker remote code execution as root/SYSTEM (and in ring 0 for one of them to boot!)
 
 The product is an antivirus, so it's going to scan every file that touches your
 disk and every email you get for viruses. Which means that you can exploit these
@@ -67,3 +67,4 @@ Our product, [Appcanary](https://appcanary.com/?utm_source=blog&utm_medium=web&u
 
 [Sign up](https://appcanary.com/sign_up?utm_source=blog&utm_medium=web&utm_campaign=symantec) today!
 [^1]: You know, it's interesting that before I became the CEO of a startup, the only time I thought about "conversion rates" of emails in my career was when I was involved in phishing campaigns.
+[^2]: I'm going to well-actually myself here so you don't have to. Tavis gives a clear path to exploit for 6 of the 8. Of the two that are left, [one](https://bugs.chromium.org/p/project-zero/issues/detail?id=821) is a lack of bounds checking on an array index, and the [other](https://bugs.chromium.org/p/project-zero/issues/detail?id=819) is an integer overflow bug. I'm going to go out on a limb and say I think both can lead to code execution. I can't fault the researcher for not going further though, after you find the first 6 remote code executions, you stop feeling the need to keep proving the point...
