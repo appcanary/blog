@@ -1,0 +1,67 @@
+---
+title: "Vulnerabilities I Have Known and Loved #1: Symantec"
+date: 2016-07-01
+author: mveytsman
+layout: post
+published: true
+tags: vikhal, security
+---
+
+Back in my security consulting days, a mentor taught me One Weird Trick to
+increase conversions on your phishing campaign. 
+
+The gigs went like this: you set up an email server, find emails of as many
+employees as possible, and then send a spoofed mass email like:
+
+> Hello this is your boss. I'm going to fire someone next week and you get to vote on who! To get your arch-nemisis fired, please log into this website that looks exactly like your company portal, but has one character in the domain name mispelled. Thanks, Your Boss.
+ 
+ Then you count how many people fell for it and put their super secret work password into your fake portal.
+
+The executive who hired you gets to demonstrate the value of increasing their
+security budget and you get to upsell your way to a bunch of "security awareness
+training" where you spend three days telling your phishing victims about the
+importance of that little green lock in their browser's address bar (but only
+when it's in the right place!) and that they should never ever click on links,
+open attachments, and if possible, avoid using computers all-together. Everybody wins.
+
+Obviously everyone involved here wants to increase the conversion rate[^1] of these phishing emails, which is where The Trick comes in: after you send your first email campaign, you send another one. This time it's faked to look like it comes from IT Security at the target company. 
+
+> Hi, we've heard reports of a phishing campaign being waged against us. Don't open those emails! It's critically important that you reset your password to protect against those evil hackers who tried to phish us. Click here to do it!
+
+It turns our that round two is *way* gets way more clicks than round one. Most people know email #1 is a little fishy, and email #2 reaffirms that, and so they click, like lambs to slaughter.
+
+This is the [Double Tap](https://en.wikipedia.org/wiki/Double_tap#Other_uses_of_the_term) and it's damn effective. And it's why vulnerabilities in security software are some of the most fun. There's nothing like an exploitable remote code execution vulnerability in the one piece of software that's supposed to protect you...
+
+Last week Tavis Ormandy delivered 8 of them against every single Symantec/Norton antivirus product.
+
+If you're using something that Symantec or Norton in its name and haven't done so already, then I can't stress this enough, **stop what you're doing and [upgrade](https://www.symantec.com/support-center/upgrades)**.
+
+The writeup is on the Google Project Zero
+[blog](http://googleprojectzero.blogspot.ca/2016/06/how-to-compromise-enterprise-endpoint.html), and the issues for all 8 vulnerabilities are [here](https://bugs.chromium.org/p/project-zero/issues/list?q=label:Vendor-Symantec). They're a doozy, all are remotely exploitable, and all should give an attacker remote code execution as root/SYSTEM (and in ring 0 for one of them to boot!)
+
+The product is an antivirus, so it's going to scan every file that touches your
+disk and every email you get for viruses. Which means that you can exploit these
+vulnerabilities simply by sending someone an email or getting them to click a
+link (did I mention you should
+[upgrade](https://www.symantec.com/support-center/upgrades)?)
+
+Tavis' blog post singles out three representative examples from the 8 vulnerabilities found. The first is a heap overflow against an unpacker for [ASpack](http://www.aspack.com/) (Symantec has to unpack packed binaries in order to analyze them). 
+
+The second is a stack overflow in a PowerPoint parser. What's interesting about it is that the vulnerability is only exploitable when Symantec is in "Aggressive Mode" &mdash; the check with the vulnerable code isn't run by default. But, the default behavior is to decide which checks to run dynamically. So Tavis was able to include the exploit in a payload that causes the rules engine to decide to run the "Aggressive Mode" checks that contain the code path the exploit is targeting. The Double Tap strikes again!
+
+### Vulnerability Management
+
+While the above two vulnerabilities are pretty cool, the Symantec bugs that are most interesting to us are [CVE-2016-2207](https://bugs.chromium.org/p/project-zero/issues/detail?id=810) and [CVE-2016-2211](https://bugs.chromium.org/p/project-zero/issues/detail?id=816). 
+
+Symantec was shipping it's product with out of date versions of [libmspack](http://www.cabextract.org.uk/libmspack/) and [unrarsrc](http://www.rarlab.com/rar_add.htm). Out of date versions that have dozens of known vulnerabilities with public exploits!
+
+Symantec was using open source libraries with known security vulnerabilities in them, and they sell a product called Enterprise Vulnerability Management! This is a hard problem, and Appcanary is trying to make it a little easier.
+
+#### Paying the Bills
+
+One quarter of the critical vulnerabilities found in Symantec's products last week was because they relied on out-of-date libraries with known security holes.
+
+Our product, [Appcanary](https://appcanary.com/?utm_source=blog&utm_medium=web&utm_campaign=compress), monitors your apps and servers, and notifies you whenever a new vulnerability is discovered in a package you rely on. 
+
+[Sign up](https://appcanary.com/sign_up?utm_source=blog&utm_medium=web&utm_campaign=compress) today!
+[^1]: You know, it's interesting that before I became the CEO of a startup, the only time I thought about "conversion rates" of emails in my career was when I was involved in phishing campaigns.
