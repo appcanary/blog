@@ -1,5 +1,5 @@
 ---
-title: "Vulnerabilities I Have Known and Loved #1: Symantec"
+title: "Vulnerabilities I Have Known and Loved #1: Symantec's Bad Week"
 date: 2016-07-01
 author: mveytsman
 layout: post
@@ -7,39 +7,48 @@ published: true
 tags: vikhal, security
 ---
 
+tl;dr: If you use software with "Symantec" or "Norton" somewhere in its name, **stop what you're doing and [upgrade](https://www.symantec.com/support-center/upgrades)**.
+
 Back in my security consulting days, a mentor taught me One Weird Trick to
-increase conversions on your phishing campaign. 
+increase conversions on your phishing campaign.  It goes like this: set up an email server, get as many employee addresses you can find, and spoof a mass message that reads:
 
-The gigs went like this: you set up an email server, find emails of as many
-employees as possible, and then send a spoofed mass email like:
+> Hello this is your boss. 
 
-> Hello this is your boss. I'm going to fire someone next week and you get to vote on who! To get your arch-nemisis fired, please log into this website that looks exactly like your company portal, but has one character in the domain name mispelled. Thanks, Your Boss.
+> I'm going to fire someone next week and you get to vote on who! To get your arch-nemisis fired, please log into this website that looks exactly like our company portal, but has one character in the domain name mispelled. 
+
+> Thanks, Your Boss.
  
- Then you count how many people fell for it and put their super secret work password into your fake portal.
+Then you sit back and count how many people fell for it.
 
-The executive who hired you gets to demonstrate the value of increasing their
-security budget and you get to upsell your way to a bunch of "security awareness
-training" where you spend three days telling your phishing victims about the
+The executive who hired you is happy because they get to demonstrate the value of increasing their
+security budget. Your employer is happy, because they get to upsell a bunch of "security awareness
+training". 
+
+Soon, you'll be spending three days telling your victims about the
 importance of that little green lock in their browser's address bar (but only
 when it's in the right place!) and that they should never ever click on links,
-open attachments, and if possible, avoid using computers all-together. Everybody wins.
+never open attachments, and if at all possible, stop using computers altogether. Everybody wins.
 
-Obviously everyone involved here wants to increase the conversion rate[^1] of these phishing emails, which is where The Trick comes in: after you send your first email campaign, you send another one. This time it's faked to look like it comes from IT Security at the target company. 
+Obviously, everyone at this stage wants to increase the conversion rate[^1] of these phishing emails. This is where The One Weird Trick comes in: after you send out your first campaign, you craft another one. Before you know it, everyone on your list receives a helpful tip from the IT Helpdesk:
 
-> Hi, we've heard reports of a phishing campaign being waged against us. Don't open those emails! It's critically important that you reset your password to protect against those evil hackers who tried to phish us. Click here to do it!
+> Hi, 
 
-It turns our that round two is *way* gets way more clicks than round one. Most people know email #1 is a little fishy, and email #2 reaffirms that, and so they click, like lambs to slaughter.
+> We've heard reports of a phishing campaign being waged against us. Don't open those emails! It's critically important that you reset your password to protect against those evil hackers who tried to phish us. 
 
-This is the [Double Tap](https://en.wikipedia.org/wiki/Double_tap#Other_uses_of_the_term) and it's damn effective. And it's why vulnerabilities in security software are some of the most fun. There's nothing like an exploitable remote code execution vulnerability in the one piece of software that's supposed to protect you...
+> Click here to do it!
+
+It turns out that round two gets *way* more clicks than round one. Most people will figure out that email #1 is a little fishy. Email #2 manages to reaffirm that, and so they dutifully click, like lambs to slaughter.
+
+This is the [double tap](https://en.wikipedia.org/wiki/Double_tap#Other_uses_of_the_term) and it's damn effective. It's why vulnerabilities in secureity software are some of the most fun. There's just nothing like an exploitable remote code execution in the one piece of software that's supposed to keep you safe...
 
 ### Symantec is Having a Bad Week
 
-Last week Tavis Ormandy delivered 8 of them against every single Symantec/Norton antivirus product. Things are not looking good in the [press](http://www.pcworld.com/article/3089463/security/wormable-flaws-in-symantec-products-expose-millions-of-computers-to-hacking.html) for them.
+Last week [Tavis Ormandy](https://twitter.com/taviso) dropped 8 vulns against every single Symantec/Norton antivirus product. Judging by [the press](http://fortune.com/2016/07/02/symantec-security-irony/), things are [not looking good](http://www.pcworld.com/article/3089463/security/wormable-flaws-in-symantec-products-expose-millions-of-computers-to-hacking.html) for them.
 
-If you're using something that Symantec or Norton in its name and haven't done so already, then I can't stress this enough, **stop what you're doing and [upgrade](https://www.symantec.com/support-center/upgrades)**.
+Once again, if you're using something that has Symantec or Norton in its name, and haven't done so already, then I can't stress this enough: **stop what you're doing and [upgrade](https://www.symantec.com/support-center/upgrades)**.
 
-The writeup is on the Google Project Zero
-[blog](http://googleprojectzero.blogspot.ca/2016/06/how-to-compromise-enterprise-endpoint.html), and the issues for all 8 vulnerabilities are [here](https://bugs.chromium.org/p/project-zero/issues/list?q=label:Vendor-Symantec). They're a doozy, all are remotely exploitable[^2], and all should give an attacker remote code execution as root/SYSTEM (and in ring 0 for one of them to boot!)
+The writeup is on the [Google Project Zero
+blog](http://googleprojectzero.blogspot.ca/2016/06/how-to-compromise-enterprise-endpoint.html), and the issues for all 8 vulnerabilities can [be found here](https://bugs.chromium.org/p/project-zero/issues/list?q=label:Vendor-Symantec). They're a doozy, all are remotely exploitable,[^2] and all should give an attacker remote code execution as root/SYSTEM (and in ring 0 for one of them to boot!)
 
 The product is an antivirus, so it's going to scan every file that touches your
 disk and every email you get for viruses. Which means that you can exploit these
