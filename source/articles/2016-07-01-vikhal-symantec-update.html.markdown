@@ -45,12 +45,12 @@ This is the [double tap](https://en.wikipedia.org/wiki/Double_tap#Other_uses_of_
 
 Last week [Tavis Ormandy](https://twitter.com/taviso) dropped 8 vulns against every single Symantec/Norton antivirus product. Judging by [the press](http://fortune.com/2016/07/02/symantec-security-irony/), things are [not looking good](http://www.pcworld.com/article/3089463/security/wormable-flaws-in-symantec-products-expose-millions-of-computers-to-hacking.html) for them.
 
-Once again, if you're using something that has Symantec or Norton in its name, and haven't done so already, then I can't stress this enough: **stop what you're doing and [upgrade](https://www.symantec.com/support-center/upgrades)**.
+Once again, if you're using a Symantec product I can't stress this enough: **stop what you're doing and [upgrade](https://www.symantec.com/support-center/upgrades)**.
 
-The writeup is on the [Google Project Zero
-blog](http://googleprojectzero.blogspot.ca/2016/06/how-to-compromise-enterprise-endpoint.html), and the issues for all 8 vulnerabilities can [be found here](https://bugs.chromium.org/p/project-zero/issues/list?q=label:Vendor-Symantec). They're a doozy, all are remotely exploitable,[^2] and all should give an attacker remote code execution as root/SYSTEM (and in ring 0 for one of them to boot!)
+You can find a writeup up on the [Google Project Zero
+blog](http://googleprojectzero.blogspot.ca/2016/06/how-to-compromise-enterprise-endpoint.html), and the issues for all 8 vulnerabilities can [be found here](https://bugs.chromium.org/p/project-zero/issues/list?q=label:Vendor-Symantec). They're all remotely exploitable,[^2] and they all should give an attacker remote code execution as root/SYSTEM (and in ring 0 for one of them to boot!)
 
-The product is an antivirus, so it's going to scan every file that touches your
+Since the product is an antivirus, so it's going to scan every file that touches your
 disk and every email you get for viruses. Which means that you can exploit these
 vulnerabilities simply by sending someone an email or getting them to click a
 link (did I mention you should
