@@ -58,7 +58,7 @@ vulnerabilities simply by sending someone an email or getting them to click a
 link (did I mention you should
 [upgrade](https://www.symantec.com/support-center/upgrades)?)
 
-The one that made me think of the Double Tap is a stack overflow in Symantec's PowerPoint parser. This parser is used to extract metadata and macros from PowerPoint decks (and presumably scan them for known malware). The parser exposes an I/O abstraction layer for these, and buffers date for perform ace. Tavis found that he could get that cache into a misaligned state, which resulted in a stack buffer overflow. The full writeup and exploit is [here](https://bugs.chromium.org/p/project-zero/issues/detail?id=823&can=1&q=label%3AVendor-Symantec).
+The one that made me think of the Double Tap is a stack overflow in Symantec's PowerPoint parser. This parser is used to extract metadata and macros from PowerPoint decks (and presumably scan them for known malware). The parser exposes an I/O abstraction layer for these, and buffers date for performance. Tavis found that he could get that cache into a misaligned state, which resulted in a stack buffer overflow. The full writeup and exploit is [here](https://bugs.chromium.org/p/project-zero/issues/detail?id=823&can=1&q=label%3AVendor-Symantec).
 
 What's interesting about it is that the vulnerable codepath is in something called “Bloodhound Heuristics”. These aren't run by default, so you'd think the vulnerability wouldn't be exploitable on a default configuration. It is. The default setting is "Automatic," which decides which checks to run dynamically. All Tavis had to do was try a bunch of known PowerPoint malware, see which one triggered the automatic mode to turn on "Bloodhound Heuristics," and put his payload into them. 
 
@@ -74,7 +74,7 @@ Symantec was using open source libraries with known security vulnerabilities in 
 
 ### Paying the Bills
 
-One quarter of the critical vulnerabilities found in Symantec's products last week was because they relied on out-of-date libraries with known security holes.
+One quarter of the critical vulnerabilities found in Symantec's products last week were there because they relied on out-of-date libraries with known security holes.
 
 Our product, [Appcanary](https://appcanary.com/?utm_source=blog&utm_medium=web&utm_campaign=compress), monitors your apps and servers, and notifies you whenever a new vulnerability is discovered in a package you rely on. 
 
