@@ -11,7 +11,7 @@
     <link rel="alternate" href="http://blog.appcanary.com/2016/vikhal-symantec.html"/>
     <id>http://blog.appcanary.com/2016/vikhal-symantec.html</id>
     <published>2016-07-06T20:00:00-04:00</published>
-    <updated>2016-07-07T12:42:48-04:00</updated>
+    <updated>2016-07-07T12:44:22-04:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
@@ -84,13 +84,15 @@ link (did I mention you should
 
 &lt;p&gt;Symantec was using open source libraries with known security vulnerabilities in them, and they sell a product called Enterprise Vulnerability Management! This is a hard problem for everyone, and at Appcanary, we&amp;rsquo;re trying to make it a little easier.&lt;/p&gt;
 
-&lt;h3&gt;Want more of these?&lt;/h3&gt;
+&lt;h3&gt;P.S.&lt;/h3&gt;
 
 &lt;p&gt;We&amp;rsquo;re going to make this a regular feature on the blog. We&amp;rsquo;ll be writing explainers for classic security vulnerabilities with a focus on historical significance or interesting techniques. Next up will be the &lt;a href="https://en.wikipedia.org/wiki/Morris_worm"&gt;Morris Worm&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;If you want to sign up to get notifications about new ones, you can subscribe to our newsletter &lt;a href="http://eepurl.com/b82xK9"&gt;here&lt;/a&gt;, or follow us on &lt;a href="https://twitter.com/appcanary"&gt;twitter&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;Have any suggestions for vulnerabilities you&amp;rsquo;d like me to write about? You can let me know at &lt;a href="mailto:max@appcanary.com"&gt;max@appcanary.com&lt;/a&gt;.&lt;/p&gt;
+
+&lt;hr&gt;
 
 &lt;h3&gt;Paying the Bills&lt;/h3&gt;
 
