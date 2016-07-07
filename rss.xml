@@ -5,13 +5,123 @@
   <id>http://blog.appcanary.com</id>
   <link href="http://blog.appcanary.com"/>
   <link href="http://blog.appcanary.com/rss.xml" rel="self"/>
-  <updated>2016-06-24T20:00:00-04:00</updated>
+  <updated>2016-07-06T20:00:00-04:00</updated>
+  <entry>
+    <title>Vulnerabilities I Have Known and Loved #1: Symantec's Bad Week</title>
+    <link rel="alternate" href="http://blog.appcanary.com/2016/vikhal-symantec.html"/>
+    <id>http://blog.appcanary.com/2016/vikhal-symantec.html</id>
+    <published>2016-07-06T20:00:00-04:00</published>
+    <updated>2016-07-07T12:26:09-04:00</updated>
+    <author>
+      <name>Max Veytsman</name>
+    </author>
+    <content type="html">&lt;p&gt;&lt;strong&gt;tl;dr:&lt;/strong&gt; If you use software with &amp;ldquo;Symantec&amp;rdquo; or &amp;ldquo;Norton&amp;rdquo; somewhere in its name, &lt;strong&gt;stop what you&amp;rsquo;re doing and &lt;a href="https://www.symantec.com/support-center/upgrades"&gt;upgrade&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Back in my security consulting days, a mentor taught me One Weird Trick to
+increase conversions on your phishing campaign.  It goes like this: set up an email server, get as many employee addresses you can find, and spoof a mass message that reads:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Hello this is your boss. &lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;m going to fire someone next week and you get to vote on who! To get your arch-nemisis fired, please log into this website that looks exactly like our company portal, but has one character in the domain name mispelled. &lt;/p&gt;
+
+&lt;p&gt;Thanks, Your Boss.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Then you sit back and count how many people fell for it.&lt;/p&gt;
+
+&lt;p&gt;The executive who hired you is happy because they get to demonstrate the value of increasing their
+security budget. The consultancy you work for is happy, because they get to upsell a bunch of &amp;ldquo;security awareness
+training&amp;rdquo;. &lt;/p&gt;
+
+&lt;p&gt;Soon, you&amp;rsquo;ll be spending three days telling your victims about the
+importance of that little green lock in their browser&amp;rsquo;s address bar (but only
+when it&amp;rsquo;s in the right place!) and that they should never ever click on links,
+never open attachments, and if at all possible, stop using computers altogether. Everybody wins.&lt;/p&gt;
+
+&lt;p&gt;Obviously, everyone at this stage wants to increase the conversion rate&lt;sup id="fnref1"&gt;&lt;a href="#fn1" rel="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt; of these phishing emails. This is where The One Weird Trick comes in: after you send out your first campaign, you craft another one. Before you know it, everyone on your list receives a helpful tip from the IT Helpdesk:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Hi, &lt;/p&gt;
+
+&lt;p&gt;We&amp;rsquo;ve heard reports of a phishing campaign being waged against us. Don&amp;rsquo;t open those emails! It&amp;rsquo;s critically important that you reset your password to protect against those evil hackers who tried to phish us. &lt;/p&gt;
+
+&lt;p&gt;Click here to do it!&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;It turns out that round two gets &lt;em&gt;way&lt;/em&gt; more clicks than round one. Most people will figure out that email #1 is a little fishy. Email #2 manages to reaffirm that, and so they dutifully click, like lambs to slaughter.&lt;/p&gt;
+
+&lt;p&gt;This is the phishing equivalent of the Double Tap. No, not the one from &lt;a href="https://www.youtube.com/watch?v=w4sWxsrEFFs"&gt;Zombieland&lt;/a&gt;. The Double Tap I&amp;rsquo;m talking about is a controversial &lt;a href="http://www.businessinsider.com/drone-double-tap-first-responders-2012-9"&gt;military technique&lt;/a&gt; where after attacking a target, you follow up by sending another missile at the first responders. You do some damage, and then attack the response to that damage.&lt;/p&gt;
+
+&lt;p&gt;The Symantec vulnerabilities reminded me of phishing and the Double Tap for two reasons. First of all, all of these vulns are exploitable just by sending an email. No need to get your target to click a link or even open the email you send &amp;mdash; Symantec will happily try to parse every email you receive. Secondly, one of the vulns does a Double Tap-like attack where it pretends to be a certain kind of malware first, in order to trigger some non-default checks from Symantec, which is where the vulnerable code path lies. More on this later.&lt;/p&gt;
+
+&lt;h3&gt;Symantec is Having a Bad Week&lt;/h3&gt;
+
+&lt;p&gt;Last week &lt;a href="https://twitter.com/taviso"&gt;Tavis Ormandy&lt;/a&gt; dropped 8 vulns against every single Symantec/Norton antivirus product. Judging by &lt;a href="http://fortune.com/2016/07/02/symantec-security-irony/"&gt;the press&lt;/a&gt;, things are &lt;a href="http://www.pcworld.com/article/3089463/security/wormable-flaws-in-symantec-products-expose-millions-of-computers-to-hacking.html"&gt;not looking good&lt;/a&gt; for them.&lt;/p&gt;
+
+&lt;p&gt;Once again, if you&amp;rsquo;re using a Symantec product I can&amp;rsquo;t stress this enough: &lt;strong&gt;stop what you&amp;rsquo;re doing and &lt;a href="https://www.symantec.com/support-center/upgrades"&gt;upgrade&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;You can find a writeup up on the &lt;a href="http://googleprojectzero.blogspot.ca/2016/06/how-to-compromise-enterprise-endpoint.html"&gt;Google Project Zero
+blog&lt;/a&gt;, and the issues for all 8 vulnerabilities can &lt;a href="https://bugs.chromium.org/p/project-zero/issues/list?can=1&amp;amp;q=label%3AVendor-Symantec"&gt;be found here&lt;/a&gt;. They&amp;rsquo;re all remotely exploitable,&lt;sup id="fnref2"&gt;&lt;a href="#fn2" rel="footnote"&gt;2&lt;/a&gt;&lt;/sup&gt; and they all should give an attacker remote code execution as root/SYSTEM (and in ring 0 for one of them to boot!)&lt;/p&gt;
+
+&lt;p&gt;Since the product is an antivirus, so it&amp;rsquo;s going to scan every file that touches your
+disk and every email you get for viruses. Which means that you can exploit these
+vulnerabilities simply by sending someone an email or getting them to click a
+link (did I mention you should
+&lt;a href="https://www.symantec.com/support-center/upgrades"&gt;upgrade&lt;/a&gt;?)&lt;/p&gt;
+
+&lt;p&gt;The one that made me think of the Double Tap is a stack overflow in Symantec&amp;rsquo;s PowerPoint parser. This parser is used to extract metadata and macros from PowerPoint decks (and presumably scan them for known malware). The parser exposes an I/O abstraction layer for these, and buffers date for perform ace. Tavis found that he could get that cache into a misaligned state, which resulted in a stack buffer overflow. The full writeup and exploit is &lt;a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=823&amp;amp;can=1&amp;amp;q=label%3AVendor-Symantec"&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;What&amp;rsquo;s interesting about it is that the vulnerable codepath is in something called “Bloodhound Heuristics”. These aren&amp;rsquo;t run by default, so you&amp;rsquo;d think the vulnerability wouldn&amp;rsquo;t be exploitable on a default configuration. It is. The default setting is &amp;ldquo;Automatic,&amp;rdquo; which decides which checks to run dynamically. All Tavis had to do was try a bunch of known PowerPoint malware, see which one triggered the automatic mode to turn on &amp;ldquo;Bloodhound Heuristics,&amp;rdquo; and put his payload into them. &lt;/p&gt;
+
+&lt;p&gt;The exploit pretends to be a certain kind of known malware in order to trigger some special aggressive checks, which are the exploit&amp;rsquo;s true target. The Double Tap!&lt;/p&gt;
+
+&lt;h3&gt;Vulnerability Management&lt;/h3&gt;
+
+&lt;p&gt;While the above vulnerability is pretty cool, the Symantec bugs that are most interesting to us at Appcanary are &lt;a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=810"&gt;CVE-2016-2207&lt;/a&gt; and &lt;a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=816"&gt;CVE-2016-2211&lt;/a&gt;. &lt;/p&gt;
+
+&lt;p&gt;Symantec was shipping it&amp;rsquo;s product with out of date versions of &lt;a href="http://www.cabextract.org.uk/libmspack/"&gt;libmspack&lt;/a&gt; and &lt;a href="http://www.rarlab.com/rar_add.htm"&gt;unrarsrc&lt;/a&gt;. Out of date versions that have dozens of known vulnerabilities with public exploits! All Tavis had to do was download public exploits for these known vulnerabilities, and he had an attack against Symantec.&lt;/p&gt;
+
+&lt;p&gt;Symantec was using open source libraries with known security vulnerabilities in them, and they sell a product called Enterprise Vulnerability Management! This is a hard problem for everyone, and at Appcanary, we&amp;rsquo;re trying to make it a little easier.&lt;/p&gt;
+
+&lt;h3&gt;Paying the Bills&lt;/h3&gt;
+
+&lt;p&gt;One quarter of the critical vulnerabilities found in Symantec&amp;rsquo;s products last week was because they relied on out-of-date libraries with known security holes.&lt;/p&gt;
+
+&lt;p&gt;Our product, &lt;a href="https://appcanary.com/?utm_source=blog&amp;amp;utm_medium=web&amp;amp;utm_campaign=compress"&gt;Appcanary&lt;/a&gt;, monitors your apps and servers, and notifies you whenever a new vulnerability is discovered in a package you rely on. &lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://appcanary.com/sign_up?utm_source=blog&amp;amp;utm_medium=web&amp;amp;utm_campaign=symantec"&gt;Sign up&lt;/a&gt; today!&lt;/p&gt;
+
+&lt;h3&gt;P.S.&lt;/h3&gt;
+
+&lt;p&gt;We&amp;rsquo;re going to make this a regular feature on the blog. We&amp;rsquo;ll be writing explainers for classic security vulnerabilities with a focus on historical significance or interesting techniques. Next up will be the &lt;a href="https://en.wikipedia.org/wiki/Morris_worm"&gt;Morris Worm&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;If you want to sign up to get notifications about new ones, you can subscribe to our newsletter &lt;a href="http://eepurl.com/b82xK9"&gt;here&lt;/a&gt;, or follow us on &lt;a href="https://twitter.com/appcanary"&gt;twitter&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Have any suggestions for vulnerabilities you&amp;rsquo;d like me to write about? You can let me know at &lt;a href="mailto:max@appcanary.com"&gt;max@appcanary.com&lt;/a&gt;.&lt;/p&gt;
+
+&lt;div class="footnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+
+&lt;li id="fn1"&gt;
+&lt;p&gt;You know, it&amp;rsquo;s interesting that before I became the CEO of a startup, the only time I thought about &amp;ldquo;conversion rates&amp;rdquo; of emails in my career was when I was involved in phishing campaigns.&amp;nbsp;&lt;a href="#fnref1" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+
+&lt;li id="fn2"&gt;
+&lt;p&gt;I&amp;rsquo;m going to well-actually myself here so you don&amp;rsquo;t have to. Tavis gives a clear path to exploit for 6 of the 8. Of the two that are left, &lt;a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=821"&gt;one&lt;/a&gt; is a lack of bounds checking on an array index, and the &lt;a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=819"&gt;other&lt;/a&gt; is an integer overflow bug. I&amp;rsquo;m going to go out on a limb and say I think both can lead to code execution. I can&amp;rsquo;t fault the researcher for not going further though, after you find the first 6 remote code executions, you stop feeling the need to keep proving the point&amp;hellip;&amp;nbsp;&lt;a href="#fnref2" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+
+&lt;/ol&gt;
+&lt;/div&gt;
+</content>
+  </entry>
   <entry>
     <title>Should you encrypt or compress first?</title>
     <link rel="alternate" href="http://blog.appcanary.com/2016/encrypt-or-compress.html"/>
     <id>http://blog.appcanary.com/2016/encrypt-or-compress.html</id>
     <published>2016-06-24T20:00:00-04:00</published>
-    <updated>2016-06-30T21:41:51-04:00</updated>
+    <updated>2016-07-01T00:42:57-04:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
@@ -420,24 +530,6 @@ curl -H &amp;quot;Authorization: Token YOURTOKENHERE&amp;quot; \
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;And now, things behave as intended.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>A Gentle Intro to Datomic</title>
-    <link rel="alternate" href="http://blog.appcanary.com/2016/datomic-intro-talk.html"/>
-    <id>http://blog.appcanary.com/2016/datomic-intro-talk.html</id>
-    <published>2016-02-08T19:00:00-05:00</published>
-    <updated>2016-04-06T13:47:17-04:00</updated>
-    <author>
-      <name>Max Veytsman</name>
-    </author>
-    <content type="html">&lt;p&gt;We use &lt;a href="http://www.datomic.com/"&gt;Datomic&lt;/a&gt; as one of our datastores, and have been really enjoying it so far.&lt;/p&gt;
-
-&lt;p&gt;I gave a talk to my local &lt;a href="http://www.meetup.com/Clojure-Toronto/"&gt;Clojure meetup&lt;/a&gt; that provided a gentle introduction to Datomic and highlighted some cool features.&lt;/p&gt;
-
-&lt;p&gt;The slides are below:&lt;/p&gt;
-
-&lt;script async="" class="speakerdeck-embed" data-id="dd426e5c924f44eb9050c554137ae030" data-ratio="1.77777777777778" src="//speakerdeck.com/assets/embed.js"&gt;&lt;/script&gt;
 </content>
   </entry>
 </feed>

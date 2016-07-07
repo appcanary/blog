@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Appcanary: security</title>
+  <subtitle>Posts tagged with security</subtitle>
+  <id>http://blog.appcanary.com</id>
+  <link href="http://blog.appcanary.com"/>
+  <link href="http://blog.appcanary.com/tag/security/feed.xml" rel="self"/>
+  <updated>2016-06-24T20:00:00-04:00</updated>
+  <entry>
+    <title>Should you encrypt or compress first?</title>
+    <link rel="alternate" href="http://blog.appcanary.com/2016/encrypt-or-compress.html"/>
+    <id>http://blog.appcanary.com/2016/encrypt-or-compress.html</id>
+    <published>2016-06-24T20:00:00-04:00</published>
+    <updated>2016-07-01T00:42:57-04:00</updated>
+    <author>
+      <name>Max Veytsman</name>
+    </author>
+    <content type="html">&lt;p&gt;Imagine this:&lt;/p&gt;
+
+&lt;p&gt;You work for a big company. Your job is pretty boring. Frankly, your talents are wasted writing boilerplate code for an application whose only users are three people in accounting who can&amp;rsquo;t stand the sight of you.&lt;/p&gt;
+
+&lt;p&gt;Your real passion is security. You read &lt;a href="https://www.reddit.com/r/netsec"&gt;r/netsec&lt;/a&gt; every day and participate in bug bounties after work. For the past three months, you&amp;rsquo;ve been playing a baroque stock trading game that you&amp;rsquo;re winning because you found a heap-based buffer overflow and wrote some AVR shellcode to help you pick stocks.&lt;/p&gt;
+
+&lt;p&gt;Everything changes when you discover that what you had thought was a video game was actually a cleverly disguised recruitment tool. Mont Piper, the best security consultancy in the world, is hiring &amp;mdash; and you just landed an interview!&lt;/p&gt;
+
+&lt;p&gt;A plane ride and an Uber later, you&amp;rsquo;re sitting across from your potential future boss: a slightly sweaty hacker named Gary in a Norwegian metal band t-shirt and sunglasses he refuses to take off indoors.&lt;/p&gt;
+
+&lt;p&gt;You blast through the first part of the interview. You give a great explanation of the difference between privacy and anonymity. You describe the same origin policy in great detail, and give three ways an attacker can get around it. You even whiteboard the intricacies of &lt;code&gt;__fastcall&lt;/code&gt; vs &lt;code&gt;__stdcall&lt;/code&gt;. Finally, you&amp;rsquo;re at the penultimate section, protocol security.&lt;/p&gt;
+
+&lt;p&gt;Gary looks you in the eyes and says: &amp;ldquo;You&amp;rsquo;re designing a network protocol. Do you compress the data and then encrypt it, or do you encrypt and then compress?&amp;rdquo; And then he clasps his hands together and smiles to himself.&lt;/p&gt;
+
+&lt;p&gt;A classic security interview question!&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;p&gt;Take a second and think about it. &lt;/p&gt;
+
+&lt;p&gt;At a high level, compression tries to use patterns in data in order to reduce its size. Encryption tries to shuffle data in such a way that without the key, you can&amp;rsquo;t find any patterns in the data at all. &lt;/p&gt;
+
+&lt;p&gt;Encryption produces output that appears random: a jumble of bits with a lot of entropy. Compression doesn&amp;rsquo;t really work on data that appears random &amp;mdash; entropy can actually be thought of as a measure of how &amp;ldquo;compressable&amp;rdquo; some data is.&lt;/p&gt;
+
+&lt;p&gt;So if you encrypt first, your compression will be useless. The answer must be to compress first! Even StackOverflow &lt;a href="http://stackoverflow.com/questions/4676095/when-compressing-and-encrypting-should-i-compress-first-or-encrypt-first"&gt;thinks so&lt;/a&gt;.&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;p&gt;You start to say this to Gary, but you stop mid-sentence. An attacker sniffing encrypted traffic doesn&amp;rsquo;t get much information, but they do get to learn the length of messages. If they can somehow use that to learn more information about the message, maybe they can foil the encryption.&lt;/p&gt;
+
+&lt;p&gt;You start explaining this to Gary, and he interrupts you &amp;mdash; &amp;ldquo;Oh you mean like the &lt;a href="https://www.nccgroup.trust/us/about-us/newsroom-and-events/blog/2012/september/details-on-the-crime-attack/"&gt;CRIME&lt;/a&gt; attack?&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;&amp;ldquo;Yes!&amp;rdquo; you reply. You start to recall the details of it. All the SSL attacks with catchy names are mixed together in your mind, but you&amp;rsquo;re pretty sure that&amp;rsquo;s the one. They controlled some information that was being returned by the server, and used that to generate guesses for a secret token present in the response. The response was compressed in such a way that you could validate guesses for the secret by seeing how you affected the length of the compressed message. If the secret was &lt;code&gt;AAAA&lt;/code&gt; and you guessed &lt;code&gt;AAAA&lt;/code&gt;, the compressed-then-encrypted response will be shorter than if you guessed &lt;code&gt;BBBB&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Gary looks impressed. &amp;ldquo;But what if the attacker can&amp;rsquo;t control any of the plaintext in any way? Is this kind of attack still possible?&amp;rdquo; he asks.&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;p&gt;CRIME was a very cool demonstration of how compress-then-encrypt isn&amp;rsquo;t always the right decision, but my favorite compress-then-encrypt attack was published a year earlier by Andrew M. White, Austin R. Matthews, Kevin Z. Snow, and Fabian Monrose. The paper &lt;a href="http://www.cs.unc.edu/~fabian/papers/foniks-oak11.pdf"&gt;Phonotactic Reconstruction of Encrypted VoIP Conversations&lt;/a&gt; gives a technique for reconstructing speech from an encrypted VoIP call.&lt;/p&gt;
+
+&lt;p&gt;Basically, the idea is this: VoIP compression isn&amp;rsquo;t going to be a generic audio compression algorithm, because we can rely on some assumptions about human speech in order to compress more efficiently. From the paper:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Many modern speech codecs are based on variants of a well-known speech coding
+scheme known as code-excited linear prediction (CELP) [49], which is in turn
+based on the source-filter model of speech prediction. The source-filter model
+separates the audio into two signals: the excitation or source signal, as
+produced by the vocal cords, and the shape or filter signal, which models the
+shaping of the sound performed by the vocal tract. This allows for
+differentiation of phonemes; for instance, vowels have a periodic excitation
+signal while fricatives (such as the [sh] and [f] sounds) have an excitation
+signal similar to white noise [53].&lt;/p&gt;
+
+&lt;p&gt;In basic CELP, the excitation signal is modeled as an entry
+from a fixed codebook (hence code-excited). In some CELP
+variants, such as Speex’s VBR (variable bit rate) mode, the codewords can
+be chosen from different codebooks depending on the complexity
+of the input frame; each codebook contains entries
+of a different size. The filter signal is modeled using linear
+prediction, i.e., as a so-called adaptive codebook where the
+codebook entries are linear combinations of past excitation
+signals. The “best” entries from each codebook are chosen
+by searching the space of possible codewords in order
+to “perceptually” optimize the output signal in a process
+known as analysis-by-synthesis [53]. Thus an encoded frame
+consists of a fixed codebook entry and gain (coefficient) for
+the excitation signal and the linear prediction coefficients for
+the filter signal.&lt;/p&gt;
+
+&lt;p&gt;Lastly, many VoIP providers (including Skype) use VBR 
+codecs to minimize bandwidth usage while maintaining
+call quality. Under VBR, the size of the codebook entry,
+and thus the size of the encoded frame, can vary based
+on the complexity of the input frame. The specification
+for Secure RTP (SRTP) [3] does not alter the size of the
+original payload; thus encoded frame sizes are preserved
+across the cryptographic layer. The size of the encrypted
+packet therefore reflects properties of the input signal; it is
+exactly this correlation that our approach leverages to model
+phonemes as sequences of lengths of encrypted packets.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;That pretty much summarizes the paper. CELP + VBR means that message length is going to depend on complexity. Due to how linear prediction works, more information is needed to encode a drastic change in sound &amp;mdash; like the pause between phonemes! This allows the authors to build a model that can break an &lt;strong&gt;encrypted&lt;/strong&gt; audio signal into phonemes: that is, deciding which audio frames belong to which unit of speech.&lt;/p&gt;
+
+&lt;p&gt;They then built a classifier that, still only using the packet length information they started with, decides which segmented units of encrypted audio represent which actual phonemes. They then use a language model to correct the previous step&amp;rsquo;s output and segment the phoneme stream into words and then phrases.&lt;/p&gt;
+
+&lt;p&gt;The crazy thing is that this whole rigmarole works! They used a metric called &lt;a href="http://www.cs.cmu.edu/~alavie/METEOR/"&gt;METEOR&lt;/a&gt; and got scores of around .6. This is on a scale where &amp;lt;.5 is considered &amp;ldquo;interpretable by a human.&amp;rdquo; Considering that the threat vector here is a human using this technique to listen in on your encrypted VoIP calls &amp;mdash; that&amp;rsquo;s pretty amazing! &lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2&gt;Epilogue&lt;/h2&gt;
+
+&lt;p&gt;After passing the rigorous all-night culture fit screening, you end up getting the job. Six months later, Mont Piper is sold to a large conglomerate. Gary refuses to trade in his Norwegian metal t-shirts for a button-down and is summarily fired. You now spend your days going on-site to a big bank, &amp;ldquo;advising&amp;rdquo; a team that hates your guts.&lt;/p&gt;
+
+&lt;p&gt;But recently, you&amp;rsquo;ve picked up machine learning and found this really cool online game where you try to make a 6-legged robot walk in a 3d physics simulation&amp;hellip;&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h4&gt;Paying the Bills&lt;/h4&gt;
+
+&lt;p&gt;Vulnerabilities come out every day, and most don&amp;rsquo;t get blog posts like this written about them.&lt;/p&gt;
+
+&lt;p&gt;Our product, &lt;a href="https://appcanary.com/?utm_source=blog&amp;amp;utm_medium=web&amp;amp;utm_campaign=compress"&gt;Appcanary&lt;/a&gt;, monitors your apps and servers, and notifies you whenever a new vulnerability is discovered in a package you rely on. &lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://appcanary.com/sign_up?utm_source=blog&amp;amp;utm_medium=web&amp;amp;utm_campaign=compress"&gt;Sign up&lt;/a&gt; today!&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>Vulnerabilities I Have Known and Loved #1: Symantec's Bad Week</title>
+    <link rel="alternate" href="http://blog.appcanary.com/2016/vikhal-symantec.html"/>
+    <id>http://blog.appcanary.com/2016/vikhal-symantec.html</id>
+    <published>2016-07-06T20:00:00-04:00</published>
+    <updated>2016-07-07T12:26:09-04:00</updated>
+    <author>
+      <name>Max Veytsman</name>
+    </author>
+    <content type="html">&lt;p&gt;&lt;strong&gt;tl;dr:&lt;/strong&gt; If you use software with &amp;ldquo;Symantec&amp;rdquo; or &amp;ldquo;Norton&amp;rdquo; somewhere in its name, &lt;strong&gt;stop what you&amp;rsquo;re doing and &lt;a href="https://www.symantec.com/support-center/upgrades"&gt;upgrade&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Back in my security consulting days, a mentor taught me One Weird Trick to
+increase conversions on your phishing campaign.  It goes like this: set up an email server, get as many employee addresses you can find, and spoof a mass message that reads:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Hello this is your boss. &lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;m going to fire someone next week and you get to vote on who! To get your arch-nemisis fired, please log into this website that looks exactly like our company portal, but has one character in the domain name mispelled. &lt;/p&gt;
+
+&lt;p&gt;Thanks, Your Boss.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Then you sit back and count how many people fell for it.&lt;/p&gt;
+
+&lt;p&gt;The executive who hired you is happy because they get to demonstrate the value of increasing their
+security budget. The consultancy you work for is happy, because they get to upsell a bunch of &amp;ldquo;security awareness
+training&amp;rdquo;. &lt;/p&gt;
+
+&lt;p&gt;Soon, you&amp;rsquo;ll be spending three days telling your victims about the
+importance of that little green lock in their browser&amp;rsquo;s address bar (but only
+when it&amp;rsquo;s in the right place!) and that they should never ever click on links,
+never open attachments, and if at all possible, stop using computers altogether. Everybody wins.&lt;/p&gt;
+
+&lt;p&gt;Obviously, everyone at this stage wants to increase the conversion rate&lt;sup id="fnref1"&gt;&lt;a href="#fn1" rel="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt; of these phishing emails. This is where The One Weird Trick comes in: after you send out your first campaign, you craft another one. Before you know it, everyone on your list receives a helpful tip from the IT Helpdesk:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Hi, &lt;/p&gt;
+
+&lt;p&gt;We&amp;rsquo;ve heard reports of a phishing campaign being waged against us. Don&amp;rsquo;t open those emails! It&amp;rsquo;s critically important that you reset your password to protect against those evil hackers who tried to phish us. &lt;/p&gt;
+
+&lt;p&gt;Click here to do it!&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;It turns out that round two gets &lt;em&gt;way&lt;/em&gt; more clicks than round one. Most people will figure out that email #1 is a little fishy. Email #2 manages to reaffirm that, and so they dutifully click, like lambs to slaughter.&lt;/p&gt;
+
+&lt;p&gt;This is the phishing equivalent of the Double Tap. No, not the one from &lt;a href="https://www.youtube.com/watch?v=w4sWxsrEFFs"&gt;Zombieland&lt;/a&gt;. The Double Tap I&amp;rsquo;m talking about is a controversial &lt;a href="http://www.businessinsider.com/drone-double-tap-first-responders-2012-9"&gt;military technique&lt;/a&gt; where after attacking a target, you follow up by sending another missile at the first responders. You do some damage, and then attack the response to that damage.&lt;/p&gt;
+
+&lt;p&gt;The Symantec vulnerabilities reminded me of phishing and the Double Tap for two reasons. First of all, all of these vulns are exploitable just by sending an email. No need to get your target to click a link or even open the email you send &amp;mdash; Symantec will happily try to parse every email you receive. Secondly, one of the vulns does a Double Tap-like attack where it pretends to be a certain kind of malware first, in order to trigger some non-default checks from Symantec, which is where the vulnerable code path lies. More on this later.&lt;/p&gt;
+
+&lt;h3&gt;Symantec is Having a Bad Week&lt;/h3&gt;
+
+&lt;p&gt;Last week &lt;a href="https://twitter.com/taviso"&gt;Tavis Ormandy&lt;/a&gt; dropped 8 vulns against every single Symantec/Norton antivirus product. Judging by &lt;a href="http://fortune.com/2016/07/02/symantec-security-irony/"&gt;the press&lt;/a&gt;, things are &lt;a href="http://www.pcworld.com/article/3089463/security/wormable-flaws-in-symantec-products-expose-millions-of-computers-to-hacking.html"&gt;not looking good&lt;/a&gt; for them.&lt;/p&gt;
+
+&lt;p&gt;Once again, if you&amp;rsquo;re using a Symantec product I can&amp;rsquo;t stress this enough: &lt;strong&gt;stop what you&amp;rsquo;re doing and &lt;a href="https://www.symantec.com/support-center/upgrades"&gt;upgrade&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;You can find a writeup up on the &lt;a href="http://googleprojectzero.blogspot.ca/2016/06/how-to-compromise-enterprise-endpoint.html"&gt;Google Project Zero
+blog&lt;/a&gt;, and the issues for all 8 vulnerabilities can &lt;a href="https://bugs.chromium.org/p/project-zero/issues/list?can=1&amp;amp;q=label%3AVendor-Symantec"&gt;be found here&lt;/a&gt;. They&amp;rsquo;re all remotely exploitable,&lt;sup id="fnref2"&gt;&lt;a href="#fn2" rel="footnote"&gt;2&lt;/a&gt;&lt;/sup&gt; and they all should give an attacker remote code execution as root/SYSTEM (and in ring 0 for one of them to boot!)&lt;/p&gt;
+
+&lt;p&gt;Since the product is an antivirus, so it&amp;rsquo;s going to scan every file that touches your
+disk and every email you get for viruses. Which means that you can exploit these
+vulnerabilities simply by sending someone an email or getting them to click a
+link (did I mention you should
+&lt;a href="https://www.symantec.com/support-center/upgrades"&gt;upgrade&lt;/a&gt;?)&lt;/p&gt;
+
+&lt;p&gt;The one that made me think of the Double Tap is a stack overflow in Symantec&amp;rsquo;s PowerPoint parser. This parser is used to extract metadata and macros from PowerPoint decks (and presumably scan them for known malware). The parser exposes an I/O abstraction layer for these, and buffers date for perform ace. Tavis found that he could get that cache into a misaligned state, which resulted in a stack buffer overflow. The full writeup and exploit is &lt;a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=823&amp;amp;can=1&amp;amp;q=label%3AVendor-Symantec"&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;What&amp;rsquo;s interesting about it is that the vulnerable codepath is in something called “Bloodhound Heuristics”. These aren&amp;rsquo;t run by default, so you&amp;rsquo;d think the vulnerability wouldn&amp;rsquo;t be exploitable on a default configuration. It is. The default setting is &amp;ldquo;Automatic,&amp;rdquo; which decides which checks to run dynamically. All Tavis had to do was try a bunch of known PowerPoint malware, see which one triggered the automatic mode to turn on &amp;ldquo;Bloodhound Heuristics,&amp;rdquo; and put his payload into them. &lt;/p&gt;
+
+&lt;p&gt;The exploit pretends to be a certain kind of known malware in order to trigger some special aggressive checks, which are the exploit&amp;rsquo;s true target. The Double Tap!&lt;/p&gt;
+
+&lt;h3&gt;Vulnerability Management&lt;/h3&gt;
+
+&lt;p&gt;While the above vulnerability is pretty cool, the Symantec bugs that are most interesting to us at Appcanary are &lt;a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=810"&gt;CVE-2016-2207&lt;/a&gt; and &lt;a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=816"&gt;CVE-2016-2211&lt;/a&gt;. &lt;/p&gt;
+
+&lt;p&gt;Symantec was shipping it&amp;rsquo;s product with out of date versions of &lt;a href="http://www.cabextract.org.uk/libmspack/"&gt;libmspack&lt;/a&gt; and &lt;a href="http://www.rarlab.com/rar_add.htm"&gt;unrarsrc&lt;/a&gt;. Out of date versions that have dozens of known vulnerabilities with public exploits! All Tavis had to do was download public exploits for these known vulnerabilities, and he had an attack against Symantec.&lt;/p&gt;
+
+&lt;p&gt;Symantec was using open source libraries with known security vulnerabilities in them, and they sell a product called Enterprise Vulnerability Management! This is a hard problem for everyone, and at Appcanary, we&amp;rsquo;re trying to make it a little easier.&lt;/p&gt;
+
+&lt;h3&gt;Paying the Bills&lt;/h3&gt;
+
+&lt;p&gt;One quarter of the critical vulnerabilities found in Symantec&amp;rsquo;s products last week was because they relied on out-of-date libraries with known security holes.&lt;/p&gt;
+
+&lt;p&gt;Our product, &lt;a href="https://appcanary.com/?utm_source=blog&amp;amp;utm_medium=web&amp;amp;utm_campaign=compress"&gt;Appcanary&lt;/a&gt;, monitors your apps and servers, and notifies you whenever a new vulnerability is discovered in a package you rely on. &lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://appcanary.com/sign_up?utm_source=blog&amp;amp;utm_medium=web&amp;amp;utm_campaign=symantec"&gt;Sign up&lt;/a&gt; today!&lt;/p&gt;
+
+&lt;h3&gt;P.S.&lt;/h3&gt;
+
+&lt;p&gt;We&amp;rsquo;re going to make this a regular feature on the blog. We&amp;rsquo;ll be writing explainers for classic security vulnerabilities with a focus on historical significance or interesting techniques. Next up will be the &lt;a href="https://en.wikipedia.org/wiki/Morris_worm"&gt;Morris Worm&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;If you want to sign up to get notifications about new ones, you can subscribe to our newsletter &lt;a href="http://eepurl.com/b82xK9"&gt;here&lt;/a&gt;, or follow us on &lt;a href="https://twitter.com/appcanary"&gt;twitter&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Have any suggestions for vulnerabilities you&amp;rsquo;d like me to write about? You can let me know at &lt;a href="mailto:max@appcanary.com"&gt;max@appcanary.com&lt;/a&gt;.&lt;/p&gt;
+
+&lt;div class="footnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+
+&lt;li id="fn1"&gt;
+&lt;p&gt;You know, it&amp;rsquo;s interesting that before I became the CEO of a startup, the only time I thought about &amp;ldquo;conversion rates&amp;rdquo; of emails in my career was when I was involved in phishing campaigns.&amp;nbsp;&lt;a href="#fnref1" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+
+&lt;li id="fn2"&gt;
+&lt;p&gt;I&amp;rsquo;m going to well-actually myself here so you don&amp;rsquo;t have to. Tavis gives a clear path to exploit for 6 of the 8. Of the two that are left, &lt;a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=821"&gt;one&lt;/a&gt; is a lack of bounds checking on an array index, and the &lt;a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=819"&gt;other&lt;/a&gt; is an integer overflow bug. I&amp;rsquo;m going to go out on a limb and say I think both can lead to code execution. I can&amp;rsquo;t fault the researcher for not going further though, after you find the first 6 remote code executions, you stop feeling the need to keep proving the point&amp;hellip;&amp;nbsp;&lt;a href="#fnref2" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+
+&lt;/ol&gt;
+&lt;/div&gt;
+</content>
+  </entry>
+</feed>
