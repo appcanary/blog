@@ -1,6 +1,6 @@
 ---
 title: "Vulnerabilities I Have Known and Loved #1: Symantec's Bad Week"
-date: 2016-07-01
+date: 2016-07-07
 author: mveytsman
 layout: post
 published: true
