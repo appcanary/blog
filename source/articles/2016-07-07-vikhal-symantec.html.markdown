@@ -73,13 +73,15 @@ Symantec was shipping it's product with out of date versions of [libmspack](http
 Symantec was using open source libraries with known security vulnerabilities in them, and they sell a product called Enterprise Vulnerability Management! This is a hard problem for everyone, and at Appcanary, we're trying to make it a little easier.
 
 
-### Want more of these?
+### P.S.
 
 We're going to make this a regular feature on the blog. We'll be writing explainers for classic security vulnerabilities with a focus on historical significance or interesting techniques. Next up will be the [Morris Worm](https://en.wikipedia.org/wiki/Morris_worm).
 
 If you want to sign up to get notifications about new ones, you can subscribe to our newsletter [here](http://eepurl.com/b82xK9), or follow us on [twitter](https://twitter.com/appcanary).
 
 Have any suggestions for vulnerabilities you'd like me to write about? You can let me know at [max@appcanary.com](mailto:max@appcanary.com).
+
+---
 
 ### Paying the Bills
 
