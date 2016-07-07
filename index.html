@@ -144,7 +144,7 @@ vulnerabilities simply by sending someone an email or getting them to click a
 link (did I mention you should
 <a href="https://www.symantec.com/support-center/upgrades">upgrade</a>?)</p>
 
-<p>The one that made me think of the Double Tap is a stack overflow in Symantec&rsquo;s PowerPoint parser. This parser is used to extract metadata and macros from PowerPoint decks (and presumably scan them for known malware). The parser exposes an I/O abstraction layer for these, and buffers date for perform ace. Tavis found that he could get that cache into a misaligned state, which resulted in a stack buffer overflow. The full writeup and exploit is <a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=823&amp;can=1&amp;q=label%3AVendor-Symantec">here</a>.</p>
+<p>The one that made me think of the Double Tap is a stack overflow in Symantec&rsquo;s PowerPoint parser. This parser is used to extract metadata and macros from PowerPoint decks (and presumably scan them for known malware). The parser exposes an I/O abstraction layer for these, and buffers date for performance. Tavis found that he could get that cache into a misaligned state, which resulted in a stack buffer overflow. The full writeup and exploit is <a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=823&amp;can=1&amp;q=label%3AVendor-Symantec">here</a>.</p>
 
 <p>What&rsquo;s interesting about it is that the vulnerable codepath is in something called “Bloodhound Heuristics”. These aren&rsquo;t run by default, so you&rsquo;d think the vulnerability wouldn&rsquo;t be exploitable on a default configuration. It is. The default setting is &ldquo;Automatic,&rdquo; which decides which checks to run dynamically. All Tavis had to do was try a bunch of known PowerPoint malware, see which one triggered the automatic mode to turn on &ldquo;Bloodhound Heuristics,&rdquo; and put his payload into them. </p>
 
@@ -158,21 +158,21 @@ link (did I mention you should
 
 <p>Symantec was using open source libraries with known security vulnerabilities in them, and they sell a product called Enterprise Vulnerability Management! This is a hard problem for everyone, and at Appcanary, we&rsquo;re trying to make it a little easier.</p>
 
-<h3>Paying the Bills</h3>
-
-<p>One quarter of the critical vulnerabilities found in Symantec&rsquo;s products last week was because they relied on out-of-date libraries with known security holes.</p>
-
-<p>Our product, <a href="https://appcanary.com/?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=compress">Appcanary</a>, monitors your apps and servers, and notifies you whenever a new vulnerability is discovered in a package you rely on. </p>
-
-<p><a href="https://appcanary.com/sign_up?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=symantec">Sign up</a> today!</p>
-
-<h3>P.S.</h3>
+<h3>Want more of these?</h3>
 
 <p>We&rsquo;re going to make this a regular feature on the blog. We&rsquo;ll be writing explainers for classic security vulnerabilities with a focus on historical significance or interesting techniques. Next up will be the <a href="https://en.wikipedia.org/wiki/Morris_worm">Morris Worm</a>.</p>
 
 <p>If you want to sign up to get notifications about new ones, you can subscribe to our newsletter <a href="http://eepurl.com/b82xK9">here</a>, or follow us on <a href="https://twitter.com/appcanary">twitter</a>.</p>
 
 <p>Have any suggestions for vulnerabilities you&rsquo;d like me to write about? You can let me know at <a href="mailto:max@appcanary.com">max@appcanary.com</a>.</p>
+
+<h3>Paying the Bills</h3>
+
+<p>One quarter of the critical vulnerabilities found in Symantec&rsquo;s products last week were there because they relied on out-of-date libraries with known security holes.</p>
+
+<p>Our product, <a href="https://appcanary.com/?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=compress">Appcanary</a>, monitors your apps and servers, and notifies you whenever a new vulnerability is discovered in a package you rely on. </p>
+
+<p><a href="https://appcanary.com/sign_up?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=symantec">Sign up</a> today!</p>
 
 <div class="footnotes">
 <hr>
