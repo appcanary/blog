@@ -72,6 +72,15 @@ Symantec was shipping it's product with out of date versions of [libmspack](http
 
 Symantec was using open source libraries with known security vulnerabilities in them, and they sell a product called Enterprise Vulnerability Management! This is a hard problem for everyone, and at Appcanary, we're trying to make it a little easier.
 
+
+### Want more of these?
+
+We're going to make this a regular feature on the blog. We'll be writing explainers for classic security vulnerabilities with a focus on historical significance or interesting techniques. Next up will be the [Morris Worm](https://en.wikipedia.org/wiki/Morris_worm).
+
+If you want to sign up to get notifications about new ones, you can subscribe to our newsletter [here](http://eepurl.com/b82xK9), or follow us on [twitter](https://twitter.com/appcanary).
+
+Have any suggestions for vulnerabilities you'd like me to write about? You can let me know at [max@appcanary.com](mailto:max@appcanary.com).
+
 ### Paying the Bills
 
 One quarter of the critical vulnerabilities found in Symantec's products last week were there because they relied on out-of-date libraries with known security holes.
@@ -79,14 +88,6 @@ One quarter of the critical vulnerabilities found in Symantec's products last we
 Our product, [Appcanary](https://appcanary.com/?utm_source=blog&utm_medium=web&utm_campaign=compress), monitors your apps and servers, and notifies you whenever a new vulnerability is discovered in a package you rely on. 
 
 [Sign up](https://appcanary.com/sign_up?utm_source=blog&utm_medium=web&utm_campaign=symantec) today!
-
-### P.S.
-
-We're going to make this a regular feature on the blog. We'll be writing explainers for classic security vulnerabilities with a focus on historical significance or interesting techniques. Next up will be the [Morris Worm](https://en.wikipedia.org/wiki/Morris_worm).
-
-If you want to sign up to get notifications about new ones, you can subscribe to our newsletter [here](http://eepurl.com/b82xK9), or follow us on [twitter](https://twitter.com/appcanary).
-
-Have any suggestions for vulnerabilities you'd like me to write about? You can let me know at [max@appcanary.com](mailto:max@appcanary.com).
 
 [^1]: You know, it's interesting that before I became the CEO of a startup, the only time I thought about "conversion rates" of emails in my career was when I was involved in phishing campaigns.
 [^2]: I'm going to well-actually myself here so you don't have to. Tavis gives a clear path to exploit for 6 of the 8. Of the two that are left, [one](https://bugs.chromium.org/p/project-zero/issues/detail?id=821) is a lack of bounds checking on an array index, and the [other](https://bugs.chromium.org/p/project-zero/issues/detail?id=819) is an integer overflow bug. I'm going to go out on a limb and say I think both can lead to code execution. I can't fault the researcher for not going further though, after you find the first 6 remote code executions, you stop feeling the need to keep proving the point...
