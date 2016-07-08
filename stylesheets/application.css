@@ -4418,3 +4418,7 @@ h4, h5, h6 {
 
 .appcanary-logo img {
   width: 150px; }
+
+.footnotes {
+  font-style: normal;
+  font-size: 1.6rem; }

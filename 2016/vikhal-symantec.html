@@ -126,26 +126,20 @@ never open attachments, and if at all possible, stop using computers altogether.
 
 <p>This is the phishing equivalent of the Double Tap. No, not the one from <a href="https://www.youtube.com/watch?v=w4sWxsrEFFs">Zombieland</a>. The Double Tap I&rsquo;m talking about is a controversial <a href="http://www.businessinsider.com/drone-double-tap-first-responders-2012-9">military technique</a> where after attacking a target, you follow up by sending another missile at the first responders. You do some damage, and then attack the response to that damage.</p>
 
-<p>The Symantec vulnerabilities reminded me of phishing and the Double Tap for two reasons. First of all, all of these vulns are exploitable just by sending an email. No need to get your target to click a link or even open the email you send &mdash; Symantec will happily try to parse every email you receive. Secondly, one of the vulns does a Double Tap-like attack where it pretends to be a certain kind of malware first, in order to trigger some non-default checks from Symantec, which is where the vulnerable code path lies. More on this later.</p>
-
 <h3>Symantec is Having a Bad Week</h3>
 
 <p>Last week <a href="https://twitter.com/taviso">Tavis Ormandy</a> dropped 8 vulns against every single Symantec/Norton antivirus product. Judging by <a href="http://fortune.com/2016/07/02/symantec-security-irony/">the press</a>, things are <a href="http://www.pcworld.com/article/3089463/security/wormable-flaws-in-symantec-products-expose-millions-of-computers-to-hacking.html">not looking good</a> for them.</p>
 
-<p>Once again, if you&rsquo;re using a Symantec product I can&rsquo;t stress this enough: <strong>stop what you&rsquo;re doing and <a href="https://www.symantec.com/support-center/upgrades">upgrade</a></strong>.</p>
-
 <p>You can find a writeup up on the <a href="http://googleprojectzero.blogspot.ca/2016/06/how-to-compromise-enterprise-endpoint.html">Google Project Zero
 blog</a>, and the issues for all 8 vulnerabilities can <a href="https://bugs.chromium.org/p/project-zero/issues/list?can=1&amp;q=label%3AVendor-Symantec">be found here</a>. They&rsquo;re all remotely exploitable,<sup id="fnref2"><a href="#fn2" rel="footnote">2</a></sup> and they all should give an attacker remote code execution as root/SYSTEM (and in ring 0 for one of them to boot!)</p>
 
-<p>Since the product is an antivirus, so it&rsquo;s going to scan every file that touches your
-disk and every email you get for viruses. Which means that you can exploit these
-vulnerabilities simply by sending someone an email or getting them to click a
-link (did I mention you should
-<a href="https://www.symantec.com/support-center/upgrades">upgrade</a>?)</p>
+<p>If you&rsquo;re using a Symantec product I can&rsquo;t stress this enough: <strong>stop what you&rsquo;re doing and <a href="https://www.symantec.com/support-center/upgrades">upgrade</a></strong>.</p>
 
-<p>The one that made me think of the Double Tap is a stack overflow in Symantec&rsquo;s PowerPoint parser. This parser is used to extract metadata and macros from PowerPoint decks (and presumably scan them for known malware). The parser exposes an I/O abstraction layer for these, and buffers date for performance. Tavis found that he could get that cache into a misaligned state, which resulted in a stack buffer overflow. The full writeup and exploit is <a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=823&amp;can=1&amp;q=label%3AVendor-Symantec">here</a>.</p>
+<p>These vulnerabilities reminded me of phishing and the Double Tap for two reasons. First, every one of these vulns can be exploited by just sending an email. Since the product is an antivirus, so it&rsquo;s going to scan every file that touches your disk and every email you get for viruses. You don&rsquo;t have to get your target to click a link or even open the message you sent &mdash; Symantec will happily try to parse every email you receive. </p>
 
-<p>What&rsquo;s interesting about it is that the vulnerable codepath is in something called “Bloodhound Heuristics”. These aren&rsquo;t run by default, so you&rsquo;d think the vulnerability wouldn&rsquo;t be exploitable on a default configuration. It is. The default setting is &ldquo;Automatic,&rdquo; which decides which checks to run dynamically. All Tavis had to do was try a bunch of known PowerPoint malware, see which one triggered the automatic mode to turn on &ldquo;Bloodhound Heuristics,&rdquo; and put his payload into them. </p>
+<p>Second, the <a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=823&amp;can=1&amp;q=label%3AVendor-Symantec">stack overflow in Symantec&rsquo;s PowerPoint parser</a> depends on a Double Tap-like attack! This parser is used to extract metadata and macros from PowerPoint decks (and presumably scan them for known malware) by exposing an I/O abstraction layer &mdash; which it then caches for performance. Tavis found that he could get that cache into a misaligned state, which resulted in the stack buffer overflow. </p>
+
+<p>This vulnerable codepath is in something called “Bloodhound Heuristics”, which Symantec promotes as a more advanced set of malware detection checks. Since they&rsquo;re not always run, you&rsquo;d think that the vulnerability wouldn&rsquo;t be very exploitable. And yet, it can be targetted every time! Under the default configuration, the system dynamically decides which set of checks to run. All Tavis had to do was try a bunch of known PowerPoint malware, see which one triggered the automatic mode to turn on &ldquo;Bloodhound Heuristics,&rdquo; and put his payload into them.</p>
 
 <p>The exploit pretends to be a certain kind of known malware in order to trigger some special aggressive checks, which are the exploit&rsquo;s true target. The Double Tap!</p>
 
@@ -153,25 +147,25 @@ link (did I mention you should
 
 <p>While the above vulnerability is pretty cool, the Symantec bugs that are most interesting to us at Appcanary are <a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=810">CVE-2016-2207</a> and <a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=816">CVE-2016-2211</a>. </p>
 
-<p>Symantec was shipping it&rsquo;s product with out of date versions of <a href="http://www.cabextract.org.uk/libmspack/">libmspack</a> and <a href="http://www.rarlab.com/rar_add.htm">unrarsrc</a>. Out of date versions that have dozens of known vulnerabilities with public exploits! All Tavis had to do was download public exploits for these known vulnerabilities, and he had an attack against Symantec.</p>
+<p>Symantec was shipping its product with out of date versions of <a href="http://www.cabextract.org.uk/libmspack/">libmspack</a> and <a href="http://www.rarlab.com/rar_add.htm">unrarsrc</a>. Out of date versions that have dozens of known vulnerabilities with public exploits! All Tavis had to do was download public exploits for these known vulnerabilities, and he had an attack against Symantec.</p>
 
-<p>Symantec was using open source libraries with known security vulnerabilities in them, and they sell a product called Enterprise Vulnerability Management! This is a hard problem for everyone, and at Appcanary, we&rsquo;re trying to make it a little easier.</p>
+<p>Ironically, Symantec sells a product called Enterprise Vulnerability Management! This is a hard problem for everyone. At Appcanary, we&rsquo;re working on solving it.</p>
 
 <h3>P.S.</h3>
 
-<p>We&rsquo;re going to make this a regular feature on the blog. We&rsquo;ll be writing explainers for classic security vulnerabilities with a focus on historical significance or interesting techniques. Next up will be the <a href="https://en.wikipedia.org/wiki/Morris_worm">Morris Worm</a>.</p>
+<p>We&rsquo;ll be starting a regular feature on the blog with explainers security vulnerabilities with a focus on historical significance or interesting techniques.  Next up will be the <a href="https://en.wikipedia.org/wiki/Morris_worm">Morris Worm</a>.</p>
 
-<p>If you want to sign up to get notifications about new ones, you can subscribe to our newsletter <a href="http://eepurl.com/b82xK9">here</a>, or follow us on <a href="https://twitter.com/appcanary">twitter</a>.</p>
+<p>Want to be notified whenever we post new content? <a href="http://eepurl.com/b82xK9">Subscribe to our newsletter</a>, or follow us on <a href="https://twitter.com/appcanary">twitter</a>.</p>
 
-<p>Have any suggestions for vulnerabilities you&rsquo;d like me to write about? You can let me know at <a href="mailto:max@appcanary.com">max@appcanary.com</a>.</p>
+<p>Do you have suggestions for vulnerabilities you&rsquo;d like me to write about? You can let me know at <a href="mailto:max@appcanary.com">max@appcanary.com</a>.</p>
 
 <hr>
 
-<h3>Paying the Bills</h3>
+<h4>Paying the Bills</h4>
 
 <p>One quarter of the critical vulnerabilities found in Symantec&rsquo;s products last week were there because they relied on out-of-date libraries with known security holes.</p>
 
-<p>Our product, <a href="https://appcanary.com/?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=compress">Appcanary</a>, monitors your apps and servers, and notifies you whenever a new vulnerability is discovered in a package you rely on. </p>
+<p>Our product, <a href="https://appcanary.com/?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=vikhal">Appcanary</a>, monitors your apps and servers, and notifies you whenever a new vulnerability is discovered in a package you rely on. </p>
 
 <p><a href="https://appcanary.com/sign_up?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=symantec">Sign up</a> today!</p>
 
@@ -184,7 +178,7 @@ link (did I mention you should
 </li>
 
 <li id="fn2">
-<p>I&rsquo;m going to well-actually myself here so you don&rsquo;t have to. Tavis gives a clear path to exploit for 6 of the 8. Of the two that are left, <a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=821">one</a> is a lack of bounds checking on an array index, and the <a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=819">other</a> is an integer overflow bug. I&rsquo;m going to go out on a limb and say I think both can lead to code execution. I can&rsquo;t fault the researcher for not going further though, after you find the first 6 remote code executions, you stop feeling the need to keep proving the point&hellip;&nbsp;<a href="#fnref2" rev="footnote">&#8617;</a></p>
+<p>I&rsquo;m going to well-actually myself here so you don&rsquo;t have to. Tavis gives a clear path to exploit for 6 of the 8. Of the two that are left, <a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=821">one</a> is a lack of bounds checking on an array index, and the <a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=819">other</a> is an integer overflow bug. I&rsquo;m going to go out on a limb and say I think both can lead to code execution. I can&rsquo;t fault the researcher for not going further though; after you find the first 6 remote code executions, you stop feeling the need to keep proving the point&hellip;&nbsp;<a href="#fnref2" rev="footnote">&#8617;</a></p>
 </li>
 
 </ol>
