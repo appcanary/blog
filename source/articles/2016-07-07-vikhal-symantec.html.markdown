@@ -81,7 +81,7 @@ Do you have suggestions for vulnerabilities you'd like me to write about? You ca
 
 One quarter of the critical vulnerabilities found in Symantec's products last week were there because they relied on out-of-date libraries with known security holes.
 
-Our product, [Appcanary](https://appcanary.com/?utm_source=blog&utm_medium=web&utm_campaign=vikhal), monitors your apps and servers, and notifies you whenever a new vulnerability is discovered in a package you rely on. 
+Our product, [Appcanary](https://appcanary.com/?utm_source=blog&utm_medium=web&utm_campaign=symantec), monitors your apps and servers, and notifies you whenever a new vulnerability is discovered in a package you rely on. 
 
 [Sign up](https://appcanary.com/sign_up?utm_source=blog&utm_medium=web&utm_campaign=symantec) today!
 
