@@ -101,7 +101,13 @@ After passing the rigorous all-night culture fit screening, you end up getting t
 
 But recently, you've picked up machine learning and found this really cool online game where you try to make a 6-legged robot walk in a 3d physics simulation...
 
-- - -
+---
+
+### P.S.
+
+Want to be notified whenever we post new content? [Subscribe to our newsletter](http://eepurl.com/b82xK9), or follow us on [twitter](https://twitter.com/appcanary).
+
+---
 
 #### Paying the Bills
 
