@@ -65,11 +65,11 @@ While the above vulnerability is pretty cool, the Symantec bugs that are most in
 
 Symantec was shipping its product with out of date versions of [libmspack](http://www.cabextract.org.uk/libmspack/) and [unrarsrc](http://www.rarlab.com/rar_add.htm). Out of date versions that have dozens of known vulnerabilities with public exploits! All Tavis had to do was download public exploits for these known vulnerabilities, and he had an attack against Symantec.
 
-Symantec sells a product called Enterprise Vulnerability Management! This is a hard problem for everyone.
+Ironically, Symantec sells a product called Enterprise Vulnerability Management! This is a hard problem for everyone. At Appcanary, we're working on solving it.
 
 ### P.S.
 
-We'll be writing explainers for classic security vulnerabilities with a focus on historical significance or interesting techniques. 
+We'll be starting a regular feature on the blog with explainers security vulnerabilities with a focus on historical significance or interesting techniques.  Next up will be the [Morris Worm](https://en.wikipedia.org/wiki/Morris_worm).
 
 Want to be notified whenever we post new content? [Subscribe to our newsletter](http://eepurl.com/b82xK9), or follow us on [twitter](https://twitter.com/appcanary).
 
