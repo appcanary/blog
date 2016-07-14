@@ -4,7 +4,7 @@ date: 2016-07-14
 author: mveytsman
 layout: post
 published: true
-tags: vikhal, security
+tags: Announcements, Product
 ---
 
 I'm excited to announce that we've added two features that make Appcanary a heck of a lot easier to use!
