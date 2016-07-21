@@ -84,6 +84,56 @@
 </div>
 <article class='post'>
 <header class='post-header'>
+<h1 class='post-title'><a href="2016/making-appcanary-easier.html">Making Appcanary easier to use</a></h1>
+<section class='post-meta'>
+</section>
+</header>
+<section class='post-content'>
+<p>I&rsquo;m excited to announce that we&rsquo;ve added two features that make Appcanary a heck of a lot easier to use!</p>
+
+<h2>Add monitors by uploading a file</h2>
+
+<p>Our Monitor API is great if you want to track a set of Linux packages or your Gemfile. We give you a dashboard showing which packages are vulnerable, and email you whenever new vulnerabilities that affect you come out. However, there&rsquo;s always a bunch of setup to get a new API going.</p>
+
+<p>With that in mind, we made the interface a lot more user friendly! You can now upload a file to watch directly through the website. Just go to <a href="https://appcanary.com/monitors/new">add monitors</a> to be able to upload a file directly. Monitors support Ruby&rsquo;s <code>Gemfile.lock</code>, <code>/var/lib/dpkg/status</code> for Ubuntu and Debian, and the output of <code>rpm -qa</code> for Centos and Amazon Linux!</p>
+
+<h2>Automatically upgrade vulnerable packages</h2>
+
+<p>A few of our customers told us that knowing about vulnerabilities is nice, but you know what would be <em>great</em>? If we could somehow <em>patch</em> them automatically. We thought about it and said, sure, why not!</p>
+
+<p>If you have the Appcanary <a href="(https://appcanary.com/servers/new)">agent</a> installed on an Ubuntu server, and you&rsquo;re running the latest version, you can run </p>
+<pre class="highlight plaintext"><code>appcanary upgrade
+</code></pre>
+
+<p>in order to install updates for any packages we know to be vulnerable.</p>
+
+<p>You can also run</p>
+<pre class="highlight plaintext"><code>appcanary upgrade -dry-run
+</code></pre>
+
+<p>in order to see what the agent will do, without it actually touching your system. </p>
+
+<p>Now you can manage vulnerabilities, learn about new ones that affect you, and apply patches, all through Appcanary!</p>
+
+<h4>If you haven&rsquo;t tried us yet</h4>
+
+<p>Stay on top of the security vulnerabilities that affect you, today.</p>
+
+<p><a href="https://appcanary.com/?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=making_easier">Appcanary</a>, monitors your apps and servers, and notifies you whenever a new vulnerability is discovered in a package you rely on. And now it will help you patch vulnerable packages as well.</p>
+
+<p><a href="https://appcanary.com/sign_up?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=making_easier">Sign up</a> today!</p>
+
+</section>
+<footer class='post-meta'>
+<a href='/author/max-veytsman.html'>Max Veytsman</a>
+on <a href='/tag/announcements.html'>Announcements</a>, <a href='/tag/product.html'>Product</a>
+<time class='post-date' datetime='2016-07-14'>
+14 July 2016
+</time>
+</footer>
+</article>
+<article class='post'>
+<header class='post-header'>
 <h1 class='post-title'><a href="2016/vikhal-symantec.html">Vulnerabilities I Have Known and Loved #1: Symantec's Bad Week</a></h1>
 <section class='post-meta'>
 </section>
@@ -557,95 +607,6 @@ on <a href='/tag/announcements.html'>Announcements</a>, <a href='/tag/product.ht
 </time>
 </footer>
 </article>
-<article class='post'>
-<header class='post-header'>
-<h1 class='post-title'><a href="2016/slippery-exception-clojure-ruby.html">Slippery exceptions in Clojure and Ruby</a></h1>
-<section class='post-meta'>
-</section>
-</header>
-<section class='post-content'>
-<p>Recently I spent a couple of hours banging my head against code that looks like this:</p>
-<pre class="highlight clojure"><code><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">parse-file</span><span class="w">
-  </span><span class="p">[</span><span class="n">contents</span><span class="p">]</span><span class="w">
-  </span><span class="p">(</span><span class="nb">remove</span><span class="w"> </span><span class="nb">nil?</span><span class="w">
-          </span><span class="p">(</span><span class="nf">code-that</span><span class="w"> </span><span class="n">throws-an-exception</span><span class="p">)))</span><span class="w">
-
-</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">consume-manifest</span><span class="w">
-  </span><span class="p">[</span><span class="n">contents</span><span class="w"> </span><span class="n">kind</span><span class="p">]</span><span class="w">
-  </span><span class="p">(</span><span class="nf">try+</span><span class="w">
-    </span><span class="p">(</span><span class="nf">parse-file</span><span class="w"> </span><span class="n">kind</span><span class="w"> </span><span class="n">contents</span><span class="p">)</span><span class="w">
-
-    </span><span class="p">(</span><span class="nf">catch</span><span class="w"> </span><span class="n">java.lang.Exception</span><span class="w"> </span><span class="n">e</span><span class="w">
-      </span><span class="p">(</span><span class="nf">throw+</span><span class="w"> </span><span class="p">{</span><span class="no">:type</span><span class="w"> </span><span class="no">::bad-parse</span><span class="w"> </span><span class="no">:message</span><span class="w"> </span><span class="s">"Invalid file."</span><span class="p">}))))</span><span class="w">
-
-</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">check</span><span class="w">
-  </span><span class="p">[</span><span class="n">file</span><span class="w"> </span><span class="n">kind</span><span class="p">]</span><span class="w">
-  </span><span class="p">(</span><span class="nf">try+</span><span class="w">
-    </span><span class="p">(</span><span class="k">let</span><span class="w"> </span><span class="p">[</span><span class="n">artifacts</span><span class="w"> </span><span class="p">(</span><span class="nf">consume-manifest</span><span class="w"> </span><span class="p">(</span><span class="nb">slurp</span><span class="w"> </span><span class="n">file</span><span class="p">)</span><span class="w"> </span><span class="n">kind</span><span class="p">]</span><span class="w">
-      </span><span class="p">(</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nf">not-empty</span><span class="w"> </span><span class="n">artifacts</span><span class="p">)</span><span class="w">
-        </span><span class="err">…</span><span class="w"> </span><span class="n">etc</span><span class="w">
-</span></code></pre>
-
-<p>And much to my surprise, I kept getting the kind of exception <code>parse-file</code> generates deep within the <code>check</code> function, right up against <code>(not-empty artifacts)</code>.</p>
-
-<p>I&rsquo;ve grown somewhat used to Clojure exceptions being unhelpful, but this was taking the cake. Coming from Ruby and pretty much every other language, this brushed up rudely against my expectations. </p>
-
-<p>You can tell that exceptions in Clojure are unloved, given how cumbersome handling them natively is. We&rsquo;d had some trouble in the past getting <a href="https://github.com/scgilardi/slingshot">slingshot</a> to behave properly, so I zero&#39;ed in on there. Don&rsquo;t all exceptions in Java descend from <code>Exception</code>?</p>
-
-<p>Stepping through <code>check</code> in the <a href="cursive-ide.com">Cursive</a> debugger, I could see that the exception generated was a pure java exception, not a slingshot exception generated by <code>throw+</code> in <code>consume-manifest</code>. This meant that the exception was slipping straight through uncaught. But calling <code>consume-manifest</code> directly in my repl was causing it to work as intended.</p>
-
-<p>What the hell was going on?</p>
-
-<p><a href="https://twitter.com/mveytsman">Max</a> took one look at it and set me straight. &ldquo;Oh. <a href="https://clojuredocs.org/clojure.core/remove"><code>remove</code></a> is lazy, so the exception isn&rsquo;t being throw until the lazy sequence is accessed.&rdquo;</p>
-
-<p>Excuse me? I had an angry expression on my face. He looked sheepish.</p>
-
-<p>&ldquo;How else would a lazy data structure work?&rdquo;</p>
-
-<p>Well. I would expect a <code>catch java.lang.Exception</code> to <em>catch every exception</em>.</p>
-
-<p>&ldquo;Right, well, hear me out. What if you had the following Ruby?&rdquo;</p>
-<pre class="highlight ruby"><code><span class="k">def</span> <span class="nf">lazy_parse</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-  <span class="no">File</span><span class="p">.</span><span class="nf">open</span><span class="p">(</span><span class="n">filename</span><span class="p">).</span><span class="nf">each_line</span><span class="p">.</span><span class="nf">each_with_index</span><span class="p">.</span><span class="nf">lazy</span><span class="p">.</span><span class="nf">map</span> <span class="k">do</span> <span class="o">|</span><span class="n">line</span><span class="p">,</span> <span class="n">i</span><span class="o">|</span>
-    <span class="k">raise</span> <span class="s2">"You can't catch me, I'm the exception man"</span> <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">5</span>
-    <span class="n">line</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-
-<span class="k">def</span> <span class="nf">consume_file</span>
-  <span class="k">begin</span>
-    <span class="n">lazy_parse</span><span class="p">(</span><span class="s2">"Gemfile.lock"</span><span class="p">)</span>
-  <span class="k">rescue</span>
-    <span class="nb">puts</span> <span class="s2">"Woops, an exception. Good thing we caught it."</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-
-<span class="n">file</span> <span class="o">=</span> <span class="n">consume_file</span>
-<span class="nb">puts</span> <span class="n">file</span><span class="p">.</span><span class="nf">first</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-</code></pre>
-
-<p>(Did you know that Ruby has had <a href="http://railsware.com/blog/2012/03/13/ruby-2-0-enumerablelazy/">lazy enumerables</a> for almost four years now? Worth reading <a href="http://patshaughnessy.net/2013/4/3/ruby-2-0-works-hard-so-you-can-be-lazy">Shaughnessy as well</a>.)</p>
-
-<p>That shut me up good. And in case you were wondering, the stack trace is also useless in Ruby; there simply isn&rsquo;t any context for it to preserve. Frankly, I&rsquo;ve just never had to think about lazy data structures in Rubyland; they&rsquo;ve not been super popular. </p>
-
-<p>It&rsquo;s hard to reason about this. I want to write wrapper functions that make my code safe to consume downstream. This isn&rsquo;t feasible for any functions iterating over potentially infinite lazy sequences, but fortunately for us we need to fit this file into memory anyways. In Ruby we&rsquo;d have to forcibly iterate over every element of the sequence and check for exceptions, but Clojure makes this easy with <a href="https://clojuredocs.org/clojure.core/doall"><code>doall</code></a>:</p>
-<pre class="highlight clojure"><code><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">parse-file</span><span class="w">
-  </span><span class="p">[</span><span class="n">contents</span><span class="p">]</span><span class="w">
-  </span><span class="p">(</span><span class="nb">doall</span><span class="w"> </span><span class="p">(</span><span class="nb">remove</span><span class="w"> </span><span class="nb">nil?</span><span class="w">
-                 </span><span class="p">(</span><span class="nf">code-that</span><span class="w"> </span><span class="n">throws-an-exception</span><span class="p">))))</span><span class="w">
-</span></code></pre>
-
-<p>And now, things behave as intended.</p>
-
-</section>
-<footer class='post-meta'>
-<a href='/author/phillip-mendonca-vieira.html'>Phillip Mendonça-Vieira</a>
-on <a href='/tag/clojure.html'>Clojure</a>, <a href='/tag/ruby.html'>Ruby</a>, <a href='/tag/programming.html'>Programming</a>, <a href='/tag/bugs.html'>Bugs</a>, <a href='/tag/developer-diary.html'>Developer Diary</a>
-<time class='post-date' datetime='2016-02-16'>
-16 February 2016
-</time>
-</footer>
-</article>
 <nav class='pagination' role='pagination'>
 <span class='page-number'>Page 1 of 2</span>
 <a class="older-posts" href="page/2/">Older Posts →</a>
@@ -665,6 +626,22 @@ on <a href='/tag/clojure.html'>Clojure</a>, <a href='/tag/ruby.html'>Ruby</a>, <
 </footer>
 </div>
 <script src="javascripts/application.js"></script>
+<script type="text/javascript">
+ /* <![CDATA[ */
+ var google_conversion_id = 928841383;
+ var google_custom_params = window.google_tag_params;
+ var google_remarketing_only = true;
+ /* ]]> */
+</script>
+
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+<noscript>
+    <div style="display:inline;">
+        <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/928841383/?value=0&amp;guid=ON&amp;script=0"/>
+    </div>
+</noscript>
+
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
