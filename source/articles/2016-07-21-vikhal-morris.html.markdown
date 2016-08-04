@@ -14,24 +14,23 @@ executed some code he'd been working on and went to dinner. The aftermath was a
 self-replicating computer worm that infected 10% of the Internet[^internet] at the time
 &mdash; a whopping 6,000 computers!
 
-Morris claimed that wrote his program to map the size of the internet. And
+Morris claimed that he wrote his program to map the size of the internet. And
 indeed, each infection would send a byte to a machine in Berkeley
 (further hiding the trail to Morris from Cornell as the author). Unfortunately,
 there was a bug that caused it to propagate too aggressively and infect the same
 computer multiple times, which resulted in a denial of service attack across the
 whole Internet. Furthermore, the code to report infection had a bug in it. It tried to
-send a UDP packet over a TCP socket, making it useless for reporting the internet size.
+send a UDP packet over a TCP socket, making it useless for reporting the internet's size.
 
 An alternative explanation is that Morris was trying to bring to wider attention
-some long-standing bugs in the internet. Morris' friend and future co-founder
-Paul Graham [compared](http://www.nytimes.com/1988/11/07/us/computer-invasion-back-door-ajar.html)
-him to [Mathias Rust](https://en.wikipedia.org/wiki/Mathias_Rust)
+some long-standing bugs in the internet. As Morris' friend and future co-founder
+Paul Graham [put it](http://www.nytimes.com/1988/11/07/us/computer-invasion-back-door-ajar.html):
 
 > Mr. Graham, who has known the younger Mr. Morris for several years, compared
 > his exploit to that of Mathias Rust, the young German who flew light plane
 > through Soviet air defenses in May 1987 and landed in Moscow.
 
-> "It's as if Mathias Rust had not just flown into Red Square, but built
+> "It's as if [Mathias Rust](https://en.wikipedia.org/wiki/Mathias_Rust) had not just flown into Red Square, but built
 > himself a stealth bomber by hand and then flown into Red Square," he said.
 
 pg's mastery of the metaphor was unparalleled even then.
@@ -46,16 +45,16 @@ very neat trick." You can see the (decompiled and commented) code [here](https:/
 ## Rsh and Rexec
 
 `rsh` and `rexec` are remote shell protocols from the BSD era that are almost
-unused today, being supplanted by `ssh`. `rsh` can allow passwordless
+unused today, having been supplanted by `ssh`. `rsh` can allow passwordless
 authentication if coming from a "trusted" host. The file `/etc/hosts.equiv` and
 per-user `.rhosts` files contain a list of addresses of trusted hosts. When an
-`rsh` request comes from a user of trusted machine, the user is automatically
+`rsh` request comes from a user of a trusted machine, the user is automatically
 granted access. The worm used this to propagate, searching for trusted hosts in
 the above two files and in `.forward` which was used to forward your mail around
 the Internet.
 
 Even in 1988, people knew that leaving `rsh` open on an untrusted network like
-the the Internet was a bad idea, and the worm also propogated via `rexec`.
+the the Internet was a Bad Idea, and the worm also propogated via `rexec`.
 `rexec` uses password authentication, but Morris made the intelligent assumption
 that one person's accounts on different machines will share a password.
 Back then, `/etc/passwd` would often[^shadow] store the encrypted user password. The
@@ -67,7 +66,7 @@ in to likely hosts with it.
 ### What we've learned
 
 Almost everywhere today, `/etc/passwd` is world readable, but doesn't contain
-password hashes. `/etc/shadow` stores the hashes, but is only readable by
+password hashes. `/etc/shadow` stores the hashes, but can only be read by
 privileged users.  Besides implementing `/etc/shadow` widely since then, the `rsh`
 attack demonstrates exploiting trust boundaries, and lateral movement, a common
 feature of many attacks. Defense in depth is the principle that seeks to limit
@@ -89,9 +88,9 @@ hit more potent.
 ## Sendmail
 
 The Morris Worm exploited an
-[apparantly deliberate](http://www.nytimes.com/1988/11/07/us/computer-invasion-back-door-ajar.html)
+[apparently deliberate](http://www.nytimes.com/1988/11/07/us/computer-invasion-back-door-ajar.html)
 backdoor in Sendmail. Sendmail had a "debug" mode, that allowed you to route an
-email to be send to any process, including shell! Ironically, it was left as a backdoor to
+email to any process, including shell! Ironically, it was left as a backdoor to
 get around annoying sysadmins that were too paranoid to give the author too much access.
 
 > Eric Allman, a computer programmer who designed the mail program that Morris
@@ -199,7 +198,7 @@ he sent over the network. The beginning of the buffer contained
 
 ### What we've learned
 
-This is the first buffer overflow exploit I can find, and It's been a cat and
+The Morris worm is regarded as the earliest documented buffer overflow exploit, and it's been a cat and
 mouse game ever since. We've tried banning `gets` and other dangerous functions,
 but buffers can be overflown in more subtle ways. We've tried making it
 impossible to execute code on the stack, but you can do
@@ -256,6 +255,6 @@ Our product, [Appcanary](https://appcanary.com/?utm_source=blog&utm_medium=web&u
 
 [^magic]: Exploits really are magic, and goes without saying that exploit users have chosen the [Left-Hand Path](https://en.wikipedia.org/wiki/Left-hand_path_and_right-hand_path) to wizardhood. If the [cover of SICP](https://mitpress.mit.edu/sicp/full-text/book/book.html) is to be believed, the Right-Hand Path is available through careful study of functional programming and Lisps. Perhaps this is the true reason why Morris and Graham were such effective collaborators.
 
-[^code]: On the other hand, this C code is over 30 years old. It makes me so happy that when I ran it through the gcc on my machine, it complained bitterly but still compiled it. One exercise for the reader is where the network operation actually happens. `main` takes input and output from STDIN/STDOUT, but there's an uninitialized `struct sockaddr_in sin` that we call `getpeername` on. How is a network socket piped to standard input/output and who is initializing the `sin` struct? I actually haven't been able to figure this part out. If you know, please tell [me](mailto:max@appcanary.com)! The full code listing is [here]((http://minnie.tuhs.org/cgi-bin/utree.pl?file=4.3BSD/usr/src/etc/fingerd.c).
+[^code]: On the other hand, this C code is over 30 years old. It makes me very happy that when I ran it through gcc, it complained bitterly but still compiled it. One exercise for the reader is where the network operation actually happens. `main` takes input and output from STDIN/STDOUT, but there's an uninitialized `struct sockaddr_in sin` that we call `getpeername` on. How is a network socket piped to standard input/output and who is initializing the `sin` struct? I actually haven't been able to figure this part out. If you know, please tell [me](mailto:max@appcanary.com)! The full code listing is [here]((http://minnie.tuhs.org/cgi-bin/utree.pl?file=4.3BSD/usr/src/etc/fingerd.c).
 
 
