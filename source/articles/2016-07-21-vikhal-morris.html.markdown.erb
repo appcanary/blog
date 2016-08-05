@@ -9,6 +9,22 @@ tags: vikhal, security
 
 ![Morris Worm](images/morris_worm.jpg)
 
+
+Paranoia is natural for security practitioners. A novel software exploit is
+indistinguishable from magic, and when you understand how it works, you get
+initiated into a secret society of wizards[^magic] that's been operating since
+almost the dawn computing. Initiates understand that they're not alone, there
+are secret societies of wizards operating, some with nation-scale budgets. If
+you've been able to hack almost any piece of software you've touched, and the
+secrets of doing so are available to many people with many different
+motivations, it naturally follows that you must already be hacked.
+
+Like
+[Hemingway's paranoia](http://www.nytimes.com/2011/07/02/opinion/02hotchner.html?_r=0)
+the paranoia of most security professionals is perfectly reasonable, considering the circumstances. 
+
+
+
 On November 2nd 1988 Robert Tappan Morris, a graduate student at Cornell,
 executed some code he'd been working on and went to dinner. The aftermath was a
 self-replicating computer worm that infected 10% of the Internet[^internet] at the time
@@ -153,7 +169,7 @@ The very neat trick that Vixie was talking about is a now-standard
 [stack buffer overflow](https://en.wikipedia.org/wiki/Buffer_overflow)! It's
 fascinating to read contemporary accounts that marvel at the cleverness of a class of
 bugs that are now ubiquitous &mdash; although, for me at least, they haven't
-lost their magic[^magic].
+lost their magic.
 
 Here's the main routine from fingerd of that [era](http://minnie.tuhs.org/cgi-bin/utree.pl?file=4.3BSD/usr/src/etc/fingerd.c):
 
@@ -246,6 +262,10 @@ We're trying our best, but we'll only be able to blog about a minuscule percenta
 Our product, [Appcanary](https://appcanary.com/?utm_source=blog&utm_medium=web&utm_campaign=symantec), monitors your apps and servers, and notifies you whenever a new vulnerability is discovered in a package you rely on. 
 
 [Sign up](https://appcanary.com/sign_up?utm_source=blog&utm_medium=web&utm_campaign=symantec) today!
+
+---
+
+<%= partial "shared/newsletter" %>
 
 [^internet]: The 60,000 computer-strong Internet was of course one many networks at the time. The Internet was the one that was global and used TCP/IP &mdash; the Internet protocols. There in lies the pedant's case against the [AP](https://twitter.com/APStylebook/status/716279065888563200) about capitalization of the word "Internet".
 
