@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>Appcanary</title>
-  <subtitle>&lt;a href="https://appcanary.com"&gt;Appcanary&lt;/a&gt; makes sure you never run vulnerable software in your apps.</subtitle>
+  <subtitle>&lt;a href="https://appcanary.com"&gt;Appcanary&lt;/a&gt; makes sure you never run vulnerable software in your apps.&lt;br/&gt;Subscribe to our &lt;a href="https://appcanary.us10.list-manage.com/subscribe?u=303b378f377508300c0b5469a&amp;id=dc58e8f56f"&gt;newsletter&lt;/a&gt;!</subtitle>
   <id>http://blog.appcanary.com</id>
   <link href="http://blog.appcanary.com"/>
   <link href="http://blog.appcanary.com/rss.xml" rel="self"/>
