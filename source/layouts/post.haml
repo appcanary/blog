@@ -20,7 +20,6 @@
             on #{tags}
 
       %section.post-content= yield
-
       %footer.post-footer
         - if gravatar?
           %figure.author-image
@@ -69,3 +68,4 @@
         %section.post
           %h2= next_article.title
           %p #{read_next_summary(next_article, 19)}&hellip;
+
