@@ -1,0 +1,235 @@
+---
+title: 'Morris & badBIOS, 25 years in 2 worms: ViKHAL #2'
+date: 2016-08-24
+author: mveytsman
+layout: post
+published: true
+tags: vihkal, security
+---
+
+Paranoia is natural for security practitioners. 
+
+Hacking can feel like being initiated into a secret society of wizards.
+Once you're in, you get access to an
+<a href="https://docs.google.com/presentation/d/1Sv8IHkBtBEXjSW7WktEYg4EbAUHtVyXIZBrAGD3WR5Y/edit?pref=2&pli=1#slide=id.p" target="_blank">addictive drug</a>
+that gives you super powers. But there are other wizards out there; some are good
+but many practice black magic. And the NSA's school of the dark arts has a seemingly
+unlimited budget. 
+
+It's natural to get a little paranoid. Experience shows you
+that with the right incantation you can turn crashes into working exploits. It
+follows that every time your computer crashes there could be someone in the
+shadows, chanting the right incantation. The paranoia can be all-consuming;
+just because you're paranoid doesn't mean they're not <a href="http://www.nytimes.com/2011/07/02/opinion/02hotchner.html?_r=0" target="_blank">out to get you</a>.
+
+In October 2013, a well known computer security expert named Dragos Ruiu came
+out with a <a href="http://arstechnica.com/security/2013/10/meet-badbios-the-mysterious-mac-and-pc-malware-that-jumps-airgaps/" target="_blank">story</a>. He found that his computers had been behaving oddly, and that the symptoms he was seeing were impossible to eradicate. This was some kind of worm, since the behavior would
+replicate across <a href="https://en.wikipedia.org/wiki/Air_gap_(networking)" target="_blank">air gapped</a> computers in his lab. He theorized that he
+was infected with a super advanced piece of malware that lived in the BIOS and
+could spread by sending ultrasonic frequencies from speaker to
+microphone, undetectable to the human ear. It looked like
+the work of the NSA or someone equally omnipotent. He dubbed it badBIOS. 
+
+Everything Dragos claimed badBIOS could do is at least possible, and most security folks know this. Malware in the BIOS is feasible, and beyond being a <a href="https://www.wired.com/2015/03/researchers-uncover-way-hack-bios-undermine-secure-operating-systems/" target="_blank">research</a> topic, it's something we <a href="https://www.schneier.com/blog/archives/2015/02/the_equation_gr.html" target="_blank">know</a> the <a href="http://www.spiegel.de/international/world/catalog-reveals-nsa-has-back-doors-for-numerous-devices-a-940994.html" target="_blank">NSA does</a>. In fact, because of the hype, <a href="https://github.com/Katee/quietnet" target="_blank">many</a> <a href="https://www.anfractuosity.com/projects/ultrasound-networking/" target="_blank">people</a> developed ultrasound networking libraries just to demonstrate how viable it is. 
+
+Dragos Ruiu imaged his computer and made a lot of data available to the
+community for peer review, but unfortunately no credible researcher[^credible] has publicly confirmed his findings. Maybe there was something going on. Maybe he was seeing patterns in the noise. Either way, it says something about the world today that when you're a security expert and your computer starts behaving weirdly, the obvious culprit is the NSA.
+
+It made me think of a different worm, from a more innocent time.
+
+![Morris Worm](images/morris_worm.jpg)
+## The Morris Worm
+
+It's November 2nd 1988, almost exactly 25 years before badBIOS became a
+hashtag. Robert Tappan Morris, a graduate student at Cornell, executes some
+code he'd been working on and goes to dinner. The aftermath was a
+self-replicating computer worm that infected 10% of the Internet[^internet] at
+the time &mdash; a whopping 6,000 computers!
+
+Morris claimed that he wrote his program to map the size of the Internet. And
+indeed, each infection would send a byte to a machine in Berkeley
+(hiding the trail to Morris, in Cornell, as the author). Unfortunately,
+there was a bug that caused it to propagate too aggressively: it infected the same
+computer multiple times, which resulted in a denial of service attack across the
+whole Internet. Furthermore, the code to report infections had a bug in it. It tried to
+send a UDP packet over a TCP socket, making it useless for reporting the Internet's size.
+
+An alternative explanation is that Morris was trying to bring to wider attention
+some long-standing bugs in the Internet. As Morris' friend and future co-founder <a href="http://www.nytimes.com/1988/11/07/us/computer-invasion-back-door-ajar.html" target="_blank">put it</a>, in classic pg[^graham] style:
+
+> Mr. Graham, who has known the younger Mr. Morris for several years, compared
+> his exploit to that of Mathias Rust, the young German who flew light plane
+> through Soviet air defenses in May 1987 and landed in Moscow.
+
+> "It's as if <a href="https://en.wikipedia.org/wiki/Mathias_Rust" target="_blank">Mathias Rust</a> had not just flown into Red Square, but built
+> himself a stealth bomber by hand and then flown into Red Square," he said.
+
+### What did the Morris Worm actually do?
+
+The Morris Worm[^worm] exploited three separate vulnerabilities. It guessed
+passwords for `rsh`/`rexec`, it exploited a debug-mode backdoor in sendmail and it used "one
+very neat trick". I'll go over each of these in detail, and you can find an archive (decompiled and commented) of the code for yourself <a href="https://github.com/arialdomartini/morris-worm" target="_blank">here</a>.
+
+#### 1. Rsh and Rexec
+
+`rsh` and `rexec` are remote shell protocols from the BSD era that are almost
+unused today (since supplanted by `ssh`). `rsh` can allow passwordless
+authentication if coming from a "trusted" host, which it determines via a list of addresses stored in a global `/etc/hosts.equiv` or
+per-user `.rhosts` file. When an
+`rsh` request comes from a user of a trusted machine, access is automatically
+granted. The worm used this to propagate, searching those two files &mdash; as well as the `.forward` file, which back then was used to forward your mail around the Internet &mdash; for trusted hosts.
+
+Even in 1988, people knew that leaving `rsh` open on an untrusted network like
+the Internet was a Bad Idea, and so the worm also propagated via `rexec`.
+Now, `rexec` uses password authentication, but Morris made an intelligent assumption:
+people tend to reuse passwords.
+Back then, `/etc/passwd` used to[^shadow] store everyone's encrypted passwords. The
+worm shipped with an optimized implementation of
+<a href="https://en.wikipedia.org/wiki/Crypt_(Unix)" target="_blank">`crypt`</a> and a dictionary, and went to town. Once it cracked a password, it tried it against
+all the likely hosts it could find.
+
+#### 2. Sendmail's Backdoor
+
+In the absence of any friendly hosts, the Morris Worm would then exploit a
+backdoor in <a href="https://en.wikipedia.org/wiki/Sendmail" target="_blank">Sendmail</a>. You see, Sendmail had a "debug" mode that allowed anyone to route an
+email to any process, including the shell! Ironically, this was <a href="http://www.nytimes.com/1988/11/07/us/computer-invasion-back-door-ajar.html" target="_blank">apparently deliverate</a>:
+
+> Eric Allman, a computer programmer who designed the mail program that Morris
+> exploited, said yesterday that he created the back door to allow him to fine
+> tune the program on a machine that an overzealous administrator would not give
+> him access to. He said he forgot to remove the entry point before the program
+> was widely distributed in 1985.
+
+(This wasn't even the first Sendmail backdoor. Sendmail used to ship with "wizard mode", where sending the strings "WIZ" and "SHELL" gave you a root shell. By the time that Morris was writing his worm, wizard mode was disabled almost everywhere.)
+
+If you're wondering how sendmail could have backdoors like this, it seems that it was somewhat well known. This quote from a <a href="http://securitydigest.org/tcp-ip/archive/1988/11" target="_blank">mail</a> by <a href="https://en.wikipedia.org/wiki/Paul_Vixie" target="_blank">Paul Vixie</a> summarizes the situation.
+
+```
+From: vixie@decwrl.dec.com (Paul Vixie)
+Newsgroups: comp.protocols.tcp-ip,comp.unix.wizards
+Subject: Re: a holiday gift from Robert "wormer" Morris
+Message-ID: <24@jove.dec.com>
+Date: 6 Nov 88 19:36:10 GMT
+References: <1698@cadre.dsl.PITTSBURGH.EDU> <2060@spdcc.COM>
+Distribution: na
+Organization: DEC Western Research Lab
+Lines: 15
+
+
+# the hole [in sendmail] was so obvious that i surmise that Morris
+# was not the only one to discover it.  perhaps other less
+# reproductively minded arpanetters have been having a field
+# 'day' ever since this bsd release happened. 
+
+I've known about it for a long time.  I thought it was common knowledge
+and that the Internet was just a darned polite place.  (I think it _was_
+common knowledge among the people who like to diddle the sendmail source.)
+
+The bug in fingerd was a big surprise, though.  Overwriting a stack frame
+on a remote machine with executable code is One Very Neat Trick.
+-- 
+Paul Vixie
+Work:    vixie@decwrl.dec.com    decwrl!vixie    +1 415 853 6600
+Play:    paul@vixie.sf.ca.us     vixie!paul      +1 415 864 7013
+```
+
+The Internet was a polite place, indeed.
+
+#### 3. One Very Neat Trick
+
+The Very Neat Trick that Vixie was talking about is the now-standard
+<a href="https://en.wikipedia.org/wiki/Buffer_overflow" target="_blank">stack buffer overflow</a>. It's
+fascinating to read contemporary accounts that marvel at the cleverness of a class of
+bugs that are now ubiquitous &mdash; although, for me at least, they still haven't
+lost their magic[^magic].
+
+Here's the main routine from the `fingerd` of that <a href="http://minnie.tuhs.org/cgi-bin/utree.pl?file=4.3BSD/usr/src/etc/fingerd.c" target="_blank">era</a>:
+
+```c
+main(argc, argv)
+	char *argv[];
+{
+	register char *sp;
+	char line[512];
+	struct sockaddr_in sin;
+	int i, p[2], pid, status;
+	FILE *fp;
+	char *av[4];
+
+	i = sizeof (sin);
+	if (getpeername(0, &sin, &i) < 0)
+		fatal(argv[0], "getpeername");
+	line[0] = '\0';
+	gets(line);
+	sp = line;
+    // ... snip ...
+    // build sp into arguments for finger 
+    // and call /usr/ucb/finger via execv before
+    // putchar'ing the result back to stdout
+	return(0);
+} 
+```
+
+
+If you have experience with reading C code,[^code] you may have spotted the
+vulnerability. `gets(line)` reads STDIN and puts the contents into a 512 byte
+buffer. This means that sending more than 512 bytes will overwrite the stack
+with an attacker-controlled value.
+
+The worm sent 536 bytes of data, which overwrote the
+<a href="https://en.wikipedia.org/wiki/Call_stack#Stack_and_frame_pointers" target="_blank">stack frame</a>
+of the `main` function. This allowed Morris to overwrite the pointer to where
+`main` is returning to. He set that pointer to be *within* the 536 byte buffer
+he sent over the network. The beginning of the buffer contained
+<a href="https://en.wikipedia.org/wiki/Shellcode" target="_blank">shellcode</a> that called `/bin/sh`. Game over.
+
+## Aftermath
+
+Robert Tappan Morris was convicted and sentenced to three years probation, 400
+hours of community service and a $10,050 fine (about $20,000 in today's dollars)
+plus the cost of his supervision. He then went on to co-found a little startup
+called Viaweb. You may have heard the rest of that story.
+Today, Morris is a tenured professor at the Computer Science and Artificial
+Intelligence Laboratory at MIT and is one of the leaders of the Parallel and
+Distributed Systems Groups.
+
+Why did the paranoia around badBIOS make me think of the Morris Worm? If you read contemporary articles about the Morris Worm, they'll sometimes mention, but never emphasize, who Robert Morris's father was. The <a href="https://en.wikipedia.org/wiki/Robert_Morris_(cryptographer)" target="_blank">elder Robert Morris</a> just happened to be a computer security expert. While the young Robert Morris was writing his worm, Robert Morris Sr. was serving as Chief Scientist at the NSA's National Computer Security Center! 
+
+The Internet grew up a lot since 1988, and not just in size. In 2013, your computer acting strangely is obviously a NSA-written malware that lives in your BIOS and propagates over sound waves imperceptible to the human ear. In 1988, son of an NSA security executive infects 10% of the Internet with a worm that uses an exotic new exploitation technique called a buffer overflow and... nothing.
+
+Just to be clear, I'm not alleging any conspiracy between father and son, besides perhaps father making some calls after son's arrest. While the Morris worm was likely the first malicious use, buffer overflows were understood as a problem before 1988, if not widely. The way the media narrative handled the NSA connection in 1988 just says a lot about how the world of the Internet changed in 25 years.
+
+As for Dragos Ruiu, he's been quiet about badBIOS since 2013. I'm not sure what he's doing these days besides <a href="https://cansecwest.com/" target="_blank">CanSecWest</a>, but in my heart of hearts, I like to picture him playing the saxophone amidst the detritus of his torn up apartment.
+
+<a href="https://en.wikipedia.org/wiki/The_Conversation" target="_blank"><img src="/images/the_conversation.jpg"></a>
+
+---
+
+#### Paying the Bills
+
+We're trying our best, but we'll only be able to blog about a minuscule percentage of the world's vulnerabilities. And starting with 1988 means we have a lot of catching up to do. How will you ever find about the ones that actually affect you?
+
+Our product, [Appcanary](https://appcanary.com/?utm_source=blog&utm_medium=web&utm_campaign=morris), monitors your apps and servers, and notifies you whenever a new vulnerability is discovered in a package you rely on. 
+
+[Sign up](https://appcanary.com/sign_up?utm_source=blog&utm_medium=web&utm_campaign=morris) today!
+
+---
+
+<%= partial "shared/newsletter" %>
+
+
+[^credible]: One of the things I wish that the security industry would do less of is blind appeals to authority, and I hate that I made one here. Unfortunately, I don't have the skills or time to make my own analysis of Ruiu's data, so I just have to trust the Thought Leaders on this one. 
+
+[^internet]: The 60,000 computer-strong Internet was of course one of many networks at the time. The Internet was the one that was global and used TCP/IP &mdash; the Internet protocols. Therein lies the pedant's case against the <a href="https://twitter.com/APStylebook/status/716279065888563200" target="_blank">AP's capitalization</a> of the word "Internet".
+
+[^graham]: Disclosure time: years after giving that quote, Paul Graham and Robert Morris went on to found Y Combinator along with Jessica Livingston and Trevor Blackwell. YC in turn is an investor in [Appcanary](https://www.appcanary.com). Robert Morris and I have never met, tho we did once meet with Paul Graham. 
+
+[^worm]: My favourite paper on the analysis of the worm is <a href="http://denninginstitute.com/modules/acmpkp/security/texts/INTWORM.PDF" target="_blank">With Microscope and Tweezers</a> from MIT's Eichin and Rochlis. They spend a page passionately arguing that it's a virus by using a complicated appeal to the difference between lytic and lysogenic viruses with references to three separate biology textbooks!
+
+[^shadow]: I assumed that `/etc/shadow` came about as a consequence of the Morris Worm, but it <a href="https://en.wikipedia.org/wiki/Passwd#History" target="_blank">seems</a> that it was originally implemented in SunOS earlier in the 80's, and then took 2 years after the Morris Worm to make it into BSD.
+
+[^magic]: Exploits really are magic, and it goes without saying that exploit users have chosen the <a href="https://en.wikipedia.org/wiki/Left-hand_path_and_right-hand_path" target="_blank">Left-Hand Path</a> to wizardhood. If the <a href="https://mitpress.mit.edu/sicp/full-text/book/book.html" target="_blank">cover of SICP</a> is to be believed, the Right-Hand Path is available through careful study of functional programming and Lisps. Perhaps this is the true reason why Morris and Graham were such effective collaborators.
+
+[^code]: On the other hand, this C code is over 30 years old. When I ran it through the gcc on my machine, I was very happy to see that it complained bitterly but still compiled it. One exercise for the reader is finding where the network operation actually happens. `main` takes input and output from STDIN/STDOUT, but there's an uninitialized `struct sockaddr_in sin` that we call `getpeername` on. How is a network socket piped to standard input/output and who is initializing the `sin` struct? I actually haven't been able to figure this part out. If you know, please tell [me](mailto:max@appcanary.com)! The full code listing is <a href="http://minnie.tuhs.org/cgi-bin/utree.pl?file=4.3BSD/usr/src/etc/fingerd.c" target="_blank">here</a>.
+
+
