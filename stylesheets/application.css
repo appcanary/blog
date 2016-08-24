@@ -4422,3 +4422,13 @@ h4, h5, h6 {
 .footnotes {
   font-style: normal;
   font-size: 1.6rem; }
+
+.post-content img {
+  display: block;
+  max-width: 100%; }
+
+pre code, pre tt {
+  font-size: 14px; }
+
+.footnotes li {
+  padding-top: 10px; }

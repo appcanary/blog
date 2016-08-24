@@ -11,7 +11,7 @@
     <link rel="alternate" href="http://blog.appcanary.com/2016/vikhal-symantec.html"/>
     <id>http://blog.appcanary.com/2016/vikhal-symantec.html</id>
     <published>2016-07-06T20:00:00-04:00</published>
-    <updated>2016-08-19T13:16:27-04:00</updated>
+    <updated>2016-08-19T13:23:10-04:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
@@ -119,6 +119,276 @@ blog&lt;/a&gt;, and the issues for all 8 vulnerabilities can &lt;a href="https:/
 
 &lt;li id="fn2"&gt;
 &lt;p&gt;I&amp;rsquo;m going to well-actually myself here so you don&amp;rsquo;t have to. Tavis gives a clear path to exploit for 6 of the 8. Of the two that are left, &lt;a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=821"&gt;one&lt;/a&gt; is a lack of bounds checking on an array index, and the &lt;a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=819"&gt;other&lt;/a&gt; is an integer overflow bug. I&amp;rsquo;m going to go out on a limb and say I think both can lead to code execution. I can&amp;rsquo;t fault the researcher for not going further though; after you find the first 6 remote code executions, you stop feeling the need to keep proving the point&amp;hellip;&amp;nbsp;&lt;a href="#fnref2" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+
+&lt;/ol&gt;
+&lt;/div&gt;
+</content>
+  </entry>
+  <entry>
+    <title>Morris &amp; badBIOS, 25 years in 2 worms: ViHKAL #2</title>
+    <link rel="alternate" href="http://blog.appcanary.com/2016/vikhal-morris.html"/>
+    <id>http://blog.appcanary.com/2016/vikhal-morris.html</id>
+    <published>2016-08-23T20:00:00-04:00</published>
+    <updated>2016-08-24T12:49:15-04:00</updated>
+    <author>
+      <name>Max Veytsman</name>
+    </author>
+    <content type="html">&lt;p&gt;Paranoia is natural for security practitioners. &lt;/p&gt;
+
+&lt;p&gt;Hacking can feel like being initiated into a secret society of wizards.
+Once you&amp;rsquo;re in, you get access to an
+&lt;a href="https://docs.google.com/presentation/d/1Sv8IHkBtBEXjSW7WktEYg4EbAUHtVyXIZBrAGD3WR5Y/edit?pref=2&amp;pli=1#slide=id.p" target="_blank"&gt;addictive drug&lt;/a&gt;
+that gives you super powers. But there are other wizards out there; some are good
+but many practice black magic. And the NSA&amp;rsquo;s school of the dark arts has a seemingly
+unlimited budget. &lt;/p&gt;
+
+&lt;p&gt;It&amp;rsquo;s natural to get a little paranoid. Experience shows you
+that with the right incantation you can turn crashes into working exploits. It
+follows that every time your computer crashes there could be someone in the
+shadows, chanting the right incantation. The paranoia can be all-consuming;
+just because you&amp;rsquo;re paranoid doesn&amp;rsquo;t mean they&amp;rsquo;re not &lt;a href="http://www.nytimes.com/2011/07/02/opinion/02hotchner.html?_r=0" target="_blank"&gt;out to get you&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;In October 2013, a well known computer security expert named Dragos Ruiu came
+out with a &lt;a href="http://arstechnica.com/security/2013/10/meet-badbios-the-mysterious-mac-and-pc-malware-that-jumps-airgaps/" target="_blank"&gt;story&lt;/a&gt;. He found that his computers had been behaving oddly, and that the symptoms he was seeing were impossible to eradicate. This was some kind of worm, since the behavior would
+replicate across &lt;a href="https://en.wikipedia.org/wiki/Air_gap_(networking)" target="_blank"&gt;air gapped&lt;/a&gt; computers in his lab. He theorized that he
+was infected with a super advanced piece of malware that lived in the BIOS and
+could spread by sending ultrasonic frequencies from speaker to
+microphone, undetectable to the human ear. It looked like
+the work of the NSA or someone equally omnipotent. He dubbed it badBIOS. &lt;/p&gt;
+
+&lt;p&gt;Everything Dragos claimed badBIOS could do is at least possible, and most security folks know this. Malware in the BIOS is feasible, and beyond being a &lt;a href="https://www.wired.com/2015/03/researchers-uncover-way-hack-bios-undermine-secure-operating-systems/" target="_blank"&gt;research&lt;/a&gt; topic, it&amp;rsquo;s something we &lt;a href="https://www.schneier.com/blog/archives/2015/02/the_equation_gr.html" target="_blank"&gt;know&lt;/a&gt; the &lt;a href="http://www.spiegel.de/international/world/catalog-reveals-nsa-has-back-doors-for-numerous-devices-a-940994.html" target="_blank"&gt;NSA does&lt;/a&gt;. In fact, because of the hype, &lt;a href="https://github.com/Katee/quietnet" target="_blank"&gt;many&lt;/a&gt; &lt;a href="https://www.anfractuosity.com/projects/ultrasound-networking/" target="_blank"&gt;people&lt;/a&gt; developed ultrasound networking libraries just to demonstrate how viable it is. &lt;/p&gt;
+
+&lt;p&gt;Dragos Ruiu imaged his computer and made a lot of data available to the
+community for peer review, but unfortunately no credible researcher&lt;sup id="fnref1"&gt;&lt;a href="#fn1" rel="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt; has publicly confirmed his findings. Maybe there was something going on. Maybe he was seeing patterns in the noise. Either way, it says something about the world today that when you&amp;rsquo;re a security expert and your computer starts behaving weirdly, the obvious culprit is the NSA.&lt;/p&gt;
+
+&lt;p&gt;It made me think of a different worm, from a more innocent time.&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="Morris Worm" src="/images/morris_worm.jpg" /&gt;&lt;/p&gt;
+
+&lt;h2&gt;The Morris Worm&lt;/h2&gt;
+
+&lt;p&gt;It&amp;rsquo;s November 2nd 1988, almost exactly 25 years before badBIOS became a
+hashtag. Robert Tappan Morris, a graduate student at Cornell, executes some
+code he&amp;rsquo;d been working on and goes to dinner. The aftermath was a
+self-replicating computer worm that infected 10% of the Internet&lt;sup id="fnref2"&gt;&lt;a href="#fn2" rel="footnote"&gt;2&lt;/a&gt;&lt;/sup&gt; at
+the time &amp;mdash; a whopping 6,000 computers!&lt;/p&gt;
+
+&lt;p&gt;Morris claimed that he wrote his program to map the size of the Internet. And
+indeed, each infection would send a byte to a machine in Berkeley
+(hiding the trail to Morris, in Cornell, as the author). Unfortunately,
+there was a bug that caused it to propagate too aggressively: it infected the same
+computer multiple times, which resulted in a denial of service attack across the
+whole Internet. Furthermore, the code to report infections had a bug in it. It tried to
+send a UDP packet over a TCP socket, making it useless for reporting the Internet&amp;rsquo;s size.&lt;/p&gt;
+
+&lt;p&gt;An alternative explanation is that Morris was trying to bring to wider attention
+some long-standing bugs in the Internet. As Morris&amp;rsquo; friend and future co-founder &lt;a href="http://www.nytimes.com/1988/11/07/us/computer-invasion-back-door-ajar.html" target="_blank"&gt;put it&lt;/a&gt;, in classic pg&lt;sup id="fnref3"&gt;&lt;a href="#fn3" rel="footnote"&gt;3&lt;/a&gt;&lt;/sup&gt; style:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Mr. Graham, who has known the younger Mr. Morris for several years, compared
+his exploit to that of Mathias Rust, the young German who flew light plane
+through Soviet air defenses in May 1987 and landed in Moscow.&lt;/p&gt;
+
+&lt;p&gt;&amp;ldquo;It&amp;rsquo;s as if &lt;a href="https://en.wikipedia.org/wiki/Mathias_Rust" target="_blank"&gt;Mathias Rust&lt;/a&gt; had not just flown into Red Square, but built
+himself a stealth bomber by hand and then flown into Red Square,&amp;rdquo; he said.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3&gt;What did the Morris Worm actually do?&lt;/h3&gt;
+
+&lt;p&gt;The Morris Worm&lt;sup id="fnref4"&gt;&lt;a href="#fn4" rel="footnote"&gt;4&lt;/a&gt;&lt;/sup&gt; exploited three separate vulnerabilities. It guessed
+passwords for &lt;code&gt;rsh&lt;/code&gt;/&lt;code&gt;rexec&lt;/code&gt;, it exploited a debug-mode backdoor in sendmail and it used &amp;ldquo;one
+very neat trick&amp;rdquo;. I&amp;rsquo;ll go over each of these in detail, and you can find an archive (decompiled and commented) of the code for yourself &lt;a href="https://github.com/arialdomartini/morris-worm" target="_blank"&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h4&gt;1. Rsh and Rexec&lt;/h4&gt;
+
+&lt;p&gt;&lt;code&gt;rsh&lt;/code&gt; and &lt;code&gt;rexec&lt;/code&gt; are remote shell protocols from the BSD era that are almost
+unused today (since supplanted by &lt;code&gt;ssh&lt;/code&gt;). &lt;code&gt;rsh&lt;/code&gt; can allow passwordless
+authentication if coming from a &amp;ldquo;trusted&amp;rdquo; host, which it determines via a list of addresses stored in a global &lt;code&gt;/etc/hosts.equiv&lt;/code&gt; or
+per-user &lt;code&gt;.rhosts&lt;/code&gt; file. When an
+&lt;code&gt;rsh&lt;/code&gt; request comes from a user of a trusted machine, access is automatically
+granted. The worm used this to propagate, searching those two files &amp;mdash; as well as the &lt;code&gt;.forward&lt;/code&gt; file, which back then was used to forward your mail around the Internet &amp;mdash; for trusted hosts.&lt;/p&gt;
+
+&lt;p&gt;Even in 1988, people knew that leaving &lt;code&gt;rsh&lt;/code&gt; open on an untrusted network like
+the Internet was a Bad Idea, and so the worm also propagated via &lt;code&gt;rexec&lt;/code&gt;.
+Now, &lt;code&gt;rexec&lt;/code&gt; uses password authentication, but Morris made an intelligent assumption:
+people tend to reuse passwords.
+Back then, &lt;code&gt;/etc/passwd&lt;/code&gt; used to&lt;sup id="fnref5"&gt;&lt;a href="#fn5" rel="footnote"&gt;5&lt;/a&gt;&lt;/sup&gt; store everyone&amp;rsquo;s encrypted passwords. The
+worm shipped with an optimized implementation of
+&lt;a href="https://en.wikipedia.org/wiki/Crypt_(Unix)" target="_blank"&gt;&lt;code&gt;crypt&lt;/code&gt;&lt;/a&gt; and a dictionary, and went to town. Once it cracked a password, it tried it against
+all the likely hosts it could find.&lt;/p&gt;
+
+&lt;h4&gt;2. Sendmail&amp;rsquo;s Backdoor&lt;/h4&gt;
+
+&lt;p&gt;In the absence of any friendly hosts, the Morris Worm would then exploit a
+backdoor in &lt;a href="https://en.wikipedia.org/wiki/Sendmail" target="_blank"&gt;Sendmail&lt;/a&gt;. You see, Sendmail had a &amp;ldquo;debug&amp;rdquo; mode that allowed anyone to route an
+email to any process, including the shell! Ironically, this was &lt;a href="http://www.nytimes.com/1988/11/07/us/computer-invasion-back-door-ajar.html" target="_blank"&gt;apparently deliberate&lt;/a&gt;:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Eric Allman, a computer programmer who designed the mail program that Morris
+exploited, said yesterday that he created the back door to allow him to fine
+tune the program on a machine that an overzealous administrator would not give
+him access to. He said he forgot to remove the entry point before the program
+was widely distributed in 1985.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;(This wasn&amp;rsquo;t even the first Sendmail backdoor. Sendmail used to ship with &amp;ldquo;wizard mode&amp;rdquo;, where sending the strings &amp;ldquo;WIZ&amp;rdquo; and &amp;ldquo;SHELL&amp;rdquo; gave you a root shell. By the time that Morris was writing his worm, wizard mode was disabled almost everywhere.)&lt;/p&gt;
+
+&lt;p&gt;If you&amp;rsquo;re wondering how sendmail could have backdoors like this, it seems that it was somewhat well known. This quote from a &lt;a href="http://securitydigest.org/tcp-ip/archive/1988/11" target="_blank"&gt;mail&lt;/a&gt; by &lt;a href="https://en.wikipedia.org/wiki/Paul_Vixie" target="_blank"&gt;Paul Vixie&lt;/a&gt; summarizes the situation.&lt;/p&gt;
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;From: vixie@decwrl.dec.com (Paul Vixie)
+Newsgroups: comp.protocols.tcp-ip,comp.unix.wizards
+Subject: Re: a holiday gift from Robert "wormer" Morris
+Message-ID: &amp;lt;24@jove.dec.com&amp;gt;
+Date: 6 Nov 88 19:36:10 GMT
+References: &amp;lt;1698@cadre.dsl.PITTSBURGH.EDU&amp;gt; &amp;lt;2060@spdcc.COM&amp;gt;
+Distribution: na
+Organization: DEC Western Research Lab
+Lines: 15
+
+
+# the hole [in sendmail] was so obvious that i surmise that Morris
+# was not the only one to discover it.  perhaps other less
+# reproductively minded arpanetters have been having a field
+# 'day' ever since this bsd release happened. 
+
+I've known about it for a long time.  I thought it was common knowledge
+and that the Internet was just a darned polite place.  (I think it _was_
+common knowledge among the people who like to diddle the sendmail source.)
+
+The bug in fingerd was a big surprise, though.  Overwriting a stack frame
+on a remote machine with executable code is One Very Neat Trick.
+-- 
+Paul Vixie
+Work:    vixie@decwrl.dec.com    decwrl!vixie    +1 415 853 6600
+Play:    paul@vixie.sf.ca.us     vixie!paul      +1 415 864 7013
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The Internet was a polite place, indeed.&lt;/p&gt;
+
+&lt;h4&gt;3. One Very Neat Trick&lt;/h4&gt;
+
+&lt;p&gt;The Very Neat Trick that Vixie was talking about is the now-standard
+&lt;a href="https://en.wikipedia.org/wiki/Buffer_overflow" target="_blank"&gt;stack buffer overflow&lt;/a&gt;. It&amp;rsquo;s
+fascinating to read contemporary accounts that marvel at the cleverness of a class of
+bugs that are now ubiquitous &amp;mdash; although, for me at least, they still haven&amp;rsquo;t
+lost their magic&lt;sup id="fnref6"&gt;&lt;a href="#fn6" rel="footnote"&gt;6&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s the main routine from the &lt;code&gt;fingerd&lt;/code&gt; of that &lt;a href="http://minnie.tuhs.org/cgi-bin/utree.pl?file=4.3BSD/usr/src/etc/fingerd.c" target="_blank"&gt;era&lt;/a&gt;:&lt;/p&gt;
+&lt;pre class="highlight c"&gt;&lt;code&gt;&lt;span class="n"&gt;main&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;argc&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;argv&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="kt"&gt;char&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;argv&lt;/span&gt;&lt;span class="p"&gt;[];&lt;/span&gt;
+&lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="k"&gt;register&lt;/span&gt; &lt;span class="kt"&gt;char&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;sp&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="kt"&gt;char&lt;/span&gt; &lt;span class="n"&gt;line&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;512&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+    &lt;span class="k"&gt;struct&lt;/span&gt; &lt;span class="n"&gt;sockaddr_in&lt;/span&gt; &lt;span class="n"&gt;sin&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;p&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;pid&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;status&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="kt"&gt;FILE&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;fp&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="kt"&gt;char&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;av&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+
+    &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;sizeof&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sin&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;getpeername&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="n"&gt;sin&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="n"&gt;fatal&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;argv&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="s"&gt;"getpeername"&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="n"&gt;line&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="sc"&gt;'\0'&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="n"&gt;gets&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;line&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="n"&gt;sp&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;line&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="c1"&gt;// ... snip ...
+&lt;/span&gt;    &lt;span class="c1"&gt;// build sp into arguments for finger 
+&lt;/span&gt;    &lt;span class="c1"&gt;// and call /usr/ucb/finger via execv before
+&lt;/span&gt;    &lt;span class="c1"&gt;// putchar'ing the result back to stdout
+&lt;/span&gt;    &lt;span class="k"&gt;return&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt; 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If you have experience with reading C code,&lt;sup id="fnref7"&gt;&lt;a href="#fn7" rel="footnote"&gt;7&lt;/a&gt;&lt;/sup&gt; you may have spotted the
+vulnerability. &lt;code&gt;gets(line)&lt;/code&gt; reads STDIN and puts the contents into a 512 byte
+buffer. This means that sending more than 512 bytes will overwrite the stack
+with an attacker-controlled value.&lt;/p&gt;
+
+&lt;p&gt;The worm sent 536 bytes of data, which overwrote the
+&lt;a href="https://en.wikipedia.org/wiki/Call_stack#Stack_and_frame_pointers" target="_blank"&gt;stack frame&lt;/a&gt;
+of the &lt;code&gt;main&lt;/code&gt; function. This allowed Morris to overwrite the pointer to where
+&lt;code&gt;main&lt;/code&gt; is returning to. He set that pointer to be &lt;em&gt;within&lt;/em&gt; the 536 byte buffer
+he sent over the network. The beginning of the buffer contained
+&lt;a href="https://en.wikipedia.org/wiki/Shellcode" target="_blank"&gt;shellcode&lt;/a&gt; that called &lt;code&gt;/bin/sh&lt;/code&gt;. Game over.&lt;/p&gt;
+
+&lt;h2&gt;Aftermath&lt;/h2&gt;
+
+&lt;p&gt;Robert Tappan Morris was convicted and sentenced to three years probation, 400
+hours of community service and a $10,050 fine (about $20,000 in today&amp;rsquo;s dollars)
+plus the cost of his supervision. He then went on to co-found a little startup
+called Viaweb. You may have heard the rest of that story.
+Today, Morris is a tenured professor at the Computer Science and Artificial
+Intelligence Laboratory at MIT and is one of the leaders of the Parallel and
+Distributed Systems Groups.&lt;/p&gt;
+
+&lt;p&gt;Why did the paranoia around badBIOS make me think of the Morris Worm? If you read contemporary articles about the Morris Worm, they&amp;rsquo;ll sometimes mention, but never emphasize, who Robert Morris&amp;rsquo;s father was. The &lt;a href="https://en.wikipedia.org/wiki/Robert_Morris_(cryptographer)" target="_blank"&gt;elder Robert Morris&lt;/a&gt; just happened to be a computer security expert. While the young Robert Morris was writing his worm, Robert Morris Sr. was serving as Chief Scientist at the NSA&amp;rsquo;s National Computer Security Center! &lt;/p&gt;
+
+&lt;p&gt;The Internet grew up a lot since 1988, and not just in size. In 2013, your computer acting strangely is obviously a NSA-written malware that lives in your BIOS and propagates over sound waves imperceptible to the human ear. In 1988, son of an NSA security executive infects 10% of the Internet with a worm that uses an exotic new exploitation technique called a buffer overflow and&amp;hellip; nothing.&lt;/p&gt;
+
+&lt;p&gt;Just to be clear, I&amp;rsquo;m not alleging any conspiracy between father and son, besides perhaps father making some calls after son&amp;rsquo;s arrest. While the Morris worm was likely the first malicious use, buffer overflows were understood as a problem before 1988, if not widely. The way the media narrative handled the NSA connection in 1988 just says a lot about how the world of the Internet changed in 25 years.&lt;/p&gt;
+
+&lt;p&gt;As for Dragos Ruiu, he&amp;rsquo;s been quiet about badBIOS since 2013. I&amp;rsquo;m not sure what he&amp;rsquo;s doing these days besides &lt;a href="https://cansecwest.com/" target="_blank"&gt;CanSecWest&lt;/a&gt;, but in my heart of hearts, I like to picture him playing the saxophone amidst the detritus of his torn up apartment.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://en.wikipedia.org/wiki/The_Conversation" target="_blank"&gt;&lt;img src="/images/the_conversation.jpg"&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h4&gt;Paying the Bills&lt;/h4&gt;
+
+&lt;p&gt;We&amp;rsquo;re trying our best, but we&amp;rsquo;ll only be able to blog about a minuscule percentage of the world&amp;rsquo;s vulnerabilities. And starting with 1988 means we have a lot of catching up to do. How will you ever find about the ones that actually affect you?&lt;/p&gt;
+
+&lt;p&gt;Our product, &lt;a href="https://appcanary.com/?utm_source=blog&amp;amp;utm_medium=web&amp;amp;utm_campaign=morris"&gt;Appcanary&lt;/a&gt;, monitors your apps and servers, and notifies you whenever a new vulnerability is discovered in a package you rely on. &lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://appcanary.com/sign_up?utm_source=blog&amp;amp;utm_medium=web&amp;amp;utm_campaign=morris"&gt;Sign up&lt;/a&gt; today!&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;p&gt;&lt;link href="//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css" rel="stylesheet" type="text/css"&gt;
+&lt;style type="text/css"&gt;
+ #mc&lt;em&gt;embed&lt;/em&gt;signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; width:100%;}
+ /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+      We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+&lt;/style&gt;
+&lt;div id="mc_embed_signup"&gt;
+&lt;form action="//appcanary.us10.list-manage.com/subscribe/post?u=303b378f377508300c0b5469a&amp;amp;id=dc58e8f56f" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate&gt;
+&lt;div id="mc_embed_signup_scroll"&gt;
+&lt;label for="mce-EMAIL"&gt;Liked this post? Subscribe to our newsletter for more!&lt;/label&gt;
+&lt;input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required&gt;
+&lt;div style="position: absolute; left: -5000px;" aria-hidden="true"&gt;&lt;input type="text" name="b_303b378f377508300c0b5469a_dc58e8f56f" tabindex="-1" value=""&gt;&lt;/div&gt;
+&lt;div class="clear"&gt;&lt;input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/form&gt;
+&lt;/div&gt;&lt;/p&gt;
+
+&lt;div class="footnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+
+&lt;li id="fn1"&gt;
+&lt;p&gt;One of the things I wish that the security industry would do less of is blind appeals to authority, and I hate that I made one here. Unfortunately, I don&amp;rsquo;t have the skills or time to make my own analysis of Ruiu&amp;rsquo;s data, so I just have to trust the Thought Leaders on this one. &amp;nbsp;&lt;a href="#fnref1" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+
+&lt;li id="fn2"&gt;
+&lt;p&gt;The 60,000 computer-strong Internet was of course one of many networks at the time. The Internet was the one that was global and used TCP/IP &amp;mdash; the Internet protocols. Therein lies the pedant&amp;rsquo;s case against the &lt;a href="https://twitter.com/APStylebook/status/716279065888563200" target="_blank"&gt;AP&amp;rsquo;s capitalization&lt;/a&gt; of the word &amp;ldquo;Internet&amp;rdquo;.&amp;nbsp;&lt;a href="#fnref2" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+
+&lt;li id="fn3"&gt;
+&lt;p&gt;Disclosure time: years after giving that quote, Paul Graham and Robert Morris went on to found Y Combinator along with Jessica Livingston and Trevor Blackwell. YC in turn is an investor in &lt;a href="https://www.appcanary.com"&gt;Appcanary&lt;/a&gt;. Robert Morris and I have never met, tho we did once meet with Paul Graham. &amp;nbsp;&lt;a href="#fnref3" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+
+&lt;li id="fn4"&gt;
+&lt;p&gt;My favourite paper on the analysis of the worm is &lt;a href="http://denninginstitute.com/modules/acmpkp/security/texts/INTWORM.PDF" target="_blank"&gt;With Microscope and Tweezers&lt;/a&gt; from MIT&amp;rsquo;s Eichin and Rochlis. They spend a page passionately arguing that it&amp;rsquo;s a virus by using a complicated appeal to the difference between lytic and lysogenic viruses with references to three separate biology textbooks!&amp;nbsp;&lt;a href="#fnref4" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+
+&lt;li id="fn5"&gt;
+&lt;p&gt;I assumed that &lt;code&gt;/etc/shadow&lt;/code&gt; came about as a consequence of the Morris Worm, but it &lt;a href="https://en.wikipedia.org/wiki/Passwd#History" target="_blank"&gt;seems&lt;/a&gt; that it was originally implemented in SunOS earlier in the 80&amp;rsquo;s, and then took 2 years after the Morris Worm to make it into BSD.&amp;nbsp;&lt;a href="#fnref5" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+
+&lt;li id="fn6"&gt;
+&lt;p&gt;Exploits really are magic, and it goes without saying that exploit users have chosen the &lt;a href="https://en.wikipedia.org/wiki/Left-hand_path_and_right-hand_path" target="_blank"&gt;Left-Hand Path&lt;/a&gt; to wizardhood. If the &lt;a href="https://mitpress.mit.edu/sicp/full-text/book/book.html" target="_blank"&gt;cover of SICP&lt;/a&gt; is to be believed, the Right-Hand Path is available through careful study of functional programming and Lisps. Perhaps this is the true reason why Morris and Graham were such effective collaborators.&amp;nbsp;&lt;a href="#fnref6" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+
+&lt;li id="fn7"&gt;
+&lt;p&gt;On the other hand, this C code is over 30 years old. When I ran it through the gcc on my machine, I was very happy to see that it complained bitterly but still compiled it. One exercise for the reader is finding where the network operation actually happens. &lt;code&gt;main&lt;/code&gt; takes input and output from STDIN/STDOUT, but there&amp;rsquo;s an uninitialized &lt;code&gt;struct sockaddr_in sin&lt;/code&gt; that we call &lt;code&gt;getpeername&lt;/code&gt; on. How is a network socket piped to standard input/output and who is initializing the &lt;code&gt;sin&lt;/code&gt; struct? I actually haven&amp;rsquo;t been able to figure this part out. If you know, please tell &lt;a href="mailto:max@appcanary.com"&gt;me&lt;/a&gt;! The full code listing is &lt;a href="http://minnie.tuhs.org/cgi-bin/utree.pl?file=4.3BSD/usr/src/etc/fingerd.c" target="_blank"&gt;here&lt;/a&gt;.&amp;nbsp;&lt;a href="#fnref7" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 
 &lt;/ol&gt;

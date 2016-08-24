@@ -11,9 +11,11 @@
 <meta content='website' property='og:type'>
 <meta content='&lt;a href="https://appcanary.com"&gt;Appcanary&lt;/a&gt; makes sure you never run vulnerable software in your apps.&lt;br/&gt;Subscribe to our &lt;a href="https://appcanary.us10.list-manage.com/subscribe?u=303b378f377508300c0b5469a&amp;id=dc58e8f56f"&gt;newsletter&lt;/a&gt;!' property='og:description'>
 <meta content='http://blog.appcanary.com/author/max-veytsman.html' property='og:url'>
+<meta content='http://blog.appcanary.com/images/appcanary.png' property='og:image'>
 <meta content='summary' name='twitter:card'>
 <meta content='&lt;a href="https://appcanary.com"&gt;Appcanary&lt;/a&gt; makes sure you never run vulnerable software in your apps.&lt;br/&gt;Subscribe to our &lt;a href="https://appcanary.us10.list-manage.com/subscribe?u=303b378f377508300c0b5469a&amp;id=dc58e8f56f"&gt;newsletter&lt;/a&gt;!' name='twitter:description'>
 <meta content='http://blog.appcanary.com/author/max-veytsman.html' name='twitter:url'>
+<meta content='http://blog.appcanary.com/images/appcanary.png' name='twitter:image:src'>
 <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="/feed.xml" />
 <link href="/images/favicon.ico" rel="icon" type="image/ico" />
 <link href="../stylesheets/application.css" rel="stylesheet" />
@@ -79,7 +81,7 @@
 <div class='author-meta'>
 <span class='author-stats'>
 <i class='icon-stats'></i>
-8 posts
+9 posts
 </span>
 </div>
 </section>
@@ -91,6 +93,282 @@
 </nav>
 
 </div>
+<article class='post'>
+<header class='post-header'>
+<h1 class='post-title'><a href="../2016/vikhal-morris.html">Morris & badBIOS, 25 years in 2 worms: ViHKAL #2</a></h1>
+<section class='post-meta'>
+</section>
+</header>
+<section class='post-content'>
+<p>Paranoia is natural for security practitioners. </p>
+
+<p>Hacking can feel like being initiated into a secret society of wizards.
+Once you&rsquo;re in, you get access to an
+<a href="https://docs.google.com/presentation/d/1Sv8IHkBtBEXjSW7WktEYg4EbAUHtVyXIZBrAGD3WR5Y/edit?pref=2&pli=1#slide=id.p" target="_blank">addictive drug</a>
+that gives you super powers. But there are other wizards out there; some are good
+but many practice black magic. And the NSA&rsquo;s school of the dark arts has a seemingly
+unlimited budget. </p>
+
+<p>It&rsquo;s natural to get a little paranoid. Experience shows you
+that with the right incantation you can turn crashes into working exploits. It
+follows that every time your computer crashes there could be someone in the
+shadows, chanting the right incantation. The paranoia can be all-consuming;
+just because you&rsquo;re paranoid doesn&rsquo;t mean they&rsquo;re not <a href="http://www.nytimes.com/2011/07/02/opinion/02hotchner.html?_r=0" target="_blank">out to get you</a>.</p>
+
+<p>In October 2013, a well known computer security expert named Dragos Ruiu came
+out with a <a href="http://arstechnica.com/security/2013/10/meet-badbios-the-mysterious-mac-and-pc-malware-that-jumps-airgaps/" target="_blank">story</a>. He found that his computers had been behaving oddly, and that the symptoms he was seeing were impossible to eradicate. This was some kind of worm, since the behavior would
+replicate across <a href="https://en.wikipedia.org/wiki/Air_gap_(networking)" target="_blank">air gapped</a> computers in his lab. He theorized that he
+was infected with a super advanced piece of malware that lived in the BIOS and
+could spread by sending ultrasonic frequencies from speaker to
+microphone, undetectable to the human ear. It looked like
+the work of the NSA or someone equally omnipotent. He dubbed it badBIOS. </p>
+
+<p>Everything Dragos claimed badBIOS could do is at least possible, and most security folks know this. Malware in the BIOS is feasible, and beyond being a <a href="https://www.wired.com/2015/03/researchers-uncover-way-hack-bios-undermine-secure-operating-systems/" target="_blank">research</a> topic, it&rsquo;s something we <a href="https://www.schneier.com/blog/archives/2015/02/the_equation_gr.html" target="_blank">know</a> the <a href="http://www.spiegel.de/international/world/catalog-reveals-nsa-has-back-doors-for-numerous-devices-a-940994.html" target="_blank">NSA does</a>. In fact, because of the hype, <a href="https://github.com/Katee/quietnet" target="_blank">many</a> <a href="https://www.anfractuosity.com/projects/ultrasound-networking/" target="_blank">people</a> developed ultrasound networking libraries just to demonstrate how viable it is. </p>
+
+<p>Dragos Ruiu imaged his computer and made a lot of data available to the
+community for peer review, but unfortunately no credible researcher<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup> has publicly confirmed his findings. Maybe there was something going on. Maybe he was seeing patterns in the noise. Either way, it says something about the world today that when you&rsquo;re a security expert and your computer starts behaving weirdly, the obvious culprit is the NSA.</p>
+
+<p>It made me think of a different worm, from a more innocent time.</p>
+
+<p><img alt="Morris Worm" src="../images/morris_worm.jpg" /></p>
+
+<h2>The Morris Worm</h2>
+
+<p>It&rsquo;s November 2nd 1988, almost exactly 25 years before badBIOS became a
+hashtag. Robert Tappan Morris, a graduate student at Cornell, executes some
+code he&rsquo;d been working on and goes to dinner. The aftermath was a
+self-replicating computer worm that infected 10% of the Internet<sup id="fnref2"><a href="#fn2" rel="footnote">2</a></sup> at
+the time &mdash; a whopping 6,000 computers!</p>
+
+<p>Morris claimed that he wrote his program to map the size of the Internet. And
+indeed, each infection would send a byte to a machine in Berkeley
+(hiding the trail to Morris, in Cornell, as the author). Unfortunately,
+there was a bug that caused it to propagate too aggressively: it infected the same
+computer multiple times, which resulted in a denial of service attack across the
+whole Internet. Furthermore, the code to report infections had a bug in it. It tried to
+send a UDP packet over a TCP socket, making it useless for reporting the Internet&rsquo;s size.</p>
+
+<p>An alternative explanation is that Morris was trying to bring to wider attention
+some long-standing bugs in the Internet. As Morris&rsquo; friend and future co-founder <a href="http://www.nytimes.com/1988/11/07/us/computer-invasion-back-door-ajar.html" target="_blank">put it</a>, in classic pg<sup id="fnref3"><a href="#fn3" rel="footnote">3</a></sup> style:</p>
+
+<blockquote>
+<p>Mr. Graham, who has known the younger Mr. Morris for several years, compared
+his exploit to that of Mathias Rust, the young German who flew light plane
+through Soviet air defenses in May 1987 and landed in Moscow.</p>
+
+<p>&ldquo;It&rsquo;s as if <a href="https://en.wikipedia.org/wiki/Mathias_Rust" target="_blank">Mathias Rust</a> had not just flown into Red Square, but built
+himself a stealth bomber by hand and then flown into Red Square,&rdquo; he said.</p>
+</blockquote>
+
+<h3>What did the Morris Worm actually do?</h3>
+
+<p>The Morris Worm<sup id="fnref4"><a href="#fn4" rel="footnote">4</a></sup> exploited three separate vulnerabilities. It guessed
+passwords for <code>rsh</code>/<code>rexec</code>, it exploited a debug-mode backdoor in sendmail and it used &ldquo;one
+very neat trick&rdquo;. I&rsquo;ll go over each of these in detail, and you can find an archive (decompiled and commented) of the code for yourself <a href="https://github.com/arialdomartini/morris-worm" target="_blank">here</a>.</p>
+
+<h4>1. Rsh and Rexec</h4>
+
+<p><code>rsh</code> and <code>rexec</code> are remote shell protocols from the BSD era that are almost
+unused today (since supplanted by <code>ssh</code>). <code>rsh</code> can allow passwordless
+authentication if coming from a &ldquo;trusted&rdquo; host, which it determines via a list of addresses stored in a global <code>/etc/hosts.equiv</code> or
+per-user <code>.rhosts</code> file. When an
+<code>rsh</code> request comes from a user of a trusted machine, access is automatically
+granted. The worm used this to propagate, searching those two files &mdash; as well as the <code>.forward</code> file, which back then was used to forward your mail around the Internet &mdash; for trusted hosts.</p>
+
+<p>Even in 1988, people knew that leaving <code>rsh</code> open on an untrusted network like
+the Internet was a Bad Idea, and so the worm also propagated via <code>rexec</code>.
+Now, <code>rexec</code> uses password authentication, but Morris made an intelligent assumption:
+people tend to reuse passwords.
+Back then, <code>/etc/passwd</code> used to<sup id="fnref5"><a href="#fn5" rel="footnote">5</a></sup> store everyone&rsquo;s encrypted passwords. The
+worm shipped with an optimized implementation of
+<a href="https://en.wikipedia.org/wiki/Crypt_(Unix)" target="_blank"><code>crypt</code></a> and a dictionary, and went to town. Once it cracked a password, it tried it against
+all the likely hosts it could find.</p>
+
+<h4>2. Sendmail&rsquo;s Backdoor</h4>
+
+<p>In the absence of any friendly hosts, the Morris Worm would then exploit a
+backdoor in <a href="https://en.wikipedia.org/wiki/Sendmail" target="_blank">Sendmail</a>. You see, Sendmail had a &ldquo;debug&rdquo; mode that allowed anyone to route an
+email to any process, including the shell! Ironically, this was <a href="http://www.nytimes.com/1988/11/07/us/computer-invasion-back-door-ajar.html" target="_blank">apparently deliberate</a>:</p>
+
+<blockquote>
+<p>Eric Allman, a computer programmer who designed the mail program that Morris
+exploited, said yesterday that he created the back door to allow him to fine
+tune the program on a machine that an overzealous administrator would not give
+him access to. He said he forgot to remove the entry point before the program
+was widely distributed in 1985.</p>
+</blockquote>
+
+<p>(This wasn&rsquo;t even the first Sendmail backdoor. Sendmail used to ship with &ldquo;wizard mode&rdquo;, where sending the strings &ldquo;WIZ&rdquo; and &ldquo;SHELL&rdquo; gave you a root shell. By the time that Morris was writing his worm, wizard mode was disabled almost everywhere.)</p>
+
+<p>If you&rsquo;re wondering how sendmail could have backdoors like this, it seems that it was somewhat well known. This quote from a <a href="http://securitydigest.org/tcp-ip/archive/1988/11" target="_blank">mail</a> by <a href="https://en.wikipedia.org/wiki/Paul_Vixie" target="_blank">Paul Vixie</a> summarizes the situation.</p>
+<pre class="highlight plaintext"><code>From: vixie@decwrl.dec.com (Paul Vixie)
+Newsgroups: comp.protocols.tcp-ip,comp.unix.wizards
+Subject: Re: a holiday gift from Robert "wormer" Morris
+Message-ID: &lt;24@jove.dec.com&gt;
+Date: 6 Nov 88 19:36:10 GMT
+References: &lt;1698@cadre.dsl.PITTSBURGH.EDU&gt; &lt;2060@spdcc.COM&gt;
+Distribution: na
+Organization: DEC Western Research Lab
+Lines: 15
+
+
+# the hole [in sendmail] was so obvious that i surmise that Morris
+# was not the only one to discover it.  perhaps other less
+# reproductively minded arpanetters have been having a field
+# 'day' ever since this bsd release happened. 
+
+I've known about it for a long time.  I thought it was common knowledge
+and that the Internet was just a darned polite place.  (I think it _was_
+common knowledge among the people who like to diddle the sendmail source.)
+
+The bug in fingerd was a big surprise, though.  Overwriting a stack frame
+on a remote machine with executable code is One Very Neat Trick.
+-- 
+Paul Vixie
+Work:    vixie@decwrl.dec.com    decwrl!vixie    +1 415 853 6600
+Play:    paul@vixie.sf.ca.us     vixie!paul      +1 415 864 7013
+</code></pre>
+
+<p>The Internet was a polite place, indeed.</p>
+
+<h4>3. One Very Neat Trick</h4>
+
+<p>The Very Neat Trick that Vixie was talking about is the now-standard
+<a href="https://en.wikipedia.org/wiki/Buffer_overflow" target="_blank">stack buffer overflow</a>. It&rsquo;s
+fascinating to read contemporary accounts that marvel at the cleverness of a class of
+bugs that are now ubiquitous &mdash; although, for me at least, they still haven&rsquo;t
+lost their magic<sup id="fnref6"><a href="#fn6" rel="footnote">6</a></sup>.</p>
+
+<p>Here&rsquo;s the main routine from the <code>fingerd</code> of that <a href="http://minnie.tuhs.org/cgi-bin/utree.pl?file=4.3BSD/usr/src/etc/fingerd.c" target="_blank">era</a>:</p>
+<pre class="highlight c"><code><span class="n">main</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span> <span class="n">argv</span><span class="p">)</span>
+    <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[];</span>
+<span class="p">{</span>
+    <span class="k">register</span> <span class="kt">char</span> <span class="o">*</span><span class="n">sp</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">line</span><span class="p">[</span><span class="mi">512</span><span class="p">];</span>
+    <span class="k">struct</span> <span class="n">sockaddr_in</span> <span class="n">sin</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">pid</span><span class="p">,</span> <span class="n">status</span><span class="p">;</span>
+    <span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="o">*</span><span class="n">av</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
+
+    <span class="n">i</span> <span class="o">=</span> <span class="k">sizeof</span> <span class="p">(</span><span class="n">sin</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">getpeername</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">sin</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">i</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">fatal</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">"getpeername"</span><span class="p">);</span>
+    <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'\0'</span><span class="p">;</span>
+    <span class="n">gets</span><span class="p">(</span><span class="n">line</span><span class="p">);</span>
+    <span class="n">sp</span> <span class="o">=</span> <span class="n">line</span><span class="p">;</span>
+    <span class="c1">// ... snip ...
+</span>    <span class="c1">// build sp into arguments for finger 
+</span>    <span class="c1">// and call /usr/ucb/finger via execv before
+</span>    <span class="c1">// putchar'ing the result back to stdout
+</span>    <span class="k">return</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span> 
+</code></pre>
+
+<p>If you have experience with reading C code,<sup id="fnref7"><a href="#fn7" rel="footnote">7</a></sup> you may have spotted the
+vulnerability. <code>gets(line)</code> reads STDIN and puts the contents into a 512 byte
+buffer. This means that sending more than 512 bytes will overwrite the stack
+with an attacker-controlled value.</p>
+
+<p>The worm sent 536 bytes of data, which overwrote the
+<a href="https://en.wikipedia.org/wiki/Call_stack#Stack_and_frame_pointers" target="_blank">stack frame</a>
+of the <code>main</code> function. This allowed Morris to overwrite the pointer to where
+<code>main</code> is returning to. He set that pointer to be <em>within</em> the 536 byte buffer
+he sent over the network. The beginning of the buffer contained
+<a href="https://en.wikipedia.org/wiki/Shellcode" target="_blank">shellcode</a> that called <code>/bin/sh</code>. Game over.</p>
+
+<h2>Aftermath</h2>
+
+<p>Robert Tappan Morris was convicted and sentenced to three years probation, 400
+hours of community service and a $10,050 fine (about $20,000 in today&rsquo;s dollars)
+plus the cost of his supervision. He then went on to co-found a little startup
+called Viaweb. You may have heard the rest of that story.
+Today, Morris is a tenured professor at the Computer Science and Artificial
+Intelligence Laboratory at MIT and is one of the leaders of the Parallel and
+Distributed Systems Groups.</p>
+
+<p>Why did the paranoia around badBIOS make me think of the Morris Worm? If you read contemporary articles about the Morris Worm, they&rsquo;ll sometimes mention, but never emphasize, who Robert Morris&rsquo;s father was. The <a href="https://en.wikipedia.org/wiki/Robert_Morris_(cryptographer)" target="_blank">elder Robert Morris</a> just happened to be a computer security expert. While the young Robert Morris was writing his worm, Robert Morris Sr. was serving as Chief Scientist at the NSA&rsquo;s National Computer Security Center! </p>
+
+<p>The Internet grew up a lot since 1988, and not just in size. In 2013, your computer acting strangely is obviously a NSA-written malware that lives in your BIOS and propagates over sound waves imperceptible to the human ear. In 1988, son of an NSA security executive infects 10% of the Internet with a worm that uses an exotic new exploitation technique called a buffer overflow and&hellip; nothing.</p>
+
+<p>Just to be clear, I&rsquo;m not alleging any conspiracy between father and son, besides perhaps father making some calls after son&rsquo;s arrest. While the Morris worm was likely the first malicious use, buffer overflows were understood as a problem before 1988, if not widely. The way the media narrative handled the NSA connection in 1988 just says a lot about how the world of the Internet changed in 25 years.</p>
+
+<p>As for Dragos Ruiu, he&rsquo;s been quiet about badBIOS since 2013. I&rsquo;m not sure what he&rsquo;s doing these days besides <a href="https://cansecwest.com/" target="_blank">CanSecWest</a>, but in my heart of hearts, I like to picture him playing the saxophone amidst the detritus of his torn up apartment.</p>
+
+<p><a href="https://en.wikipedia.org/wiki/The_Conversation" target="_blank"><img src="../images/the_conversation.jpg"></a></p>
+
+<hr>
+
+<h4>Paying the Bills</h4>
+
+<p>We&rsquo;re trying our best, but we&rsquo;ll only be able to blog about a minuscule percentage of the world&rsquo;s vulnerabilities. And starting with 1988 means we have a lot of catching up to do. How will you ever find about the ones that actually affect you?</p>
+
+<p>Our product, <a href="https://appcanary.com/?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=morris">Appcanary</a>, monitors your apps and servers, and notifies you whenever a new vulnerability is discovered in a package you rely on. </p>
+
+<p><a href="https://appcanary.com/sign_up?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=morris">Sign up</a> today!</p>
+
+<hr>
+
+<p><link href="//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+ #mc<em>embed</em>signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; width:100%;}
+ /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+      We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+</style>
+<div id="mc_embed_signup">
+<form action="//appcanary.us10.list-manage.com/subscribe/post?u=303b378f377508300c0b5469a&amp;id=dc58e8f56f" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+<div id="mc_embed_signup_scroll">
+<label for="mce-EMAIL">Liked this post? Subscribe to our newsletter for more!</label>
+<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+<div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_303b378f377508300c0b5469a_dc58e8f56f" tabindex="-1" value=""></div>
+<div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+</div>
+</form>
+</div></p>
+
+<div class="footnotes">
+<hr>
+<ol>
+
+<li id="fn1">
+<p>One of the things I wish that the security industry would do less of is blind appeals to authority, and I hate that I made one here. Unfortunately, I don&rsquo;t have the skills or time to make my own analysis of Ruiu&rsquo;s data, so I just have to trust the Thought Leaders on this one. &nbsp;<a href="#fnref1" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn2">
+<p>The 60,000 computer-strong Internet was of course one of many networks at the time. The Internet was the one that was global and used TCP/IP &mdash; the Internet protocols. Therein lies the pedant&rsquo;s case against the <a href="https://twitter.com/APStylebook/status/716279065888563200" target="_blank">AP&rsquo;s capitalization</a> of the word &ldquo;Internet&rdquo;.&nbsp;<a href="#fnref2" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn3">
+<p>Disclosure time: years after giving that quote, Paul Graham and Robert Morris went on to found Y Combinator along with Jessica Livingston and Trevor Blackwell. YC in turn is an investor in <a href="https://www.appcanary.com">Appcanary</a>. Robert Morris and I have never met, tho we did once meet with Paul Graham. &nbsp;<a href="#fnref3" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn4">
+<p>My favourite paper on the analysis of the worm is <a href="http://denninginstitute.com/modules/acmpkp/security/texts/INTWORM.PDF" target="_blank">With Microscope and Tweezers</a> from MIT&rsquo;s Eichin and Rochlis. They spend a page passionately arguing that it&rsquo;s a virus by using a complicated appeal to the difference between lytic and lysogenic viruses with references to three separate biology textbooks!&nbsp;<a href="#fnref4" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn5">
+<p>I assumed that <code>/etc/shadow</code> came about as a consequence of the Morris Worm, but it <a href="https://en.wikipedia.org/wiki/Passwd#History" target="_blank">seems</a> that it was originally implemented in SunOS earlier in the 80&rsquo;s, and then took 2 years after the Morris Worm to make it into BSD.&nbsp;<a href="#fnref5" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn6">
+<p>Exploits really are magic, and it goes without saying that exploit users have chosen the <a href="https://en.wikipedia.org/wiki/Left-hand_path_and_right-hand_path" target="_blank">Left-Hand Path</a> to wizardhood. If the <a href="https://mitpress.mit.edu/sicp/full-text/book/book.html" target="_blank">cover of SICP</a> is to be believed, the Right-Hand Path is available through careful study of functional programming and Lisps. Perhaps this is the true reason why Morris and Graham were such effective collaborators.&nbsp;<a href="#fnref6" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn7">
+<p>On the other hand, this C code is over 30 years old. When I ran it through the gcc on my machine, I was very happy to see that it complained bitterly but still compiled it. One exercise for the reader is finding where the network operation actually happens. <code>main</code> takes input and output from STDIN/STDOUT, but there&rsquo;s an uninitialized <code>struct sockaddr_in sin</code> that we call <code>getpeername</code> on. How is a network socket piped to standard input/output and who is initializing the <code>sin</code> struct? I actually haven&rsquo;t been able to figure this part out. If you know, please tell <a href="mailto:max@appcanary.com">me</a>! The full code listing is <a href="http://minnie.tuhs.org/cgi-bin/utree.pl?file=4.3BSD/usr/src/etc/fingerd.c" target="_blank">here</a>.&nbsp;<a href="#fnref7" rev="footnote">&#8617;</a></p>
+</li>
+
+</ol>
+</div>
+
+</section>
+<footer class='post-meta'>
+<a href='/author/max-veytsman.html'>Max Veytsman</a>
+on <a href='/tag/vihkal.html'>vihkal</a>, <a href='/tag/security.html'>security</a>
+<time class='post-date' datetime='2016-08-24'>
+24 August 2016
+</time>
+</footer>
+</article>
 <article class='post'>
 <header class='post-header'>
 <h1 class='post-title'><a href="../2016/making-appcanary-easier.html">Making Appcanary easier to use</a></h1>
@@ -562,85 +840,6 @@ curl -H &quot;Authorization: Token YOURTOKENHERE&quot; \
 on <a href='/tag/announcements.html'>Announcements</a>, <a href='/tag/product.html'>Product</a>
 <time class='post-date' datetime='2016-04-06'>
 06 April 2016
-</time>
-</footer>
-</article>
-<article class='post'>
-<header class='post-header'>
-<h1 class='post-title'><a href="../2016/new-api-centos-support.html">Hello, new Appcanary API and CentOS support!</a></h1>
-<section class='post-meta'>
-</section>
-</header>
-<section class='post-content'>
-<p>A lot of our users have told us, </p>
-
-<blockquote>
-<p>&ldquo;Gosh, I love knowing exactly which packages I have to update in order to keep my apps and servers secure. Have you thought about an API?&rdquo;</p>
-</blockquote>
-
-<p>We listened carefully to that feedback, and it is with pride and pleasure that we&rsquo;re announcing our new beta! We&rsquo;re still busy improving it, so we won&rsquo;t charge you for it for now.</p>
-
-<p>Once you <a href="https://appcanary.com/sign_up">sign up</a>, all you have to do is issue a curl:</p>
-<pre class="highlight shell"><code>curl -H <span class="s2">"Authorization: Token YOURTOKENHERE"</span> <span class="se">\</span>
-     -X POST -F <span class="nv">file</span><span class="o">=</span>@./Gemfile.lock <span class="se">\</span>
-     https://appcanary.com/api/v2/check/ruby
-</code></pre>
-
-<p>and you&rsquo;ll get a response like:</p>
-<pre class="highlight json"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"vulnerable"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-    </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"artifact-version"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"attributes"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rack"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rubygem"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.6.0"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"vulnerabilities"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-          </span><span class="p">{</span><span class="w">
-            </span><span class="nt">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Potential Denial of Service Vulnerability in Rack"</span><span class="p">,</span><span class="w">
-            </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Carefully crafted requests can cause a `SystemStackError` and potentially \ncause a denial of service attack. \n\nAll users running an affected release should upgrade."</span><span class="p">,</span><span class="w">
-            </span><span class="nt">"criticality"</span><span class="p">:</span><span class="w"> </span><span class="s2">"high"</span><span class="p">,</span><span class="w">
-            </span><span class="nt">"cve"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-              </span><span class="s2">"CVE-2015-3225"</span><span class="w">
-            </span><span class="p">],</span><span class="w">
-            </span><span class="nt">"osvdb"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
-            </span><span class="nt">"patched-versions"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-              </span><span class="s2">"~&lt; 1.5.4"</span><span class="p">,</span><span class="w">
-              </span><span class="s2">"~&lt; 1.4.6"</span><span class="p">,</span><span class="w">
-              </span><span class="s2">"&gt;= 1.6.2"</span><span class="w">
-            </span><span class="p">],</span><span class="w">
-            </span><span class="nt">"unaffected-versions"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
-            </span><span class="nt">"uuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"55807540-053f-40f0-9266-a3d1ca6a5838"</span><span class="p">,</span><span class="w">
-            </span><span class="nt">"upgrade-to"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-              </span><span class="s2">"&gt;= 1.6.2"</span><span class="w">
-            </span><span class="p">]</span><span class="w">
-          </span><span class="p">}</span><span class="w">
-        </span><span class="p">]</span><span class="w">
-      </span><span class="p">}</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-  </span><span class="p">]</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-
-<p>Our API fully supports <strong>Ruby</strong>, <strong>Ubuntu</strong>, and <strong>CentOS 7</strong>! You can learn more about how to use it by visiting <a href="https://appcanary.com/docs">the docs page</a>.</p>
-
-<p>Which reminds us,</p>
-
-<h2>We now support CentOS 7!</h2>
-
-<p>Appcanary now fully supports <strong>CentoOS 7</strong>. If you install our agent on a CentOS 7 server, we will email you notifications whenever any rpm package you have installed on your system has a known vulnerability.</p>
-
-<p>If you&rsquo;re not a current user and want to try out Appcanary&rsquo;s API and/or use us to monitor your CentOS 7 servers, you can <a href="https://appcanary.com/signup">sign up</a>!</p>
-
-<p>You can always let us know what you think at <a href="mailto:hello@appcanary.com">hello@appcanary.com</a>.</p>
-
-</section>
-<footer class='post-meta'>
-<a href='/author/max-veytsman.html'>Max Veytsman</a>
-on <a href='/tag/announcements.html'>Announcements</a>, <a href='/tag/product.html'>Product</a>
-<time class='post-date' datetime='2016-03-07'>
-07 March 2016
 </time>
 </footer>
 </article>
