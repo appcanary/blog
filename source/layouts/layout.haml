@@ -15,8 +15,7 @@
       %meta{property: "og:title", content: og_title}
     %meta{property: "og:description", content: page_description}
     %meta{property: "og:url", content: URI.join(blog_settings.url, current_page.url)}
-    - if cover?
-      %meta{property: "og:image", content: URI.join(blog_settings.url, image_path(current_page.data.cover))}
+    %meta{property: "og:image", content: URI.join(blog_settings.url, image_path(thumbnail))}
     - if is_blog_article?
       %meta{property: "article:published_time", content: current_article.date.strftime('%Y-%m-%d')}
 
@@ -28,8 +27,7 @@
       %meta{name: "twitter:title", content: twitter_title}
     %meta{name: "twitter:description", content: page_description}
     %meta{name: "twitter:url", content: URI.join(blog_settings.url, current_page.url)}
-    - if cover?
-      %meta{name: "twitter:image:src", content: URI.join(blog_settings.url, image_path(current_page.data.cover))}
+    %meta{name: "twitter:image:src", content: URI.join(blog_settings.url, image_path(thumbnail))}
 
     = feed_tag :atom, "#{blog.options.prefix.to_s}/feed.xml", title: "Atom Feed"
     = favicon_tag 'images/favicon.ico'
