@@ -87,3 +87,12 @@ h4, h5, h6 {
     display: block;
     max-width: 100%;
 }
+
+pre code, pre tt {
+  font-size: 14px;
+}
+
+// prevents footnotes from coliding with #topbar
+.footnotes li {
+  padding-top: 10px;
+}
