@@ -231,6 +231,20 @@ Our product, [Appcanary](https://appcanary.com/?utm_source=blog&utm_medium=web&u
 
 [^magic]: Exploits really are magic, and it goes without saying that exploit users have chosen the <a href="https://en.wikipedia.org/wiki/Left-hand_path_and_right-hand_path" target="_blank">Left-Hand Path</a> to wizardhood. If the <a href="https://mitpress.mit.edu/sicp/full-text/book/book.html" target="_blank">cover of SICP</a> is to be believed, the Right-Hand Path is available through careful study of functional programming and Lisps. Perhaps this is the true reason why Morris and Graham were such effective collaborators.
 
-[^code]: On the other hand, this C code is over 30 years old. When I ran it through the gcc on my machine, I was very happy to see that it complained bitterly but still compiled it. One exercise for the reader is finding where the network operation actually happens. `main` takes input and output from STDIN/STDOUT, but there's an uninitialized `struct sockaddr_in sin` that we call `getpeername` on. How is a network socket piped to standard input/output and who is initializing the `sin` struct? I actually haven't been able to figure this part out. If you know, please tell [me](mailto:max@appcanary.com)! The full code listing is <a href="http://minnie.tuhs.org/cgi-bin/utree.pl?file=4.3BSD/usr/src/etc/fingerd.c" target="_blank">here</a>.
+[^code]:
+  On the other hand, this C code is over 30 years old. When I ran it through the gcc on my machine,I was very happy to see that it complained bitterly but still compiled it. One exercise for the reader is finding where the network operation actually happens. `main` takes input and output from STDIN/STDOUT, but there's an uninitialized `struct sockaddr_in sin` that we call `getpeername` on. How is a network socket piped to standard input/output and who is initializing the `sin` struct? I actually haven't been able to figure this part out. If you know, please tell [me](mailto:max@appcanary.com)! The full code listing is <a href="http://minnie.tuhs.org/cgi-bin/utree.pl?file=4.3BSD/usr/src/etc/fingerd.c" target="_blank">here</a>.
+  
+  **Update 08/29/2016** Dave Vandervies emailed me with an explanation!
+  > fingerd was meant to be run from inetd (see <a href="http://minnie.tuhs.org/cgi-bin/utree.pl?file=4.3BSD/etc/inetd.conf" target="_blank">here</a>),
+  > which sets up the network connection and invokes the actual server process
+  > with its stdin and stdout attached to the network socket.
+  >
+  <br/>
+  > As for the getpeername, the address is an out parameter; this call looks up
+  > the peer address of stdin (fd 0), and will fail (and fingerd will error out
+  > on that) if it isn't a socket (see
+  > <a href="http://man.openbsd.org/OpenBSD-current/man2/getpeername.2">here</a>).
+  > Since the actual address doesn't get used, that appears to be the purpose of the
+  > call here.
 
 
