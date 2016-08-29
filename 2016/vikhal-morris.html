@@ -344,7 +344,23 @@ Distributed Systems Groups.</p>
 </li>
 
 <li id="fn7">
-<p>On the other hand, this C code is over 30 years old. When I ran it through the gcc on my machine, I was very happy to see that it complained bitterly but still compiled it. One exercise for the reader is finding where the network operation actually happens. <code>main</code> takes input and output from STDIN/STDOUT, but there&rsquo;s an uninitialized <code>struct sockaddr_in sin</code> that we call <code>getpeername</code> on. How is a network socket piped to standard input/output and who is initializing the <code>sin</code> struct? I actually haven&rsquo;t been able to figure this part out. If you know, please tell <a href="mailto:max@appcanary.com">me</a>! The full code listing is <a href="http://minnie.tuhs.org/cgi-bin/utree.pl?file=4.3BSD/usr/src/etc/fingerd.c" target="_blank">here</a>.&nbsp;<a href="#fnref7" rev="footnote">&#8617;</a></p>
+<p>On the other hand, this C code is over 30 years old. When I ran it through the gcc on my machine,I was very happy to see that it complained bitterly but still compiled it. One exercise for the reader is finding where the network operation actually happens. <code>main</code> takes input and output from STDIN/STDOUT, but there&rsquo;s an uninitialized <code>struct sockaddr_in sin</code> that we call <code>getpeername</code> on. How is a network socket piped to standard input/output and who is initializing the <code>sin</code> struct? I actually haven&rsquo;t been able to figure this part out. If you know, please tell <a href="mailto:max@appcanary.com">me</a>! The full code listing is <a href="http://minnie.tuhs.org/cgi-bin/utree.pl?file=4.3BSD/usr/src/etc/fingerd.c" target="_blank">here</a>.&nbsp;<a href="#fnref7" rev="footnote">&#8617;</a></p>
+
+<p><strong>Update 08/29/2016</strong> Dave Vandervies emailed me with an explanation!</p>
+
+<blockquote>
+<p>fingerd was meant to be run from inetd (see <a href="http://minnie.tuhs.org/cgi-bin/utree.pl?file=4.3BSD/etc/inetd.conf" target="_blank">here</a>),
+which sets up the network connection and invokes the actual server process
+with its stdin and stdout attached to the network socket.</p>
+
+<p><br/>
+As for the getpeername, the address is an out parameter; this call looks up
+the peer address of stdin (fd 0), and will fail (and fingerd will error out
+on that) if it isn&rsquo;t a socket (see
+<a href="http://man.openbsd.org/OpenBSD-current/man2/getpeername.2">here</a>).
+Since the actual address doesn&rsquo;t get used, that appears to be the purpose of the
+call here.</p>
+</blockquote>
 </li>
 
 </ol>
