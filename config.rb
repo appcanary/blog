@@ -133,6 +133,7 @@ end
 
 redirect 'post/131974777156/hello-appcanary', to: '/2015/hello-appcanary.html'
 redirect 'post/125101503771/hello-world', to: '/2015/hello-world.html'
+redirect '2016/vikhal-morris.html', to: '/2016/tale-of-two-worms.html'
 
 # Pretty URLs - https://middlemanapp.com/advanced/pretty_urls/
 # activate :directory_indexes
