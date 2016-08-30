@@ -7,11 +7,11 @@
   <link href="http://blog.appcanary.com/feed.xml" rel="self"/>
   <updated>2016-08-23T20:00:00-04:00</updated>
   <entry>
-    <title>Morris &amp; badBIOS, 25 years in 2 worms: ViHKAL #2</title>
-    <link rel="alternate" href="http://blog.appcanary.com/2016/vikhal-morris.html"/>
-    <id>http://blog.appcanary.com/2016/vikhal-morris.html</id>
+    <title>A tale of two worms, three vulnerabilities, and one National Security Agency</title>
+    <link rel="alternate" href="http://blog.appcanary.com/2016/tale-of-two-worms.html"/>
+    <id>http://blog.appcanary.com/2016/tale-of-two-worms.html</id>
     <published>2016-08-23T20:00:00-04:00</published>
-    <updated>2016-08-29T15:38:34-04:00</updated>
+    <updated>2016-08-30T11:22:49-04:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
