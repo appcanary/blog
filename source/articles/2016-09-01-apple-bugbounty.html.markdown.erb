@@ -1,0 +1,28 @@
+---
+title: 'Actually, Apple probably could just buy every vuln'
+date: 2016-09-01
+author: phillmv 
+layout: post
+published: false
+tags: security, apple, theverge, hottake, bugbounty
+---
+
+Over at [The Verge](http://www.theverge.com/2016/8/26/12660800/apple-ios-security-bug-bounty-payouts), Russel Brandom explores why Apple doesn't just dump a ton of cash into its bug bounty program.
+
+If the black market can pay a cool mil for a good iOS vuln, why should Apple top out at $200k? Well, incentives are hard:
+
+>If Apple really did put its enormous cash reserves behind catching every bug, the result might have unintended consequences for its own security workforce. Building and deploying patches is hard work, every bit as delicate and creative as finding vulnerabilities. Companies need dedicated teams to do that work — but with skyrocketing prices for iOS vulnerabilities, why not put in a few months to find an exploit, turn it in for the bounty, and then spend the rest of the year working on your tan? "If Apple or other defense bounties tried to outbid or even match offense bug prices, they may lose the employees they need most to fix the issues," [Luta Security CEO, Katie] Moussouris says.
+
+This is intuitively appealing, but I have a few quibbles.
+
+**One**, defense and offense are related but separate skills. A world class vuln *patcher* doesn't automatically have the skillset or obsessive need to dig up vulns all the time. It's not hard to imagine a universe where top Apple coders, devops and sysadmins are relatively unfazed by million dollar bounties. 
+
+They could in theory find a vuln on the inside, and then quit their job to collect the bounty; but you can only do that once.
+
+**Two**, they're already offering $200k &mdash; so incentives are already skewed. Once you figure in stock options, what are the odds that top Apple engineers' total compensation is already deep into the six figures and near the seven?
+
+**Three**, the black market is probably far less liquid than Apple is. Apple's quarterly profit is larger than the NSA's (public) yearly budget.
+
+How many **million dollar** vulns do you think get cleared per year? I have no idea &mdash; but let's run a [Fermi estimate](https://what-if.xkcd.com/84/). Let's assume CVEs are a reasonable proxy for the total order of magnitude of vulns found per year. About 10,000 CVEs get published; let's say about 1% of those will qualify. There are probably fewer than one hundred of these vulns per year.
+
+Security is about managing the expected value of your exposure to risk, so this is likely to not make financial sense. But if Tim Cook woke up tomorrow and decided to launch a personal vendetta towards eliminating every major Apple security flaw &mdash; flood the market!
