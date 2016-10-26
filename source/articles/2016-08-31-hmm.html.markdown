@@ -1,0 +1,17 @@
+---
+title: Hmm
+date: 2016-08-31
+tags: Java, Maven, Clojure, Programming, Security, Talks
+author: mveytsman
+published: false
+layout: post
+---
+
+The David Lodge novel Changing Places invented an academic parlour game called "Humiliation," which is a form of "Never Have I Ever" for the over-educated set. In it, players take turns naming classic works of literature they've never read, scoring points for each of their opponents that had, in fact, read it. In Changing Places, one of the main characters, overtaken by his competitive nature, bursts out with "Hamlet." He wins the game and loses his job.
+
+My turn to play. First of all, I've never actually read Changing Places. The story was told to me as an anecdote by a philosophy professor illustating some point or another, and it (but not the point he was making) stuck with me. And also, I've never been to Defcon. Or Blackhat for that matter. I just scored north of 20,000 Humiliation points in the security professional edition of the game! But hey, one cool thing that happened when tens of thousands of people wrapped their laptops in tinfoil and descended on Vegas was a cool vulnerability quitely released at about TCP/IP sequence attacks.
+
+Basically, you can determine very quickly whether two arbitrary ips are communicating over a TCP/IP connection and which port is sending and recieving. You can also use this power to drop the connection or inject into it. I really want to write a VIHKAL post about it, but to get into it we have to start with with there 
+
+
+Kevin Mitnick is a name 
