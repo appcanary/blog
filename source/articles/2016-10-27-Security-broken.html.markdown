@@ -71,7 +71,7 @@ The low hanging fruit is patching, configuration, strong passwords/2fa. The hard
 part is writing secure code and not getting socially engineered. Solve the first
 three, and focus your security teams's energy on the Sisyphean tasks of the last two
 
---
+---
 
 #### Paying the Bills
 
