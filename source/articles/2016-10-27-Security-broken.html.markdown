@@ -15,7 +15,7 @@ alas...
 You've probably heard of this. The DNS provider Dyn was facing a massive Denial
 of Service attack from the Mirai botnet which attacks Internet of Things devices
 like cameras. I've written about the
-[Morris worm]](https://blog.appcanary.com/2016/tale-of-two-worms.html), and I
+[Morris worm](https://blog.appcanary.com/2016/tale-of-two-worms.html), and I
 wanted to dig into the [source](https://github.com/jgamblin/Mirai-Source-Code)
 of the Mirai botnet (helpfully published by the author) to see how the big worm
 of 2016 compares to the big worm of 1988.
