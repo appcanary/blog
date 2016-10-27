@@ -46,6 +46,8 @@ users for this. I go to security talks all the time that make fun of the idiots
 who build these insecure systems given by people who make their money selling
 boxes that use advanced "machine learning" to show you a map of where malware is coming from.
 
+TODO: Explain here that both the camera company and the DNC were customers of security firms and bought this shit
+
 This is all the security industry's fault. We've been selling expensive
 fingerprint scanners to people who need a good password manager. It's like the
 old
