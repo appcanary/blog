@@ -4,7 +4,7 @@ date: 2016-10-27
 tags: Security
 author: mveytsman
 published: false
-layout: post
+layout: page
 ---
 
 Last Friday, my workday was rudely interrupted because I couldn't access Github.
@@ -15,7 +15,7 @@ alas...
 You've probably heard of this. Huge tracts of the Internet were down because the DNS provider Dyn 
 faced a massive Denial of Service attack from the
 [Mirai botnet](https://krebsonsecurity.com/2016/10/hacked-cameras-dvrs-powered-todays-massive-internet-outage/), 
-which takes advantage of Internet of Things devices like cameras, toasters and TVs.
+which takes advantage of Internet of Things devices like cameras and DVRs.
 
 <blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">&quot;Oh &amp; also, evil sorcerers crippled our divination network Friday by getting millions of coffee makers &amp; lightswitches to shout real loud&quot; <a href="https://t.co/OPhdOJLwc1">https://t.co/OPhdOJLwc1</a></p>&mdash; Max Gladstone (@maxgladstone) <a href="https://twitter.com/maxgladstone/status/790890882543288320">October 25, 2016</a></blockquote>
 <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
@@ -31,7 +31,7 @@ Can you guess how Mirai spreads?
 
 Was there new zeroday in the devices? Hey, maybe there was an old, unpatched
 vulnerability hanging &mdash; who has time to apply software updates to their toaster? 
-Maybe it was HeartBleed 👻!
+Maybe it was HeartBleed 👻?
 
 Nope.
 
@@ -48,7 +48,7 @@ Oh, and Morris' password dictionary was larger, too.
 
 ## $75 Billion 
 
-$75 Billion a year. That's how much we spend on information security. And for
+$75 billion a year. That's how much we spend on information security globally. And for
 what? Suppose I waved a magic wand and cut the worldwide security budget in
 half. Would things really be that much worse?
 
@@ -82,7 +82,7 @@ making any progress in 28 years. Lots of money in it, though.
 
 #### Paying the Bills
 
-Surprise!, I also sell a security product! But I will say this: Appcanary
+Surprise, I also sell a security product! But I will say this: Appcanary
 isn't going to protect you from shipping millions of internet-accessible
 cameras with the same password. We won't even protect you from having your DNS
 provider DoSed.
@@ -100,7 +100,3 @@ monitors your apps and servers, and notifies you whenever a new vulnerability is
 discovered in a package you rely on.
 
 [Sign up](https://appcanary.com/sign_up?utm_source=blog&utm_medium=web&utm_campaign=broken) today!
-
-[^apocryphal]: This story is probably
-[apocryphal](http://mentalfloss.com/article/13103/russians-didnt-just-use-pencils-space),
-but I just take that as evidence that it contains a deeper truth.
