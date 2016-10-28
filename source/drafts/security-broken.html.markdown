@@ -1,6 +1,5 @@
 ---
 title: The Mirai Botnet is Proof the Security Industry is Fundamentally Broken
-tags: Security
 author: mveytsman
 published: false
 layout: page
