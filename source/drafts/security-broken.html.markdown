@@ -46,9 +46,11 @@ Oh, and Morris' password dictionary was larger, too.
 
 ## $75 Billion 
 
-$75 billion a year. That's how much we spend on information security globally. And for
-what? Suppose I waved a magic wand and cut the worldwide security budget in
-half. Would things really be that much worse?
+$75 billion a year. That's how much we spend on information security globally.
+And for what, when we keep getting such basic things wrong? Suppose I waved a
+magic wand and cut the worldwide security budget in half. Would things really be
+that much worse? The security industry is addicted to selling expensive
+complicated products instead of doing the basics well. 
 
 I was at a security conference the other week, and there was yet another crop of
 cyberapocalypse talks. The Internet of Things is a garbage fire. Industrial control
@@ -60,21 +62,22 @@ It's all bullshit.
 
 We sell biometric authentication systems to people who need a good password
 manager. We sell live threat attribution intelligence with colorful maps to
-people who need to practice configuration management. We sell advanced in-cpu
-sandbox malware detection to people who need to institute a patching program.
+people who need to practice configuration management. We sell advanced
+in-cpu sandbox endpoint protection to people who need to institute a patching program.
 There's a reason why security practitioners get such a kick out of
 [ThreatButt](https://threatbutt.com/).
 
 There are lots of real, important, conceptually difficult problems in
 security. We don't really know how to write secure code, and it's all too
-easy to get socially engineered. But, right now, the vast majority of threats can be thwarted by three simple, if hard to implement, solutions:
+easy to get socially engineered. But, right now, the vast majority of threats can be thwarted by the basics:
 
 1. Keep your systems patched
 2. Keep your systems properly configured.
 3. Make sure you have strong passwords and two factor authentication.
 
-Solve these problems first, and then focus on the Sisyphean tasks that remain. Instead, here we are selling bullshit and barely
-making any progress in 28 years. Lots of money in it, though.
+Do the basics first. The basics matter. Then you can focus on the Sisyphean
+tasks that remain. Instead, here we are selling fancy bullshit and barely making
+any progress in 28 years. Lots of money in it, though.
 
 ---
 
@@ -87,7 +90,7 @@ provider DoSed.
 
 The major botnet of 2016 is *simpler* than the botnet of 1988. There's something
 wrong in how we do security, and at Appcanary, we think it's a complete lack of
-focus on low-hanging fruit. 
+focus on the basics. 
 
 The highest value, easiest thing you can do to improve your security is patch
 known vulnerabilities. Most breaches come from years-old vulnerabilities. 
