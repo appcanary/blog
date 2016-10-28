@@ -15,7 +15,7 @@ alas...
 You've probably heard of this. Huge tracts of the Internet were down because the DNS provider Dyn 
 faced a massive Denial of Service attack from the
 [Mirai botnet](https://krebsonsecurity.com/2016/10/hacked-cameras-dvrs-powered-todays-massive-internet-outage/), 
-which takes advantage of Internet of Things devices like cameras, toasters and tvs.
+which takes advantage of Internet of Things devices like cameras, toasters and TVs.
 
 <blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">&quot;Oh &amp; also, evil sorcerers crippled our divination network Friday by getting millions of coffee makers &amp; lightswitches to shout real loud&quot; <a href="https://t.co/OPhdOJLwc1">https://t.co/OPhdOJLwc1</a></p>&mdash; Max Gladstone (@maxgladstone) <a href="https://twitter.com/maxgladstone/status/790890882543288320">October 25, 2016</a></blockquote>
 <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
@@ -29,20 +29,22 @@ and I wanted to dig into the
 
 Can you guess how Mirai spreads? 
 
-Some new zeroday in the devices? Maybe an old
-vulnerability that the devices haven't patched (because lord knows who has time
-to apply software updates to their toaster)? Maybe it was HeartBleed 👻?
+Was there new zeroday in the devices? Hey, maybe there was an old, unpatched
+vulnerability hanging &mdash; who has time to apply software updates to their toaster? 
+Maybe it was HeartBleed 👻!
 
-Mirai does only one thing to break into new devices. It tries a bunch of default
+Nope.
+
+Mirai does one, and only one thing in order to break into new devices: it cycles through a bunch of default
 username/password combinations over telnet, like "admin/admin" and "root/realtek". For a
 laugh, "mother/fucker" is in there too.
 
-Default credentials. Over telnet. That's how you get <strike>millions</strike> hundreds
-of thousands of
+Default credentials. Over telnet. That's how you get hundreds of thousands of
 [devices](http://dyn.com/blog/dyn-analysis-summary-of-friday-october-21-attack/).
-The Morris worm from 1988 tried a dictionary password attack too, but only if
-its buffer overflow and sendmail backdoor exploits failed. Oh, and its
-dictionary was bigger than Mirai's.
+The Morris worm from 1988 tried a dictionary password attack too, but only after
+its buffer overflow and sendmail backdoor exploits failed. 
+
+Oh, and Morris' password dictionary was larger, too.
 
 ## $75 Billion 
 
@@ -50,20 +52,13 @@ $75 Billion a year. That's how much we spend on information security. And for
 what? Suppose I waved a magic wand and cut the worldwide security budget in
 half. Would things really be that much worse?
 
-I was a security conference the other week, and there was a yet another crop of
+I was at a security conference the other week, and there was yet another crop of
 cyberapocalypse talks. The Internet of Things is a garbage fire. Industrial control
 systems are going to get us all killed. Users are clicking phishing links like
 sheep. We're all doomed. And somehow, it's always the fault of shitty
 programmers or dumb users. Let's all laugh at their fails.
 
-Bullshit. Let's all pretend the DNC and the State Department don't spend
-big money on security and instead laugh at John Podesta's shitty
-[password](http://www.politico.com/story/2016/10/john-podesta-cybersecurity-hacked-emails-230122).
-
-There's a classic story[^apocryphal] about how NASA spent millions of dollars to
-develop a space-pen that would work in zero gravity. The Soviets just packed a
-pencil and called it a day. In order to justify the sticker price of $75 billion
-dollars a year, we have to keep selling space-pens and ignore the real issues.
+It's all bullshit. 
 
 We sell biometric authentication systems to people who need a good password
 manager. We sell live threat attribution intelligence with colorful maps to
@@ -72,23 +67,22 @@ sandbox malware detection to people who need to institute a patching program.
 There's a reason why security practitioners get such a kick out of
 [ThreatButt](https://threatbutt.com/).
 
-Don't get me wrong, there are a lot of important, conceptually hard problems in
-security. They might even be intractable. But, right now, the majority of
-attacks can be prevented with straightforward solutions. They're challenging to
-implement, but they work. The problem is that you can't charge $75 billion a
-year for straightforward things. So here we are selling bullshit and barely
-making any progress in 28 years. Lot's of money in it though.
+There are lots of real, important, conceptually difficult problems in
+security. We don't really know how to write secure code, and it's all too
+easy to get socially engineered. But, right now, the vast majority of threats can be thwarted by three simple, if hard to implement, solutions:
 
-The straightforward things you can do is patching, secure configuration, and
-making sure you have strong passwords/two factor authentication. The hard problems
-are writing secure code and not getting socially engineered. Solve the first
-three, and then you can focus on the Sisyphean tasks that are left.
+1. Keep your systems patched
+2. Keep your systems properly configured.
+3. Make sure you have strong passwords and two factor authentication.
+
+Solve these problems first, and then focus on the Sisyphean tasks that remain. Instead, here we are selling bullshit and barely
+making any progress in 28 years. Lots of money in it, though.
 
 ---
 
 #### Paying the Bills
 
-Surprise!, I also sell a security product! But I will say this, Appcanary
+Surprise!, I also sell a security product! But I will say this: Appcanary
 isn't going to protect you from shipping millions of internet-accessible
 cameras with the same password. We won't even protect you from having your DNS
 provider DoSed.
