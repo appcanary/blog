@@ -1,8 +1,10 @@
 ---
 title: The Mirai Botnet is Proof the Security Industry is Broken
+date: 2016-10-31
 author: mveytsman
 published: true
-layout: page
+tags: vihkal, security, mirai, botnet
+layout: post
 ---
 
 Last Friday, my workday was rudely interrupted because I couldn't access Github.
