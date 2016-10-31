@@ -1,7 +1,7 @@
 ---
-title: The Mirai Botnet is Proof the Security Industry is Fundamentally Broken
+title: The Mirai Botnet is Proof the Security Industry is Broken
 author: mveytsman
-published: false
+published: true
 layout: page
 ---
 
@@ -15,8 +15,10 @@ faced a massive Denial of Service attack from the
 [Mirai botnet](https://krebsonsecurity.com/2016/10/hacked-cameras-dvrs-powered-todays-massive-internet-outage/), 
 which takes advantage of Internet of Things devices like cameras and DVRs.
 
-<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">&quot;Oh &amp; also, evil sorcerers crippled our divination network Friday by getting millions of coffee makers &amp; lightswitches to shout real loud&quot; <a href="https://t.co/OPhdOJLwc1">https://t.co/OPhdOJLwc1</a></p>&mdash; Max Gladstone (@maxgladstone) <a href="https://twitter.com/maxgladstone/status/790890882543288320">October 25, 2016</a></blockquote>
-<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+<p><blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">&quot;Oh &amp; also, evil sorcerers crippled our divination network Friday by getting millions of coffee makers &amp; lightswitches to shout real loud&quot; <a href="https://t.co/OPhdOJLwc1">https://t.co/OPhdOJLwc1</a></p>&mdash; Max Gladstone (@maxgladstone) <a href="https://twitter.com/maxgladstone/status/790890882543288320">October 25, 2016</a></blockquote>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script></p>
+
+### So, what's new about Mirai? 
 
 I've written about
 1988's [Morris worm](https://blog.appcanary.com/2016/tale-of-two-worms.html), 
@@ -44,9 +46,9 @@ its buffer overflow and sendmail backdoor exploits failed.
 
 Oh, and Morris' password dictionary was larger, too.
 
-## $75 Billion 
+### How do we keep getting this wrong?
 
-$75 billion a year. That's how much we spend on information security globally.
+Around the world, we spend $75 billion a year on information security.
 And for what, when we keep getting such basic things wrong? Suppose I waved a
 magic wand and cut the worldwide security budget in half. Would things really be
 that much worse? The security industry is addicted to selling expensive
@@ -58,7 +60,7 @@ systems are going to get us all killed. Users are clicking phishing links like
 sheep. We're all doomed. And somehow, it's always the fault of shitty
 programmers or dumb users. Let's all laugh at their fails.
 
-It's all bullshit. 
+### It's all bullshit. 
 
 We sell biometric authentication systems to people who need a good password
 manager. We sell live threat attribution intelligence with colorful maps to
@@ -69,7 +71,7 @@ There's a reason why security practitioners get such a kick out of
 
 There are lots of real, important, conceptually difficult problems in
 security. We don't really know how to write secure code, and it's all too
-easy to get socially engineered. But, right now, the vast majority of threats can be thwarted by the basics:
+easy to get socially engineered. But, right now, the vast majority of threats can be thwarted by <b>the basics</b>:
 
 1. Keep your systems patched
 2. Keep your systems properly configured.
