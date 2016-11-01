@@ -79,11 +79,128 @@
 <main class='content' id='content' role='main'>
 <div class='extra-pagination inner'>
 <nav class='pagination' role='pagination'>
-<span class='page-number'>Page 1 of 2</span>
+<span class='page-number'>Page 1 of 3</span>
 <a class="older-posts" href="page/2/">Older Posts →</a>
 </nav>
 
 </div>
+<article class='post'>
+<header class='post-header'>
+<h1 class='post-title'><a href="2016/mirai-botnet-security-broken.html">The Mirai Botnet is Proof the Security Industry is Broken</a></h1>
+<section class='post-meta'>
+</section>
+</header>
+<section class='post-content'>
+<p>Last Friday, my workday was rudely interrupted because I couldn&rsquo;t access Github.
+To add insult to injury I couldn&rsquo;t even complain about it on Twitter. I tried to
+drown my sorrows by listening to moody Leonard Cohen songs on Spotify, but
+alas&hellip;</p>
+
+<p>You&rsquo;ve probably heard of this. Huge tracts of the Internet were down because the DNS provider Dyn 
+faced a massive Denial of Service attack from the
+<a href="https://krebsonsecurity.com/2016/10/hacked-cameras-dvrs-powered-todays-massive-internet-outage/">Mirai botnet</a>, 
+which takes advantage of Internet of Things devices like cameras and DVRs.</p>
+
+<p><blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">&ldquo;Oh &amp; also, evil sorcerers crippled our divination network Friday by getting millions of coffee makers &amp; lightswitches to shout real loud&rdquo; <a href="https://t.co/OPhdOJLwc1">https://t.co/OPhdOJLwc1</a></p>&mdash; Max Gladstone (@maxgladstone) <a href="https://twitter.com/maxgladstone/status/790890882543288320">October 25, 2016</a></blockquote>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script></p>
+
+<h3>So, what&rsquo;s new about Mirai?</h3>
+
+<p>I&rsquo;ve written about
+1988&rsquo;s <a href="https://blog.appcanary.com/2016/tale-of-two-worms.html">Morris worm</a>, 
+and I wanted to dig into the
+<a href="https://github.com/jgamblin/Mirai-Source-Code">source</a> of the Mirai botnet
+(helpfully published by the author) to see how far we&rsquo;ve come along in the past
+28 years.</p>
+
+<p>Can you guess how Mirai spreads? </p>
+
+<p>Was there new zeroday in the devices? Hey, maybe there was an old, unpatched
+vulnerability hanging &mdash; who has time to apply software updates to their toaster? 
+Maybe it was HeartBleed 👻?</p>
+
+<p>Nope.</p>
+
+<p>Mirai does one, and only one thing in order to break into new devices: it cycles through a bunch of default
+username/password combinations over telnet, like &ldquo;admin/admin&rdquo; and &ldquo;root/realtek&rdquo;. For a
+laugh, &ldquo;mother/fucker&rdquo; is in there too.</p>
+
+<p>Default credentials. Over telnet. That&rsquo;s how you get hundreds of thousands of
+<a href="http://dyn.com/blog/dyn-analysis-summary-of-friday-october-21-attack/">devices</a>.
+The Morris worm from 1988 tried a dictionary password attack too, but only after
+its buffer overflow and sendmail backdoor exploits failed. </p>
+
+<p>Oh, and Morris&rsquo; password dictionary was larger, too.</p>
+
+<h3>How do we keep getting this wrong?</h3>
+
+<p>Around the world, we spend $75 billion a year on information security.
+And for what, when we keep getting such basic things wrong? Suppose I waved a
+magic wand and cut the worldwide security budget in half. Would things really be
+that much worse? The security industry is addicted to selling expensive
+complicated products instead of doing the basics well. </p>
+
+<p>I was at a security conference the other week, and there was yet another crop of
+cyberapocalypse talks. The Internet of Things is a garbage fire. Industrial control
+systems are going to get us all killed. Users are clicking phishing links like
+sheep. We&rsquo;re all doomed. And somehow, it&rsquo;s always the fault of shitty
+programmers or dumb users. Let&rsquo;s all laugh at their fails.</p>
+
+<h3>It&rsquo;s all bullshit.</h3>
+
+<p>We sell biometric authentication systems to people who need a good password
+manager. We sell live threat attribution intelligence with colorful maps to
+people who need to practice configuration management. We sell advanced
+in-cpu sandbox endpoint protection to people who need to institute a patching program.
+There&rsquo;s a reason why security practitioners get such a kick out of
+<a href="https://threatbutt.com/">ThreatButt</a>.</p>
+
+<p>There are lots of real, important, conceptually difficult problems in
+security. We don&rsquo;t really know how to write secure code, and it&rsquo;s all too
+easy to get socially engineered. But, right now, the vast majority of threats can be thwarted by <b>the basics</b>:</p>
+
+<ol>
+<li>Keep your systems patched</li>
+<li>Keep your systems properly configured.</li>
+<li>Make sure you have strong passwords and two factor authentication.</li>
+</ol>
+
+<p>Do the basics first. The basics matter. Then you can focus on the Sisyphean
+tasks that remain. Instead, here we are selling fancy bullshit and barely making
+any progress in 28 years. Lots of money in it, though.</p>
+
+<hr>
+
+<h4>Paying the Bills</h4>
+
+<p>Surprise, I also sell a security product! But I will say this: Appcanary
+isn&rsquo;t going to protect you from shipping millions of internet-accessible
+cameras with the same password. We won&rsquo;t even protect you from having your DNS
+provider DoSed.</p>
+
+<p>The major botnet of 2016 is <em>simpler</em> than the botnet of 1988. There&rsquo;s something
+wrong in how we do security, and at Appcanary, we think it&rsquo;s a complete lack of
+focus on the basics. </p>
+
+<p>The highest value, easiest thing you can do to improve your security is patch
+known vulnerabilities. Most breaches come from years-old vulnerabilities. </p>
+
+<p>Our product,
+<a href="https://appcanary.com/?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=broken">Appcanary</a>,
+monitors your apps and servers, and notifies you whenever a new vulnerability is
+discovered in a package you rely on.</p>
+
+<p><a href="https://appcanary.com/sign_up?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=broken">Sign up</a> today!</p>
+
+</section>
+<footer class='post-meta'>
+<a href='/author/max-veytsman.html'>Max Veytsman</a>
+on <a href='/tag/security.html'>security</a>, <a href='/tag/mirai.html'>mirai</a>, <a href='/tag/botnet.html'>botnet</a>
+<time class='post-date' datetime='2016-10-31'>
+31 October 2016
+</time>
+</footer>
+</article>
 <article class='post'>
 <header class='post-header'>
 <h1 class='post-title'><a href="2016/tale-of-two-worms.html">A tale of two worms, three vulnerabilities, and one National Security Agency</a></h1>
@@ -725,133 +842,8 @@ on <a href='/tag/announcements.html'>Announcements</a>, <a href='/tag/product.ht
 </time>
 </footer>
 </article>
-<article class='post'>
-<header class='post-header'>
-<h1 class='post-title'><a href="2016/two-new-apis.html">Two new APIs from Appcanary</a></h1>
-<section class='post-meta'>
-</section>
-</header>
-<section class='post-content'>
-<p>After the success of our <a href="http://blog.appcanary.com/2016/new-api-centos-support.html">check</a> API, we found that our users told us:</p>
-
-<blockquote>
-<p>&ldquo;I love your API so much! But can I use it register the packages my app uses and get emailed if new vulnerabilities that affect me come out? Oh, and it would be nice if I could pragmatically query the servers I have agents running on too!&rdquo;</p>
-</blockquote>
-
-<p>So we went ahead and built both.</p>
-
-<h2>The Monitor API</h2>
-
-<p>The &ldquo;Monitor&rdquo; API lets you register a Gemfile or an Ubuntu/CentOS package list to be emailed when new vulnerabilities are discovered. It like what our agent does, but in situations where it doesn&rsquo;t make sense like when you use Docker or deploy on a PaaS like Heroku.</p>
-
-<p>You can register a new monitor by:</p>
-<pre class="highlight shell"><code>curl -H <span class="s2">"Authorization: Token YOURTOKENHERE"</span> <span class="se">\</span>
-     -X POST -F <span class="nv">file</span><span class="o">=</span>@./Gemfile.lock <span class="se">\</span>
-     https://appcanary.com/api/v2/monitors/my-great-app?platform<span class="o">=</span>ruby
-</code></pre>
-
-<p>and you&rsquo;ll get a response like:</p>
-<pre class="highlight json"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"monitor"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"attributes"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"my-server"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"uuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"56eac124-35c2-49bd-ab02-45de56c03ef4"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"vulnerable"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-  </span><span class="p">}</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-
-<p>And, you&rsquo;ll be emailed about any vulnerabilities that affect your app as soon as we find out about them!</p>
-
-<p>You can also list, inspect, or delete monitors via the API. More information <a href="https://appcanary.com/docs#create-monitor">here</a>.</p>
-
-<h2>The Server API</h2>
-
-<p>The &ldquo;Server&rdquo; API allows you to navigate the servers you have the Appcanary agent running on via API, and list any vulnerabilities that affect them!</p>
-
-<p>I can see the servers I have agents running on with:
-<code>bash
-curl -H &quot;Authorization: Token YOURTOKENHERE&quot; \
-      https://appcanary.com/api/v2/servers
-</code></p>
-
-<p>and you&rsquo;ll get a response like:</p>
-<pre class="highlight json"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-    </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"server"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"attributes"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"server1"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"uuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"55a5baeb-2ad4-4787-8784-a062d254900e"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"hostname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"server1"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"last-heartbeat-at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-03-27T03:33:02.185Z"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"vulnerable"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"apps"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-          </span><span class="p">{</span><span class="w">
-            </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"app"</span><span class="p">,</span><span class="w">
-            </span><span class="nt">"attributes"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-              </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
-              </span><span class="nt">"path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/var/lib/dpkg/status"</span><span class="p">,</span><span class="w">
-              </span><span class="nt">"uuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"55a5baec-3e5c-4cca-832c-06aaa36418f6"</span><span class="p">,</span><span class="w">
-              </span><span class="nt">"vulnerable"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-            </span><span class="p">}</span><span class="w">
-          </span><span class="p">},</span><span class="w">
-          </span><span class="p">{</span><span class="w">
-            </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"app"</span><span class="p">,</span><span class="w">
-            </span><span class="nt">"attributes"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-              </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
-              </span><span class="nt">"path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/var/www/myapp/current/Gemfile.lock"</span><span class="p">,</span><span class="w">
-              </span><span class="nt">"uuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"55a5baec-027d-4618-b8de-12638281f34c"</span><span class="p">,</span><span class="w">
-              </span><span class="nt">"vulnerable"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-            </span><span class="p">}</span><span class="w">
-          </span><span class="p">}</span><span class="w">
-        </span><span class="p">]</span><span class="w">
-      </span><span class="p">}</span><span class="w">
-    </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"server"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"attributes"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"server2"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"uuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"560b0e75-1317-481c-98bb-15e6ae5978b6"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"hostname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"database"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"last-heartbeat-at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-03-08T00:21:31.105Z"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"vulnerable"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"apps"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-          </span><span class="p">{</span><span class="w">
-            </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"app"</span><span class="p">,</span><span class="w">
-            </span><span class="nt">"attributes"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-              </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
-              </span><span class="nt">"path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/var/lib/dpkg/status"</span><span class="p">,</span><span class="w">
-              </span><span class="nt">"uuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"560b0e77-0a26-41fd-bc35-38b5aac33709"</span><span class="p">,</span><span class="w">
-              </span><span class="nt">"vulnerable"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-            </span><span class="p">}</span><span class="w">
-          </span><span class="p">}</span><span class="w">
-        </span><span class="p">]</span><span class="w">
-      </span><span class="p">}</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-  </span><span class="p">]</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-
-<p>You can also inspect or delete any server with an agent on it via the API.</p>
-
-<p>Our API fully supports <strong>Ruby</strong>, <strong>Ubuntu</strong>, and <strong>CentOS 7</strong>! Learn more about how to use it by visiting <a href="https://appcanary.com/docs">the docs page</a>.</p>
-
-<p>You can <a href="https://appcanary.com/sign_up">sign up</a> for Appcanary to use our APIs today!</p>
-
-</section>
-<footer class='post-meta'>
-<a href='/author/max-veytsman.html'>Max Veytsman</a>
-on <a href='/tag/announcements.html'>Announcements</a>, <a href='/tag/product.html'>Product</a>
-<time class='post-date' datetime='2016-04-06'>
-06 April 2016
-</time>
-</footer>
-</article>
 <nav class='pagination' role='pagination'>
-<span class='page-number'>Page 1 of 2</span>
+<span class='page-number'>Page 1 of 3</span>
 <a class="older-posts" href="page/2/">Older Posts →</a>
 </nav>
 

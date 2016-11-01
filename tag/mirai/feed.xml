@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Appcanary: mirai</title>
+  <subtitle>Posts tagged with mirai</subtitle>
+  <id>http://blog.appcanary.com</id>
+  <link href="http://blog.appcanary.com"/>
+  <link href="http://blog.appcanary.com/tag/mirai/feed.xml" rel="self"/>
+  <updated>2016-10-30T20:00:00-04:00</updated>
+  <entry>
+    <title>The Mirai Botnet is Proof the Security Industry is Broken</title>
+    <link rel="alternate" href="http://blog.appcanary.com/2016/mirai-botnet-security-broken.html"/>
+    <id>http://blog.appcanary.com/2016/mirai-botnet-security-broken.html</id>
+    <published>2016-10-30T20:00:00-04:00</published>
+    <updated>2016-10-31T23:21:35-04:00</updated>
+    <author>
+      <name>Max Veytsman</name>
+    </author>
+    <content type="html">&lt;p&gt;Last Friday, my workday was rudely interrupted because I couldn&amp;rsquo;t access Github.
+To add insult to injury I couldn&amp;rsquo;t even complain about it on Twitter. I tried to
+drown my sorrows by listening to moody Leonard Cohen songs on Spotify, but
+alas&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;You&amp;rsquo;ve probably heard of this. Huge tracts of the Internet were down because the DNS provider Dyn 
+faced a massive Denial of Service attack from the
+&lt;a href="https://krebsonsecurity.com/2016/10/hacked-cameras-dvrs-powered-todays-massive-internet-outage/"&gt;Mirai botnet&lt;/a&gt;, 
+which takes advantage of Internet of Things devices like cameras and DVRs.&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class="twitter-tweet" data-lang="en"&gt;&lt;p lang="en" dir="ltr"&gt;&amp;ldquo;Oh &amp;amp; also, evil sorcerers crippled our divination network Friday by getting millions of coffee makers &amp;amp; lightswitches to shout real loud&amp;rdquo; &lt;a href="https://t.co/OPhdOJLwc1"&gt;https://t.co/OPhdOJLwc1&lt;/a&gt;&lt;/p&gt;&amp;mdash; Max Gladstone (@maxgladstone) &lt;a href="https://twitter.com/maxgladstone/status/790890882543288320"&gt;October 25, 2016&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src="//platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;h3&gt;So, what&amp;rsquo;s new about Mirai?&lt;/h3&gt;
+
+&lt;p&gt;I&amp;rsquo;ve written about
+1988&amp;rsquo;s &lt;a href="https://blog.appcanary.com/2016/tale-of-two-worms.html"&gt;Morris worm&lt;/a&gt;, 
+and I wanted to dig into the
+&lt;a href="https://github.com/jgamblin/Mirai-Source-Code"&gt;source&lt;/a&gt; of the Mirai botnet
+(helpfully published by the author) to see how far we&amp;rsquo;ve come along in the past
+28 years.&lt;/p&gt;
+
+&lt;p&gt;Can you guess how Mirai spreads? &lt;/p&gt;
+
+&lt;p&gt;Was there new zeroday in the devices? Hey, maybe there was an old, unpatched
+vulnerability hanging &amp;mdash; who has time to apply software updates to their toaster? 
+Maybe it was HeartBleed 👻?&lt;/p&gt;
+
+&lt;p&gt;Nope.&lt;/p&gt;
+
+&lt;p&gt;Mirai does one, and only one thing in order to break into new devices: it cycles through a bunch of default
+username/password combinations over telnet, like &amp;ldquo;admin/admin&amp;rdquo; and &amp;ldquo;root/realtek&amp;rdquo;. For a
+laugh, &amp;ldquo;mother/fucker&amp;rdquo; is in there too.&lt;/p&gt;
+
+&lt;p&gt;Default credentials. Over telnet. That&amp;rsquo;s how you get hundreds of thousands of
+&lt;a href="http://dyn.com/blog/dyn-analysis-summary-of-friday-october-21-attack/"&gt;devices&lt;/a&gt;.
+The Morris worm from 1988 tried a dictionary password attack too, but only after
+its buffer overflow and sendmail backdoor exploits failed. &lt;/p&gt;
+
+&lt;p&gt;Oh, and Morris&amp;rsquo; password dictionary was larger, too.&lt;/p&gt;
+
+&lt;h3&gt;How do we keep getting this wrong?&lt;/h3&gt;
+
+&lt;p&gt;Around the world, we spend $75 billion a year on information security.
+And for what, when we keep getting such basic things wrong? Suppose I waved a
+magic wand and cut the worldwide security budget in half. Would things really be
+that much worse? The security industry is addicted to selling expensive
+complicated products instead of doing the basics well. &lt;/p&gt;
+
+&lt;p&gt;I was at a security conference the other week, and there was yet another crop of
+cyberapocalypse talks. The Internet of Things is a garbage fire. Industrial control
+systems are going to get us all killed. Users are clicking phishing links like
+sheep. We&amp;rsquo;re all doomed. And somehow, it&amp;rsquo;s always the fault of shitty
+programmers or dumb users. Let&amp;rsquo;s all laugh at their fails.&lt;/p&gt;
+
+&lt;h3&gt;It&amp;rsquo;s all bullshit.&lt;/h3&gt;
+
+&lt;p&gt;We sell biometric authentication systems to people who need a good password
+manager. We sell live threat attribution intelligence with colorful maps to
+people who need to practice configuration management. We sell advanced
+in-cpu sandbox endpoint protection to people who need to institute a patching program.
+There&amp;rsquo;s a reason why security practitioners get such a kick out of
+&lt;a href="https://threatbutt.com/"&gt;ThreatButt&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;There are lots of real, important, conceptually difficult problems in
+security. We don&amp;rsquo;t really know how to write secure code, and it&amp;rsquo;s all too
+easy to get socially engineered. But, right now, the vast majority of threats can be thwarted by &lt;b&gt;the basics&lt;/b&gt;:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Keep your systems patched&lt;/li&gt;
+&lt;li&gt;Keep your systems properly configured.&lt;/li&gt;
+&lt;li&gt;Make sure you have strong passwords and two factor authentication.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Do the basics first. The basics matter. Then you can focus on the Sisyphean
+tasks that remain. Instead, here we are selling fancy bullshit and barely making
+any progress in 28 years. Lots of money in it, though.&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h4&gt;Paying the Bills&lt;/h4&gt;
+
+&lt;p&gt;Surprise, I also sell a security product! But I will say this: Appcanary
+isn&amp;rsquo;t going to protect you from shipping millions of internet-accessible
+cameras with the same password. We won&amp;rsquo;t even protect you from having your DNS
+provider DoSed.&lt;/p&gt;
+
+&lt;p&gt;The major botnet of 2016 is &lt;em&gt;simpler&lt;/em&gt; than the botnet of 1988. There&amp;rsquo;s something
+wrong in how we do security, and at Appcanary, we think it&amp;rsquo;s a complete lack of
+focus on the basics. &lt;/p&gt;
+
+&lt;p&gt;The highest value, easiest thing you can do to improve your security is patch
+known vulnerabilities. Most breaches come from years-old vulnerabilities. &lt;/p&gt;
+
+&lt;p&gt;Our product,
+&lt;a href="https://appcanary.com/?utm_source=blog&amp;amp;utm_medium=web&amp;amp;utm_campaign=broken"&gt;Appcanary&lt;/a&gt;,
+monitors your apps and servers, and notifies you whenever a new vulnerability is
+discovered in a package you rely on.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://appcanary.com/sign_up?utm_source=blog&amp;amp;utm_medium=web&amp;amp;utm_campaign=broken"&gt;Sign up&lt;/a&gt; today!&lt;/p&gt;
+</content>
+  </entry>
+</feed>

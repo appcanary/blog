@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Appcanary: botnet</title>
+<meta content='&lt;a href="https://appcanary.com"&gt;Appcanary&lt;/a&gt; makes sure you never run vulnerable software in your apps.&lt;br/&gt;Subscribe to our &lt;a href="https://appcanary.us10.list-manage.com/subscribe?u=303b378f377508300c0b5469a&amp;id=dc58e8f56f"&gt;newsletter&lt;/a&gt;!' name='description'>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1.0' name='viewport'>
+<meta content='IE=edge' http-equiv='X-UA-Compatible'>
+<meta content='True' name='HandheldFriendly'>
+<meta content='Appcanary' property='og:site_name'>
+<meta content='website' property='og:type'>
+<meta content='botnet' property='og:title'>
+<meta content='&lt;a href="https://appcanary.com"&gt;Appcanary&lt;/a&gt; makes sure you never run vulnerable software in your apps.&lt;br/&gt;Subscribe to our &lt;a href="https://appcanary.us10.list-manage.com/subscribe?u=303b378f377508300c0b5469a&amp;id=dc58e8f56f"&gt;newsletter&lt;/a&gt;!' property='og:description'>
+<meta content='http://blog.appcanary.com/tag/botnet.html' property='og:url'>
+<meta content='http://blog.appcanary.com/images/appcanary.png' property='og:image'>
+<meta content='summary' name='twitter:card'>
+<meta content='botnet' name='twitter:title'>
+<meta content='&lt;a href="https://appcanary.com"&gt;Appcanary&lt;/a&gt; makes sure you never run vulnerable software in your apps.&lt;br/&gt;Subscribe to our &lt;a href="https://appcanary.us10.list-manage.com/subscribe?u=303b378f377508300c0b5469a&amp;id=dc58e8f56f"&gt;newsletter&lt;/a&gt;!' name='twitter:description'>
+<meta content='http://blog.appcanary.com/tag/botnet.html' name='twitter:url'>
+<meta content='http://blog.appcanary.com/images/appcanary.png' name='twitter:image:src'>
+<link rel="alternate" type="application/atom+xml" title="Atom Feed" href="/feed.xml" />
+<link href="/images/favicon.ico" rel="icon" type="image/ico" />
+<link href="../stylesheets/application.css" rel="stylesheet" />
+<script src="//use.typekit.net/dkz5zwp.js"></script>
+<script>try{Typekit.load({ async: false });}catch(e){}</script>
+
+</head>
+<body class='post-template home-post-template nav-closed'>
+<div class='topbar'></div>
+<div class='nav'>
+<h3 class='nav-title'>Menu</h3>
+<a class='nav-close' href='#'>
+<span class='hidden'>Close</span>
+</a>
+<ul>
+<li class='nav-home' role='presentation'>
+<a href='/'>Home</a>
+</li>
+<li class='nav-archive' role='presentation'>
+<a href='archive.html'>Archive</a>
+</li>
+<li class='nav-github' role='presentation'>
+<a href='https://github.com/appcanary'>Github</a>
+</li>
+</ul>
+<a class='subscribe-button icon-feed' href='/tag/botnet.htmlfeed.xml'>Subscribe</a>
+</div>
+<span class='nav-cover'></span>
+
+<div class='site-wrapper'>
+<header class='main-header no-cover tag-head'>
+<nav class='main-nav overlay clearfix'>
+<a class='blog-logo' href='/'>
+<img alt="Appcanary" src="../images/appcanary.png" />
+</a>
+</nav>
+<div class='vertical'>
+<div class='main-header-content inner'>
+<h1 class='page-title'>botnet</h1>
+<h2 class='page-description'>A 1-post collection</h2>
+</div>
+</div>
+</header>
+<main class='content' id='content' role='main'>
+<div class='extra-pagination inner'>
+<nav class='pagination' role='pagination'>
+<span class='page-number'>Page 1 of 1</span>
+</nav>
+
+</div>
+<article class='post'>
+<header class='post-header'>
+<h1 class='post-title'><a href="../2016/mirai-botnet-security-broken.html">The Mirai Botnet is Proof the Security Industry is Broken</a></h1>
+<section class='post-meta'>
+</section>
+</header>
+<section class='post-content'>
+<p>Last Friday, my workday was rudely interrupted because I couldn&rsquo;t access Github.
+To add insult to injury I couldn&rsquo;t even complain about it on Twitter. I tried to
+drown my sorrows by listening to moody Leonard Cohen songs on Spotify, but
+alas&hellip;</p>
+
+<p>You&rsquo;ve probably heard of this. Huge tracts of the Internet were down because the DNS provider Dyn 
+faced a massive Denial of Service attack from the
+<a href="https://krebsonsecurity.com/2016/10/hacked-cameras-dvrs-powered-todays-massive-internet-outage/">Mirai botnet</a>, 
+which takes advantage of Internet of Things devices like cameras and DVRs.</p>
+
+<p><blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">&ldquo;Oh &amp; also, evil sorcerers crippled our divination network Friday by getting millions of coffee makers &amp; lightswitches to shout real loud&rdquo; <a href="https://t.co/OPhdOJLwc1">https://t.co/OPhdOJLwc1</a></p>&mdash; Max Gladstone (@maxgladstone) <a href="https://twitter.com/maxgladstone/status/790890882543288320">October 25, 2016</a></blockquote>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script></p>
+
+<h3>So, what&rsquo;s new about Mirai?</h3>
+
+<p>I&rsquo;ve written about
+1988&rsquo;s <a href="https://blog.appcanary.com/2016/tale-of-two-worms.html">Morris worm</a>, 
+and I wanted to dig into the
+<a href="https://github.com/jgamblin/Mirai-Source-Code">source</a> of the Mirai botnet
+(helpfully published by the author) to see how far we&rsquo;ve come along in the past
+28 years.</p>
+
+<p>Can you guess how Mirai spreads? </p>
+
+<p>Was there new zeroday in the devices? Hey, maybe there was an old, unpatched
+vulnerability hanging &mdash; who has time to apply software updates to their toaster? 
+Maybe it was HeartBleed 👻?</p>
+
+<p>Nope.</p>
+
+<p>Mirai does one, and only one thing in order to break into new devices: it cycles through a bunch of default
+username/password combinations over telnet, like &ldquo;admin/admin&rdquo; and &ldquo;root/realtek&rdquo;. For a
+laugh, &ldquo;mother/fucker&rdquo; is in there too.</p>
+
+<p>Default credentials. Over telnet. That&rsquo;s how you get hundreds of thousands of
+<a href="http://dyn.com/blog/dyn-analysis-summary-of-friday-october-21-attack/">devices</a>.
+The Morris worm from 1988 tried a dictionary password attack too, but only after
+its buffer overflow and sendmail backdoor exploits failed. </p>
+
+<p>Oh, and Morris&rsquo; password dictionary was larger, too.</p>
+
+<h3>How do we keep getting this wrong?</h3>
+
+<p>Around the world, we spend $75 billion a year on information security.
+And for what, when we keep getting such basic things wrong? Suppose I waved a
+magic wand and cut the worldwide security budget in half. Would things really be
+that much worse? The security industry is addicted to selling expensive
+complicated products instead of doing the basics well. </p>
+
+<p>I was at a security conference the other week, and there was yet another crop of
+cyberapocalypse talks. The Internet of Things is a garbage fire. Industrial control
+systems are going to get us all killed. Users are clicking phishing links like
+sheep. We&rsquo;re all doomed. And somehow, it&rsquo;s always the fault of shitty
+programmers or dumb users. Let&rsquo;s all laugh at their fails.</p>
+
+<h3>It&rsquo;s all bullshit.</h3>
+
+<p>We sell biometric authentication systems to people who need a good password
+manager. We sell live threat attribution intelligence with colorful maps to
+people who need to practice configuration management. We sell advanced
+in-cpu sandbox endpoint protection to people who need to institute a patching program.
+There&rsquo;s a reason why security practitioners get such a kick out of
+<a href="https://threatbutt.com/">ThreatButt</a>.</p>
+
+<p>There are lots of real, important, conceptually difficult problems in
+security. We don&rsquo;t really know how to write secure code, and it&rsquo;s all too
+easy to get socially engineered. But, right now, the vast majority of threats can be thwarted by <b>the basics</b>:</p>
+
+<ol>
+<li>Keep your systems patched</li>
+<li>Keep your systems properly configured.</li>
+<li>Make sure you have strong passwords and two factor authentication.</li>
+</ol>
+
+<p>Do the basics first. The basics matter. Then you can focus on the Sisyphean
+tasks that remain. Instead, here we are selling fancy bullshit and barely making
+any progress in 28 years. Lots of money in it, though.</p>
+
+<hr>
+
+<h4>Paying the Bills</h4>
+
+<p>Surprise, I also sell a security product! But I will say this: Appcanary
+isn&rsquo;t going to protect you from shipping millions of internet-accessible
+cameras with the same password. We won&rsquo;t even protect you from having your DNS
+provider DoSed.</p>
+
+<p>The major botnet of 2016 is <em>simpler</em> than the botnet of 1988. There&rsquo;s something
+wrong in how we do security, and at Appcanary, we think it&rsquo;s a complete lack of
+focus on the basics. </p>
+
+<p>The highest value, easiest thing you can do to improve your security is patch
+known vulnerabilities. Most breaches come from years-old vulnerabilities. </p>
+
+<p>Our product,
+<a href="https://appcanary.com/?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=broken">Appcanary</a>,
+monitors your apps and servers, and notifies you whenever a new vulnerability is
+discovered in a package you rely on.</p>
+
+<p><a href="https://appcanary.com/sign_up?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=broken">Sign up</a> today!</p>
+
+</section>
+<footer class='post-meta'>
+<a href='/author/max-veytsman.html'>Max Veytsman</a>
+on <a href='/tag/security.html'>security</a>, <a href='/tag/mirai.html'>mirai</a>, <a href='/tag/botnet.html'>botnet</a>
+<time class='post-date' datetime='2016-10-31'>
+31 October 2016
+</time>
+</footer>
+</article>
+<nav class='pagination' role='pagination'>
+<span class='page-number'>Page 1 of 1</span>
+</nav>
+
+
+</main>
+
+<footer class='site-footer clearfix'>
+<section class='copyright'>
+<a href='/'>Appcanary</a>
+&copy;
+2016
+</section>
+<section class='poweredby'>
+</section>
+</footer>
+</div>
+<script src="../javascripts/application.js"></script>
+<script type="text/javascript">
+ /* <![CDATA[ */
+ var google_conversion_id = 928841383;
+ var google_custom_params = window.google_tag_params;
+ var google_remarketing_only = true;
+ /* ]]> */
+</script>
+
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+<noscript>
+    <div style="display:inline;">
+        <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/928841383/?value=0&amp;guid=ON&amp;script=0"/>
+    </div>
+</noscript>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61163522-3', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+<!-- Twitter universal website tag code -->
+<script>
+ !function(e,n,u,a){e.twq||(a=e.twq=function(){a.exe?a.exe.apply(a,arguments):
+                                               a.queue.push(arguments);},a.version='1',a.queue=[],t=n.createElement(u),
+                            t.async=!0,t.src='//static.ads-twitter.com/uwt.js',s=n.getElementsByTagName(u)[0],
+                            s.parentNode.insertBefore(t,s))}(window,document,'script');
+ // Insert Twitter Pixel ID and Standard Event data below
+ twq('init','nve06');
+ twq('track','PageView');
+</script>
+<!-- End Twitter universal website tag code -->
+
+</body>
+</html>

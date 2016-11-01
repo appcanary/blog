@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Appcanary</title>
+<title>Appcanary: Ubuntu Hardening Guide</title>
 <meta content='&lt;a href="https://appcanary.com"&gt;Appcanary&lt;/a&gt; makes sure you never run vulnerable software in your apps.&lt;br/&gt;Subscribe to our &lt;a href="https://appcanary.us10.list-manage.com/subscribe?u=303b378f377508300c0b5469a&amp;id=dc58e8f56f"&gt;newsletter&lt;/a&gt;!' name='description'>
 <meta charset='utf-8'>
 <meta content='width=device-width, initial-scale=1.0' name='viewport'>
@@ -9,16 +9,18 @@
 <meta content='True' name='HandheldFriendly'>
 <meta content='Appcanary' property='og:site_name'>
 <meta content='website' property='og:type'>
+<meta content='Ubuntu Hardening Guide' property='og:title'>
 <meta content='&lt;a href="https://appcanary.com"&gt;Appcanary&lt;/a&gt; makes sure you never run vulnerable software in your apps.&lt;br/&gt;Subscribe to our &lt;a href="https://appcanary.us10.list-manage.com/subscribe?u=303b378f377508300c0b5469a&amp;id=dc58e8f56f"&gt;newsletter&lt;/a&gt;!' property='og:description'>
-<meta content='http://blog.appcanary.com/author/phillip-mendonca-vieira.html' property='og:url'>
+<meta content='http://blog.appcanary.com/drafts/ubuntu-hardening' property='og:url'>
 <meta content='http://blog.appcanary.com/images/appcanary.png' property='og:image'>
 <meta content='summary' name='twitter:card'>
+<meta content='Ubuntu Hardening Guide' name='twitter:title'>
 <meta content='&lt;a href="https://appcanary.com"&gt;Appcanary&lt;/a&gt; makes sure you never run vulnerable software in your apps.&lt;br/&gt;Subscribe to our &lt;a href="https://appcanary.us10.list-manage.com/subscribe?u=303b378f377508300c0b5469a&amp;id=dc58e8f56f"&gt;newsletter&lt;/a&gt;!' name='twitter:description'>
-<meta content='http://blog.appcanary.com/author/phillip-mendonca-vieira.html' name='twitter:url'>
+<meta content='http://blog.appcanary.com/drafts/ubuntu-hardening' name='twitter:url'>
 <meta content='http://blog.appcanary.com/images/appcanary.png' name='twitter:image:src'>
 <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="/feed.xml" />
 <link href="/images/favicon.ico" rel="icon" type="image/ico" />
-<link href="../stylesheets/application.css" rel="stylesheet" />
+<link href="/stylesheets/application.css" rel="stylesheet" />
 <script src="//use.typekit.net/dkz5zwp.js"></script>
 <script>try{Typekit.load({ async: false });}catch(e){}</script>
 
@@ -46,59 +48,20 @@
 <span class='nav-cover'></span>
 
 <div class='site-wrapper'>
-<header class='main-header no-cover'>
-<nav class='main-nav overlay clearfix'>
+<header class='main-header no-cover post-head'>
+<nav class='main-nav clearfix'>
+<a class='blog-logo' href='/'>
+<img alt="Appcanary" src="/images/appcanary.png" />
+</a>
 </nav>
-<div class='vertical'>
-<div class='main-header-content inner'>
-<a class='appcanary-logo' href='/'>
-<img alt="Appcanary" src="../images/appcanary.png" />
-</a>
-<h2 class='page-description'><a href="https://appcanary.com">Appcanary</a> makes sure you never run vulnerable software in your apps.<br/>Subscribe to our <a href="https://appcanary.us10.list-manage.com/subscribe?u=303b378f377508300c0b5469a&id=dc58e8f56f">newsletter</a>!</h2>
-<div class='more-icons'>
-<a alt='Twitter' href='https://twitter.com/appcanary' title='Twitter'>
-<i class='fa fa-twitter-square'></i>
-</a>
-<a alt='Github' href='https://github.com/appcanary' title='Github'>
-<i class='fa fa-github-square'></i>
-</a>
-<a alt='Archive' href='/archive.html' title='Archive'>
-<i class='fa fa-archive'></i>
-</a>
-<a alt='Feed' href='/feed.xml' title='Feed'>
-<i class='fa fa-rss-square'></i>
-</a>
-</div>
-</div>
-</div>
-<a class='scroll-down icon-arrow-left' data-offset='-45' href='#content'>
-<span class='hidden'>Scroll Down</span>
-</a>
 </header>
-
-<section class='author-profile inner'>
-<h1 class='author-title'>Phillip Mendonça-Vieira</h1>
-<div class='author-meta'>
-<span class='author-stats'>
-<i class='icon-stats'></i>
-1 post
-</span>
-</div>
-</section>
-<main class='content' id='content' role='main'>
-<div class='extra-pagination inner'>
-<nav class='pagination' role='pagination'>
-<span class='page-number'>Page 1 of 3</span>
-<a class="older-posts" href="phillip-mendonca-vieira/page/2.html">Older Posts →</a>
-</nav>
-
-</div>
-<nav class='pagination' role='pagination'>
-<span class='page-number'>Page 1 of 3</span>
-<a class="older-posts" href="phillip-mendonca-vieira/page/2.html">Older Posts →</a>
-</nav>
-
-
+<main class='content' role='main'>
+<article class='post'>
+<header class='post-header'>
+<h1 class='post-title'>Ubuntu Hardening Guide</h1>
+</header>
+<section class='post-content'></section>
+</article>
 </main>
 
 <footer class='site-footer clearfix'>
@@ -111,7 +74,7 @@
 </section>
 </footer>
 </div>
-<script src="../javascripts/application.js"></script>
+<script src="/javascripts/application.js"></script>
 <script type="text/javascript">
  /* <![CDATA[ */
  var google_conversion_id = 928841383;
