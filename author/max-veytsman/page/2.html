@@ -92,378 +92,597 @@
 <div class='extra-pagination inner'>
 <nav class='pagination' role='pagination'>
 <a class="newer-posts" href="../../max-veytsman.html">← Newer Posts</a>
-<span class='page-number'>Page 2 of 3</span>
-<a class="older-posts" href="3.html">Older Posts →</a>
+<span class='page-number'>Page 2 of 2</span>
 </nav>
 
 </div>
 <article class='post'>
 <header class='post-header'>
-<h1 class='post-title'><a href="../../../2016/two-new-apis.html">Two new APIs from Appcanary</a></h1>
+<h1 class='post-title'><a href="../../../2016/vikhal-symantec.html">Vulnerabilities I Have Known and Loved #1: Symantec's Bad Week</a></h1>
 <section class='post-meta'>
 </section>
 </header>
 <section class='post-content'>
-<p>After the success of our <a href="http://blog.appcanary.com/2016/new-api-centos-support.html">check</a> API, we found that our users told us:</p>
+<p><strong>tl;dr:</strong> If you use software with &ldquo;Symantec&rdquo; or &ldquo;Norton&rdquo; somewhere in its name, <strong>stop what you&rsquo;re doing and <a href="https://www.symantec.com/support-center/upgrades">upgrade</a></strong>.</p>
+
+<p>Back in my security consulting days, a mentor taught me One Weird Trick to
+increase conversions on your phishing campaign.  It goes like this: set up an email server, get as many employee addresses you can find, and spoof a mass message that reads:</p>
 
 <blockquote>
-<p>&ldquo;I love your API so much! But can I use it register the packages my app uses and get emailed if new vulnerabilities that affect me come out? Oh, and it would be nice if I could pragmatically query the servers I have agents running on too!&rdquo;</p>
+<p>Hello this is your boss. </p>
+
+<p>I&rsquo;m going to fire someone next week and you get to vote on who! To get your arch-nemisis fired, please log into this website that looks exactly like our company portal, but has one character in the domain name mispelled. </p>
+
+<p>Thanks, Your Boss.</p>
 </blockquote>
 
-<p>So we went ahead and built both.</p>
+<p>Then you sit back and count how many people fell for it.</p>
 
-<h2>The Monitor API</h2>
+<p>The executive who hired you is happy because they get to demonstrate the value of increasing their
+security budget. The consultancy you work for is happy, because they get to upsell a bunch of &ldquo;security awareness
+training&rdquo;. </p>
 
-<p>The &ldquo;Monitor&rdquo; API lets you register a Gemfile or an Ubuntu/CentOS package list to be emailed when new vulnerabilities are discovered. It like what our agent does, but in situations where it doesn&rsquo;t make sense like when you use Docker or deploy on a PaaS like Heroku.</p>
+<p>Soon, you&rsquo;ll be spending three days telling your victims about the
+importance of that little green lock in their browser&rsquo;s address bar (but only
+when it&rsquo;s in the right place!) and that they should never ever click on links,
+never open attachments, and if at all possible, stop using computers altogether. Everybody wins.</p>
 
-<p>You can register a new monitor by:</p>
-<pre class="highlight shell"><code>curl -H <span class="s2">"Authorization: Token YOURTOKENHERE"</span> <span class="se">\</span>
-     -X POST -F <span class="nv">file</span><span class="o">=</span>@./Gemfile.lock <span class="se">\</span>
-     https://appcanary.com/api/v2/monitors/my-great-app?platform<span class="o">=</span>ruby
+<p>Obviously, everyone at this stage wants to increase the conversion rate<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup> of these phishing emails. This is where The One Weird Trick comes in: after you send out your first campaign, you craft another one. Before you know it, everyone on your list receives a helpful tip from the IT Helpdesk:</p>
+
+<blockquote>
+<p>Hi, </p>
+
+<p>We&rsquo;ve heard reports of a phishing campaign being waged against us. Don&rsquo;t open those emails! It&rsquo;s critically important that you reset your password to protect against those evil hackers who tried to phish us. </p>
+
+<p>Click here to do it!</p>
+</blockquote>
+
+<p>It turns out that round two gets <em>way</em> more clicks than round one. Most people will figure out that email #1 is a little fishy. Email #2 manages to reaffirm that, and so they dutifully click, like lambs to slaughter.</p>
+
+<p>This is the phishing equivalent of the Double Tap. No, not the one from <a href="https://www.youtube.com/watch?v=w4sWxsrEFFs">Zombieland</a>. The Double Tap I&rsquo;m talking about is a controversial <a href="http://www.businessinsider.com/drone-double-tap-first-responders-2012-9">military technique</a> where after attacking a target, you follow up by sending another missile at the first responders. You do some damage, and then attack the response to that damage.</p>
+
+<h3>Symantec is Having a Bad Week</h3>
+
+<p>Last week <a href="https://twitter.com/taviso">Tavis Ormandy</a> dropped 8 vulns against every single Symantec/Norton antivirus product. Judging by <a href="http://fortune.com/2016/07/02/symantec-security-irony/">the press</a>, things are <a href="http://www.pcworld.com/article/3089463/security/wormable-flaws-in-symantec-products-expose-millions-of-computers-to-hacking.html">not looking good</a> for them.</p>
+
+<p>You can find a writeup up on the <a href="http://googleprojectzero.blogspot.ca/2016/06/how-to-compromise-enterprise-endpoint.html">Google Project Zero
+blog</a>, and the issues for all 8 vulnerabilities can <a href="https://bugs.chromium.org/p/project-zero/issues/list?can=1&amp;q=label%3AVendor-Symantec">be found here</a>. They&rsquo;re all remotely exploitable,<sup id="fnref2"><a href="#fn2" rel="footnote">2</a></sup> and they all should give an attacker remote code execution as root/SYSTEM (and in ring 0 for one of them to boot!)</p>
+
+<p>If you&rsquo;re using a Symantec product I can&rsquo;t stress this enough: <strong>stop what you&rsquo;re doing and <a href="https://www.symantec.com/support-center/upgrades">upgrade</a></strong>.</p>
+
+<p>These vulnerabilities reminded me of phishing and the Double Tap for two reasons. First, every one of these vulns can be exploited by just sending an email. Since the product is an antivirus, so it&rsquo;s going to scan every file that touches your disk and every email you get for viruses. You don&rsquo;t have to get your target to click a link or even open the message you sent &mdash; Symantec will happily try to parse every email you receive. </p>
+
+<p>Second, the <a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=823&amp;can=1&amp;q=label%3AVendor-Symantec">stack overflow in Symantec&rsquo;s PowerPoint parser</a> depends on a Double Tap-like attack! This parser is used to extract metadata and macros from PowerPoint decks (and presumably scan them for known malware) by exposing an I/O abstraction layer &mdash; which it then caches for performance. Tavis found that he could get that cache into a misaligned state, which resulted in the stack buffer overflow. </p>
+
+<p>This vulnerable codepath is in something called “Bloodhound Heuristics”, which Symantec promotes as a more advanced set of malware detection checks. Since they&rsquo;re not always run, you&rsquo;d think that the vulnerability wouldn&rsquo;t be very exploitable. And yet, it can be targetted every time! Under the default configuration, the system dynamically decides which set of checks to run. All Tavis had to do was try a bunch of known PowerPoint malware, see which one triggered the automatic mode to turn on &ldquo;Bloodhound Heuristics,&rdquo; and put his payload into them.</p>
+
+<p>The exploit pretends to be a certain kind of known malware in order to trigger some special aggressive checks, which are the exploit&rsquo;s true target. The Double Tap!</p>
+
+<h3>Vulnerability Management</h3>
+
+<p>While the above vulnerability is pretty cool, the Symantec bugs that are most interesting to us at Appcanary are <a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=810">CVE-2016-2207</a> and <a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=816">CVE-2016-2211</a>. </p>
+
+<p>Symantec was shipping its product with out of date versions of <a href="http://www.cabextract.org.uk/libmspack/">libmspack</a> and <a href="http://www.rarlab.com/rar_add.htm">unrarsrc</a>. Out of date versions that have dozens of known vulnerabilities with public exploits! All Tavis had to do was download public exploits for these known vulnerabilities, and he had an attack against Symantec.</p>
+
+<p>Ironically, Symantec sells a product called Enterprise Vulnerability Management! This is a hard problem for everyone. At Appcanary, we&rsquo;re working on solving it.</p>
+
+<h3>P.S.</h3>
+
+<p><link href="//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+ #mc<em>embed</em>signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; width:100%;}
+ /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+      We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+</style>
+<div id="mc_embed_signup">
+<form action="//appcanary.us10.list-manage.com/subscribe/post?u=303b378f377508300c0b5469a&amp;id=dc58e8f56f" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+<div id="mc_embed_signup_scroll">
+<label for="mce-EMAIL">Liked this post? Subscribe to our newsletter for more!</label>
+<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+<div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_303b378f377508300c0b5469a_dc58e8f56f" tabindex="-1" value=""></div>
+<div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+</div>
+</form>
+</div></p>
+
+<p>Do you have suggestions for vulnerabilities you&rsquo;d like me to write about? You can let me know at <a href="mailto:max@appcanary.com">max@appcanary.com</a>.</p>
+
+<hr>
+
+<h4>Paying the Bills</h4>
+
+<p>One quarter of the critical vulnerabilities found in Symantec&rsquo;s products last week were there because they relied on out-of-date libraries with known security holes.</p>
+
+<p>Our product, <a href="https://appcanary.com/?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=symantec">Appcanary</a>, monitors your apps and servers, and notifies you whenever a new vulnerability is discovered in a package you rely on. </p>
+
+<p><a href="https://appcanary.com/sign_up?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=symantec">Sign up</a> today!</p>
+
+<div class="footnotes">
+<hr>
+<ol>
+
+<li id="fn1">
+<p>You know, it&rsquo;s interesting that before I became the CEO of a startup, the only time I thought about &ldquo;conversion rates&rdquo; of emails in my career was when I was involved in phishing campaigns.&nbsp;<a href="#fnref1" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn2">
+<p>I&rsquo;m going to well-actually myself here so you don&rsquo;t have to. Tavis gives a clear path to exploit for 6 of the 8. Of the two that are left, <a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=821">one</a> is a lack of bounds checking on an array index, and the <a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=819">other</a> is an integer overflow bug. I&rsquo;m going to go out on a limb and say I think both can lead to code execution. I can&rsquo;t fault the researcher for not going further though; after you find the first 6 remote code executions, you stop feeling the need to keep proving the point&hellip;&nbsp;<a href="#fnref2" rev="footnote">&#8617;</a></p>
+</li>
+
+</ol>
+</div>
+
+</section>
+<footer class='post-meta'>
+<a href='/author/max-veytsman.html'>Max Veytsman</a>
+on <a href='/tag/vihkal.html'>vihkal</a>, <a href='/tag/security.html'>security</a>
+<time class='post-date' datetime='2016-07-07'>
+07 July 2016
+</time>
+</footer>
+</article>
+<article class='post'>
+<header class='post-header'>
+<h1 class='post-title'><a href="../../../2016/making-appcanary-easier.html">Making Appcanary easier to use</a></h1>
+<section class='post-meta'>
+</section>
+</header>
+<section class='post-content'>
+<p>I&rsquo;m excited to announce that we&rsquo;ve added two features that make Appcanary a heck of a lot easier to use!</p>
+
+<h2>Add monitors by uploading a file</h2>
+
+<p>Our Monitor API is great if you want to track a set of Linux packages or your Gemfile. We give you a dashboard showing which packages are vulnerable, and email you whenever new vulnerabilities that affect you come out. However, there&rsquo;s always a bunch of setup to get a new API going.</p>
+
+<p>With that in mind, we made the interface a lot more user friendly! You can now upload a file to watch directly through the website. Just go to <a href="https://appcanary.com/monitors/new">add monitors</a> to be able to upload a file directly. Monitors support Ruby&rsquo;s <code>Gemfile.lock</code>, <code>/var/lib/dpkg/status</code> for Ubuntu and Debian, and the output of <code>rpm -qa</code> for Centos and Amazon Linux!</p>
+
+<h2>Automatically upgrade vulnerable packages</h2>
+
+<p>A few of our customers told us that knowing about vulnerabilities is nice, but you know what would be <em>great</em>? If we could somehow <em>patch</em> them automatically. We thought about it and said, sure, why not!</p>
+
+<p>If you have the Appcanary <a href="(https://appcanary.com/servers/new)">agent</a> installed on an Ubuntu server, and you&rsquo;re running the latest version, you can run </p>
+<pre class="highlight plaintext"><code>appcanary upgrade
 </code></pre>
 
-<p>and you&rsquo;ll get a response like:</p>
-<pre class="highlight json"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"monitor"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"attributes"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"my-server"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"uuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"56eac124-35c2-49bd-ab02-45de56c03ef4"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"vulnerable"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-  </span><span class="p">}</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
+<p>in order to install updates for any packages we know to be vulnerable.</p>
 
-<p>And, you&rsquo;ll be emailed about any vulnerabilities that affect your app as soon as we find out about them!</p>
+<p>You can also run</p>
+<pre class="highlight plaintext"><code>appcanary upgrade -dry-run
+</code></pre>
 
-<p>You can also list, inspect, or delete monitors via the API. More information <a href="https://appcanary.com/docs#create-monitor">here</a>.</p>
+<p>in order to see what the agent will do, without it actually touching your system. </p>
 
-<h2>The Server API</h2>
+<p>Now you can manage vulnerabilities, learn about new ones that affect you, and apply patches, all through Appcanary!</p>
 
-<p>The &ldquo;Server&rdquo; API allows you to navigate the servers you have the Appcanary agent running on via API, and list any vulnerabilities that affect them!</p>
+<h4>If you haven&rsquo;t tried us yet</h4>
 
-<p>I can see the servers I have agents running on with:
-<code>bash
-curl -H &quot;Authorization: Token YOURTOKENHERE&quot; \
-      https://appcanary.com/api/v2/servers
-</code></p>
+<p>Stay on top of the security vulnerabilities that affect you, today.</p>
 
-<p>and you&rsquo;ll get a response like:</p>
-<pre class="highlight json"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-    </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"server"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"attributes"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"server1"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"uuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"55a5baeb-2ad4-4787-8784-a062d254900e"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"hostname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"server1"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"last-heartbeat-at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-03-27T03:33:02.185Z"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"vulnerable"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"apps"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-          </span><span class="p">{</span><span class="w">
-            </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"app"</span><span class="p">,</span><span class="w">
-            </span><span class="nt">"attributes"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-              </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
-              </span><span class="nt">"path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/var/lib/dpkg/status"</span><span class="p">,</span><span class="w">
-              </span><span class="nt">"uuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"55a5baec-3e5c-4cca-832c-06aaa36418f6"</span><span class="p">,</span><span class="w">
-              </span><span class="nt">"vulnerable"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-            </span><span class="p">}</span><span class="w">
-          </span><span class="p">},</span><span class="w">
-          </span><span class="p">{</span><span class="w">
-            </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"app"</span><span class="p">,</span><span class="w">
-            </span><span class="nt">"attributes"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-              </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
-              </span><span class="nt">"path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/var/www/myapp/current/Gemfile.lock"</span><span class="p">,</span><span class="w">
-              </span><span class="nt">"uuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"55a5baec-027d-4618-b8de-12638281f34c"</span><span class="p">,</span><span class="w">
-              </span><span class="nt">"vulnerable"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-            </span><span class="p">}</span><span class="w">
-          </span><span class="p">}</span><span class="w">
-        </span><span class="p">]</span><span class="w">
-      </span><span class="p">}</span><span class="w">
-    </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"server"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"attributes"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"server2"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"uuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"560b0e75-1317-481c-98bb-15e6ae5978b6"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"hostname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"database"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"last-heartbeat-at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-03-08T00:21:31.105Z"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"vulnerable"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"apps"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-          </span><span class="p">{</span><span class="w">
-            </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"app"</span><span class="p">,</span><span class="w">
-            </span><span class="nt">"attributes"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-              </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
-              </span><span class="nt">"path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/var/lib/dpkg/status"</span><span class="p">,</span><span class="w">
-              </span><span class="nt">"uuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"560b0e77-0a26-41fd-bc35-38b5aac33709"</span><span class="p">,</span><span class="w">
-              </span><span class="nt">"vulnerable"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-            </span><span class="p">}</span><span class="w">
-          </span><span class="p">}</span><span class="w">
-        </span><span class="p">]</span><span class="w">
-      </span><span class="p">}</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-  </span><span class="p">]</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
+<p><a href="https://appcanary.com/?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=making_easier">Appcanary</a>, monitors your apps and servers, and notifies you whenever a new vulnerability is discovered in a package you rely on. And now it will help you patch vulnerable packages as well.</p>
 
-<p>You can also inspect or delete any server with an agent on it via the API.</p>
-
-<p>Our API fully supports <strong>Ruby</strong>, <strong>Ubuntu</strong>, and <strong>CentOS 7</strong>! Learn more about how to use it by visiting <a href="https://appcanary.com/docs">the docs page</a>.</p>
-
-<p>You can <a href="https://appcanary.com/sign_up">sign up</a> for Appcanary to use our APIs today!</p>
+<p><a href="https://appcanary.com/sign_up?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=making_easier">Sign up</a> today!</p>
 
 </section>
 <footer class='post-meta'>
 <a href='/author/max-veytsman.html'>Max Veytsman</a>
 on <a href='/tag/announcements.html'>Announcements</a>, <a href='/tag/product.html'>Product</a>
-<time class='post-date' datetime='2016-04-06'>
-06 April 2016
+<time class='post-date' datetime='2016-07-14'>
+14 July 2016
 </time>
 </footer>
 </article>
 <article class='post'>
 <header class='post-header'>
-<h1 class='post-title'><a href="../../../2016/new-api-centos-support.html">Hello, new Appcanary API and CentOS support!</a></h1>
+<h1 class='post-title'><a href="../../../2016/tale-of-two-worms.html">A tale of two worms, three vulnerabilities, and one National Security Agency</a></h1>
 <section class='post-meta'>
 </section>
 </header>
 <section class='post-content'>
-<p>A lot of our users have told us, </p>
+<p>Paranoia is natural for security practitioners. </p>
+
+<p>Hacking can feel like being initiated into a secret society of wizards.
+Once you&rsquo;re in, you get access to an
+<a href="https://docs.google.com/presentation/d/1Sv8IHkBtBEXjSW7WktEYg4EbAUHtVyXIZBrAGD3WR5Y/edit?pref=2&pli=1#slide=id.p" target="_blank">addictive drug</a>
+that gives you super powers. But there are other wizards out there; some are good
+but many practice black magic. And the NSA&rsquo;s school of the dark arts has a seemingly
+unlimited budget. </p>
+
+<p>It&rsquo;s natural to get a little paranoid. Experience shows you
+that with the right incantation you can turn crashes into working exploits. It
+follows that every time your computer crashes there could be someone in the
+shadows, chanting the right incantation. The paranoia can be all-consuming;
+just because you&rsquo;re paranoid doesn&rsquo;t mean they&rsquo;re not <a href="http://www.nytimes.com/2011/07/02/opinion/02hotchner.html?_r=0" target="_blank">out to get you</a>.</p>
+
+<p>In October 2013, a well known computer security expert named Dragos Ruiu came
+out with a <a href="http://arstechnica.com/security/2013/10/meet-badbios-the-mysterious-mac-and-pc-malware-that-jumps-airgaps/" target="_blank">story</a>. He found that his computers had been behaving oddly, and that the symptoms he was seeing were impossible to eradicate. This was some kind of worm, since the behavior would
+replicate across <a href="https://en.wikipedia.org/wiki/Air_gap_(networking)" target="_blank">air gapped</a> computers in his lab. He theorized that he
+was infected with a super advanced piece of malware that lived in the BIOS and
+could spread by sending ultrasonic frequencies from speaker to
+microphone, undetectable to the human ear. It looked like
+the work of the NSA or someone equally omnipotent. He dubbed it badBIOS. </p>
+
+<p>Everything Dragos claimed badBIOS could do is at least possible, and most security folks know this. Malware in the BIOS is feasible, and beyond being a <a href="https://www.wired.com/2015/03/researchers-uncover-way-hack-bios-undermine-secure-operating-systems/" target="_blank">research</a> topic, it&rsquo;s something we <a href="https://www.schneier.com/blog/archives/2015/02/the_equation_gr.html" target="_blank">know</a> the <a href="http://www.spiegel.de/international/world/catalog-reveals-nsa-has-back-doors-for-numerous-devices-a-940994.html" target="_blank">NSA does</a>. In fact, because of the hype, <a href="https://github.com/Katee/quietnet" target="_blank">many</a> <a href="https://www.anfractuosity.com/projects/ultrasound-networking/" target="_blank">people</a> developed ultrasound networking libraries just to demonstrate how viable it is. </p>
+
+<p>Dragos Ruiu imaged his computer and made a lot of data available to the
+community for peer review, but unfortunately no credible researcher<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup> has publicly confirmed his findings. Maybe there was something going on. Maybe he was seeing patterns in the noise. Either way, it says something about the world today that when you&rsquo;re a security expert and your computer starts behaving weirdly, the obvious culprit is the NSA.</p>
+
+<p>It made me think of a different worm, from a more innocent time.</p>
+
+<p><img alt="Morris Worm" src="../../../images/morris_worm.jpg" /></p>
+
+<h2>The Morris Worm</h2>
+
+<p>It&rsquo;s November 2nd 1988, almost exactly 25 years before badBIOS became a
+hashtag. Robert Tappan Morris, a graduate student at Cornell, executes some
+code he&rsquo;d been working on and goes to dinner. The aftermath was a
+self-replicating computer worm that infected 10% of the Internet<sup id="fnref2"><a href="#fn2" rel="footnote">2</a></sup> at
+the time &mdash; a whopping 6,000 computers!</p>
+
+<p>Morris claimed that he wrote his program to map the size of the Internet. And
+indeed, each infection would send a byte to a machine in Berkeley
+(hiding the trail to Morris, in Cornell, as the author). Unfortunately,
+there was a bug that caused it to propagate too aggressively: it infected the same
+computer multiple times, which resulted in a denial of service attack across the
+whole Internet. Furthermore, the code to report infections had a bug in it. It tried to
+send a UDP packet over a TCP socket, making it useless for reporting the Internet&rsquo;s size.</p>
+
+<p>An alternative explanation is that Morris was trying to bring to wider attention
+some long-standing bugs in the Internet. As Morris&rsquo; friend and future co-founder <a href="http://www.nytimes.com/1988/11/07/us/computer-invasion-back-door-ajar.html" target="_blank">put it</a>, in classic pg<sup id="fnref3"><a href="#fn3" rel="footnote">3</a></sup> style:</p>
 
 <blockquote>
-<p>&ldquo;Gosh, I love knowing exactly which packages I have to update in order to keep my apps and servers secure. Have you thought about an API?&rdquo;</p>
+<p>Mr. Graham, who has known the younger Mr. Morris for several years, compared
+his exploit to that of Mathias Rust, the young German who flew light plane
+through Soviet air defenses in May 1987 and landed in Moscow.</p>
+
+<p>&ldquo;It&rsquo;s as if <a href="https://en.wikipedia.org/wiki/Mathias_Rust" target="_blank">Mathias Rust</a> had not just flown into Red Square, but built
+himself a stealth bomber by hand and then flown into Red Square,&rdquo; he said.</p>
 </blockquote>
 
-<p>We listened carefully to that feedback, and it is with pride and pleasure that we&rsquo;re announcing our new beta! We&rsquo;re still busy improving it, so we won&rsquo;t charge you for it for now.</p>
+<h3>What did the Morris Worm actually do?</h3>
 
-<p>Once you <a href="https://appcanary.com/sign_up">sign up</a>, all you have to do is issue a curl:</p>
-<pre class="highlight shell"><code>curl -H <span class="s2">"Authorization: Token YOURTOKENHERE"</span> <span class="se">\</span>
-     -X POST -F <span class="nv">file</span><span class="o">=</span>@./Gemfile.lock <span class="se">\</span>
-     https://appcanary.com/api/v2/check/ruby
+<p>The Morris Worm<sup id="fnref4"><a href="#fn4" rel="footnote">4</a></sup> exploited three separate vulnerabilities. It guessed
+passwords for <code>rsh</code>/<code>rexec</code>, it exploited a debug-mode backdoor in sendmail and it used &ldquo;one
+very neat trick&rdquo;. I&rsquo;ll go over each of these in detail, and you can find an archive (decompiled and commented) of the code for yourself <a href="https://github.com/arialdomartini/morris-worm" target="_blank">here</a>.</p>
+
+<h4>1. Rsh and Rexec</h4>
+
+<p><code>rsh</code> and <code>rexec</code> are remote shell protocols from the BSD era that are almost
+unused today (since supplanted by <code>ssh</code>). <code>rsh</code> can allow passwordless
+authentication if coming from a &ldquo;trusted&rdquo; host, which it determines via a list of addresses stored in a global <code>/etc/hosts.equiv</code> or
+per-user <code>.rhosts</code> file. When an
+<code>rsh</code> request comes from a user of a trusted machine, access is automatically
+granted. The worm used this to propagate, searching those two files &mdash; as well as the <code>.forward</code> file, which back then was used to forward your mail around the Internet &mdash; for trusted hosts.</p>
+
+<p>Even in 1988, people knew that leaving <code>rsh</code> open on an untrusted network like
+the Internet was a Bad Idea, and so the worm also propagated via <code>rexec</code>.
+Now, <code>rexec</code> uses password authentication, but Morris made an intelligent assumption:
+people tend to reuse passwords.
+Back then, <code>/etc/passwd</code> used to<sup id="fnref5"><a href="#fn5" rel="footnote">5</a></sup> store everyone&rsquo;s encrypted passwords. The
+worm shipped with an optimized implementation of
+<a href="https://en.wikipedia.org/wiki/Crypt_(Unix)" target="_blank"><code>crypt</code></a> and a dictionary, and went to town. Once it cracked a password, it tried it against
+all the likely hosts it could find.</p>
+
+<h4>2. Sendmail&rsquo;s Backdoor</h4>
+
+<p>In the absence of any friendly hosts, the Morris Worm would then exploit a
+backdoor in <a href="https://en.wikipedia.org/wiki/Sendmail" target="_blank">Sendmail</a>. You see, Sendmail had a &ldquo;debug&rdquo; mode that allowed anyone to route an
+email to any process, including the shell! Ironically, this was <a href="http://www.nytimes.com/1988/11/07/us/computer-invasion-back-door-ajar.html" target="_blank">apparently deliberate</a>:</p>
+
+<blockquote>
+<p>Eric Allman, a computer programmer who designed the mail program that Morris
+exploited, said yesterday that he created the back door to allow him to fine
+tune the program on a machine that an overzealous administrator would not give
+him access to. He said he forgot to remove the entry point before the program
+was widely distributed in 1985.</p>
+</blockquote>
+
+<p>(This wasn&rsquo;t even the first Sendmail backdoor. Sendmail used to ship with &ldquo;wizard mode&rdquo;, where sending the strings &ldquo;WIZ&rdquo; and &ldquo;SHELL&rdquo; gave you a root shell. By the time that Morris was writing his worm, wizard mode was disabled almost everywhere.)</p>
+
+<p>If you&rsquo;re wondering how sendmail could have backdoors like this, it seems that it was somewhat well known. This quote from a <a href="http://securitydigest.org/tcp-ip/archive/1988/11" target="_blank">mail</a> by <a href="https://en.wikipedia.org/wiki/Paul_Vixie" target="_blank">Paul Vixie</a> summarizes the situation.</p>
+<pre class="highlight plaintext"><code>From: vixie@decwrl.dec.com (Paul Vixie)
+Newsgroups: comp.protocols.tcp-ip,comp.unix.wizards
+Subject: Re: a holiday gift from Robert "wormer" Morris
+Message-ID: &lt;24@jove.dec.com&gt;
+Date: 6 Nov 88 19:36:10 GMT
+References: &lt;1698@cadre.dsl.PITTSBURGH.EDU&gt; &lt;2060@spdcc.COM&gt;
+Distribution: na
+Organization: DEC Western Research Lab
+Lines: 15
+
+
+# the hole [in sendmail] was so obvious that i surmise that Morris
+# was not the only one to discover it.  perhaps other less
+# reproductively minded arpanetters have been having a field
+# 'day' ever since this bsd release happened. 
+
+I've known about it for a long time.  I thought it was common knowledge
+and that the Internet was just a darned polite place.  (I think it _was_
+common knowledge among the people who like to diddle the sendmail source.)
+
+The bug in fingerd was a big surprise, though.  Overwriting a stack frame
+on a remote machine with executable code is One Very Neat Trick.
+-- 
+Paul Vixie
+Work:    vixie@decwrl.dec.com    decwrl!vixie    +1 415 853 6600
+Play:    paul@vixie.sf.ca.us     vixie!paul      +1 415 864 7013
 </code></pre>
 
-<p>and you&rsquo;ll get a response like:</p>
-<pre class="highlight json"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"vulnerable"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-    </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"artifact-version"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"attributes"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rack"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rubygem"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.6.0"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"vulnerabilities"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-          </span><span class="p">{</span><span class="w">
-            </span><span class="nt">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Potential Denial of Service Vulnerability in Rack"</span><span class="p">,</span><span class="w">
-            </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Carefully crafted requests can cause a `SystemStackError` and potentially \ncause a denial of service attack. \n\nAll users running an affected release should upgrade."</span><span class="p">,</span><span class="w">
-            </span><span class="nt">"criticality"</span><span class="p">:</span><span class="w"> </span><span class="s2">"high"</span><span class="p">,</span><span class="w">
-            </span><span class="nt">"cve"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-              </span><span class="s2">"CVE-2015-3225"</span><span class="w">
-            </span><span class="p">],</span><span class="w">
-            </span><span class="nt">"osvdb"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
-            </span><span class="nt">"patched-versions"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-              </span><span class="s2">"~&lt; 1.5.4"</span><span class="p">,</span><span class="w">
-              </span><span class="s2">"~&lt; 1.4.6"</span><span class="p">,</span><span class="w">
-              </span><span class="s2">"&gt;= 1.6.2"</span><span class="w">
-            </span><span class="p">],</span><span class="w">
-            </span><span class="nt">"unaffected-versions"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
-            </span><span class="nt">"uuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"55807540-053f-40f0-9266-a3d1ca6a5838"</span><span class="p">,</span><span class="w">
-            </span><span class="nt">"upgrade-to"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-              </span><span class="s2">"&gt;= 1.6.2"</span><span class="w">
-            </span><span class="p">]</span><span class="w">
-          </span><span class="p">}</span><span class="w">
-        </span><span class="p">]</span><span class="w">
-      </span><span class="p">}</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-  </span><span class="p">]</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
+<p>The Internet was a polite place, indeed.</p>
 
-<p>Our API fully supports <strong>Ruby</strong>, <strong>Ubuntu</strong>, and <strong>CentOS 7</strong>! You can learn more about how to use it by visiting <a href="https://appcanary.com/docs">the docs page</a>.</p>
+<h4>3. One Very Neat Trick</h4>
 
-<p>Which reminds us,</p>
+<p>The Very Neat Trick that Vixie was talking about is the now-standard
+<a href="https://en.wikipedia.org/wiki/Buffer_overflow" target="_blank">stack buffer overflow</a>. It&rsquo;s
+fascinating to read contemporary accounts that marvel at the cleverness of a class of
+bugs that are now ubiquitous &mdash; although, for me at least, they still haven&rsquo;t
+lost their magic<sup id="fnref6"><a href="#fn6" rel="footnote">6</a></sup>.</p>
 
-<h2>We now support CentOS 7!</h2>
+<p>Here&rsquo;s the main routine from the <code>fingerd</code> of that <a href="http://minnie.tuhs.org/cgi-bin/utree.pl?file=4.3BSD/usr/src/etc/fingerd.c" target="_blank">era</a>:</p>
+<pre class="highlight c"><code><span class="n">main</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span> <span class="n">argv</span><span class="p">)</span>
+    <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[];</span>
+<span class="p">{</span>
+    <span class="k">register</span> <span class="kt">char</span> <span class="o">*</span><span class="n">sp</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">line</span><span class="p">[</span><span class="mi">512</span><span class="p">];</span>
+    <span class="k">struct</span> <span class="n">sockaddr_in</span> <span class="n">sin</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">pid</span><span class="p">,</span> <span class="n">status</span><span class="p">;</span>
+    <span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="o">*</span><span class="n">av</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
 
-<p>Appcanary now fully supports <strong>CentoOS 7</strong>. If you install our agent on a CentOS 7 server, we will email you notifications whenever any rpm package you have installed on your system has a known vulnerability.</p>
+    <span class="n">i</span> <span class="o">=</span> <span class="k">sizeof</span> <span class="p">(</span><span class="n">sin</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">getpeername</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">sin</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">i</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">fatal</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">"getpeername"</span><span class="p">);</span>
+    <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'\0'</span><span class="p">;</span>
+    <span class="n">gets</span><span class="p">(</span><span class="n">line</span><span class="p">);</span>
+    <span class="n">sp</span> <span class="o">=</span> <span class="n">line</span><span class="p">;</span>
+    <span class="c1">// ... snip ...
+</span>    <span class="c1">// build sp into arguments for finger 
+</span>    <span class="c1">// and call /usr/ucb/finger via execv before
+</span>    <span class="c1">// putchar'ing the result back to stdout
+</span>    <span class="k">return</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span> 
+</code></pre>
 
-<p>If you&rsquo;re not a current user and want to try out Appcanary&rsquo;s API and/or use us to monitor your CentOS 7 servers, you can <a href="https://appcanary.com/signup">sign up</a>!</p>
+<p>If you have experience with reading C code,<sup id="fnref7"><a href="#fn7" rel="footnote">7</a></sup> you may have spotted the
+vulnerability. <code>gets(line)</code> reads STDIN and puts the contents into a 512 byte
+buffer. This means that sending more than 512 bytes will overwrite the stack
+with an attacker-controlled value.</p>
 
-<p>You can always let us know what you think at <a href="mailto:hello@appcanary.com">hello@appcanary.com</a>.</p>
+<p>The worm sent 536 bytes of data, which overwrote the
+<a href="https://en.wikipedia.org/wiki/Call_stack#Stack_and_frame_pointers" target="_blank">stack frame</a>
+of the <code>main</code> function. This allowed Morris to overwrite the pointer to where
+<code>main</code> is returning to. He set that pointer to be <em>within</em> the 536 byte buffer
+he sent over the network. The beginning of the buffer contained
+<a href="https://en.wikipedia.org/wiki/Shellcode" target="_blank">shellcode</a> that called <code>/bin/sh</code>. Game over.</p>
+
+<h2>Aftermath</h2>
+
+<p>Robert Tappan Morris was convicted and sentenced to three years probation, 400
+hours of community service and a $10,050 fine (about $20,000 in today&rsquo;s dollars)
+plus the cost of his supervision. He then went on to co-found a little startup
+called Viaweb. You may have heard the rest of that story.
+Today, Morris is a tenured professor at the Computer Science and Artificial
+Intelligence Laboratory at MIT and is one of the leaders of the Parallel and
+Distributed Systems Groups.</p>
+
+<p>Why did the paranoia around badBIOS make me think of the Morris Worm? If you read contemporary articles about the Morris Worm, they&rsquo;ll sometimes mention, but never emphasize, who Robert Morris&rsquo;s father was. The <a href="https://en.wikipedia.org/wiki/Robert_Morris_(cryptographer)" target="_blank">elder Robert Morris</a> just happened to be a computer security expert. While the young Robert Morris was writing his worm, Robert Morris Sr. was serving as Chief Scientist at the NSA&rsquo;s National Computer Security Center! </p>
+
+<p>The Internet grew up a lot since 1988, and not just in size. In 2013, your computer acting strangely is obviously a NSA-written malware that lives in your BIOS and propagates over sound waves imperceptible to the human ear. In 1988, son of an NSA security executive infects 10% of the Internet with a worm that uses an exotic new exploitation technique called a buffer overflow and&hellip; nothing.</p>
+
+<p>Just to be clear, I&rsquo;m not alleging any conspiracy between father and son, besides perhaps father making some calls after son&rsquo;s arrest. While the Morris worm was likely the first malicious use, buffer overflows were understood as a problem before 1988, if not widely. The way the media narrative handled the NSA connection in 1988 just says a lot about how the world of the Internet changed in 25 years.</p>
+
+<p>As for Dragos Ruiu, he&rsquo;s been quiet about badBIOS since 2013. I&rsquo;m not sure what he&rsquo;s doing these days besides <a href="https://cansecwest.com/" target="_blank">CanSecWest</a>, but in my heart of hearts, I like to picture him playing the saxophone amidst the detritus of his torn up apartment.</p>
+
+<p><a href="https://en.wikipedia.org/wiki/The_Conversation" target="_blank"><img src="../../../images/the_conversation.jpg"></a></p>
+
+<hr>
+
+<h4>Paying the Bills</h4>
+
+<p>We&rsquo;re trying our best, but we&rsquo;ll only be able to blog about a minuscule percentage of the world&rsquo;s vulnerabilities. And starting with 1988 means we have a lot of catching up to do. How will you ever find about the ones that actually affect you?</p>
+
+<p>Our product, <a href="https://appcanary.com/?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=morris">Appcanary</a>, monitors your apps and servers, and notifies you whenever a new vulnerability is discovered in a package you rely on. </p>
+
+<p><a href="https://appcanary.com/sign_up?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=morris">Sign up</a> today!</p>
+
+<hr>
+
+<p><link href="//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+ #mc<em>embed</em>signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; width:100%;}
+ /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+      We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+</style>
+<div id="mc_embed_signup">
+<form action="//appcanary.us10.list-manage.com/subscribe/post?u=303b378f377508300c0b5469a&amp;id=dc58e8f56f" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+<div id="mc_embed_signup_scroll">
+<label for="mce-EMAIL">Liked this post? Subscribe to our newsletter for more!</label>
+<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+<div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_303b378f377508300c0b5469a_dc58e8f56f" tabindex="-1" value=""></div>
+<div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+</div>
+</form>
+</div></p>
+
+<div class="footnotes">
+<hr>
+<ol>
+
+<li id="fn1">
+<p>One of the things I wish that the security industry would do less of is blind appeals to authority, and I hate that I made one here. Unfortunately, I don&rsquo;t have the skills or time to make my own analysis of Ruiu&rsquo;s data, so I just have to trust the Thought Leaders on this one. &nbsp;<a href="#fnref1" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn2">
+<p>The 60,000 computer-strong Internet was of course one of many networks at the time. The Internet was the one that was global and used TCP/IP &mdash; the Internet protocols. Therein lies the pedant&rsquo;s case against the <a href="https://twitter.com/APStylebook/status/716279065888563200" target="_blank">AP&rsquo;s capitalization</a> of the word &ldquo;Internet&rdquo;.&nbsp;<a href="#fnref2" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn3">
+<p>Disclosure time: years after giving that quote, Paul Graham and Robert Morris went on to found Y Combinator along with Jessica Livingston and Trevor Blackwell. YC in turn is an investor in <a href="https://www.appcanary.com">Appcanary</a>. Robert Morris and I have never met, though we did once meet with Paul Graham. &nbsp;<a href="#fnref3" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn4">
+<p>My favourite paper on the analysis of the worm is <a href="http://denninginstitute.com/modules/acmpkp/security/texts/INTWORM.PDF" target="_blank">With Microscope and Tweezers</a> from MIT&rsquo;s Eichin and Rochlis. They spend a page passionately arguing that it&rsquo;s a virus by using a complicated appeal to the difference between lytic and lysogenic viruses with references to three separate biology textbooks!&nbsp;<a href="#fnref4" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn5">
+<p>I assumed that <code>/etc/shadow</code> came about as a consequence of the Morris Worm, but it <a href="https://en.wikipedia.org/wiki/Passwd#History" target="_blank">seems</a> that it was originally implemented in SunOS earlier in the 80&rsquo;s, and then took 2 years after the Morris Worm to make it into BSD.&nbsp;<a href="#fnref5" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn6">
+<p>Exploits really are magic, and it goes without saying that exploit users have chosen the <a href="https://en.wikipedia.org/wiki/Left-hand_path_and_right-hand_path" target="_blank">Left-Hand Path</a> to wizardhood. If the <a href="https://mitpress.mit.edu/sicp/full-text/book/book.html" target="_blank">cover of SICP</a> is to be believed, the Right-Hand Path is available through careful study of functional programming and Lisps. Perhaps this is the true reason why Morris and Graham were such effective collaborators.&nbsp;<a href="#fnref6" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn7">
+<p>On the other hand, this C code is over 30 years old. When I ran it through the gcc on my machine,I was very happy to see that it complained bitterly but still compiled it. One exercise for the reader is finding where the network operation actually happens. <code>main</code> takes input and output from STDIN/STDOUT, but there&rsquo;s an uninitialized <code>struct sockaddr_in sin</code> that we call <code>getpeername</code> on. How is a network socket piped to standard input/output and who is initializing the <code>sin</code> struct? I actually haven&rsquo;t been able to figure this part out. If you know, please tell <a href="mailto:max@appcanary.com">me</a>! The full code listing is <a href="http://minnie.tuhs.org/cgi-bin/utree.pl?file=4.3BSD/usr/src/etc/fingerd.c" target="_blank">here</a>.&nbsp;<a href="#fnref7" rev="footnote">&#8617;</a></p>
+
+<p><strong>Update 08/29/2016</strong> Dave Vandervies emailed me with an explanation!</p>
+
+<blockquote>
+<p>fingerd was meant to be run from inetd (see <a href="http://minnie.tuhs.org/cgi-bin/utree.pl?file=4.3BSD/etc/inetd.conf" target="_blank">here</a>),
+which sets up the network connection and invokes the actual server process
+with its stdin and stdout attached to the network socket.</p>
+
+<p><br/>
+As for the getpeername, the address is an out parameter; this call looks up
+the peer address of stdin (fd 0), and will fail (and fingerd will error out
+on that) if it isn&rsquo;t a socket (see
+<a href="http://man.openbsd.org/OpenBSD-current/man2/getpeername.2">here</a>).
+Since the actual address doesn&rsquo;t get used, that appears to be the purpose of the
+call here.</p>
+</blockquote>
+</li>
+
+</ol>
+</div>
 
 </section>
 <footer class='post-meta'>
 <a href='/author/max-veytsman.html'>Max Veytsman</a>
-on <a href='/tag/announcements.html'>Announcements</a>, <a href='/tag/product.html'>Product</a>
-<time class='post-date' datetime='2016-03-07'>
-07 March 2016
+on <a href='/tag/vihkal.html'>vihkal</a>, <a href='/tag/security.html'>security</a>
+<time class='post-date' datetime='2016-08-24'>
+24 August 2016
 </time>
 </footer>
 </article>
 <article class='post'>
 <header class='post-header'>
-<h1 class='post-title'><a href="../../../2016/datomic-intro-talk.html">A Gentle Intro to Datomic</a></h1>
+<h1 class='post-title'><a href="../../../2016/mirai-botnet-security-broken.html">The Mirai Botnet is Proof the Security Industry is Broken</a></h1>
 <section class='post-meta'>
 </section>
 </header>
 <section class='post-content'>
-<p>We use <a href="http://www.datomic.com/">Datomic</a> as one of our datastores, and have been really enjoying it so far.</p>
+<p>Last Friday, my workday was rudely interrupted because I couldn&rsquo;t access Github.
+To add insult to injury I couldn&rsquo;t even complain about it on Twitter. I tried to
+drown my sorrows by listening to moody Leonard Cohen songs on Spotify, but
+alas&hellip;</p>
 
-<p>I gave a talk to my local <a href="http://www.meetup.com/Clojure-Toronto/">Clojure meetup</a> that provided a gentle introduction to Datomic and highlighted some cool features.</p>
+<p>You&rsquo;ve probably heard of this. Huge tracts of the Internet were down because the DNS provider Dyn 
+faced a massive Denial of Service attack from the
+<a href="https://krebsonsecurity.com/2016/10/hacked-cameras-dvrs-powered-todays-massive-internet-outage/">Mirai botnet</a>, 
+which takes advantage of Internet of Things devices like cameras and DVRs.</p>
 
-<p>The slides are below:</p>
+<p><blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">&ldquo;Oh &amp; also, evil sorcerers crippled our divination network Friday by getting millions of coffee makers &amp; lightswitches to shout real loud&rdquo; <a href="https://t.co/OPhdOJLwc1">https://t.co/OPhdOJLwc1</a></p>&mdash; Max Gladstone (@maxgladstone) <a href="https://twitter.com/maxgladstone/status/790890882543288320">October 25, 2016</a></blockquote>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script></p>
 
-<script async="" class="speakerdeck-embed" data-id="dd426e5c924f44eb9050c554137ae030" data-ratio="1.77777777777778" src="//speakerdeck.com/assets/embed.js"></script>
+<h3>So, what&rsquo;s new about Mirai?</h3>
 
-</section>
-<footer class='post-meta'>
-<a href='/author/max-veytsman.html'>Max Veytsman</a>
-on <a href='/tag/clojure.html'>Clojure</a>, <a href='/tag/datomic.html'>Datomic</a>, <a href='/tag/programming.html'>Programming</a>, <a href='/tag/talks.html'>Talks</a>
-<time class='post-date' datetime='2016-02-09'>
-09 February 2016
-</time>
-</footer>
-</article>
-<article class='post'>
-<header class='post-header'>
-<h1 class='post-title'><a href="../../../2016/state-management-downtime.html">How being lazy about state management in Clojure caused us downtime</a></h1>
-<section class='post-meta'>
-</section>
-</header>
-<section class='post-content'>
-<p>On November 10th, we suffered some downtime as our backend application mysteriously crashed and had to be restarted. After looking at our process monitoring service, I found a very suspicious graph:</p>
+<p>I&rsquo;ve written about
+1988&rsquo;s <a href="https://blog.appcanary.com/2016/tale-of-two-worms.html">Morris worm</a>, 
+and I wanted to dig into the
+<a href="https://github.com/jgamblin/Mirai-Source-Code">source</a> of the Mirai botnet
+(helpfully published by the author) to see how far we&rsquo;ve come along in the past
+28 years.</p>
 
-<p><img alt="image" src="../../../images/system.process.threads.png" /></p>
+<p>Can you guess how Mirai spreads? </p>
 
-<p>Somehow, we managed to spin up more then 30,000 threads right before the application crashed. This was very likely the cause of the failure, but how did it happen?</p>
+<p>Was there new zeroday in the devices? Hey, maybe there was an old, unpatched
+vulnerability hanging &mdash; who has time to apply software updates to their toaster? 
+Maybe it was HeartBleed 👻?</p>
 
-<p>An easy way to get an idea of where a thread leak is coming from is to look at the thread names. In Java you can do this with <code>jstack -l $PID</code>.</p>
+<p>Nope.</p>
 
-<p>To get a list of all thread names of a Java application sorted by most common name, you can do:</p>
-<pre class="highlight plaintext"><code>jstack -l $PID | grep daemon |  awk '{ print $1 }' | sort | uniq -c |   sort -nr
-</code></pre>
+<p>Mirai does one, and only one thing in order to break into new devices: it cycles through a bunch of default
+username/password combinations over telnet, like &ldquo;admin/admin&rdquo; and &ldquo;root/realtek&rdquo;. For a
+laugh, &ldquo;mother/fucker&rdquo; is in there too.</p>
 
-<p>Which on our end yielded something like this:</p>
-<pre class="highlight plaintext"><code>  30000 "Analytics"
-      2 "Datomic
-      2 "C2
-      1 "worker-4"
-      1 "worker-3"
-      1 "worker-2"
-      1 "worker-1"
-      1 "Timer-0"
-      1 "Thread-5"
-      1 "Thread-4
-      1 "Thread-3
-      1 "Thread-2
-      1 "Thread-1
-      1 "Thread-0
-</code></pre>
+<p>Default credentials. Over telnet. That&rsquo;s how you get hundreds of thousands of
+<a href="http://dyn.com/blog/dyn-analysis-summary-of-friday-october-21-attack/">devices</a>.
+The Morris worm from 1988 tried a dictionary password attack too, but only after
+its buffer overflow and sendmail backdoor exploits failed. </p>
 
-<p>Hmm&hellip;</p>
+<p>Oh, and Morris&rsquo; password dictionary was larger, too.</p>
 
-<h3>Background</h3>
+<h3>How do we keep getting this wrong?</h3>
 
-<p>Our backend is written in Clojure and we use Stuart Sierra&rsquo;s <a href="https://github.com/stuartsierra/component">component</a> framework to manage most of our application&rsquo;s state and lifecycle. Normally this should prevent runaway threads, but unfortunately for us our analytics client&rsquo;s state was managed independently of the framework. To explain why, I need to first delve a little in to how component works.</p>
+<p>Around the world, we spend $75 billion a year on information security.
+And for what, when we keep getting such basic things wrong? Suppose I waved a
+magic wand and cut the worldwide security budget in half. Would things really be
+that much worse? The security industry is addicted to selling expensive
+complicated products instead of doing the basics well. </p>
 
-<p>Regardless of how beautiful and functional it may be, any application that talks to the outside world will need to manage some state representing these external resources. We need to manage our database connections, our clients for external APIs, our background workers, etc.</p>
+<p>I was at a security conference the other week, and there was yet another crop of
+cyberapocalypse talks. The Internet of Things is a garbage fire. Industrial control
+systems are going to get us all killed. Users are clicking phishing links like
+sheep. We&rsquo;re all doomed. And somehow, it&rsquo;s always the fault of shitty
+programmers or dumb users. Let&rsquo;s all laugh at their fails.</p>
 
-<p>One way to deal with this in Clojureland is to create a global singleton object for representing each stateful piece, possibly wrapped in an <code>atom</code>. This feels lacking, though. You still need a way to initialize all these singletons on startup, and having mutable singletons everywhere goes against what I would consider good Clojure style.</p>
+<h3>It&rsquo;s all bullshit.</h3>
 
-<p>Component solves this problem by implementing dependency injection in a Clojurelike way. You define a graph that represents each stateful piece, how they depend on each other, and how each piece starts and stops. On system start, component boots each piece in the right order, passing along references to dependencies when they&rsquo;re needed.</p>
+<p>We sell biometric authentication systems to people who need a good password
+manager. We sell live threat attribution intelligence with colorful maps to
+people who need to practice configuration management. We sell advanced
+in-cpu sandbox endpoint protection to people who need to institute a patching program.
+There&rsquo;s a reason why security practitioners get such a kick out of
+<a href="https://threatbutt.com/">ThreatButt</a>.</p>
 
-<p>For example, Appcanary&rsquo;s dependency graph looks (something) like this:</p>
-<pre class="highlight clojure"><code><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">canary-system</span><span class="w">
-  </span><span class="p">[]</span><span class="w">
-  </span><span class="c1">;;Initialize logging
-</span><span class="w">  </span><span class="p">(</span><span class="nf">component/system-map</span><span class="w">
-   </span><span class="no">:datomic</span><span class="w"> </span><span class="p">(</span><span class="nf">new-datomic</span><span class="w"> </span><span class="p">(</span><span class="nf">env</span><span class="w"> </span><span class="no">:datomic-uri</span><span class="p">))</span><span class="w">
-   </span><span class="no">:scheduler</span><span class="w"> </span><span class="p">(</span><span class="nf">new-scheduler</span><span class="p">)</span><span class="w">
-   </span><span class="no">:mailer</span><span class="w"> </span><span class="p">(</span><span class="nf">component/using</span><span class="w">  </span><span class="p">(</span><span class="nf">new-mailer</span><span class="w"> </span><span class="p">(</span><span class="nf">env</span><span class="w"> </span><span class="no">:mandrill-key</span><span class="p">))</span><span class="w">
-                             </span><span class="p">[</span><span class="no">:datomic</span><span class="w"> </span><span class="no">:scheduler</span><span class="p">])</span><span class="w">
-   </span><span class="no">:web-server</span><span class="w"> </span><span class="p">(</span><span class="nf">component/using</span><span class="w"> </span><span class="p">(</span><span class="nf">new-web-server</span><span class="w"> </span><span class="p">(</span><span class="nf">env</span><span class="w"> </span><span class="no">:http-ip</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nf">Integer.</span><span class="w"> </span><span class="p">(</span><span class="nf">env</span><span class="w"> </span><span class="no">:http-port</span><span class="p">))</span><span class="w"> </span><span class="n">canary-api</span><span class="p">)</span><span class="w">
-                             </span><span class="p">[</span><span class="no">:datomic</span><span class="p">])))</span><span class="w">
-</span></code></pre>
-
-<p>The <code>mailer</code> depends on <code>datomic</code> and the <code>scheduler</code>, the web server depends on <code>datomic</code>, and both <code>datomic</code> and the <code>scheduler</code> don&rsquo;t depend on anything.</p>
-
-<p>Like all the other components, the <code>new-datomic</code> function is a constructor for a record that knows how to start and stop itself. On system start, all the components are started, and the dependencies are filled in.</p>
-
-<h3>Sometimes component feels like overkill</h3>
-
-<p>Component is great, but it didn&rsquo;t fit our analytics engine usecase. We use <a href="https://segment.io">segment.io</a> to handle our app analytics, and we needed to maintain a client to talk to it. An analytics event can potentially be called from anywhere in the app, but it&rsquo;s cumbersome to pass an analytics client reference to every component, and into every analytics call. If every component depends on something, it feels like maybe it should be a global singleton. Futhermore, I don&rsquo;t want my components to know much about the analytics client at all; I just want them to know how to trigger events.</p>
-
-<p>What I want to have is an analytics namespace which contains all the events I may want to trigger, and wraps the client inside all of them. This lets me  do something like <code>(analytics/user-added-server user)</code> inside of the code that handles server creation.</p>
-
-<p>(One thing to note is that while there is a clojure segment.io <a href="https://github.com/ardoq/analytics-clj">client</a>, it&rsquo;s based off a 1.x release of the underlying <a href="https://github.com/segmentio/analytics-java">java library</a>, while we wanted to use features only available in the 2.0 release. Because of that, I wrote an analytics namespace that called the java library directly).</p>
-
-<p>The first pass of creating the client looked something like this:</p>
-<pre class="highlight clojure"><code><span class="p">(</span><span class="nf">defonce</span><span class="w"> </span><span class="n">client</span><span class="w">
-  </span><span class="p">(</span><span class="nf">.build</span><span class="w"> </span><span class="p">(</span><span class="nf">Analytics/builder</span><span class="w"> </span><span class="p">(</span><span class="nf">env</span><span class="w"> </span><span class="no">:segment-api-key</span><span class="p">))))</span><span class="w">
-
-</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">track</span><span class="w">
-  </span><span class="s">"Wrapper for analytics/track"</span><span class="w">
-  </span><span class="p">[</span><span class="n">id</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="n">properties</span><span class="w"> </span><span class="p">{</span><span class="no">:keys</span><span class="w"> </span><span class="p">[</span><span class="n">timestamp</span><span class="p">]</span><span class="w"> </span><span class="no">:as</span><span class="w"> </span><span class="n">options</span><span class="p">}]</span><span class="w">
-  </span><span class="p">(</span><span class="nb">when</span><span class="w"> </span><span class="p">(</span><span class="nf">production?</span><span class="p">)</span><span class="w">
-    </span><span class="p">(</span><span class="nf">.enqueue</span><span class="w"> </span><span class="n">client</span><span class="w">
-              </span><span class="c1">;; Java interop to build the analytics message here)))
-</span></code></pre>
-
-<p>There&rsquo;s only one problem with the above code: the segment api key is loaded from an environment variable. </p>
-
-<p>We deploy appcanary in a pretty standard way &ndash; we compile an uberjar and rsync it to the server. API keys live in environment variables, and the production API key is only going to live on the production server. So, at compile time, we have no way of knowing what the segment api key is. As a result, the analytics client needs to be built at runtime and not compile time in order to have access to the api key.</p>
-
-<h3>This is where I get lazy</h3>
-
-<p>The obvious thing to do to build the analytics client at runtime is to wrap it as a function:</p>
-<pre class="highlight clojure"><code><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">client</span><span class="w">
-  </span><span class="p">[]</span><span class="w">
-  </span><span class="p">(</span><span class="nf">.build</span><span class="w"> </span><span class="p">(</span><span class="nf">Analytics/builder</span><span class="w"> </span><span class="p">(</span><span class="nf">env</span><span class="w"> </span><span class="no">:segment-api-key</span><span class="p">))))</span><span class="w">
-
-</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">track</span><span class="w">
-  </span><span class="s">"Wrapper for analytics/track"</span><span class="w">
-  </span><span class="p">[</span><span class="n">id</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="n">properties</span><span class="w"> </span><span class="p">{</span><span class="no">:keys</span><span class="w"> </span><span class="p">[</span><span class="n">timestamp</span><span class="p">]</span><span class="w"> </span><span class="no">:as</span><span class="w"> </span><span class="n">options</span><span class="p">}]</span><span class="w">
-  </span><span class="p">(</span><span class="nb">when</span><span class="w"> </span><span class="p">(</span><span class="nf">production?</span><span class="p">)</span><span class="w">
-    </span><span class="p">(</span><span class="nf">.enqueue</span><span class="w"> </span><span class="p">(</span><span class="nf">client</span><span class="p">)</span><span class="w">
-              </span><span class="c1">;; Java interop to build the analytics message here)))
-</span></code></pre>
-
-<p>I saw three downsides here:</p>
+<p>There are lots of real, important, conceptually difficult problems in
+security. We don&rsquo;t really know how to write secure code, and it&rsquo;s all too
+easy to get socially engineered. But, right now, the vast majority of threats can be thwarted by <b>the basics</b>:</p>
 
 <ol>
-<li>We&rsquo;ll lose some efficiency from not reusing the TCP connection to segment.io</li>
-<li>It&rsquo;s possible that we&rsquo;ll have to waste a bit of time authenticating the analytics client on each call</li>
-<li>We&rsquo;ll spawn an extra client object per call, which will be garbage collected right away as it goes out of scope immediately after the <code>track</code> call</li>
+<li>Keep your systems patched</li>
+<li>Keep your systems properly configured.</li>
+<li>Make sure you have strong passwords and two factor authentication.</li>
 </ol>
 
-<p>The above three things aren&rsquo;t intrinsically bad, and it seemed like optimizing the performance of your analytics engine early on was a wasteful thing to do in a fast-paced startup environment.</p>
+<p>Do the basics first. The basics matter. Then you can focus on the Sisyphean
+tasks that remain. Instead, here we are selling fancy bullshit and barely making
+any progress in 28 years. Lots of money in it, though.</p>
 
-<p>What I didn&rsquo;t consider is that the java library uses <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ExecutorService.html"><code>ExecutorService</code></a> to manage a threadpool, and <code>shutdown</code> must be called explicitly. Otherwise, the threads are put on hold instead of being marked for GC (see also <a href="http://stackoverflow.com/questions/16122987/reason-for-calling-shutdown-on-executorservice">this stackoverflow</a>).</p>
+<hr>
 
-<p>The fact that each client spawns a thread that isn&rsquo;t cleaned up by garbage collection was not <a href="https://segment.com/docs/libraries/java/">documented</a> unfortunately.</p>
+<h4>Paying the Bills</h4>
 
-<h3>Outcome</h3>
+<p>Surprise, I also sell a security product! But I will say this: Appcanary
+isn&rsquo;t going to protect you from shipping millions of internet-accessible
+cameras with the same password. We won&rsquo;t even protect you from having your DNS
+provider DoSed.</p>
 
-<p>Every analytics call we made spawned another threadpool, which caused the thread count to grow proportionally with user activity. We hit 40,000 threads before our application crashed.</p>
+<p>The major botnet of 2016 is <em>simpler</em> than the botnet of 1988. There&rsquo;s something
+wrong in how we do security, and at Appcanary, we think it&rsquo;s a complete lack of
+focus on the basics. </p>
 
-<h3>TL;DR:</h3>
+<p>The highest value, easiest thing you can do to improve your security is patch
+known vulnerabilities. Most breaches come from years-old vulnerabilities. </p>
 
-<p>We spawned a new client object on every analytics call, not realizing that the underlying library uses a thread pool that&rsquo;s not shutdown on garbage collection. This is how we ended up killing the server by hitting 40,000 threads</p>
+<p>Our product,
+<a href="https://appcanary.com/?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=broken">Appcanary</a>,
+monitors your apps and servers, and notifies you whenever a new vulnerability is
+discovered in a package you rely on.</p>
+
+<p><a href="https://appcanary.com/sign_up?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=broken">Sign up</a> today!</p>
 
 </section>
 <footer class='post-meta'>
 <a href='/author/max-veytsman.html'>Max Veytsman</a>
-on <a href='/tag/clojure.html'>Clojure</a>, <a href='/tag/programming.html'>Programming</a>, <a href='/tag/developer-diary.html'>Developer Diary</a>, <a href='/tag/bugs.html'>Bugs</a>
-<time class='post-date' datetime='2016-02-02'>
-02 February 2016
+on <a href='/tag/security.html'>security</a>, <a href='/tag/mirai.html'>mirai</a>, <a href='/tag/botnet.html'>botnet</a>
+<time class='post-date' datetime='2016-10-31'>
+31 October 2016
 </time>
 </footer>
 </article>
 <nav class='pagination' role='pagination'>
 <a class="newer-posts" href="../../max-veytsman.html">← Newer Posts</a>
-<span class='page-number'>Page 2 of 3</span>
-<a class="older-posts" href="3.html">Older Posts →</a>
+<span class='page-number'>Page 2 of 2</span>
 </nav>
 
 
