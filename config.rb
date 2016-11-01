@@ -90,10 +90,13 @@ tags.each do |tag, articles|
 end
 
 proxy "/rss", "/feed.xml"
-
-config.casper[:authors].each do |k, author|
-  proxy "/author/#{author[:name].parameterize}.html",
-    '/author.html', ignore: true, :locals => { "page_type" => "author", :current_article => OpenStruct.new({:metadata => {:page => { :author => k }}}) }
+ready do
+  config.casper[:authors].each do |k, author|
+    proxy "/author/#{author[:name].parameterize}.html",
+          '/author.html', ignore: true, :locals => { "page_type" => "author",
+                                                     "articles" => sitemap.resources.select { |r| r.data.author == k },
+                                                     :current_article => OpenStruct.new({:metadata => {:page => { :author => k }}}) }
+  end
 end
 
 # General configuration

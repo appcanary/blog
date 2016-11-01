@@ -31,7 +31,7 @@ per_page: 6
         %a{href: "https://twitter.com/#{blog_author(current_article).twitter}"}= "@#{blog_author(current_article).twitter}"
     %span.author-stats
       %i.icon-stats
-      = pluralize(blog.articles.select { |a| a.metadata[:page][:author] == current_article.metadata[:page][:author] }.count, 'post')
+      = pluralize(articles.count, 'post')
 %main#content.content{role: :main}
   = partial('shared/page_articles',
-            locals: { page_articles: page_articles.select { |a| a.metadata[:page][:author] == current_article.metadata[:page][:author] }, paginate: paginate })
+            locals: { articles: articles, page_articles: page_articles, paginate: paginate })
