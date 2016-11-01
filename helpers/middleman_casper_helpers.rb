@@ -3,15 +3,17 @@ require 'digest/md5'
 
 module MiddlemanCasperHelpers
   def page_title
-    title = blog_settings.name.dup
+    title = ""
     if is_tag_page?
-      title << ": #{current_resource.metadata[:locals]['tagname']}"
+      title << current_resource.metadata[:locals]['tagname']
+    elsif is_author_page?
+      title << blog_author(current_resource.metadata[:locals][:current_article]).name
     elsif current_page.data.title
-      title << ": #{current_page.data.title}"
+      title << current_page.data.title
     elsif is_blog_article?
-      title << ": #{current_article.title}"
+      title << current_article.title
     end
-    title
+    title << " - #{blog_settings.name}"
   end
 
   def page_description
@@ -59,6 +61,11 @@ module MiddlemanCasperHelpers
   def is_tag_page?
     current_resource.metadata[:locals]['page_type'] == 'tag'
   end
+
+  def is_author_page?
+    current_resource.metadata[:locals]['page_type'] == 'author'
+  end
+
   def tags?(article = current_article)
     article.tags.present?
   end

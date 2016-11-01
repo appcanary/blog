@@ -93,7 +93,7 @@ proxy "/rss", "/feed.xml"
 
 config.casper[:authors].each do |k, author|
   proxy "/author/#{author[:name].parameterize}.html",
-    '/author.html', ignore: true, :locals => { :current_article => OpenStruct.new({:metadata => {:page => { :author => k }}}) }
+    '/author.html', ignore: true, :locals => { "page_type" => "author", :current_article => OpenStruct.new({:metadata => {:page => { :author => k }}}) }
 end
 
 # General configuration
