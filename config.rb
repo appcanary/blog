@@ -141,7 +141,7 @@ redirect '2016/vikhal-morris.html', to: '/2016/tale-of-two-worms.html'
 # Middleman-Syntax - https://github.com/middleman/middleman-syntax
 set :haml, { ugly: true }
 set :markdown_engine, :redcarpet
-set :markdown, fenced_code_blocks: true, smartypants: true, footnotes: true, tables: true
+set :markdown, fenced_code_blocks: true, smartypants: true, footnotes: true, tables: true, with_toc_data: true
 activate :syntax, line_numbers: false
 
 # Methods defined in the helpers block are available in templates
