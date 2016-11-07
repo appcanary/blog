@@ -57,7 +57,7 @@
 <div class='vertical'>
 <div class='main-header-content inner'>
 <h1 class='page-title'>Programming</h1>
-<h2 class='page-description'>A 3-post collection</h2>
+<h2 class='page-description'>A 4-post collection</h2>
 </div>
 </div>
 </header>
@@ -68,6 +68,183 @@
 </nav>
 
 </div>
+<article class='post'>
+<header class='post-header'>
+<h1 class='post-title'><a href="../2016/missing-clojure.html">We Left Clojure. Here's 5 Things I'll Miss.</a></h1>
+<section class='post-meta'>
+</section>
+</header>
+<section class='post-content'>
+<p>On October 11th, Appcanary relied on about 8,500 lines of clojure code. On the
+12th we were down to zero. We replaced it by adding another 5,700 lines of Ruby to our codebase. 
+<a href="https://twitter.com/phillmv">Phill</a> will be discussing why we left, and what we learned both here and <a href="http://rubyconf.org/program#prop_19">at this year&rsquo;s RubyConf</a>. For now, I want to talk about what I&rsquo;ll miss.</p>
+
+<h3>1) The joy of Lisp</h3>
+
+<p><a href="https://xkcd.com/297/"><img alt="XKCD #297" src="http://imgs.xkcd.com/comics/lisp_cycles.png" /></a></p>
+
+<p>There&rsquo;s something magical about writing lisp. Alan Kay called it the greatest
+single programming language ever devised. Paul Graham called it a
+secret weapon. You can find tens of thousands
+of words on the elegant, mind-expanding powers of lisp<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup>. I don&rsquo;t think
+my version of the Lisp wizardry blog post would be particularly original or
+unique, so if you want to know more about the agony and ecstasy of wielding
+parenthesis, read <a href="http://paulgraham.com/avg.html">Paul Graham</a>.</p>
+
+<p>What&rsquo;s great about Clojure is that while Ruby
+<a href="http://www.randomhacks.net/2005/12/03/why-ruby-is-an-acceptable-lisp/">might be an acceptable lisp</a>,
+and lisp might
+<a href="http://steve-yegge.blogspot.ca/2006/04/lisp-is-not-acceptable-lisp.html">not be an acceptable lisp</a>,
+Clojure is a more than acceptable lisp. If we avoid the minefield of type
+systems, Clojure addresses the other 4 problems Steve Yegge discusses in the previous link<sup id="fnref2"><a href="#fn2" rel="footnote">2</a></sup>.</p>
+
+<h3>2) Immutability</h3>
+
+<p>The core data structures in clojure are immutable. If I define <code>car</code> to be <code>&quot;a dirty van&quot;</code>,
+nothing can ever change that. I can name some other thing <code>car</code> later, but
+anything referencing that first <code>car</code> will always be referencing <code>&quot;a dirty van&quot;</code>.</p>
+
+<p>This is great for a host of reasons. For one, you get parallelization for free &emdash;
+since nothing will mutate your collection, mapping or reducing some function
+over it can be hadooped out to as many clouds as you want without changing your
+algorithms.</p>
+
+<p>It&rsquo;s also much easier to can reason about your code. There&rsquo;s a famous quote by Larry Wall:</p>
+
+<blockquote>
+<p>[Perl] would prefer that you stayed out of its living room because you weren&rsquo;t
+invited, not because it has a shotgun.</p>
+</blockquote>
+
+<p>He was talking about private methods, but the same is true for mutability in most languages. You call some method and who knows if it mutated a value you were using? You would prefer it not to, but you have no shotgun, and frankly it&rsquo;s so easy to mutate state without even knowing that you are. Consider Python:</p>
+<pre class="highlight python"><code><span class="n">str1</span> <span class="o">=</span> <span class="s">"My name "</span>
+<span class="n">str2</span> <span class="o">=</span> <span class="n">str1</span>
+<span class="n">str1</span> <span class="o">+=</span> <span class="s">"is Max"</span>
+<span class="k">print</span> <span class="n">str1</span>
+<span class="c"># "My name is Max"</span>
+<span class="k">print</span> <span class="n">str2</span>
+<span class="c"># "My name"</span>
+
+<span class="n">list1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">list2</span> <span class="o">=</span> <span class="n">list1</span>
+<span class="n">list1</span> <span class="o">+=</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+<span class="k">print</span> <span class="n">list1</span>
+<span class="c"># [1, 2, 3, 4, 5]</span>
+<span class="k">print</span> <span class="n">list2</span>
+<span class="c"># [1, 2, 3, 4, 5]</span>
+</code></pre>
+
+<p>Calling <code>+=</code> on a string returned a new one, while calling <code>+=</code> on a list
+mutated it in place! I have to remember which types are mutable, and whether
+<code>+=</code> will give me a new object or mutate the existing one depending on its type.
+Who knows what might happen when you start passing your variables by reference
+to somewhere else?</p>
+
+<p>Not having the choice to mutate state is as liberating as getting rid of your Facebook account.</p>
+
+<h3>3) Data first programming</h3>
+
+<p>Walking away from object-oriented languages is very freeing. </p>
+
+<p>I want to design a model for the game of poker. I start by listing the
+nouns<sup id="fnref3"><a href="#fn3" rel="footnote">3</a></sup>: &ldquo;card&rdquo;, &ldquo;deck&rdquo;, &ldquo;hand&rdquo;, &ldquo;player&rdquo;, &ldquo;dealer&rdquo;, etc. Then I
+think of the verbs, &ldquo;deal&rdquo;, &ldquo;bet&rdquo;, &ldquo;fold&rdquo;, etc. </p>
+
+<p>Now what?
+<a href="http://stackoverflow.com/questions/19553838/oop-design-quesiton-with-a-card-game">Here&rsquo;s</a>
+a typical StackOverflow question demonstrating the confusion that comes with
+designing like this. Is the dealer a kind of player or a separate class? If
+players have hands of cards, how does the deck keep track of what cards are
+left? </p>
+
+<p>At the end of the day, the work of programming a poker game is codifying all of
+the actual rules of the game, and these will end up in a <code>Game</code> singleton that
+does most of the work anyway. </p>
+
+<p>If you start by thinking about data and the functions that operate on it,
+there&rsquo;s a natural way to solve hard problems from the top-down, which lets you quickly iterate your
+design (see below). You have some data structure that represents the game
+state, a structure representing possible actions a player can take, and a
+function to transform a game state and an action into the next game state. That
+function encodes the actual rules of poker (defined in lots of other, smaller
+functions).</p>
+
+<p>I find this style of programming very natural and satisfying. Of course, you can
+do this in any language; but I find Clojure draws me towards it, while OO
+languages push me away from it.</p>
+
+<h3>4) Unit Testing</h3>
+
+<p>The majority of your code is made up of pure functions. A pure function is one
+which always gives the same output for a given input &emdash; doesn&rsquo;t that sound
+easy to test? Instead of setting up test harnesses databases and mocks, you just
+write tests for your functions.</p>
+
+<p>Testing the edges of your code that talk to the outside world requires mocking,
+of course, and integration testing is never trivial. But the first thing you want to
+test is the super-complicated piece of business logic deep in your
+codebase. The business logic your business depends on, like for instance computing
+whether your version of OpenSSL is vulnerable to HeartBleed. </p>
+
+<p>Clojure pushes you
+to make that bit of code a pure function that&rsquo;s testable without setting
+up complicated state.</p>
+
+<h3>5) Refactoring</h3>
+
+<p>Here&rsquo;s a typical clojure function</p>
+<pre class="highlight clojure"><code><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">foo</span><span class="w"> </span><span class="p">[</span><span class="n">a</span><span class="w"> </span><span class="n">b</span><span class="p">]</span><span class="w">
+  </span><span class="c1">;; some code here
+</span><span class="w">  </span><span class="p">(</span><span class="k">let</span><span class="w"> </span><span class="p">[</span><span class="n">c</span><span class="w"> </span><span class="p">(</span><span class="nf">some-function</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">b</span><span class="p">)]</span><span class="w">
+    </span><span class="c1">;; a ton of 
+</span><span class="w">    </span><span class="c1">;; complicated code here
+</span><span class="p">)))</span><span class="w">
+</span></code></pre>
+
+<p>In lisp-speak, a parenthesized block is called a &ldquo;form&rdquo;. The <code>foo</code> form is the outer form, and it contains the <code>let</code> form, which ostensibly contains other forms that do complicated things.</p>
+
+<p>I know that all the complicated code inside of the <code>let</code> form isn&rsquo;t going to
+mutate any state, and that it&rsquo;s only dependent on the <code>a</code> and <code>b</code> variables. This means that
+refactoring this code out into its own functions is as trivial as selecting
+everything between two matching parentheses and cutting and pasting it out. If
+you have an editor that supports paredit-style navigation of lisp forms, you can
+rearrange code at lightning speed.</p>
+
+<div class="footnotes">
+<hr>
+<ol>
+
+<li id="fn1">
+<p>My favourite essay of this ilk is Mark Tarver&rsquo;s melancholy
+<a href="http://www.shenlanguage.org/lambdassociates/htdocs/blog/bipolar.htm">The Bipolar Lisp Programmer</a>.
+He describes lisp as a language designed by and for brilliant failures. Back
+in university, I ate this shit up. My grades were obvious evidence of half the
+requirement of being a lisp programmer.&nbsp;<a href="#fnref1" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn2">
+<p>I&rsquo;m aware that clojure&rsquo;s <code>gensym</code> does not a hygenic macro system
+make. But, if you have strong opinions on hygenic macros as they relate to
+acceptable lisps, this article might not be for you.&nbsp;<a href="#fnref2" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn3">
+<p>For the record, I know that this isn&rsquo;t the &ldquo;right&rdquo; way to design OO
+programs, but the fact that I have to acknowledge this proves my point.&nbsp;<a href="#fnref3" rev="footnote">&#8617;</a></p>
+</li>
+
+</ol>
+</div>
+
+</section>
+<footer class='post-meta'>
+<a href='/author/max-veytsman.html'>Max Veytsman</a>
+on <a href='/tag/clojure.html'>Clojure</a>, <a href='/tag/programming.html'>Programming</a>, <a href='/tag/ruby.html'>Ruby</a>
+<time class='post-date' datetime='2016-11-07'>
+07 November 2016
+</time>
+</footer>
+</article>
 <article class='post'>
 <header class='post-header'>
 <h1 class='post-title'><a href="../2016/slippery-exception-clojure-ruby.html">Slippery exceptions in Clojure and Ruby</a></h1>

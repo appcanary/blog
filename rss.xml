@@ -5,7 +5,178 @@
   <id>http://blog.appcanary.com</id>
   <link href="http://blog.appcanary.com"/>
   <link href="http://blog.appcanary.com/rss.xml" rel="self"/>
-  <updated>2016-10-30T20:00:00-04:00</updated>
+  <updated>2016-11-06T19:00:00-05:00</updated>
+  <entry>
+    <title>We Left Clojure. Here's 5 Things I'll Miss.</title>
+    <link rel="alternate" href="http://blog.appcanary.com/2016/missing-clojure.html"/>
+    <id>http://blog.appcanary.com/2016/missing-clojure.html</id>
+    <published>2016-11-06T19:00:00-05:00</published>
+    <updated>2016-11-07T11:56:15-05:00</updated>
+    <author>
+      <name>Max Veytsman</name>
+    </author>
+    <content type="html">&lt;p&gt;On October 11th, Appcanary relied on about 8,500 lines of clojure code. On the
+12th we were down to zero. We replaced it by adding another 5,700 lines of Ruby to our codebase. 
+&lt;a href="https://twitter.com/phillmv"&gt;Phill&lt;/a&gt; will be discussing why we left, and what we learned both here and &lt;a href="http://rubyconf.org/program#prop_19"&gt;at this year&amp;rsquo;s RubyConf&lt;/a&gt;. For now, I want to talk about what I&amp;rsquo;ll miss.&lt;/p&gt;
+
+&lt;h3&gt;1) The joy of Lisp&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href="https://xkcd.com/297/"&gt;&lt;img alt="XKCD #297" src="http://imgs.xkcd.com/comics/lisp_cycles.png" /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;There&amp;rsquo;s something magical about writing lisp. Alan Kay called it the greatest
+single programming language ever devised. Paul Graham called it a
+secret weapon. You can find tens of thousands
+of words on the elegant, mind-expanding powers of lisp&lt;sup id="fnref1"&gt;&lt;a href="#fn1" rel="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt;. I don&amp;rsquo;t think
+my version of the Lisp wizardry blog post would be particularly original or
+unique, so if you want to know more about the agony and ecstasy of wielding
+parenthesis, read &lt;a href="http://paulgraham.com/avg.html"&gt;Paul Graham&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;What&amp;rsquo;s great about Clojure is that while Ruby
+&lt;a href="http://www.randomhacks.net/2005/12/03/why-ruby-is-an-acceptable-lisp/"&gt;might be an acceptable lisp&lt;/a&gt;,
+and lisp might
+&lt;a href="http://steve-yegge.blogspot.ca/2006/04/lisp-is-not-acceptable-lisp.html"&gt;not be an acceptable lisp&lt;/a&gt;,
+Clojure is a more than acceptable lisp. If we avoid the minefield of type
+systems, Clojure addresses the other 4 problems Steve Yegge discusses in the previous link&lt;sup id="fnref2"&gt;&lt;a href="#fn2" rel="footnote"&gt;2&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+
+&lt;h3&gt;2) Immutability&lt;/h3&gt;
+
+&lt;p&gt;The core data structures in clojure are immutable. If I define &lt;code&gt;car&lt;/code&gt; to be &lt;code&gt;&amp;quot;a dirty van&amp;quot;&lt;/code&gt;,
+nothing can ever change that. I can name some other thing &lt;code&gt;car&lt;/code&gt; later, but
+anything referencing that first &lt;code&gt;car&lt;/code&gt; will always be referencing &lt;code&gt;&amp;quot;a dirty van&amp;quot;&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;This is great for a host of reasons. For one, you get parallelization for free &amp;emdash;
+since nothing will mutate your collection, mapping or reducing some function
+over it can be hadooped out to as many clouds as you want without changing your
+algorithms.&lt;/p&gt;
+
+&lt;p&gt;It&amp;rsquo;s also much easier to can reason about your code. There&amp;rsquo;s a famous quote by Larry Wall:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;[Perl] would prefer that you stayed out of its living room because you weren&amp;rsquo;t
+invited, not because it has a shotgun.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;He was talking about private methods, but the same is true for mutability in most languages. You call some method and who knows if it mutated a value you were using? You would prefer it not to, but you have no shotgun, and frankly it&amp;rsquo;s so easy to mutate state without even knowing that you are. Consider Python:&lt;/p&gt;
+&lt;pre class="highlight python"&gt;&lt;code&gt;&lt;span class="n"&gt;str1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;"My name "&lt;/span&gt;
+&lt;span class="n"&gt;str2&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;str1&lt;/span&gt;
+&lt;span class="n"&gt;str1&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="s"&gt;"is Max"&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="n"&gt;str1&lt;/span&gt;
+&lt;span class="c"&gt;# "My name is Max"&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="n"&gt;str2&lt;/span&gt;
+&lt;span class="c"&gt;# "My name"&lt;/span&gt;
+
+&lt;span class="n"&gt;list1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="n"&gt;list2&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;list1&lt;/span&gt;
+&lt;span class="n"&gt;list1&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="n"&gt;list1&lt;/span&gt;
+&lt;span class="c"&gt;# [1, 2, 3, 4, 5]&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="n"&gt;list2&lt;/span&gt;
+&lt;span class="c"&gt;# [1, 2, 3, 4, 5]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Calling &lt;code&gt;+=&lt;/code&gt; on a string returned a new one, while calling &lt;code&gt;+=&lt;/code&gt; on a list
+mutated it in place! I have to remember which types are mutable, and whether
+&lt;code&gt;+=&lt;/code&gt; will give me a new object or mutate the existing one depending on its type.
+Who knows what might happen when you start passing your variables by reference
+to somewhere else?&lt;/p&gt;
+
+&lt;p&gt;Not having the choice to mutate state is as liberating as getting rid of your Facebook account.&lt;/p&gt;
+
+&lt;h3&gt;3) Data first programming&lt;/h3&gt;
+
+&lt;p&gt;Walking away from object-oriented languages is very freeing. &lt;/p&gt;
+
+&lt;p&gt;I want to design a model for the game of poker. I start by listing the
+nouns&lt;sup id="fnref3"&gt;&lt;a href="#fn3" rel="footnote"&gt;3&lt;/a&gt;&lt;/sup&gt;: &amp;ldquo;card&amp;rdquo;, &amp;ldquo;deck&amp;rdquo;, &amp;ldquo;hand&amp;rdquo;, &amp;ldquo;player&amp;rdquo;, &amp;ldquo;dealer&amp;rdquo;, etc. Then I
+think of the verbs, &amp;ldquo;deal&amp;rdquo;, &amp;ldquo;bet&amp;rdquo;, &amp;ldquo;fold&amp;rdquo;, etc. &lt;/p&gt;
+
+&lt;p&gt;Now what?
+&lt;a href="http://stackoverflow.com/questions/19553838/oop-design-quesiton-with-a-card-game"&gt;Here&amp;rsquo;s&lt;/a&gt;
+a typical StackOverflow question demonstrating the confusion that comes with
+designing like this. Is the dealer a kind of player or a separate class? If
+players have hands of cards, how does the deck keep track of what cards are
+left? &lt;/p&gt;
+
+&lt;p&gt;At the end of the day, the work of programming a poker game is codifying all of
+the actual rules of the game, and these will end up in a &lt;code&gt;Game&lt;/code&gt; singleton that
+does most of the work anyway. &lt;/p&gt;
+
+&lt;p&gt;If you start by thinking about data and the functions that operate on it,
+there&amp;rsquo;s a natural way to solve hard problems from the top-down, which lets you quickly iterate your
+design (see below). You have some data structure that represents the game
+state, a structure representing possible actions a player can take, and a
+function to transform a game state and an action into the next game state. That
+function encodes the actual rules of poker (defined in lots of other, smaller
+functions).&lt;/p&gt;
+
+&lt;p&gt;I find this style of programming very natural and satisfying. Of course, you can
+do this in any language; but I find Clojure draws me towards it, while OO
+languages push me away from it.&lt;/p&gt;
+
+&lt;h3&gt;4) Unit Testing&lt;/h3&gt;
+
+&lt;p&gt;The majority of your code is made up of pure functions. A pure function is one
+which always gives the same output for a given input &amp;emdash; doesn&amp;rsquo;t that sound
+easy to test? Instead of setting up test harnesses databases and mocks, you just
+write tests for your functions.&lt;/p&gt;
+
+&lt;p&gt;Testing the edges of your code that talk to the outside world requires mocking,
+of course, and integration testing is never trivial. But the first thing you want to
+test is the super-complicated piece of business logic deep in your
+codebase. The business logic your business depends on, like for instance computing
+whether your version of OpenSSL is vulnerable to HeartBleed. &lt;/p&gt;
+
+&lt;p&gt;Clojure pushes you
+to make that bit of code a pure function that&amp;rsquo;s testable without setting
+up complicated state.&lt;/p&gt;
+
+&lt;h3&gt;5) Refactoring&lt;/h3&gt;
+
+&lt;p&gt;Here&amp;rsquo;s a typical clojure function&lt;/p&gt;
+&lt;pre class="highlight clojure"&gt;&lt;code&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;defn&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;foo&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="c1"&gt;;; some code here
+&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;let&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;c&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;some-function&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="p"&gt;)]&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="c1"&gt;;; a ton of 
+&lt;/span&gt;&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="c1"&gt;;; complicated code here
+&lt;/span&gt;&lt;span class="p"&gt;)))&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In lisp-speak, a parenthesized block is called a &amp;ldquo;form&amp;rdquo;. The &lt;code&gt;foo&lt;/code&gt; form is the outer form, and it contains the &lt;code&gt;let&lt;/code&gt; form, which ostensibly contains other forms that do complicated things.&lt;/p&gt;
+
+&lt;p&gt;I know that all the complicated code inside of the &lt;code&gt;let&lt;/code&gt; form isn&amp;rsquo;t going to
+mutate any state, and that it&amp;rsquo;s only dependent on the &lt;code&gt;a&lt;/code&gt; and &lt;code&gt;b&lt;/code&gt; variables. This means that
+refactoring this code out into its own functions is as trivial as selecting
+everything between two matching parentheses and cutting and pasting it out. If
+you have an editor that supports paredit-style navigation of lisp forms, you can
+rearrange code at lightning speed.&lt;/p&gt;
+
+&lt;div class="footnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+
+&lt;li id="fn1"&gt;
+&lt;p&gt;My favourite essay of this ilk is Mark Tarver&amp;rsquo;s melancholy
+&lt;a href="http://www.shenlanguage.org/lambdassociates/htdocs/blog/bipolar.htm"&gt;The Bipolar Lisp Programmer&lt;/a&gt;.
+He describes lisp as a language designed by and for brilliant failures. Back
+in university, I ate this shit up. My grades were obvious evidence of half the
+requirement of being a lisp programmer.&amp;nbsp;&lt;a href="#fnref1" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+
+&lt;li id="fn2"&gt;
+&lt;p&gt;I&amp;rsquo;m aware that clojure&amp;rsquo;s &lt;code&gt;gensym&lt;/code&gt; does not a hygenic macro system
+make. But, if you have strong opinions on hygenic macros as they relate to
+acceptable lisps, this article might not be for you.&amp;nbsp;&lt;a href="#fnref2" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+
+&lt;li id="fn3"&gt;
+&lt;p&gt;For the record, I know that this isn&amp;rsquo;t the &amp;ldquo;right&amp;rdquo; way to design OO
+programs, but the fact that I have to acknowledge this proves my point.&amp;nbsp;&lt;a href="#fnref3" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+
+&lt;/ol&gt;
+&lt;/div&gt;
+</content>
+  </entry>
   <entry>
     <title>The Mirai Botnet is Proof the Security Industry is Broken</title>
     <link rel="alternate" href="http://blog.appcanary.com/2016/mirai-botnet-security-broken.html"/>
@@ -701,31 +872,6 @@ phonemes as sequences of lengths of encrypted packets.&lt;/p&gt;
 &lt;p&gt;Our product, &lt;a href="https://appcanary.com/?utm_source=blog&amp;amp;utm_medium=web&amp;amp;utm_campaign=compress"&gt;Appcanary&lt;/a&gt;, monitors your apps and servers, and notifies you whenever a new vulnerability is discovered in a package you rely on. &lt;/p&gt;
 
 &lt;p&gt;&lt;a href="https://appcanary.com/sign_up?utm_source=blog&amp;amp;utm_medium=web&amp;amp;utm_campaign=compress"&gt;Sign up&lt;/a&gt; today!&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Appcanary now supports Debian!</title>
-    <link rel="alternate" href="http://blog.appcanary.com/2016/debian-support.html"/>
-    <id>http://blog.appcanary.com/2016/debian-support.html</id>
-    <published>2016-06-23T20:00:00-04:00</published>
-    <updated>2016-06-24T11:23:20-04:00</updated>
-    <author>
-      <name>Max Veytsman</name>
-    </author>
-    <content type="html">&lt;p&gt;I&amp;rsquo;m excited to announce that Appcanary now fully supports &lt;strong&gt;Debian&lt;/strong&gt;. If you
-install our agent on a Debian server, we will email you notifications whenever
-any package you have installed on your system has a known vulnerability. We track over 24,000 vulnerabilities already!&lt;/p&gt;
-
-&lt;p&gt;You can also use our &lt;a href="https://appcanary.com/docs#check-endpoint"&gt;Check API&lt;/a&gt; to
-verify if your Debian server has any vulnerable packages, and our
-&lt;a href="https://appcanary.com/docs#create-monitor"&gt;Monitor API&lt;/a&gt; to register to receive
-notifications if a set of Debian packages ever has new vulnerabilities.&lt;/p&gt;
-
-&lt;p&gt;If you&amp;rsquo;re not a current user and want to try out Appcanary for Debian, you can
-&lt;a href="https://appcanary.com/signup"&gt;sign up&lt;/a&gt;!&lt;/p&gt;
-
-&lt;p&gt;You can always let us know what you think at
-&lt;a href="mailto:hello@appcanary.com"&gt;hello@appcanary.com&lt;/a&gt;.&lt;/p&gt;
 </content>
   </entry>
 </feed>
