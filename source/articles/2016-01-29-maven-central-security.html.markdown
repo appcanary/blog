@@ -3,7 +3,7 @@ title: Maven Central Security
 date: 2016-01-29
 tags: Java, Maven, Clojure, Programming, Security, Talks
 author: mveytsman
-published: false
+published: true
 layout: post
 ---
 The security of your package manager is very important to us at appcanary, and it’s important to make sure the packages you’re downloading are secure in transit.
