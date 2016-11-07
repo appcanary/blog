@@ -36,7 +36,7 @@ The core data structures in clojure are immutable. If I define `car` to be `"a d
 nothing can ever change that. I can name some other thing `car` later, but
 anything referencing that first `car` will always be referencing `"a dirty van"`.
 
-This is great for a host of reasons. For one, you get parallelization for free &emdash;
+This is great for a host of reasons. For one, you get parallelization for free &mdash;
 since nothing will mutate your collection, mapping or reducing some function
 over it can be hadooped out to as many clouds as you want without changing your
 algorithms.
@@ -109,7 +109,7 @@ languages push me away from it.
 ### 4) Unit Testing
 
 The majority of your code is made up of pure functions. A pure function is one
-which always gives the same output for a given input &emdash; doesn't that sound
+which always gives the same output for a given input &mdash; doesn't that sound
 easy to test? Instead of setting up test harnesses databases and mocks, you just
 write tests for your functions.
 
