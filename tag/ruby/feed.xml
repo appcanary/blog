@@ -94,7 +94,7 @@
     <link rel="alternate" href="http://blog.appcanary.com/2016/missing-clojure.html"/>
     <id>http://blog.appcanary.com/2016/missing-clojure.html</id>
     <published>2016-11-06T19:00:00-05:00</published>
-    <updated>2016-11-07T11:56:15-05:00</updated>
+    <updated>2016-11-07T12:42:07-05:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
@@ -127,7 +127,7 @@ systems, Clojure addresses the other 4 problems Steve Yegge discusses in the pre
 nothing can ever change that. I can name some other thing &lt;code&gt;car&lt;/code&gt; later, but
 anything referencing that first &lt;code&gt;car&lt;/code&gt; will always be referencing &lt;code&gt;&amp;quot;a dirty van&amp;quot;&lt;/code&gt;.&lt;/p&gt;
 
-&lt;p&gt;This is great for a host of reasons. For one, you get parallelization for free &amp;emdash;
+&lt;p&gt;This is great for a host of reasons. For one, you get parallelization for free &amp;mdash;
 since nothing will mutate your collection, mapping or reducing some function
 over it can be hadooped out to as many clouds as you want without changing your
 algorithms.&lt;/p&gt;
@@ -199,7 +199,7 @@ languages push me away from it.&lt;/p&gt;
 &lt;h3&gt;4) Unit Testing&lt;/h3&gt;
 
 &lt;p&gt;The majority of your code is made up of pure functions. A pure function is one
-which always gives the same output for a given input &amp;emdash; doesn&amp;rsquo;t that sound
+which always gives the same output for a given input &amp;mdash; doesn&amp;rsquo;t that sound
 easy to test? Instead of setting up test harnesses databases and mocks, you just
 write tests for your functions.&lt;/p&gt;
 
