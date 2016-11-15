@@ -1,6 +1,6 @@
 ---
 title: Best security news of 2016? Ubuntu 16.10 ships with unattended upgrades enabled
-date: 2016-11-09
+date: 2016-11-15
 tags:  Clojure, Programming, Ruby
 author: mveytsman
 published: true
