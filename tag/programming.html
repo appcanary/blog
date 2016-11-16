@@ -57,7 +57,7 @@
 <div class='vertical'>
 <div class='main-header-content inner'>
 <h1 class='page-title'>Programming</h1>
-<h2 class='page-description'>A 4-post collection</h2>
+<h2 class='page-description'>A 6-post collection</h2>
 </div>
 </div>
 </header>
@@ -68,6 +68,138 @@
 </nav>
 
 </div>
+<article class='post'>
+<header class='post-header'>
+<h1 class='post-title'><a href="../2016/unattended-upgrades.html">Good News: Ubuntu Now Ships With unattended-upgrades On By Default!</a></h1>
+<section class='post-meta'>
+</section>
+</header>
+<section class='post-content'>
+<p>Last week, we got a strange support request. One of our users had received the following notification:</p>
+
+<blockquote>
+<p>Hey! Good job.</p>
+
+<p>We&rsquo;ve detected that you patched some vulnerabilities.</p>
+
+<p>Here&rsquo;s what changed:</p>
+
+<p><a href="https://appcanary.com/vulns/46220">CVE-2016-8704</a></p>
+
+<p>is no longer present in:</p>
+
+<p>[name of server redacted]</p>
+</blockquote>
+
+<p>This came as a surprise, since they knew for a fact that no one had touched the package in
+question, and they were certain they had not enabled unattended upgrades. </p>
+
+<p>Somehow, the vulnerability magically got patched and they wanted to
+know: what&rsquo;s going on?</p>
+
+<p>The vuln is a pretty serious remote code execution vulnerability in <code>memcached</code>,
+and as far as we could tell our user was indeed using the most recent version available for their
+distribution &mdash; <code>1.4.25-2ubuntu2.1</code>. This version was released on November 3rd, and we could see from our logs that
+<code>memcached</code> got upgraded that same day.</p>
+
+<p>How did it happen without them knowing about it? The only thing unique about
+their configuration was that they&rsquo;re running the recently released Ubuntu 16.10 (Yakkety
+Yak)<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup>. </p>
+
+<p>We dug around, and set up some test Yakkety boxes, and
+lo and behold: unattended upgrades is automatically enabled by default!</p>
+
+<p>For those of you who are unaware, <code>unattended-upgrades</code> is a debian/ubuntu package that, well, does what it says on the
+tin: it automatically upgrades your packages. The most common configuration, and the one enabled in 16.10, is to upgrade any packages that have a published security patch. Unattended upgrades does this by checking and installing any
+updates from the <code>${distro_codename}-security</code> repository.</p>
+
+<p>Ubuntu/debian has had this for years, but it simply was never turned on by
+default. After a year of many
+<a href="https://blog.appcanary.com/2016/vikhal-symantec.html">security</a>
+<a href="https://blog.appcanary.com/2016/mirai-botnet-security-broken.html">fails</a>, this
+news warmed the cockles of my heart and gave me hope for our future! And what&rsquo;s
+even amazing is that they turned it on without any fanfare. </p>
+
+<p>It&rsquo;s the quiet,
+simple changes that provide the biggest wins.</p>
+
+<p>Of course, there are reasons why administrators don&rsquo;t always want software to be upgraded without
+their input. And if it does get updated, there are good reasons for knowing exactly what vulnerabilities are being patched when.
+<a href="https://appcanary.com/?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=unattended">Appcanary</a> exists in order to allow you to be notified
+about security updates without automatically installing them, and to have
+insight into what&rsquo;s going being installed if you are patching automatically.</p>
+
+<p>But if you don&rsquo;t have the capacity to actively manage the packages on your
+linux systems (and even if you do!), we implore you: set up <code>unattended-upgrades</code>!</p>
+
+<p>Ubuntu enabling this by default is a great sign for the future.</p>
+
+<h2>Not running Ubuntu 16.10?</h2>
+
+<p>Here&rsquo;s how to turn on unattended upgrades</p>
+
+<ul>
+<li>Ansible: <a href="https://galaxy.ansible.com/jnv/unattended-upgrades/">jnv.unattended-upgrades</a></li>
+<li>Puppet: <a href="https://forge.puppet.com/puppet/unattended_upgrades">puppet/unattended_upgrades</a></li>
+<li>Chef: <a href="https://supermarket.chef.io/cookbooks/apt">apt</a></li>
+<li><p>If you&rsquo;re using the server interactively: </p>
+
+<p><code>sudo apt-get install unattended-upgrades &amp;&amp; sudo dpkg-reconfigure unattended-upgrades</code></p></li>
+<li><p>Set up manually: <code>sudo apt-get install unattended-upgrades</code> and</p>
+
+<ul>
+<li><p>In <code>/etc/apt/apt.conf.d/20auto-upgrades</code>:</p>
+<pre class="highlight plaintext"><code>APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Unattended-Upgrade "1";
+</code></pre></li>
+<li><p>In <code>/etc/apt/apt.conf.d/50unattended-upgrades</code></p>
+<pre class="highlight plaintext"><code>// Automatically upgrade packages from these (origin, archive) pairs
+Unattended-Upgrade::Allowed-Origins {    
+// ${distro_id} and ${distro_codename} will be automatically expanded
+    "${distro_id} ${distro_codename}-security";
+};
+
+// Send email to this address for problems or packages upgrades
+// If empty or unset then no email is sent, make sure that you 
+// have a working mail setup on your system. The package 'mailx'
+// must be installed or anything that provides /usr/bin/mail.
+//Unattended-Upgrade::Mail "root@localhost";
+
+// Do automatic removal of new unused dependencies after the upgrade
+// (equivalent to apt-get autoremove)
+//Unattended-Upgrade::Remove-Unused-Dependencies "false";
+
+// Automatically reboot *WITHOUT CONFIRMATION* if a 
+// the file /var/run/reboot-required is found after the upgrade 
+//Unattended-Upgrade::Automatic-Reboot "false";
+</code></pre></li>
+</ul></li>
+</ul>
+
+<div class="footnotes">
+<hr>
+<ol>
+
+<li id="fn1">
+<p>16.10 is not a Long Term Support release. Regular Ubuntu releases
+are supported for 9 months, while April releases on even years (i.e. 14.04,
+16.04, etc&hellip;) are designated LTS, and are supported for 5 years. It&rsquo;s thus
+more common to see 12.04, 14.04, and 16.04 in use on servers over other
+Ubuntu releases. This particular user has a good reason for running 16.10.&nbsp;<a href="#fnref1" rev="footnote">&#8617;</a></p>
+</li>
+
+</ol>
+</div>
+
+</section>
+<footer class='post-meta'>
+<a href='/author/max-veytsman.html'>Max Veytsman</a>
+on <a href='/tag/clojure.html'>Clojure</a>, <a href='/tag/programming.html'>Programming</a>, <a href='/tag/ruby.html'>Ruby</a>
+<time class='post-date' datetime='2016-11-15'>
+15 November 2016
+</time>
+</footer>
+</article>
 <article class='post'>
 <header class='post-header'>
 <h1 class='post-title'><a href="../2016/missing-clojure.html">We Left Clojure. Here's 5 Things I'll Miss.</a></h1>
@@ -490,6 +622,30 @@ on <a href='/tag/clojure.html'>Clojure</a>, <a href='/tag/datomic.html'>Datomic<
 on <a href='/tag/clojure.html'>Clojure</a>, <a href='/tag/programming.html'>Programming</a>, <a href='/tag/developer-diary.html'>Developer Diary</a>, <a href='/tag/bugs.html'>Bugs</a>
 <time class='post-date' datetime='2016-02-02'>
 02 February 2016
+</time>
+</footer>
+</article>
+<article class='post'>
+<header class='post-header'>
+<h1 class='post-title'><a href="../2016/maven-central-security.html">Maven Central Security</a></h1>
+<section class='post-meta'>
+</section>
+</header>
+<section class='post-content'>
+<p>The security of your package manager is very important to us at appcanary, and it’s important to make sure the packages you’re downloading are secure in transit.</p>
+
+<p>Back in the summer of 2014, I discovered that <a href="http://search.maven.org/">Maven Central</a>  wasn’t using TLS or any signature verification when serving up java packages.</p>
+
+<p>I gave a talk at <a href="http://bangbangcon.com/index.html">!!con 2015</a> about what I did to help convince them to start using encryption.</p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/6NdLZl16OkA" frameborder="0" allowfullscreen></iframe>
+
+</section>
+<footer class='post-meta'>
+<a href='/author/max-veytsman.html'>Max Veytsman</a>
+on <a href='/tag/java.html'>Java</a>, <a href='/tag/maven.html'>Maven</a>, <a href='/tag/clojure.html'>Clojure</a>, <a href='/tag/programming.html'>Programming</a>, <a href='/tag/security.html'>Security</a>, <a href='/tag/talks.html'>Talks</a>
+<time class='post-date' datetime='2016-01-29'>
+29 January 2016
 </time>
 </footer>
 </article>

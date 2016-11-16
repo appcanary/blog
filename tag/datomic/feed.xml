@@ -5,13 +5,13 @@
   <id>http://blog.appcanary.com</id>
   <link href="http://blog.appcanary.com"/>
   <link href="http://blog.appcanary.com/tag/datomic/feed.xml" rel="self"/>
-  <updated>2016-02-08T19:00:00-05:00</updated>
+  <updated>2016-02-08T16:00:00-08:00</updated>
   <entry>
     <title>A Gentle Intro to Datomic</title>
     <link rel="alternate" href="http://blog.appcanary.com/2016/datomic-intro-talk.html"/>
     <id>http://blog.appcanary.com/2016/datomic-intro-talk.html</id>
-    <published>2016-02-08T19:00:00-05:00</published>
-    <updated>2016-04-06T13:47:17-04:00</updated>
+    <published>2016-02-08T16:00:00-08:00</published>
+    <updated>2016-04-06T10:47:17-07:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>

@@ -5,13 +5,13 @@
   <id>http://blog.appcanary.com</id>
   <link href="http://blog.appcanary.com"/>
   <link href="http://blog.appcanary.com/tag/retrospective/feed.xml" rel="self"/>
-  <updated>2015-10-25T20:00:00-04:00</updated>
+  <updated>2015-10-25T17:00:00-07:00</updated>
   <entry>
     <title>Hello Appcanary</title>
     <link rel="alternate" href="http://blog.appcanary.com/2015/hello-appcanary.html"/>
     <id>http://blog.appcanary.com/2015/hello-appcanary.html</id>
-    <published>2015-10-25T20:00:00-04:00</published>
-    <updated>2016-01-29T16:22:53-05:00</updated>
+    <published>2015-10-25T17:00:00-07:00</published>
+    <updated>2016-01-29T13:22:53-08:00</updated>
     <author>
       <name>Team Appcanary</name>
     </author>

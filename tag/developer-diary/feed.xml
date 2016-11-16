@@ -5,13 +5,13 @@
   <id>http://blog.appcanary.com</id>
   <link href="http://blog.appcanary.com"/>
   <link href="http://blog.appcanary.com/tag/developer-diary/feed.xml" rel="self"/>
-  <updated>2016-02-01T19:00:00-05:00</updated>
+  <updated>2016-02-01T16:00:00-08:00</updated>
   <entry>
     <title>How being lazy about state management in Clojure caused us downtime</title>
     <link rel="alternate" href="http://blog.appcanary.com/2016/state-management-downtime.html"/>
     <id>http://blog.appcanary.com/2016/state-management-downtime.html</id>
-    <published>2016-02-01T19:00:00-05:00</published>
-    <updated>2016-04-06T13:47:17-04:00</updated>
+    <published>2016-02-01T16:00:00-08:00</published>
+    <updated>2016-04-06T10:47:17-07:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
@@ -139,8 +139,8 @@
     <title>Slippery exceptions in Clojure and Ruby</title>
     <link rel="alternate" href="http://blog.appcanary.com/2016/slippery-exception-clojure-ruby.html"/>
     <id>http://blog.appcanary.com/2016/slippery-exception-clojure-ruby.html</id>
-    <published>2016-02-15T19:00:00-05:00</published>
-    <updated>2016-04-06T13:47:17-04:00</updated>
+    <published>2016-02-15T16:00:00-08:00</published>
+    <updated>2016-04-06T10:47:17-07:00</updated>
     <author>
       <name>Phillip Mendonça-Vieira</name>
     </author>

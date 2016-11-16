@@ -5,13 +5,31 @@
   <id>http://blog.appcanary.com</id>
   <link href="http://blog.appcanary.com"/>
   <link href="http://blog.appcanary.com/tag/programming/feed.xml" rel="self"/>
-  <updated>2016-02-01T19:00:00-05:00</updated>
+  <updated>2016-01-28T16:00:00-08:00</updated>
+  <entry>
+    <title>Maven Central Security</title>
+    <link rel="alternate" href="http://blog.appcanary.com/2016/maven-central-security.html"/>
+    <id>http://blog.appcanary.com/2016/maven-central-security.html</id>
+    <published>2016-01-28T16:00:00-08:00</published>
+    <updated>2016-11-16T11:36:46-08:00</updated>
+    <author>
+      <name>Max Veytsman</name>
+    </author>
+    <content type="html">&lt;p&gt;The security of your package manager is very important to us at appcanary, and it’s important to make sure the packages you’re downloading are secure in transit.&lt;/p&gt;
+
+&lt;p&gt;Back in the summer of 2014, I discovered that &lt;a href="http://search.maven.org/"&gt;Maven Central&lt;/a&gt;  wasn’t using TLS or any signature verification when serving up java packages.&lt;/p&gt;
+
+&lt;p&gt;I gave a talk at &lt;a href="http://bangbangcon.com/index.html"&gt;!!con 2015&lt;/a&gt; about what I did to help convince them to start using encryption.&lt;/p&gt;
+
+&lt;iframe width="560" height="315" src="https://www.youtube.com/embed/6NdLZl16OkA" frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;
+</content>
+  </entry>
   <entry>
     <title>How being lazy about state management in Clojure caused us downtime</title>
     <link rel="alternate" href="http://blog.appcanary.com/2016/state-management-downtime.html"/>
     <id>http://blog.appcanary.com/2016/state-management-downtime.html</id>
-    <published>2016-02-01T19:00:00-05:00</published>
-    <updated>2016-04-06T13:47:17-04:00</updated>
+    <published>2016-02-01T16:00:00-08:00</published>
+    <updated>2016-04-06T10:47:17-07:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
@@ -139,8 +157,8 @@
     <title>A Gentle Intro to Datomic</title>
     <link rel="alternate" href="http://blog.appcanary.com/2016/datomic-intro-talk.html"/>
     <id>http://blog.appcanary.com/2016/datomic-intro-talk.html</id>
-    <published>2016-02-08T19:00:00-05:00</published>
-    <updated>2016-04-06T13:47:17-04:00</updated>
+    <published>2016-02-08T16:00:00-08:00</published>
+    <updated>2016-04-06T10:47:17-07:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
@@ -157,8 +175,8 @@
     <title>Slippery exceptions in Clojure and Ruby</title>
     <link rel="alternate" href="http://blog.appcanary.com/2016/slippery-exception-clojure-ruby.html"/>
     <id>http://blog.appcanary.com/2016/slippery-exception-clojure-ruby.html</id>
-    <published>2016-02-15T19:00:00-05:00</published>
-    <updated>2016-04-06T13:47:17-04:00</updated>
+    <published>2016-02-15T16:00:00-08:00</published>
+    <updated>2016-04-06T10:47:17-07:00</updated>
     <author>
       <name>Phillip Mendonça-Vieira</name>
     </author>
@@ -240,8 +258,8 @@
     <title>We Left Clojure. Here's 5 Things I'll Miss.</title>
     <link rel="alternate" href="http://blog.appcanary.com/2016/missing-clojure.html"/>
     <id>http://blog.appcanary.com/2016/missing-clojure.html</id>
-    <published>2016-11-06T19:00:00-05:00</published>
-    <updated>2016-11-07T12:42:07-05:00</updated>
+    <published>2016-11-06T16:00:00-08:00</published>
+    <updated>2016-11-16T11:36:46-08:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
@@ -401,6 +419,132 @@ acceptable lisps, this article might not be for you.&amp;nbsp;&lt;a href="#fnref
 &lt;li id="fn3"&gt;
 &lt;p&gt;For the record, I know that this isn&amp;rsquo;t the &amp;ldquo;right&amp;rdquo; way to design OO
 programs, but the fact that I have to acknowledge this proves my point.&amp;nbsp;&lt;a href="#fnref3" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+
+&lt;/ol&gt;
+&lt;/div&gt;
+</content>
+  </entry>
+  <entry>
+    <title>Good News: Ubuntu Now Ships With unattended-upgrades On By Default!</title>
+    <link rel="alternate" href="http://blog.appcanary.com/2016/unattended-upgrades.html"/>
+    <id>http://blog.appcanary.com/2016/unattended-upgrades.html</id>
+    <published>2016-11-14T16:00:00-08:00</published>
+    <updated>2016-11-16T11:37:29-08:00</updated>
+    <author>
+      <name>Max Veytsman</name>
+    </author>
+    <content type="html">&lt;p&gt;Last week, we got a strange support request. One of our users had received the following notification:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Hey! Good job.&lt;/p&gt;
+
+&lt;p&gt;We&amp;rsquo;ve detected that you patched some vulnerabilities.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s what changed:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://appcanary.com/vulns/46220"&gt;CVE-2016-8704&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;is no longer present in:&lt;/p&gt;
+
+&lt;p&gt;[name of server redacted]&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;This came as a surprise, since they knew for a fact that no one had touched the package in
+question, and they were certain they had not enabled unattended upgrades. &lt;/p&gt;
+
+&lt;p&gt;Somehow, the vulnerability magically got patched and they wanted to
+know: what&amp;rsquo;s going on?&lt;/p&gt;
+
+&lt;p&gt;The vuln is a pretty serious remote code execution vulnerability in &lt;code&gt;memcached&lt;/code&gt;,
+and as far as we could tell our user was indeed using the most recent version available for their
+distribution &amp;mdash; &lt;code&gt;1.4.25-2ubuntu2.1&lt;/code&gt;. This version was released on November 3rd, and we could see from our logs that
+&lt;code&gt;memcached&lt;/code&gt; got upgraded that same day.&lt;/p&gt;
+
+&lt;p&gt;How did it happen without them knowing about it? The only thing unique about
+their configuration was that they&amp;rsquo;re running the recently released Ubuntu 16.10 (Yakkety
+Yak)&lt;sup id="fnref1"&gt;&lt;a href="#fn1" rel="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt;. &lt;/p&gt;
+
+&lt;p&gt;We dug around, and set up some test Yakkety boxes, and
+lo and behold: unattended upgrades is automatically enabled by default!&lt;/p&gt;
+
+&lt;p&gt;For those of you who are unaware, &lt;code&gt;unattended-upgrades&lt;/code&gt; is a debian/ubuntu package that, well, does what it says on the
+tin: it automatically upgrades your packages. The most common configuration, and the one enabled in 16.10, is to upgrade any packages that have a published security patch. Unattended upgrades does this by checking and installing any
+updates from the &lt;code&gt;${distro_codename}-security&lt;/code&gt; repository.&lt;/p&gt;
+
+&lt;p&gt;Ubuntu/debian has had this for years, but it simply was never turned on by
+default. After a year of many
+&lt;a href="https://blog.appcanary.com/2016/vikhal-symantec.html"&gt;security&lt;/a&gt;
+&lt;a href="https://blog.appcanary.com/2016/mirai-botnet-security-broken.html"&gt;fails&lt;/a&gt;, this
+news warmed the cockles of my heart and gave me hope for our future! And what&amp;rsquo;s
+even amazing is that they turned it on without any fanfare. &lt;/p&gt;
+
+&lt;p&gt;It&amp;rsquo;s the quiet,
+simple changes that provide the biggest wins.&lt;/p&gt;
+
+&lt;p&gt;Of course, there are reasons why administrators don&amp;rsquo;t always want software to be upgraded without
+their input. And if it does get updated, there are good reasons for knowing exactly what vulnerabilities are being patched when.
+&lt;a href="https://appcanary.com/?utm_source=blog&amp;amp;utm_medium=web&amp;amp;utm_campaign=unattended"&gt;Appcanary&lt;/a&gt; exists in order to allow you to be notified
+about security updates without automatically installing them, and to have
+insight into what&amp;rsquo;s going being installed if you are patching automatically.&lt;/p&gt;
+
+&lt;p&gt;But if you don&amp;rsquo;t have the capacity to actively manage the packages on your
+linux systems (and even if you do!), we implore you: set up &lt;code&gt;unattended-upgrades&lt;/code&gt;!&lt;/p&gt;
+
+&lt;p&gt;Ubuntu enabling this by default is a great sign for the future.&lt;/p&gt;
+
+&lt;h2&gt;Not running Ubuntu 16.10?&lt;/h2&gt;
+
+&lt;p&gt;Here&amp;rsquo;s how to turn on unattended upgrades&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Ansible: &lt;a href="https://galaxy.ansible.com/jnv/unattended-upgrades/"&gt;jnv.unattended-upgrades&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Puppet: &lt;a href="https://forge.puppet.com/puppet/unattended_upgrades"&gt;puppet/unattended_upgrades&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Chef: &lt;a href="https://supermarket.chef.io/cookbooks/apt"&gt;apt&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;If you&amp;rsquo;re using the server interactively: &lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;sudo apt-get install unattended-upgrades &amp;amp;&amp;amp; sudo dpkg-reconfigure unattended-upgrades&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Set up manually: &lt;code&gt;sudo apt-get install unattended-upgrades&lt;/code&gt; and&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;In &lt;code&gt;/etc/apt/apt.conf.d/20auto-upgrades&lt;/code&gt;:&lt;/p&gt;
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Unattended-Upgrade "1";
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;In &lt;code&gt;/etc/apt/apt.conf.d/50unattended-upgrades&lt;/code&gt;&lt;/p&gt;
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;// Automatically upgrade packages from these (origin, archive) pairs
+Unattended-Upgrade::Allowed-Origins {    
+// ${distro_id} and ${distro_codename} will be automatically expanded
+    "${distro_id} ${distro_codename}-security";
+};
+
+// Send email to this address for problems or packages upgrades
+// If empty or unset then no email is sent, make sure that you 
+// have a working mail setup on your system. The package 'mailx'
+// must be installed or anything that provides /usr/bin/mail.
+//Unattended-Upgrade::Mail "root@localhost";
+
+// Do automatic removal of new unused dependencies after the upgrade
+// (equivalent to apt-get autoremove)
+//Unattended-Upgrade::Remove-Unused-Dependencies "false";
+
+// Automatically reboot *WITHOUT CONFIRMATION* if a 
+// the file /var/run/reboot-required is found after the upgrade 
+//Unattended-Upgrade::Automatic-Reboot "false";
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class="footnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+
+&lt;li id="fn1"&gt;
+&lt;p&gt;16.10 is not a Long Term Support release. Regular Ubuntu releases
+are supported for 9 months, while April releases on even years (i.e. 14.04,
+16.04, etc&amp;hellip;) are designated LTS, and are supported for 5 years. It&amp;rsquo;s thus
+more common to see 12.04, 14.04, and 16.04 in use on servers over other
+Ubuntu releases. This particular user has a good reason for running 16.10.&amp;nbsp;&lt;a href="#fnref1" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 
 &lt;/ol&gt;
