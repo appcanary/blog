@@ -6,7 +6,7 @@ author: mveytsman
 published: true
 layout: post
 ---
-We got a strange support request on November 3rd. One of our users got the following email:
+Last week, we got a strange support request. One of our users had received the following notification:
 
 
 > Hey! Good job.
@@ -21,47 +21,48 @@ We got a strange support request on November 3rd. One of our users got the follo
 >
 > [name of server redacted]
 
-They were surprised to get this, as they were pretty sure they were not running
-unattended upgrades, and they knew that no one manually upgraded the package in
-question. Somehow the vulnerability magically got patched and they wanted to
-know how?
+This came as a surprise, since they knew for a fact that no one had touched the package in
+question, and they were certain they had not enabled unattended upgrades. 
+
+Somehow, the vulnerability magically got patched and they wanted to
+know: what's going on?
 
 The vuln is a pretty serious remote code execution vulnerability in `memcached`,
-and it did in fact look like our user was running the latest version for their
-distribution &mdash; `1.4.25-2ubuntu2.1`. This version of the package only came
-out on November 3rd, and we could see from our logs that they had upgraded
-`memcached` that day.
+and as far as we could tell, our user was indeed using the most recent version available for their
+distribution &mdash; `1.4.25-2ubuntu2.1`. This version was released on November 3rd, and we could see from our logs that
+`memcached` got upgraded that same day.
 
-How did it happen without any interaction from them? The only thing unique about
-their configuration was that they were running Ubuntu 16.10 (Yakkety
-Yak)[^yakkety]. We did a bit of digging and set up some test Yakkety boxes, and
-low and behold, unattended upgrades is automatically enabled by default!
+How did it happen without them knowing about it? The only thing unique about
+their configuration was that they're running the recently released Ubuntu 16.10 (Yakkety
+Yak)[^yakkety]. 
 
-Unattended upgrades is a debian/ubuntu package that does what it says on the
-tin: it automatically upgrades packages. The most common configuration, and this
-is the one enabled in 16.10, is to upgrade any packages that have a published
-security patch. Unattended upgrades does this by automatically installing any
+We dug around, and set up some test Yakkety boxes, and
+lo and behold: unattended upgrades is automatically enabled by default!
+
+For those of you who are unaware, `unattended-upgrades` is a debian/ubuntu package that, well, does what it says on the
+tin: it automatically upgrades your packages. The most common configuration, andthe one enabled in 16.10, is to upgrade any packages that have a published security patch. Unattended upgrades does this by checking and installing any
 updates from the `${distro_codename}-security` repository.
 
-Ubuntu/debian has had it available, for a while, but it never came turned on by
+Ubuntu/debian has had this for years, but it simply was never turned on by
 default. After a year of many
 [security](https://blog.appcanary.com/2016/vikhal-symantec.html)
 [fails](https://blog.appcanary.com/2016/mirai-botnet-security-broken.html), this
 news warmed the cockles of my heart and gave me hope for our future! And what's
-even amazing is that they turned it on without any fanfare. It's the quiet,
+even amazing is that they turned it on without any fanfare. 
+
+It's the quiet,
 simple changes that provide the biggest wins.
 
-There are reasons why administrators don't want software to be upgraded without
-their input, and if it is, to know what vulnerabilities are being patched when.
+Of course, there are reasons why administrators don't always want software to be upgraded without
+their input. And if it does get updated, there are good reasons for knowing exactly what vulnerabilities are being patched when.
 [Appcanary](https://appcanary.com/) exists in order to allow you to be notified
 about security updates without automatically installing them, and to have
 insight into what's going being installed if you are patching automatically.
 
-But, if you don't have the capacity to actively manage the packages on your
-linux systems (and even if you do!), we implore you, set up unattended upgrades.
-We strongly believe that having unpatched systems is a basic security best
-practice that will make you much more secure. Ubuntu enabling this by default is
-a great sign for the future.
+But if you don't have the capacity to actively manage the packages on your
+linux systems (and even if you do!), we implore you: set up `unattended-upgrades`!
+
+Ubuntu enabling this by default is a great sign for the future.
 
 ## Not running Ubuntu 16.10?
 
