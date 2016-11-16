@@ -1,5 +1,5 @@
 ---
-title: Best security news of 2016? Ubuntu 16.10 ships with unattended upgrades enabled
+title: "Good News: Ubuntu Now Ships With unattended-upgrades On By Default!"
 date: 2016-11-15
 tags:  Clojure, Programming, Ruby
 author: mveytsman
@@ -28,7 +28,7 @@ Somehow, the vulnerability magically got patched and they wanted to
 know: what's going on?
 
 The vuln is a pretty serious remote code execution vulnerability in `memcached`,
-and as far as we could tell, our user was indeed using the most recent version available for their
+and as far as we could tell our user was indeed using the most recent version available for their
 distribution &mdash; `1.4.25-2ubuntu2.1`. This version was released on November 3rd, and we could see from our logs that
 `memcached` got upgraded that same day.
 
@@ -40,7 +40,7 @@ We dug around, and set up some test Yakkety boxes, and
 lo and behold: unattended upgrades is automatically enabled by default!
 
 For those of you who are unaware, `unattended-upgrades` is a debian/ubuntu package that, well, does what it says on the
-tin: it automatically upgrades your packages. The most common configuration, andthe one enabled in 16.10, is to upgrade any packages that have a published security patch. Unattended upgrades does this by checking and installing any
+tin: it automatically upgrades your packages. The most common configuration, and the one enabled in 16.10, is to upgrade any packages that have a published security patch. Unattended upgrades does this by checking and installing any
 updates from the `${distro_codename}-security` repository.
 
 Ubuntu/debian has had this for years, but it simply was never turned on by
