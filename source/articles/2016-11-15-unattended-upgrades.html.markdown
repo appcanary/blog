@@ -55,7 +55,7 @@ simple changes that provide the biggest wins.
 
 Of course, there are reasons why administrators don't always want software to be upgraded without
 their input. And if it does get updated, there are good reasons for knowing exactly what vulnerabilities are being patched when.
-[Appcanary](https://appcanary.com/) exists in order to allow you to be notified
+[Appcanary](https://appcanary.com/?utm_source=blog&utm_medium=web&utm_campaign=unattended) exists in order to allow you to be notified
 about security updates without automatically installing them, and to have
 insight into what's going being installed if you are patching automatically.
 
