@@ -31,45 +31,28 @@ Helps detect/prevent XSS, mixed-content, and other classes of attack.  [CSP 2 Sp
 ### X-XSS-Protection
 
 ```
-Strict-Transport-Security: max-age=<expire-time>
-Strict-Transport-Security: max-age=<expire-time>; includeSubDomains
-Strict-Transport-Security: max-age=<expire-time>; preload
+X-XSS-Protection: 0;
+X-XSS-Protection: 1;
+X-XSS-Protection: 1; mode=block
 ```
 
 #### Why?
 
-There are two problems when you want to communicate with someone securely. One
-is encryption &mdash; making sure the messages you're sending are only visible
-to you and them, and no one else. The other one is authentication &mdash; making
-sure you're actually communicating with the person you think you are.
+Cross Site Scripting, commonly abbreviated XSS for an obvious reason, is an
+attack where the attacker causes a page to load some malicious javascript.
+`X-XSS-Protection` is designed to protect against "reflected" XSS attacks
+&mdash; where an attacker is sending the malicious payload as part of the
+request[^xss]. `X-XSS-Protection` is a feature in Chrome and Internet Explorer
+that attempts to prevent XSS by blocking javascript that looks like it came in
+the request.
 
-HTTPS is good at the first one, and has major problems with the second (more on
-this later, Public Key Pinning). HSTS solves the meta-problem: how do you know
-if the person you're talking to actually supports encryption?
-
-The attack is called [sslstrip](https://moxie.org/software/sslstrip/). If you're
-on a hostile network an attacker can just disable encryption between you and the
-websites you're browsing. Even if the site you're accessing is only available
-over HTTPS, an attacker that owns the wifi router you're using can just
-man-in-the-middle the HTTP traffic and make it look like the site works over
-unencrypted HTTP. No need for SSL certs, just disable the encryption.
-
-Enter the HSTS. The `Strict-Transport-Security` header solves this by letting
-your browser know to always use encryption with your site. As long as the
-browser saw the HSTS header and it's not expired, it will not access the site
-unencrypted, and will error out if it's not available over HTTPS.
+`X-XSS-Protection: 1` will filter out scripts that came from the request,
+`X-XSS-Protection: 1; mode=block` will block the whole page when a script looks
+like it came from the request, and `X-XSS-Protection: 0` disables it entirely.
 
 #### Should I use it? 
 
-Yes. Your app is only available over HTTPS, right? Trying to browse over regular
-old HTTP will redirect to the secure site, right? Use
-[letsencrypt](https://letsencrypt.org/) if you can't afford a certificate.
-
-The one downside is that HSTS allows for a
-[clever technique](http://www.radicalresearch.co.uk/lab/hstssupercookies) to
-create supercookies to fingerprint your users. But, you're a website operator,
-so the prospect of invading your users privacy doesn't bother you, does it?
-Anyways, I'm sure you will use HSTS for good and not for supercookies.
+Yes. See http://blog.innerht.ml/the-misunderstood-x-xss-protection/
 
 #### How?
 
@@ -428,3 +411,7 @@ Yes, just make sure to set your content types correctly.
 had some secret subdomain that I don't want leaking for some reason." You have
 DNS zone transfers disabled, so someone would have to know what they're looking
 for to find it, but now that it's in the preload list...
+
+[^xss]: This is opposed to "stored" XSS attacks, where the attacker is storing
+    the malicious payload somehow, i.e. in a vulnerable comment field of a
+    message board.
