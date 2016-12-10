@@ -1,12 +1,9 @@
 %header.main-header{cover}
-  %nav.main-nav.overlay.clearfix
-    - if blog_settings.navigation
-      %a.menu-button.icon-menu{href: '#'}
-        %span.word Menu
-  .vertical
-    .main-header-content.inner
+  .main-header-content
+    .logo
       %a.appcanary-logo{href: home_path}
         = image_tag blog_settings.logo, alt: blog_settings.name
+    .description
       %h2.page-description= blog_settings.description
       .more-icons
         %a{href: "https://twitter.com/appcanary", alt: "Twitter", title: "Twitter"}
@@ -17,6 +14,3 @@
           %i.fa.fa-archive
         %a{href: feed_path, alt: "Feed", title: "Feed"}
           %i.fa.fa-rss-square
-
-  %a.scroll-down.icon-arrow-left{href: '#content', data: {offset: '-45'}}
-    %span.hidden Scroll Down

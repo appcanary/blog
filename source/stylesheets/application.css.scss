@@ -1,13 +1,25 @@
-//= require vendor/casper
-//= require vendor/font-awesome
+@import "normalize.css";
+@import "vendor/font-awesome";
+@import "bourbon";
+@import "bitters/base";   /* Bitters needs to be imported before Neat */
+@import "neat";
 //= require _syntax
 
-// Overwrite some styles from casper.css
-pre.highlight {
-  word-wrap: normal;
-  code {
-    white-space: pre;
+$appcanary_yellow: #fbe68a;
+@mixin mobile-all {
+  @media only screen and (max-device-width: 736px) {
+    @content;
   }
+}
+
+@mixin desktop-all {
+  @media only screen and (min-device-width: 736px) {
+    @content;
+  }
+}
+
+a:hover {
+  text-decoration: underline;
 }
 
 body {
@@ -17,13 +29,69 @@ body {
 h1, h2, h3,
 h4, h5, h6 {
   font-family: 'myriad pro',sans-serif;
+  line-height: 1;
 }
 
-.main-header {
-  h1, h2, h3 {
-    font-family: 'myriad pro',sans-serif;
+p {
+  margin-bottom: 1em;
+}
+
+h1 { 
+  font-size: 2em;
+}
+
+h2 {
+  font-size: 1.5em;
+}
+
+
+blockquote {
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    // margin: 1.75em 0 1.75em -2.2em;
+    padding: 0 0 0 1.75em;
+    border-left: #4A4A4A 0.4em solid;
+    margin-top: 2em;
+    margin-bottom: 2em;
+    font-size: 1em;
+    p {
+      margin-bottom: 0.9rem;
+    }
+}
+
+pre {
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0 0 1.75em 0;
+    border: #E3EDF3 1px solid;
+    width: 100%;
+    padding: 10px;
+    font-family: Inconsolata, monospace, sans-serif;
+    font-size: 0.9em;
+    white-space: pre;
+    overflow: auto;
+    background: #F7FAFB;
+    border-radius: 3px;
+}
+
+pre code, pre tt {
+    font-size: inherit;
+    white-space: pre-wrap;
+    background: transparent;
+    border: none;
+    padding: 0;
+    font-size: 14px;
+}
+
+
+// Overwrite some styles from casper.css
+pre.highlight {
+  word-wrap: normal;
+  code {
+    white-space: pre;
   }
 }
+
 
 .topbar {
     position: fixed;
@@ -36,62 +104,116 @@ h4, h5, h6 {
     z-index: 1000;
 }
 
-.post-template.home-post-template .main-header .vertical {
-  // vertical-align: top;
-  // padding-top: 1.5em;
-}
-.no-cover.main-header {
-    // min-height: 160px;
-    // max-height: 40vh;
-    background: #fbe68a;
+.main-header {
+    background: $appcanary_yellow;
 }
 
-.post-template.home-post-template .post {
-  margin: 2rem auto 8rem auto;
-  padding-bottom: 4rem;
-  border-bottom: #EBF2F6 1px solid;
+.main-header-content {
+  a {
+    color: black;
+    text-decoration: underline;
+  }
+  @include outer-container;
+  padding: 1em 0;
+
+  .logo {
+    @include span-columns(2 of 12);
+    @include shift(5);
+    img {
+      display: block;
+      margin: 0 auto;
+      width: 80%;
+    }
+  }
+
+  .description {
+    @include span-columns(6 of 12);
+    @include shift(3);
+    text-align: center;
+    h2 {
+      font-weight: 400;
+      font-size: 1em;
+    }
+
+    .more-icons a {
+      text-decoration: none;
+      font-size: 1.5rem;
+    }
+  }
 }
 
-.post-template.home-post-template .post-meta {
-  margin: 1.75rem 0 0 0;
-}
+main#content {
+  @include outer-container;
+  article.post {
+    @include span-columns(6 of 12);
+    @include shift(3);
+    padding-bottom: 4rem;
+    border-bottom: #EBF2F6 1px solid;
+  }
+  .post-header, .post-content, .footnotes {
+    width: 31em;
+    margin: 0 auto;
+  }
 
-.post-template.home-post-template .post-header {
-  margin: initial;
-}
+  .footnotes {
+    ol {
+      font-size: 0.8em;
+      width: 100%;
+      list-style-type: decimal;
+      list-style-position: inside;
+      li {
+        text-indent: -1em;
+        padding-left: 1em;
+      }
+    }
+  }
 
-.post-template.home-post-template .post-date {
-    display: inline-block;
-    margin-left: 8px;
-    padding-left: 12px;
-    border-left: #d5dbde 1px solid;
-    text-transform: uppercase;
-    font-size: 1.3rem;
-    white-space: nowrap;
-}
-
-.main-header .more-icons a {
-  text-decoration: none;
-  font-size: 2rem;
-}
-.appcanary-logo img {
-  width: 150px;
-}
-
-.footnotes {
-  font-style: normal;
-  font-size: 1.6rem;
-}
-
-.post-content img {
+  .post-meta {
     display: block;
-    max-width: 100%;
+    margin: 1.75rem 0 0 0;
+    line-height: 2.2rem;
+    color: #9EABB3;
+  }
 }
 
-pre code, pre tt {
-  font-size: 14px;
-}
 
+  // old;
+  // .post-template.home-post-template .post {
+//   margin: 2rem auto 8rem auto;
+//   padding-bottom: 4rem;
+//   border-bottom: #EBF2F6 1px solid;
+// }
+// 
+// .post-template.home-post-template .post-meta {
+//   margin: 1.75rem 0 0 0;
+// }
+// 
+// .post-template.home-post-template .post-header {
+//   margin: initial;
+// }
+// 
+// .post-template.home-post-template .post-date {
+//     display: inline-block;
+//     margin-left: 8px;
+//     padding-left: 12px;
+//     border-left: #d5dbde 1px solid;
+//     text-transform: uppercase;
+//     font-size: 1.3rem;
+//     white-space: nowrap;
+// }
+// 
+// 
+// .footnotes {
+//   font-style: normal;
+//   font-size: 1.6rem;
+// }
+// 
+// .post-content img {
+//     display: block;
+//     max-width: 100%;
+// }
+// 
+// 
 // prevents footnotes from coliding with #topbar
 .footnotes li {
   padding-top: 10px;
