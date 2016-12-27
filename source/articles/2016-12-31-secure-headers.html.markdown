@@ -1,21 +1,19 @@
 ---
-title: Everything you've ever wanted to know about secure headers 
+title: Everything you need to know about secure headers 
 author: mveytsman
 layout: post
 published: false
 ---
-
-This guide isn't as exhaustive as the MDN I link to. Is "A Primer on Secure Headers" better.
-
+# Table of Contents
+* toc goes here
+{:toc}
 
 - Content Security Policy (CSP) 
 Originally proposed in 2004 by RSnake. First standard 2012, current version is from 2015.
 Helps detect/prevent XSS, mixed-content, and other classes of attack.  [CSP 2 Specification](http://www.w3.org/TR/CSP2/)
 
 
-- X-XSS-Protection - [Cross site scripting heuristic filter for IE/Chrome](https://msdn.microsoft.com/en-us/library/dd565647\(v=vs.85\).aspx)
 
-- X-Download-Options - [Prevent file downloads opening](https://msdn.microsoft.com/library/jj542450(v=vs.85).aspx)
 - X-Permitted-Cross-Domain-Policies - [Restrict Adobe Flash Player's access to data](https://www.adobe.com/devnet/adobe-media-server/articles/cross-domain-xml-for-streaming.html)
 - Referrer-Policy - [Referrer Policy draft](https://w3c.github.io/webappsec-referrer-policy/)
 - Public Key Pinning - Pin certificate fingerprints in the browser to prevent man-in-the-middle attacks due to compromised Certificate Authorities. [Public Key Pinning Specification](https://tools.ietf.org/html/rfc7469)
@@ -28,7 +26,57 @@ Helps detect/prevent XSS, mixed-content, and other classes of attack.  [CSP 2 Sp
 
 
 
-### X-XSS-Protection
+# Referrer-Policy
+
+```
+Referrer-Policy: "no-referrer" 
+Referrer-Policy: "no-referrer-when-downgrade" 
+Referrer-Policy: "origin" 
+Referrer-Policy: "origin-when-cross-origin"
+Referrer-Policy: "same-origin" 
+Referrer-Policy: "strict-origin" 
+Referrer-Policy: "strict-origin-when-cross-origin" 
+Referrer-Policy: "unsafe-url"
+```
+
+## Why?
+
+The `Referer` header. Great for analytics, bad for your users' privacy. At some point the web woke up and decided that maybe it wasn't a good idea to send it all the time. And while we're at it, we spelled "Referrer" correctly.
+
+ZZZZ You may only want to pass origin
+
+The `Referrer-Policy` header allows you to specify when the browser will set a `Referer` header.
+
+## Should I use it? 
+
+It's up to you, but it's probably a good idea. If you don't care about your users' privacy, think of it as a way to keep your sweet sweet analytics to yourself and out of your competitors grubby hands.
+
+Set `Referrer-Policy: "no-referrer"`
+
+## How?
+
+ZZZZZZ TODO
+
+|---
+| Platform | What do I do?
+|---|---
+| Rails 4 | On by default
+| Rails 5 | On by default
+| Django | SECURE_BROWSER_XSS_FILTER = True
+| Express.js | Use [helmet](https://www.npmjs.com/package/helmet) 
+| Golang | Use [unrolled/secure](https://github.com/unrolled/secure)
+| Nginx | `add_header X-XSS-Protection "1; mode=block";`
+| Apache | `Header always set X-XSS-Protection "1; mode=block"`
+
+
+## I want to know more
+
+- [X-XSS-Protection - MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection)
+
+---
+
+
+# X-XSS-Protection
 
 ```
 X-XSS-Protection: 0;
@@ -36,7 +84,7 @@ X-XSS-Protection: 1;
 X-XSS-Protection: 1; mode=block
 ```
 
-#### Why?
+## Why?
 
 Cross Site Scripting, commonly abbreviated XSS for an obvious reason, is an
 attack where the attacker causes a page to load some malicious javascript.
@@ -46,81 +94,38 @@ request[^xss]. `X-XSS-Protection` is a feature in Chrome and Internet Explorer
 that attempts to prevent XSS by blocking javascript that looks like it came in
 the request.
 
+'X-XSS-Protection: 0` turns it off.
 `X-XSS-Protection: 1` will filter out scripts that came from the request,
 `X-XSS-Protection: 1; mode=block` will block the whole page when a script looks
 like it came from the request, and `X-XSS-Protection: 0` disables it entirely.
 
-#### Should I use it? 
+## Should I use it? 
 
-Yes. See http://blog.innerht.ml/the-misunderstood-x-xss-protection/
+Yes, you should set `X-XSS-Protection:1; mode=block` See [here](http://blog.innerht.ml/the-misunderstood-x-xss-protection/) for why.
 
-#### How?
-
-The two options are
-
-- `includeSubDomains` - HSTS applies to subdomains
-- `preload` - Google maintains a [service](https://hstspreload.appspot.com/)
-  that hardcodes[^filters] your site as being HTTPS only into browsers. This way, a user
-  doesn't even have to visit your site at all to opt in for HSTS. Getting off that list is hard by the way, so turn it on if you know you can support HTTPS forever on all subdomains.
-  
-
-<table>
-  <thead>
-    <th>Platform</th>
-    <th>What do I do?</th>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Rails 4</td>
-      <td><code>config.force_ssl = true</code>
-      <br/>Does not include subdomains by default. To set it:
-      <br/><code>config.ssl_options = { hsts: { subdomains: true } }</td>
-    </tr>
-    <tr>
-      <td>Rails 5</td>
-      <td><code>config.force_ssl = true</code></td>
-    </tr>
-    <tr>
-      <td>Django</td>
-      <td><code>SECURE_HSTS_SECONDS = 31536000</code>
-        <code>SECURE_HSTS_INCLUDE_SUBDOMAINS = True</code>
-      </td>
-      </td>
-    </tr>
-    <tr>
-    <tr>
-      <td>Express.js</td>
-      <td>Use <a href="https://www.npmjs.com/package/helmet">helmet</a></td>
-    </tr>
-    <tr>
-      <td>Golang</td>
-      <td>Use <a href="https://github.com/unrolled/secure">unrolled/secure</td>
-    </tr>
-    <tr>
-      <td>Nginx</td>
-      <td>
-        <code>add_header Strict-Transport-Security "max-age=31536000; includeSubdomains; ";</code>
-      </td>
-    </tr>
-    <tr>
-      <td>Apache</td>
-      <td><code>Header always set Strict-Transport-Security "max-age=31536000; includeSubdomains;"</code></td>
-    </tr>
-  </tbody>
-</table>
+## How?
 
 
+|---
+| Platform | What do I do?
+|---|---
+| Rails 4 | On by default
+| Rails 5 | On by default
+| Django | SECURE_BROWSER_XSS_FILTER = True
+| Express.js   | Use [helmet](https://www.npmjs.com/package/helmet) 
+| Golang | Use [unrolled/secure](https://github.com/unrolled/secure)
+| Nginx | `add_header X-XSS-Protection "1; mode=block";`
+| Apache | `Header always set X-XSS-Protection "1; mode=block"`
 
-#### I want to know more
+## I want to know more
 
-- [RFC 6797](https://tools.ietf.org/html/rfc6797)
-- [Strict-Transport-Security - MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security)
+- [X-XSS-Protection - MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection)
 
 ---
 
 
 
-### HTTP Strict Transport Security (HSTS)
+# HTTP Strict Transport Security (HSTS)
 
 ```
 Strict-Transport-Security: max-age=<expire-time>
@@ -128,7 +133,7 @@ Strict-Transport-Security: max-age=<expire-time>; includeSubDomains
 Strict-Transport-Security: max-age=<expire-time>; preload
 ```
 
-#### Why?
+## Why?
 
 There are two problems when you want to communicate with someone securely. One
 is encryption &mdash; making sure the messages you're sending are only visible
@@ -151,7 +156,7 @@ your browser know to always use encryption with your site. As long as the
 browser saw the HSTS header and it's not expired, it will not access the site
 unencrypted, and will error out if it's not available over HTTPS.
 
-#### Should I use it? 
+## Should I use it? 
 
 Yes. Your app is only available over HTTPS, right? Trying to browse over regular
 old HTTP will redirect to the secure site, right? Use
@@ -163,7 +168,7 @@ create supercookies to fingerprint your users. But, you're a website operator,
 so the prospect of invading your users privacy doesn't bother you, does it?
 Anyways, I'm sure you will use HSTS for good and not for supercookies.
 
-#### How?
+## How?
 
 The two options are
 
@@ -173,61 +178,25 @@ The two options are
   doesn't even have to visit your site at all to opt in for HSTS. Getting off that list is hard by the way, so turn it on if you know you can support HTTPS forever on all subdomains.
   
 
-<table>
-  <thead>
-    <th>Platform</th>
-    <th>What do I do?</th>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Rails 4</td>
-      <td><code>config.force_ssl = true</code>
-      <br/>Does not include subdomains by default. To set it:
-      <br/><code>config.ssl_options = { hsts: { subdomains: true } }</td>
-    </tr>
-    <tr>
-      <td>Rails 5</td>
-      <td><code>config.force_ssl = true</code></td>
-    </tr>
-    <tr>
-      <td>Django</td>
-      <td><code>SECURE_HSTS_SECONDS = 31536000</code>
-        <code>SECURE_HSTS_INCLUDE_SUBDOMAINS = True</code>
-      </td>
-      </td>
-    </tr>
-    <tr>
-    <tr>
-      <td>Express.js</td>
-      <td>Use <a href="https://www.npmjs.com/package/helmet">helmet</a></td>
-    </tr>
-    <tr>
-      <td>Golang</td>
-      <td>Use <a href="https://github.com/unrolled/secure">unrolled/secure</td>
-    </tr>
-    <tr>
-      <td>Nginx</td>
-      <td>
-        <code>add_header Strict-Transport-Security "max-age=31536000; includeSubdomains; ";</code>
-      </td>
-    </tr>
-    <tr>
-      <td>Apache</td>
-      <td><code>Header always set Strict-Transport-Security "max-age=31536000; includeSubdomains;"</code></td>
-    </tr>
-  </tbody>
-</table>
+|---
+| Platform | What do I do?
+|---|---
+| Rails 4 | `config.force_ssl = true`<br/>Does not include subdomains by default. To set it:<br/>`config.ssl_options = { hsts: { subdomains: true } }`
+| Rails 5 | `config.force_ssl = true`
+| Django | `SECURE_HSTS_SECONDS = 31536000` <br/> `SECURE_HSTS_INCLUDE_SUBDOMAINS = True`
+| Express.js   | Use [helmet](https://www.npmjs.com/package/helmet) 
+| Golang | Use [unrolled/secure](https://github.com/unrolled/secure)
+| Nginx | `add_header Strict-Transport-Security "max-age=31536000; includeSubdomains; ";`
+| Apache | `Header always set Strict-Transport-Security "max-age=31536000; includeSubdomains;`
 
-
-
-#### I want to know more
+## I want to know more
 
 - [RFC 6797](https://tools.ietf.org/html/rfc6797)
 - [Strict-Transport-Security - MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security)
 
 ---
 
-### X-Frame-Options
+# X-Frame-Options
 
 ```
 X-Frame-Options: DENY
@@ -235,7 +204,7 @@ X-Frame-Options: SAMEORIGIN
 X-Frame-Options: ALLOW-FROM https://example.com/
 ```
 
-#### Why?
+## Why?
 
 Before we started giving dumb names to vulnerabilities, we used to give dumb
 names to hacking techniques. "Clickjacking" is one of those dumb names. The idea
@@ -246,13 +215,13 @@ you're non-consensually retweating all of my tweets.
 
 It sounds dumb, but it's an effective attack.
 
-#### Should I use it?
+## Should I use it?
 
 Yes. Your app is beautiful. Do you really want some
 [genius](https://techcrunch.com/2015/04/08/annotate-this/) putting it into an
 iframe so they can vandalize it?
 
-#### How?
+## How?
 
 `X-Frame-Options` has three modes, which are pretty self explanatory.
 
@@ -267,79 +236,30 @@ have a triple-decker iframe sandwich and the innermost iframe has `SAMEORIGIN`,
 do we care about the origin of the iframe around it, or the topmost one on the
 page? ¯\\_(ツ)_/¯.
 
-<table>
-  <thead>
-    <th>Platform</th>
-    <th>What do I do?</th>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Rails 4</td>
-      <td>
-        <p><code>SAMEORIGIN</code> by default.</p>
-        <p>To set <code>DENY</code>:
-<code>
-config.action_dispatch.default_headers['X-Frame-Options'] = "DENY"
-</code></p></td>
-    </tr>
-    <tr>
-      <td>Rails 5</td>
-      <td>
-        <p><code>SAMEORIGIN</code> by default.</p>
-        <p>Brave?
-<code>
-config.action_dispatch.default_headers['X-Frame-Options'] = "DENY"
-</code></p></td>
-    </tr>
-    <tr>
-      <td>Django</td>
-      <td><code>MIDDLEWARE = [
-    ...
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    ...
-]
-</code>
+|---
+| Platform | What do I do?
+|---|---
+| Rails 4 | `SAMEORIGIN` by default.<br/>To set `DENY`:<br/>`config.action_dispatch.default_headers['X-Frame-Options'] = "DENY"`
+| Rails 5 | `SAMEORIGIN` by default.<br/>To set `DENY`:<br/>`config.action_dispatch.default_headers['X-Frame-Options'] = "DENY"`
+| Django | `MIDDLEWARE = [ ... 'django.middleware.clickjacking.XFrameOptionsMiddleware', ... ]`<br/> This defaults to `SAMORIGIN`. To set `DENY`: `X_FRAME_OPTIONS = 'DENY'`
+| Express.js   | Use [helmet](https://www.npmjs.com/package/helmet) 
+| Golang | Use [unrolled/secure](https://github.com/unrolled/secure)
+| Nginx | `add_header X-Frame-Options "SAMEORIGIN";`
+| Apache | `Header always set X-Frame-Options "SAMEORIGIN"`
 
-        This defaults to <code>SAMEORIGIN</code>. To set <code>DENY</code>:
-        <br/>
-        <code>X_FRAME_OPTIONS = 'DENY'</code>
-      </td>
-    </tr>
-    <tr>
-    <tr>
-      <td>Express.js</td>
-      <td>Use <a href="https://www.npmjs.com/package/helmet">helmet</a></td>
-    </tr>
-    <tr>
-      <td>Golang</td>
-      <td>Use <a href="https://github.com/unrolled/secure">unrolled/secure</td>
-    </tr>
-    <tr>
-      <td>Nginx</td>
-      <td>
-        <code>add_header X-Frame-Options "SAMEORIGIN";</code>
-      </td>
-    </tr>
-    <tr>
-      <td>Apache</td>
-      <td><code>Header always set x-frame-options "SAMEORIGIN"</code></td>
-    </tr>
-  </tbody>
-</table>
-
-#### I want to know more
+## I want to know more
 - [RFC 7034](https://tools.ietf.org/html/rfc7034)
 - [X-Frame-Options - MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options).
 
 ---
 
-### X-Content-Type-Options
+# X-Content-Type-Options
 
 ```
 X-Content-Type-Options: nosniff;
 ```
 
-#### Why?
+## Why?
 
 The problem this header solves is called "MIME sniffing", which is actually a
 browser "feature." In theory, your server sets a `Content-Type` header for every
@@ -359,51 +279,22 @@ have a stored XSS attack on your hand.
 The `X-Content-Type-Options` headers is to tell the browser to shut up and
 set the damn content type to what I tell you, thank you.
 
-#### Should I use it?
+## Should I use it?
 Yes, just make sure to set your content types correctly.
 
-#### How?
+## How?
 
-<table>
-  <thead>
-    <th>Platform</th>
-    <th>What do I do?</th>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Rails 4</td>
-      <td>On by default</td>
-    </tr>
-    <tr>
-      <td>Rails 5</td>
-      <td>On by default</td>
-    </tr>
-    <tr>
-      <td>Django</td>
-      <td><code>SECURE_CONTENT_TYPE_NOSNIFF = True</code></td>
-      </td>
-    </tr>
-    <tr>
-    <tr>
-      <td>Express.js</td>
-      <td>Use <a href="https://www.npmjs.com/package/helmet">helmet</a></td>
-    </tr>
-    <tr>
-      <td>Golang</td>
-      <td>Use <a href="https://github.com/unrolled/secure">unrolled/secure</td>
-    </tr>
-    <tr>
-      <td>Nginx</td>
-      <td>
-        <code>add_header X-Content-Type-Options nosniff;</code>
-      </td>
-    </tr>
-    <tr>
-      <td>Apache</td>
-      <td><code>Header always set X-Content-Type-Options nosniff</code></td>
-    </tr>
-  </tbody>
-</table>
+
+|---
+| Platform | What do I do?
+|---|---
+| Rails 4 | On by default
+| Rails 5 | On by default
+| Django | `SECURE_CONTENT_TYPE_NOSNIFF = True`
+| Express.js   | Use [helmet](https://www.npmjs.com/package/helmet) 
+| Golang | Use [unrolled/secure](https://github.com/unrolled/secure)
+| Nginx | `add_header X-Content-Type-Options nosniff;`
+| Apache | `Header always set X-Content-Type-Options nosniff`
 
 ---
 
