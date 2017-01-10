@@ -57,7 +57,7 @@ You also can reason about your code much better. There's a famous quote by Larry
 
 He was talking about private methods, but the same is true for mutability in most languages. You call some method and who knows if it mutated a value you were using? You would prefer it not to, but you have no shotgun, and frankly it's so easy to mutate state without even knowing that you are. Consider Python:
 
-```python
+~~~python
 str1 = "My name "
 str2 = str1
 str1 += "is Max"
@@ -73,7 +73,7 @@ print list1
 # [1, 2, 3, 4, 5]
 print list2
 # [1, 2, 3, 4, 5]
-```
+~~~
 
 I have to actually remember whether `+=` will give me a new object or mutate the existing one depending on its type!
 
@@ -128,14 +128,14 @@ up complicated state.
 
 Here's a typical clojure function
 
-```clojure
+~~~clojure
 (defn foo [a b]
   ;; some code here
   (let [c (some-function a b)]
     ;; a ton of 
     ;; complicated code here
 )))
-```
+~~~
 
 In lisp-speak, a parenthesized block is called a "form". The `foo` form is the outer form, and it contains the `let` form, which ostensibly contains other forms that do complicated things.
 

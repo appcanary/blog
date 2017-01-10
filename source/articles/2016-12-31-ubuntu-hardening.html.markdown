@@ -28,9 +28,9 @@ We don't know everything. Find a mistake or have suggestions? Please [get in tou
 
 **How:** In `/etc/ssh/sshd_config` make sure that this line is present:
 
-```
+~~~
 PasswordAuthentication no
-```
+~~~
 
 **Downsides:** I can't think of any.
 
