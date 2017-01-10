@@ -1,88 +1,36 @@
 ---
-title: Everything you need to know about secure headers 
+title: Everything you need to know about HTTP security headers 
 author: mveytsman
 layout: post
 published: false
 ---
-# Table of Contents
-* toc goes here
+
+28 years ago some physicists needed a way to more easily share experimental data
+and the web was born. From trigonometry to the strong nucelar force, everything
+physicists touch eventually becomes weaponized, and so too has the Hypertext
+Transfer Protocol. 
+
+What can be attacked must be defended, and tradition requires all security
+features to be a bolted-on afterthought, so let me tell you everything you need
+to know about secure headers presented in order of how interesting I think they are.
+
+I'll tell you how to implement these headers in Rails, Django, Express.js, Go,
+Nginx, and Apache. Note that for some headers it makes a lot of sense to set
+them up on your HTTP servers, while others should be set up on the application
+layer. Use your own discretion here.
+
+You can test how well you're doing with Mozilla's [Observatory](https://observatory.mozilla.org/analyze.html?host=appcanary.com).
+
+1. toc goes here
 {:toc}
-
-- Content Security Policy (CSP) 
-Originally proposed in 2004 by RSnake. First standard 2012, current version is from 2015.
-Helps detect/prevent XSS, mixed-content, and other classes of attack.  [CSP 2 Specification](http://www.w3.org/TR/CSP2/)
-
-
-
-- X-Permitted-Cross-Domain-Policies - [Restrict Adobe Flash Player's access to data](https://www.adobe.com/devnet/adobe-media-server/articles/cross-domain-xml-for-streaming.html)
-- Referrer-Policy - [Referrer Policy draft](https://w3c.github.io/webappsec-referrer-policy/)
-- Public Key Pinning - Pin certificate fingerprints in the browser to prevent man-in-the-middle attacks due to compromised Certificate Authorities. [Public Key Pinning Specification](https://tools.ietf.org/html/rfc7469)
-
-- Cookies 
- - Secure
- - HttpOnly
- - SameSite
-
-
-
-
-# Referrer-Policy
-
-```
-Referrer-Policy: "no-referrer" 
-Referrer-Policy: "no-referrer-when-downgrade" 
-Referrer-Policy: "origin" 
-Referrer-Policy: "origin-when-cross-origin"
-Referrer-Policy: "same-origin" 
-Referrer-Policy: "strict-origin" 
-Referrer-Policy: "strict-origin-when-cross-origin" 
-Referrer-Policy: "unsafe-url"
-```
-
-## Why?
-
-The `Referer` header. Great for analytics, bad for your users' privacy. At some point the web woke up and decided that maybe it wasn't a good idea to send it all the time. And while we're at it, we spelled "Referrer" correctly.
-
-ZZZZ You may only want to pass origin
-
-The `Referrer-Policy` header allows you to specify when the browser will set a `Referer` header.
-
-## Should I use it? 
-
-It's up to you, but it's probably a good idea. If you don't care about your users' privacy, think of it as a way to keep your sweet sweet analytics to yourself and out of your competitors grubby hands.
-
-Set `Referrer-Policy: "no-referrer"`
-
-## How?
-
-ZZZZZZ TODO
-
-|---
-| Platform | What do I do?
-|---|---
-| Rails 4 | On by default
-| Rails 5 | On by default
-| Django | SECURE_BROWSER_XSS_FILTER = True
-| Express.js | Use [helmet](https://www.npmjs.com/package/helmet) 
-| Golang | Use [unrolled/secure](https://github.com/unrolled/secure)
-| Nginx | `add_header X-XSS-Protection "1; mode=block";`
-| Apache | `Header always set X-XSS-Protection "1; mode=block"`
-
-
-## I want to know more
-
-- [X-XSS-Protection - MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection)
-
----
-
 
 # X-XSS-Protection
 
-```
+~~~
 X-XSS-Protection: 0;
 X-XSS-Protection: 1;
 X-XSS-Protection: 1; mode=block
-```
+~~~
 
 ## Why?
 
@@ -113,7 +61,7 @@ Yes, you should set `X-XSS-Protection:1; mode=block` See [here](http://blog.inne
 | Rails 5 | On by default
 | Django | SECURE_BROWSER_XSS_FILTER = True
 | Express.js   | Use [helmet](https://www.npmjs.com/package/helmet) 
-| Golang | Use [unrolled/secure](https://github.com/unrolled/secure)
+| Go | Use [unrolled/secure](https://github.com/unrolled/secure)
 | Nginx | `add_header X-XSS-Protection "1; mode=block";`
 | Apache | `Header always set X-XSS-Protection "1; mode=block"`
 
@@ -123,15 +71,57 @@ Yes, you should set `X-XSS-Protection:1; mode=block` See [here](http://blog.inne
 
 ---
 
+# Content Security Policy
 
+~~~
+Content-Security-Policy: <policy>
+~~~
+
+## Why?
+
+Content Security Policy can be thought of as much more advanced version of the
+`X-XSS-Protection` header above. While `X-XSS-Protection` will block scripts
+that come from the request, it's not going to stop an XSS attack that involves
+storing a malicious script on your server or loading an external resource with a
+malicious script in it.
+
+CSP gives you a language to define where the browser can load resources from.
+You can white list origins for scripts, images, fonts, stylesheets, etc in a very
+granular manner.
+
+## Should I use it?
+
+Yes.
+
+## How?
+
+Writing a CSP policy can be challenging.
+See
+[here](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy) for
+a list of all the directives you can employ. A good place to start
+is [here](https://csp.withgoogle.com/docs/adopting-csp.html).
+
+
+|---
+| Platform | What do I do?
+|---|---
+| Rails 4 | Use [secureheaders](https://github.com/twitter/secureheaders)
+| Rails 5 | Use [secureheaders](https://github.com/twitter/secureheaders)
+| Django | Use [django-csp](https://github.com/mozilla/django-csp)
+| Express.js   | Use [helmet/csp(https://github.com/helmetjs/csp)
+| Go | Use [unrolled/secure](https://github.com/unrolled/secure)
+| Nginx | `add_header Content-Security-Policy "<policy>";`
+| Apache | `Header always set Content-Security-Policy "<policy>"`
+
+---
 
 # HTTP Strict Transport Security (HSTS)
 
-```
+~~~
 Strict-Transport-Security: max-age=<expire-time>
 Strict-Transport-Security: max-age=<expire-time>; includeSubDomains
 Strict-Transport-Security: max-age=<expire-time>; preload
-```
+~~~
 
 ## Why?
 
@@ -185,7 +175,7 @@ The two options are
 | Rails 5 | `config.force_ssl = true`
 | Django | `SECURE_HSTS_SECONDS = 31536000` <br/> `SECURE_HSTS_INCLUDE_SUBDOMAINS = True`
 | Express.js   | Use [helmet](https://www.npmjs.com/package/helmet) 
-| Golang | Use [unrolled/secure](https://github.com/unrolled/secure)
+| Go | Use [unrolled/secure](https://github.com/unrolled/secure)
 | Nginx | `add_header Strict-Transport-Security "max-age=31536000; includeSubdomains; ";`
 | Apache | `Header always set Strict-Transport-Security "max-age=31536000; includeSubdomains;`
 
@@ -194,15 +184,100 @@ The two options are
 - [RFC 6797](https://tools.ietf.org/html/rfc6797)
 - [Strict-Transport-Security - MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security)
 
+
+---
+# HTTP Public Key Pinning (HPKP)
+
+~~~
+Public-Key-Pins: pin-sha256=<base64==>; max-age=<expireTime>;
+Public-Key-Pins: pin-sha256=<base64==>; max-age=<expireTime>; includeSubDomains
+Public-Key-Pins: pin-sha256=<base64==>; max-age=<expireTime>; report-uri=<reportURI>
+~~~
+
+## Why?
+
+HSTS, described above, is designed to make sure that all connections to your
+website are encrypted. No where does it specify what key to use! Trust on the
+web is based on the Certificate Authority model. Your browser & Operating System
+ship with the public keys of some trusted Certificate Authorities which are
+usually specialized companies and/or nation states. You get a CA to issue you a
+certificate for a given domain, which means you can encrypt valid SSL traffic
+for that domain that anyone who trusts that CA will also trust. The CAs are
+responsible for verifying that you actually own a domain (this can be anything
+from sending you an email, to asking you to host a file, to investigating your
+company).
+
+Two CAs can issue a certificate for the same domain to two different people, and
+browsers will trust both. This creates a problem, especially since CAs can
+and [are](https://technet.microsoft.com/library/security/2524375) compromised,
+allowing attackers to MiTM any domain they want, even if that domain uses SSL &
+HSTS!
+
+HPKP seeks to mitigate this. The header allows you to "pin" a certificate. When
+a browser sees the header for the first time, it will save the certificate. For
+every request up to `max-age`, the browser will fail unless at least one
+certificate in the chain sent from the server has a fingerprint that was pinned.
+This means that you can pin to the CA or a intermediate certificate along with
+the leaf in order to not shoot yourself in the foot (more on this later).
+
+Much like HSTS above, there are privacy implications to the HPKP header as well.
+There were laid out in the [RFC](https://tools.ietf.org/html/rfc7469#section-5)
+itself.
+
+## Should I use it? 
+
+Probably not. HPKP is a very very sharp knife. Consider: if you pin to the wrong
+certificate, or you lose your keys, or something else goes wrong, you've locked
+your users out of your site. All you can do is wait for the pin to expire.
+
+This
+[article](https://blog.qualys.com/ssllabs/2016/09/06/is-http-public-key-pinning-dead) lays
+out the case against it, and includes a fun way for attackers to use HPKP to
+hold their victims ransom.
+
+One alternative is using the `Public-Key-Pins-Report-Only` header, which will
+just report that something went wrong, but not lock anyone out. This allows you
+to at least know your users are being MiTMed with fake certificates.
+
+## How?
+
+The two options are
+
+- `includeSubDomains` - HPKP applies to subdomains
+- `report-uri` - Inavlid attempts will be reported here
+
+You have to generate a base64 encoded fingerprint for the key you pin to, and
+you **have** to use a backup key.
+See
+[here](https://developer.mozilla.org/en-US/docs/Web/HTTP/Public_Key_Pinning#Extracting_the_Base64_encoded_public_key_information) for
+how to do it.
+
+
+|---
+| Platform | What do I do?
+|---|---
+| Rails 4 | Use [secureheaders](https://github.com/twitter/secureheaders/blob/master/docs/HPKP.md)
+| Rails 5 | Use [secureheaders](https://github.com/twitter/secureheaders/blob/master/docs/HPKP.md)
+| Django | Write custom middleware
+| Express.js   | Use [helmet](https://helmetjs.github.io/docs/hpkp/) 
+| Go | Use [unrolled/secure](https://github.com/unrolled/secure)
+| Nginx | `add_header Public-Key-Pins 'pin-sha256="<primary>"; pin-sha256="<backup>"; max-age=5184000; includeSubDomains';`
+| Apache | `Header always set Public-Key-Pins 'pin-sha256="<primary>"; pin-sha256="<backup>"; max-age=5184000; includeSubDomains';`
+## I want to know more
+
+- [RFC 7469](https://tools.ietf.org/html/rfc7469)
+- [HTTP Public Key Pinning (HPKP) - MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Public_Key_Pinning)
+
+
 ---
 
 # X-Frame-Options
 
-```
+~~~
 X-Frame-Options: DENY
 X-Frame-Options: SAMEORIGIN
 X-Frame-Options: ALLOW-FROM https://example.com/
-```
+~~~
 
 ## Why?
 
@@ -242,10 +317,10 @@ page? ¯\\_(ツ)_/¯.
 | Rails 4 | `SAMEORIGIN` by default.<br/>To set `DENY`:<br/>`config.action_dispatch.default_headers['X-Frame-Options'] = "DENY"`
 | Rails 5 | `SAMEORIGIN` by default.<br/>To set `DENY`:<br/>`config.action_dispatch.default_headers['X-Frame-Options'] = "DENY"`
 | Django | `MIDDLEWARE = [ ... 'django.middleware.clickjacking.XFrameOptionsMiddleware', ... ]`<br/> This defaults to `SAMORIGIN`. To set `DENY`: `X_FRAME_OPTIONS = 'DENY'`
-| Express.js   | Use [helmet](https://www.npmjs.com/package/helmet) 
-| Golang | Use [unrolled/secure](https://github.com/unrolled/secure)
-| Nginx | `add_header X-Frame-Options "SAMEORIGIN";`
-| Apache | `Header always set X-Frame-Options "SAMEORIGIN"`
+| Express.js   | `cookie: { secure: true, httpOnly: true, sameSite: true }`
+| Go | `http.Cookie{Name: "foo", Value: "bar", HttpOnly: true, Secure: true}` <br/> For SameSite, see this [issue](https://github.com/golang/go/issues/15867).
+| Nginx | You probably won't set session cookies in Nginx
+| Apache | You probably won't set session cookies in Apache
 
 ## I want to know more
 - [RFC 7034](https://tools.ietf.org/html/rfc7034)
@@ -255,9 +330,9 @@ page? ¯\\_(ツ)_/¯.
 
 # X-Content-Type-Options
 
-```
+~~~
 X-Content-Type-Options: nosniff;
-```
+~~~
 
 ## Why?
 
@@ -292,17 +367,125 @@ Yes, just make sure to set your content types correctly.
 | Rails 5 | On by default
 | Django | `SECURE_CONTENT_TYPE_NOSNIFF = True`
 | Express.js   | Use [helmet](https://www.npmjs.com/package/helmet) 
-| Golang | Use [unrolled/secure](https://github.com/unrolled/secure)
+| Go | Use [unrolled/secure](https://github.com/unrolled/secure)
 | Nginx | `add_header X-Content-Type-Options nosniff;`
 | Apache | `Header always set X-Content-Type-Options nosniff`
 
 ---
+
+# Referrer-Policy
+
+~~~
+Referrer-Policy: "no-referrer" 
+Referrer-Policy: "no-referrer-when-downgrade" 
+Referrer-Policy: "origin" 
+Referrer-Policy: "origin-when-cross-origin"
+Referrer-Policy: "same-origin" 
+Referrer-Policy: "strict-origin" 
+Referrer-Policy: "strict-origin-when-cross-origin" 
+Referrer-Policy: "unsafe-url"
+~~~
+
+## Why?
+
+The `Referer` header. Great for analytics, bad for your users' privacy. At some point the web woke up and decided that maybe it wasn't a good idea to send it all the time. And while we're at it, let's spell "Referrer" correctly[^spelling].
+
+
+The `Referrer-Policy` header allows you to specify when the browser will set a `Referer` header.
+
+## Should I use it? 
+
+It's up to you, but it's probably a good idea. If you don't care about your users' privacy, think of it as a way to keep your sweet sweet analytics to yourself and out of your competitors grubby hands.
+
+Set `Referrer-Policy: "no-referrer"`
+
+## How?
+
+|---
+| Platform | What do I do?
+|---|---
+| Rails 4 | Use [secureheaders](https://github.com/twitter/secureheaders)
+| Rails 5 | Use [secureheaders](https://github.com/twitter/secureheaders)
+| Django | Custom middleware
+| Express.js | Use [helmet](https://helmetjs.github.io/docs/referrer-policy/) 
+| Go | Custom middleware
+| Nginx | `add_header Referrer-Policy "no-referrer";`
+| Apache | `Header always set Referrer-Policy "no-referrer"`
+
+
+## I want to know more
+
+- [X-XSS-Protection - MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection)
+
+---
+
+# Cookie Options
+
+~~~
+Set-Cookie: <key>=<value>; Expires=<expiryDate>; Secure; HttpOnly; SameSite=strict
+~~~
+
+## Why?
+
+This isn't a security header per-se, but there are three different options for cookies that you should be aware of.
+
+- Cookies marked as `Secure` will only be served over HTTPS. This prevents
+  someone from reading the cookies in a MiTM attack where they can force the
+  browser to visit a page.
+
+- `HttpOnly` is a misnomer, and has nothing to do with HTTPS (unlike `Secure`
+  above). Cookies marked as `HttpOnly` can not be accessed from within
+  javascript. So if there is an XSS flaw, the attacker can't immediately steal
+  the cookies.
+  
+- `SameSite` helps defend against Cross-Origin Resource Sharing (CSRF) attacks.
+  This is an attack where a different website the user may be visiting
+  inadvertently tricks them into making a request against your site, i.e. by
+  including an image to make a GET request, or using javascript to submit a form
+  for a POST request. Generally, people defend against this
+  using
+  [CSRF tokens](https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)_Prevention_Cheat_Sheet).
+  A cookie marked as `SameSite` won't be sent to a different site.
+  
+  It has two modes, lax and strict. Lax mode allows the cookie to be sent in a
+  top-level context for GET requests (i.e. if you clicked a link). Strict
+  doesn't send any third-party cookies.
+  
+## Should I use it?
+
+You should absolutely set `Secure` and `HttpOnly`. Unfortunately, as of writing,
+SameSite cookies are [available](http://caniuse.com/#search=samesite) only in
+Chrome and Opera, so you may want to ignore them for now.
+  
+## How?
+
+|---
+| Platform | What do I do?
+|---|---
+| Rails 4 | Secure and HttpOnly enabled by default. For SameSite, use [secureheaders](https://github.com/twitter/secureheaders)
+| Rails 5 | Secure and HttpOnly enabled by default. For SameSite, use [secureheaders](https://github.com/twitter/secureheaders)
+| Django | Session cookies are HttpOnly by default. To set secure: `SESSION_COOKIE_SECURE = True`. <br/> Not sure about SameSite.
+| Express.js | Use [helmet](https://helmetjs.github.io/docs/referrer-policy/) 
+| Go | Custom middleware
+| Nginx | `add_header Referrer-Policy "no-referrer";`
+| Apache | `Header always set Referrer-Policy "no-referrer"`
+
+---
+
+Thanks to [@wolever](https://twitter.com/wolever) for python advice
+
+[^xss]: This is opposed to "stored" XSS attacks, where the attacker is storing
+    the malicious payload somehow, i.e. in a vulnerable comment field of a
+    message board.
 
 [^filters]: So if you're especially paranoid, you might be thinking "what if I
 had some secret subdomain that I don't want leaking for some reason." You have
 DNS zone transfers disabled, so someone would have to know what they're looking
 for to find it, but now that it's in the preload list...
 
-[^xss]: This is opposed to "stored" XSS attacks, where the attacker is storing
-    the malicious payload somehow, i.e. in a vulnerable comment field of a
-    message board.
+[^spelling]: The `Referer` header is
+    the [Hampster Dance](http://www.hamsterdance.org/hamsterdance/) in that it's
+    notorious for being misspelled. It would break the web to try to backport
+    the correct spelling, so instead the W3C decided to go for the worst of both
+    worlds and spell it correctly in `Referrer-Policy`.
+
