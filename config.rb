@@ -7,7 +7,7 @@ config[:casper] = {
   blog: {
     url: 'http://blog.appcanary.com',
     name: 'Appcanary',
-    description: '<a href="https://appcanary.com">Appcanary</a> makes sure you never run vulnerable software in your apps.<br/>Subscribe to our <a href="https://appcanary.us10.list-manage.com/subscribe?u=303b378f377508300c0b5469a&id=dc58e8f56f">newsletter</a>!',
+    description: '<a href="https://appcanary.com">Appcanary</a> makes sure you never run vulnerable software on your servers.<br/>Subscribe to our <a href="https://appcanary.us10.list-manage.com/subscribe?u=303b378f377508300c0b5469a&id=dc58e8f56f">newsletter</a>!',
     date_format: '%d %B %Y',
     navigation: false,
     logo: 'appcanary.png' # Optional
