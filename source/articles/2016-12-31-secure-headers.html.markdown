@@ -6,7 +6,7 @@ published: false
 ---
 
 28 years ago some physicists needed a way to more easily share experimental data
-and the web was born. From trigonometry to the strong nucelar force, everything
+and the web was born. From trigonometry to the strong nuclear force, everything
 physicists touch eventually becomes weaponized, and so too has the Hypertext
 Transfer Protocol. 
 
@@ -150,7 +150,7 @@ unencrypted, and will error out if it's not available over HTTPS.
 
 Yes. Your app is only available over HTTPS, right? Trying to browse over regular
 old HTTP will redirect to the secure site, right? Use
-[letsencrypt](https://letsencrypt.org/) if you can't afford a certificate.
+[letsencrypt](https://letsencrypt.org/) if you want to avoid the racket that is commercial CAs.
 
 The one downside is that HSTS allows for a
 [clever technique](http://www.radicalresearch.co.uk/lab/hstssupercookies) to
