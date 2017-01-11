@@ -197,7 +197,7 @@ Public-Key-Pins: pin-sha256=<base64==>; max-age=<expireTime>; report-uri=<report
 ## Why?
 
 HSTS, described above, is designed to make sure that all connections to your
-website are encrypted. No where does it specify what key to use! Trust on the
+website are encrypted. Nowhere does it specify what key to use! Trust on the
 web is based on the Certificate Authority model. Your browser & Operating System
 ship with the public keys of some trusted Certificate Authorities which are
 usually specialized companies and/or nation states. You get a CA to issue you a
@@ -286,7 +286,7 @@ names to hacking techniques. "Clickjacking" is one of those dumb names. The idea
 is that you can have an iframe in focus and receiving user input while it's
 invisible. So as an attacker, I trick you into playing a browser-based game, but
 actually your clicks are being registered by a hidden iframe of twitter and
-you're non-consensually retweating all of my tweets.
+you're non-consensually retweeting all of my tweets.
 
 It sounds dumb, but it's an effective attack.
 
@@ -395,7 +395,7 @@ The `Referrer-Policy` header allows you to specify when the browser will set a `
 
 ## Should I use it? 
 
-It's up to you, but it's probably a good idea. If you don't care about your users' privacy, think of it as a way to keep your sweet sweet analytics to yourself and out of your competitors grubby hands.
+It's up to you, but it's probably a good idea. If you don't care about your users' privacy, think of it as a way to keep your sweet sweet analytics to yourself and out of your competitors' grubby hands.
 
 Set `Referrer-Policy: "no-referrer"`
 
@@ -427,7 +427,7 @@ Set-Cookie: <key>=<value>; Expires=<expiryDate>; Secure; HttpOnly; SameSite=stri
 
 ## Why?
 
-This isn't a security header per-se, but there are three different options for cookies that you should be aware of.
+This isn't a security header per se, but there are three different options for cookies that you should be aware of.
 
 - Cookies marked as `Secure` will only be served over HTTPS. This prevents
   someone from reading the cookies in a MiTM attack where they can force the
@@ -479,7 +479,7 @@ Thanks to [@wolever](https://twitter.com/wolever) for python advice
     message board.
 
 [^filters]: So if you're especially paranoid, you might be thinking "what if I
-had some secret subdomain that I don't want leaking for some reason." You have
+had some secret subdomain that I don't want leaking for some reason?" You have
 DNS zone transfers disabled, so someone would have to know what they're looking
 for to find it, but now that it's in the preload list...
 
