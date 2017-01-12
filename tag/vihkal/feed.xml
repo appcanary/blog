@@ -5,13 +5,13 @@
   <id>http://blog.appcanary.com</id>
   <link href="http://blog.appcanary.com"/>
   <link href="http://blog.appcanary.com/tag/vihkal/feed.xml" rel="self"/>
-  <updated>2016-07-06T17:00:00-07:00</updated>
+  <updated>2016-07-06T20:00:00-04:00</updated>
   <entry>
     <title>Vulnerabilities I Have Known and Loved #1: Symantec's Bad Week</title>
     <link rel="alternate" href="http://blog.appcanary.com/2016/vikhal-symantec.html"/>
     <id>http://blog.appcanary.com/2016/vikhal-symantec.html</id>
-    <published>2016-07-06T17:00:00-07:00</published>
-    <updated>2016-08-19T10:23:10-07:00</updated>
+    <published>2016-07-06T20:00:00-04:00</published>
+    <updated>2016-08-19T13:23:10-04:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
@@ -129,8 +129,8 @@ blog&lt;/a&gt;, and the issues for all 8 vulnerabilities can &lt;a href="https:/
     <title>A tale of two worms, three vulnerabilities, and one National Security Agency</title>
     <link rel="alternate" href="http://blog.appcanary.com/2016/tale-of-two-worms.html"/>
     <id>http://blog.appcanary.com/2016/tale-of-two-worms.html</id>
-    <published>2016-08-23T17:00:00-07:00</published>
-    <updated>2016-10-26T15:54:36-07:00</updated>
+    <published>2016-08-23T20:00:00-04:00</published>
+    <updated>2017-01-12T13:49:36-05:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>

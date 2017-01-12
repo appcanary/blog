@@ -5,13 +5,13 @@
   <id>http://blog.appcanary.com</id>
   <link href="http://blog.appcanary.com"/>
   <link href="http://blog.appcanary.com/tag/java/feed.xml" rel="self"/>
-  <updated>2016-01-28T16:00:00-08:00</updated>
+  <updated>2016-01-28T19:00:00-05:00</updated>
   <entry>
     <title>Maven Central Security</title>
     <link rel="alternate" href="http://blog.appcanary.com/2016/maven-central-security.html"/>
     <id>http://blog.appcanary.com/2016/maven-central-security.html</id>
-    <published>2016-01-28T16:00:00-08:00</published>
-    <updated>2016-11-16T11:36:46-08:00</updated>
+    <published>2016-01-28T19:00:00-05:00</published>
+    <updated>2017-01-10T17:51:38-05:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>

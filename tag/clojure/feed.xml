@@ -5,13 +5,13 @@
   <id>http://blog.appcanary.com</id>
   <link href="http://blog.appcanary.com"/>
   <link href="http://blog.appcanary.com/tag/clojure/feed.xml" rel="self"/>
-  <updated>2016-01-28T16:00:00-08:00</updated>
+  <updated>2016-01-28T19:00:00-05:00</updated>
   <entry>
     <title>Maven Central Security</title>
     <link rel="alternate" href="http://blog.appcanary.com/2016/maven-central-security.html"/>
     <id>http://blog.appcanary.com/2016/maven-central-security.html</id>
-    <published>2016-01-28T16:00:00-08:00</published>
-    <updated>2016-11-16T11:36:46-08:00</updated>
+    <published>2016-01-28T19:00:00-05:00</published>
+    <updated>2017-01-10T17:51:38-05:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
@@ -28,8 +28,8 @@
     <title>How being lazy about state management in Clojure caused us downtime</title>
     <link rel="alternate" href="http://blog.appcanary.com/2016/state-management-downtime.html"/>
     <id>http://blog.appcanary.com/2016/state-management-downtime.html</id>
-    <published>2016-02-01T16:00:00-08:00</published>
-    <updated>2016-04-06T10:47:17-07:00</updated>
+    <published>2016-02-01T19:00:00-05:00</published>
+    <updated>2017-01-12T13:49:36-05:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
@@ -157,8 +157,8 @@
     <title>A Gentle Intro to Datomic</title>
     <link rel="alternate" href="http://blog.appcanary.com/2016/datomic-intro-talk.html"/>
     <id>http://blog.appcanary.com/2016/datomic-intro-talk.html</id>
-    <published>2016-02-08T16:00:00-08:00</published>
-    <updated>2016-04-06T10:47:17-07:00</updated>
+    <published>2016-02-08T19:00:00-05:00</published>
+    <updated>2016-04-06T13:47:17-04:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
@@ -175,8 +175,8 @@
     <title>Slippery exceptions in Clojure and Ruby</title>
     <link rel="alternate" href="http://blog.appcanary.com/2016/slippery-exception-clojure-ruby.html"/>
     <id>http://blog.appcanary.com/2016/slippery-exception-clojure-ruby.html</id>
-    <published>2016-02-15T16:00:00-08:00</published>
-    <updated>2016-04-06T10:47:17-07:00</updated>
+    <published>2016-02-15T19:00:00-05:00</published>
+    <updated>2017-01-12T13:49:36-05:00</updated>
     <author>
       <name>Phillip Mendonça-Vieira</name>
     </author>
@@ -258,8 +258,8 @@
     <title>We Left Clojure. Here's 5 Things I'll Miss.</title>
     <link rel="alternate" href="http://blog.appcanary.com/2016/missing-clojure.html"/>
     <id>http://blog.appcanary.com/2016/missing-clojure.html</id>
-    <published>2016-11-06T16:00:00-08:00</published>
-    <updated>2016-11-16T11:36:46-08:00</updated>
+    <published>2016-11-06T19:00:00-05:00</published>
+    <updated>2017-01-10T17:51:38-05:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
@@ -429,8 +429,8 @@ programs, but the fact that I have to acknowledge this proves my point.&amp;nbsp
     <title>Good News: Ubuntu Now Ships With unattended-upgrades On By Default!</title>
     <link rel="alternate" href="http://blog.appcanary.com/2016/unattended-upgrades.html"/>
     <id>http://blog.appcanary.com/2016/unattended-upgrades.html</id>
-    <published>2016-11-14T16:00:00-08:00</published>
-    <updated>2016-11-16T11:37:29-08:00</updated>
+    <published>2016-11-14T19:00:00-05:00</published>
+    <updated>2017-01-10T17:51:38-05:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
