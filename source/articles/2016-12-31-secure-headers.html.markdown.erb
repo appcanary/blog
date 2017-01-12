@@ -23,6 +23,7 @@ headers may be best configured in on your HTTP servers, while others should be
 set on the application layer. Use your own discretion here. You can test how well you're doing with Mozilla's
 [Observatory](https://observatory.mozilla.org/analyze.html?host=appcanary.com).
 
+<h2>HTTP Security Headers</h2>
 <%= table_of_contents(current_page) %>
 
 ## X-XSS-Protection
@@ -35,36 +36,32 @@ X-XSS-Protection: 1; mode=block
 
 ### Why?
 
-Cross Site Scripting, commonly abbreviated XSS for an obvious reason, is an
-attack where the attacker causes a page to load some malicious javascript.
-`X-XSS-Protection` is designed to protect against "reflected" XSS attacks
-&mdash; where an attacker is sending the malicious payload as part of the
-request[^xss]. `X-XSS-Protection` is a feature in Chrome and Internet Explorer
-that attempts to prevent XSS by blocking javascript that looks like it came in
-the request.
+Cross Site Scripting, commonly abbreviated XSS, is an attack where the attacker
+causes a page to load some malicious javascript.  `X-XSS-Protection` is a
+feature in Chrome and Internet Explorer that is designed to protect against
+"reflected" XSS attacks &mdash; where an attacker is sending the malicious
+payload as part of the request[^xss].
 
-`X-XSS-Protection: 0` turns it off.
-`X-XSS-Protection: 1` will filter out scripts that came from the request,
-`X-XSS-Protection: 1; mode=block` will block the whole page when a script looks
-like it came from the request, and `X-XSS-Protection: 0` disables it entirely.
+`X-XSS-Protection: 0` turns it off.<br/>
+`X-XSS-Protection: 1` will filter out scripts that came from the request - but
+will still render the page<br/> 
+`X-XSS-Protection: 1; mode=block` when triggered, will block the whole page from being rendered.
 
 ### Should I use it? 
 
-Yes, you should set `X-XSS-Protection:1; mode=block` See [here](http://blog.innerht.ml/the-misunderstood-x-xss-protection/) for why.
+Yes. Set `X-XSS-Protection: 1; mode=block`. The "filter bad scripts" mechanism is problematic; see [here](http://blog.innerht.ml/the-misunderstood-x-xss-protection/) for why.
 
 ### How?
 
 
-|---
-| Platform | What do I do?
-|---|---
-| Rails 4 | On by default
-| Rails 5 | On by default
-| Django | SECURE_BROWSER_XSS_FILTER = True
-| Express.js   | Use [helmet](https://www.npmjs.com/package/helmet) 
-| Go | Use [unrolled/secure](https://github.com/unrolled/secure)
-| Nginx | `add_header X-XSS-Protection "1; mode=block";`
-| Apache | `Header always set X-XSS-Protection "1; mode=block"`
+| Platform | What do I do? |
+|---|---|
+| Rails 4, 5 | On by default |
+| Django | `SECURE_BROWSER_XSS_FILTER = True` |
+| Express.js   | Use [helmet](https://www.npmjs.com/package/helmet) |
+| Go | Use [unrolled/secure](https://github.com/unrolled/secure) |
+| Nginx | `add_header X-XSS-Protection "1; mode=block";` |
+| Apache | `Header always set X-XSS-Protection "1; mode=block"` |
 
 ### I want to know more
 
@@ -88,11 +85,12 @@ malicious script in it.
 
 CSP gives you a language to define where the browser can load resources from.
 You can white list origins for scripts, images, fonts, stylesheets, etc in a very
-granular manner.
+granular manner. You can also compare any loaded content against a hash or
+signature.
 
 ### Should I use it?
 
-Yes.
+Yes. It won't solve every issue, but it significantly reduces the available XSS attack surface. 
 
 ### How?
 
@@ -103,16 +101,14 @@ a list of all the directives you can employ. A good place to start
 is [here](https://csp.withgoogle.com/docs/adopting-csp.html).
 
 
-|---
-| Platform | What do I do?
-|---|---
-| Rails 4 | Use [secureheaders](https://github.com/twitter/secureheaders)
-| Rails 5 | Use [secureheaders](https://github.com/twitter/secureheaders)
-| Django | Use [django-csp](https://github.com/mozilla/django-csp)
-| Express.js   | Use [helmet/csp(https://github.com/helmetjs/csp)
-| Go | Use [unrolled/secure](https://github.com/unrolled/secure)
-| Nginx | `add_header Content-Security-Policy "<policy>";`
-| Apache | `Header always set Content-Security-Policy "<policy>"`
+| Platform | What do I do? |
+|---|---|
+| Rails 4, 5 | Use [secureheaders](https://github.com/twitter/secureheaders) |
+| Django | Use [django-csp](https://github.com/mozilla/django-csp) |
+| Express.js   | Use [helmet/csp](https://github.com/helmetjs/csp) |
+| Go | Use [unrolled/secure](https://github.com/unrolled/secure) |
+| Nginx | `add_header Content-Security-Policy "<policy>";` |
+| Apache | `Header always set Content-Security-Policy "<policy>"` |
 
 ---
 
@@ -126,38 +122,43 @@ Strict-Transport-Security: max-age=<expire-time>; preload
 
 ### Why?
 
-There are two problems when you want to communicate with someone securely. One
-is encryption &mdash; making sure the messages you're sending are only visible
-to you and them, and no one else. The other one is authentication &mdash; making
-sure you're actually communicating with the person you think you are.
+When we want to securely communicate with someone, we face two problems. The
+first problem is privacy: we want to make sure the messages we send can only
+be read by the recipient, and no one else. The other problem is that of
+authentication: how do we know the recipient is who they say they are?
 
-HTTPS is good at the first one, and has major problems with the second (more on
-this later, Public Key Pinning). HSTS solves the meta-problem: how do you know
-if the person you're talking to actually supports encryption?
+HTTPS solves the first problem with encryption, though it has some major issues
+with authentication (more on this later, see [Public Key
+Pinning](#http-public-key-pinning-hpkp)). The HSTS header solves the
+meta-problem: how do you know if the person you're talking to actually supports
+encryption?
 
-The attack is called [sslstrip](https://moxie.org/software/sslstrip/). If you're
-on a hostile network an attacker can just disable encryption between you and the
-websites you're browsing. Even if the site you're accessing is only available
-over HTTPS, an attacker that owns the wifi router you're using can just
+HSTS mitigates an attack called
+[sslstrip](https://moxie.org/software/sslstrip/). Suppose you're using a hostile
+network, where a malicious attacker controls the wifi router. The attacker can
+disable encryption between you and the websites you're browsing. Even if the
+site you're accessing is only available over HTTPS, the attacker can
 man-in-the-middle the HTTP traffic and make it look like the site works over
 unencrypted HTTP. No need for SSL certs, just disable the encryption.
 
 Enter the HSTS. The `Strict-Transport-Security` header solves this by letting
-your browser know to always use encryption with your site. As long as the
-browser saw the HSTS header and it's not expired, it will not access the site
-unencrypted, and will error out if it's not available over HTTPS.
+your browser know that it must always use encryption with your site. As long as
+your browser has seen an HSTS header &mdash; and it hasn't expired &mdash; it
+will not access the site unencrypted, and will error out if it's not available
+over HTTPS.
 
 ### Should I use it? 
 
 Yes. Your app is only available over HTTPS, right? Trying to browse over regular
 old HTTP will redirect to the secure site, right? Use
-[letsencrypt](https://letsencrypt.org/) if you want to avoid the racket that is commercial CAs.
+[letsencrypt](https://letsencrypt.org/) if you want to avoid the racket that are
+commercial certificate authorities.
 
-The one downside is that HSTS allows for a
-[clever technique](http://www.radicalresearch.co.uk/lab/hstssupercookies) to
-create supercookies to fingerprint your users. But, you're a website operator,
-so the prospect of invading your users privacy doesn't bother you, does it?
-Anyways, I'm sure you will use HSTS for good and not for supercookies.
+The one downside of the HSTS header is that it allows for a [clever
+technique](http://www.radicalresearch.co.uk/lab/hstssupercookies) to create
+supercookies that can fingerprint your users. As a website operator, you
+probably already track your users somewhat - but try to only use HSTS for good
+and not for supercookies.
 
 ### How?
 
@@ -166,7 +167,7 @@ The two options are
 - `includeSubDomains` - HSTS applies to subdomains
 - `preload` - Google maintains a [service](https://hstspreload.appspot.com/)
   that hardcodes[^filters] your site as being HTTPS only into browsers. This way, a user
-  doesn't even have to visit your site at all to opt in for HSTS. Getting off that list is hard by the way, so turn it on if you know you can support HTTPS forever on all subdomains.
+  doesn't even have to visit your site at all to opt in for HSTS. Getting off that list is hard, by the way, so only turn it on if you know you can support HTTPS forever on all subdomains.
   
 
 
