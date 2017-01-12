@@ -21,17 +21,17 @@ A few of our customers told us that knowing about vulnerabilities is nice, but y
 
 If you have the Appcanary [agent]((https://appcanary.com/servers/new)) installed on an Ubuntu server, and you're running the latest version, you can run 
 
-~~~
+```
 appcanary upgrade
-~~~
+```
 
 in order to install updates for any packages we know to be vulnerable.
 
 You can also run
 
-~~~
+```
 appcanary upgrade -dry-run
-~~~
+```
 
 in order to see what the agent will do, without it actually touching your system. 
 

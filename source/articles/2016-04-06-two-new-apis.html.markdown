@@ -19,15 +19,15 @@ The "Monitor" API lets you register a Gemfile or an Ubuntu/CentOS package list t
 
 You can register a new monitor by:
 
-~~~bash
+```bash
 curl -H "Authorization: Token YOURTOKENHERE" \
      -X POST -F file=@./Gemfile.lock \
      https://appcanary.com/api/v2/monitors/my-great-app?platform=ruby
-~~~
+```
 
 and you'll get a response like:
 
-~~~json
+```json
 {
   "data": {
     "type": "monitor",
@@ -38,7 +38,7 @@ and you'll get a response like:
     }
   }
 }
-~~~
+```
 
 And, you'll be emailed about any vulnerabilities that affect your app as soon as we find out about them!
 
@@ -50,14 +50,14 @@ You can also list, inspect, or delete monitors via the API. More information [he
 The "Server" API allows you to navigate the servers you have the Appcanary agent running on via API, and list any vulnerabilities that affect them!
 
 I can see the servers I have agents running on with:
-~~~bash
+```bash
 curl -H "Authorization: Token YOURTOKENHERE" \
       https://appcanary.com/api/v2/servers
-~~~
+```
 
 and you'll get a response like:
 
-~~~json
+```json
 {
   "data": [
     {
@@ -113,7 +113,7 @@ and you'll get a response like:
     }
   ]
 }
-~~~
+```
 
 You can also inspect or delete any server with an agent on it via the API.
 

@@ -17,13 +17,13 @@ An easy way to get an idea of where a thread leak is coming from is to look at t
 
 To get a list of all thread names of a Java application sorted by most common name, you can do:
 
-~~~
+```
 jstack -l $PID | grep daemon |  awk '{ print $1 }' | sort | uniq -c |   sort -nr
-~~~
+```
 
 Which on our end yielded something like this:
 
-~~~
+```
   30000 "Analytics"
       2 "Datomic
       2 "C2
@@ -38,7 +38,7 @@ Which on our end yielded something like this:
       1 "Thread-2
       1 "Thread-1
       1 "Thread-0
-~~~
+```
 
 Hmm...
 
@@ -54,7 +54,7 @@ Component solves this problem by implementing dependency injection in a Clojurel
 
 For example, Appcanary's dependency graph looks (something) like this:
 
-~~~clojure
+```clojure
 (defn canary-system
   []
   ;;Initialize logging
@@ -65,7 +65,7 @@ For example, Appcanary's dependency graph looks (something) like this:
                              [:datomic :scheduler])
    :web-server (component/using (new-web-server (env :http-ip) (Integer. (env :http-port)) canary-api)
                              [:datomic])))
-~~~
+```
 
 The `mailer` depends on `datomic` and the `scheduler`, the web server depends on `datomic`, and both `datomic` and the `scheduler` don't depend on anything.
 
@@ -81,7 +81,7 @@ What I want to have is an analytics namespace which contains all the events I ma
 
 The first pass of creating the client looked something like this:
 
-~~~clojure
+```clojure
 (defonce client
   (.build (Analytics/builder (env :segment-api-key))))
 
@@ -91,7 +91,7 @@ The first pass of creating the client looked something like this:
   (when (production?)
     (.enqueue client
               ;; Java interop to build the analytics message here)))
-~~~
+```
 
 There's only one problem with the above code: the segment api key is loaded from an environment variable. 
 
@@ -101,7 +101,7 @@ We deploy appcanary in a pretty standard way -- we compile an uberjar and rsync 
 
 The obvious thing to do to build the analytics client at runtime is to wrap it as a function:
 
-~~~clojure
+```clojure
 (defn client
   []
   (.build (Analytics/builder (env :segment-api-key))))
@@ -112,7 +112,7 @@ The obvious thing to do to build the analytics client at runtime is to wrap it a
   (when (production?)
     (.enqueue (client)
               ;; Java interop to build the analytics message here)))
-~~~
+```
 
 I saw three downsides here:
 

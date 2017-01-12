@@ -15,15 +15,15 @@ We listened carefully to that feedback, and it is with pride and pleasure that w
 
 Once you <a href="https://appcanary.com/sign_up">sign up</a>, all you have to do is issue a curl:
 
-~~~bash
+```bash
 curl -H "Authorization: Token YOURTOKENHERE" \
      -X POST -F file=@./Gemfile.lock \
      https://appcanary.com/api/v2/check/ruby
-~~~
+```
 
 and you'll get a response like:
 
-~~~json
+```json
 {
   "vulnerable": true,
   "data": [
@@ -58,7 +58,7 @@ and you'll get a response like:
     }
   ]
 }
-~~~
+```
 
 Our API fully supports **Ruby**, **Ubuntu**, and **CentOS 7**! You can learn more about how to use it by visiting [the docs page](https://appcanary.com/docs).
 

@@ -106,7 +106,7 @@ email to any process, including the shell! Ironically, this was <a href="http://
 
 If you're wondering how sendmail could have backdoors like this, it seems that it was somewhat well known. This quote from a <a href="http://securitydigest.org/tcp-ip/archive/1988/11" target="_blank">mail</a> by <a href="https://en.wikipedia.org/wiki/Paul_Vixie" target="_blank">Paul Vixie</a> summarizes the situation.
 
-~~~
+```
 From: vixie@decwrl.dec.com (Paul Vixie)
 Newsgroups: comp.protocols.tcp-ip,comp.unix.wizards
 Subject: Re: a holiday gift from Robert "wormer" Morris
@@ -133,7 +133,7 @@ on a remote machine with executable code is One Very Neat Trick.
 Paul Vixie
 Work:    vixie@decwrl.dec.com    decwrl!vixie    +1 415 853 6600
 Play:    paul@vixie.sf.ca.us     vixie!paul      +1 415 864 7013
-~~~
+```
 
 The Internet was a polite place, indeed.
 
@@ -147,7 +147,7 @@ lost their magic[^magic].
 
 Here's the main routine from the `fingerd` of that <a href="http://minnie.tuhs.org/cgi-bin/utree.pl?file=4.3BSD/usr/src/etc/fingerd.c" target="_blank">era</a>:
 
-~~~c
+```c
 main(argc, argv)
 	char *argv[];
 {
@@ -170,7 +170,7 @@ main(argc, argv)
     // putchar'ing the result back to stdout
 	return(0);
 } 
-~~~
+```
 
 
 If you have experience with reading C code,[^code] you may have spotted the

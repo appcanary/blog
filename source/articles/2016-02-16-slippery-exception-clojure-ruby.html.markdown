@@ -9,7 +9,7 @@ layout: post
 
 Recently I spent a couple of hours banging my head against code that looks like this:
 
-~~~clojure
+```clojure
 (defn parse-file
   [contents]
   (remove nil?
@@ -29,7 +29,7 @@ Recently I spent a couple of hours banging my head against code that looks like 
     (let [artifacts (consume-manifest (slurp file) kind]
       (if (not-empty artifacts)
         … etc
-~~~
+```
 
 And much to my surprise, I kept getting the kind of exception `parse-file` generates deep within the `check` function, right up against `(not-empty artifacts)`.
 
@@ -52,7 +52,7 @@ Well. I would expect a `catch java.lang.Exception` to _catch every exception_.
 "Right, well, hear me out. What if you had the following Ruby?"
 
 
-~~~ruby
+```ruby
 def lazy_parse(filename)
   File.open(filename).each_line.each_with_index.lazy.map do |line, i|
     raise "You can't catch me, I'm the exception man" if i == 5
@@ -70,7 +70,7 @@ end
 
 file = consume_file
 puts file.first(10)
-~~~
+```
     
     
 
@@ -80,12 +80,12 @@ That shut me up good. And in case you were wondering, the stack trace is also us
 
 It's hard to reason about this. I want to write wrapper functions that make my code safe to consume downstream. This isn't feasible for any functions iterating over potentially infinite lazy sequences, but fortunately for us we need to fit this file into memory anyways. In Ruby we'd have to forcibly iterate over every element of the sequence and check for exceptions, but Clojure makes this easy with [`doall`](https://clojuredocs.org/clojure.core/doall):
 
-~~~clojure
+```clojure
 (defn parse-file
   [contents]
   (doall (remove nil?
                  (code-that throws-an-exception))))
-~~~
+```
 
 
 And now, things behave as intended.
