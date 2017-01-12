@@ -177,6 +177,7 @@ configure :build do
 end
 
 helpers do
+  # thanks, https://forum.middlemanapp.com/t/generate-inpage-navigation-nice-api-documentation/1002/2
   def table_of_contents(resource)
     content = File.read(resource.source_file)
     toc_renderer = Redcarpet::Render::HTML_TOC.new
