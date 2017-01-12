@@ -176,3 +176,11 @@ configure :build do
   ignore 'stylesheets/vendor/*'
 end
 
+helpers do
+  def table_of_contents(resource)
+    content = File.read(resource.source_file)
+    toc_renderer = Redcarpet::Render::HTML_TOC.new
+    markdown = Redcarpet::Markdown.new(toc_renderer, nesting_level: 2) # nesting_level is optional
+    markdown.render(content)
+  end
+end

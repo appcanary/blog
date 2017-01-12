@@ -4,6 +4,7 @@ date: 2016-12-31
 author: mveytsman
 layout: post
 published: false
+
 ---
 
 Some physicists 28 years ago needed a way to easily share experimental data and
@@ -22,8 +23,7 @@ headers may be best configured in on your HTTP servers, while others should be
 set on the application layer. Use your own discretion here. You can test how well you're doing with Mozilla's
 [Observatory](https://observatory.mozilla.org/analyze.html?host=appcanary.com).
 
-1. toc goes here 
-{:toc}
+<%= table_of_contents(current_page) %>
 
 # X-XSS-Protection
 
@@ -43,7 +43,7 @@ request[^xss]. `X-XSS-Protection` is a feature in Chrome and Internet Explorer
 that attempts to prevent XSS by blocking javascript that looks like it came in
 the request.
 
-'X-XSS-Protection: 0` turns it off.
+`X-XSS-Protection: 0` turns it off.
 `X-XSS-Protection: 1` will filter out scripts that came from the request,
 `X-XSS-Protection: 1; mode=block` will block the whole page when a script looks
 like it came from the request, and `X-XSS-Protection: 0` disables it entirely.
@@ -68,7 +68,7 @@ Yes, you should set `X-XSS-Protection:1; mode=block` See [here](http://blog.inne
 
 ## I want to know more
 
-- [X-XSS-Protection - MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection)
+[X-XSS-Protection - MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection)
 
 ---
 
@@ -169,16 +169,16 @@ The two options are
   doesn't even have to visit your site at all to opt in for HSTS. Getting off that list is hard by the way, so turn it on if you know you can support HTTPS forever on all subdomains.
   
 
-|---
-| Platform | What do I do?
-|---|---
-| Rails 4 | `config.force_ssl = true`<br/>Does not include subdomains by default. To set it:<br/>`config.ssl_options = { hsts: { subdomains: true } }`
-| Rails 5 | `config.force_ssl = true`
-| Django | `SECURE_HSTS_SECONDS = 31536000` <br/> `SECURE_HSTS_INCLUDE_SUBDOMAINS = True`
-| Express.js   | Use [helmet](https://www.npmjs.com/package/helmet) 
-| Go | Use [unrolled/secure](https://github.com/unrolled/secure)
-| Nginx | `add_header Strict-Transport-Security "max-age=31536000; includeSubdomains; ";`
-| Apache | `Header always set Strict-Transport-Security "max-age=31536000; includeSubdomains;`
+
+| Platform | What do I do? |
+| -------- | ------------- |
+| Rails 4 | `config.force_ssl = true`<br/>Does not include subdomains by default. To set it:<br/>`config.ssl_options = { hsts: { subdomains: true } }` |
+| Rails 5 | `config.force_ssl = true` |
+| Django | `SECURE_HSTS_SECONDS = 31536000` <br/> `SECURE_HSTS_INCLUDE_SUBDOMAINS = True` |
+| Express.js   | Use [helmet](https://www.npmjs.com/package/helmet) |
+| Go | Use [unrolled/secure](https://github.com/unrolled/secure) |
+| Nginx | `add_header Strict-Transport-Security "max-age=31536000; includeSubdomains; ";` |
+| Apache | `Header always set Strict-Transport-Security "max-age=31536000; includeSubdomains;` |
 
 ## I want to know more
 
