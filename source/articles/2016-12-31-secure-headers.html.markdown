@@ -1,27 +1,28 @@
 ---
 title: Everything you need to know about HTTP security headers 
+date: 2016-12-31
 author: mveytsman
 layout: post
 published: false
 ---
 
-28 years ago some physicists needed a way to more easily share experimental data
-and the web was born. From trigonometry to the strong nuclear force, everything
-physicists touch eventually becomes weaponized, and so too has the Hypertext
-Transfer Protocol. 
+Some physicists 28 years ago needed a way to easily share experimental data and
+thus the web was born.  This was generally considered to be a good move.
+Unfortunately, everything physicists touch &mdash; from trigonometry to the
+strong nuclear force &mdash; eventually becomes weaponized and so too has the
+Hypertext Transfer Protocol. 
 
-What can be attacked must be defended, and tradition requires all security
-features to be a bolted-on afterthought, so let me tell you everything you need
-to know about secure headers presented in order of how interesting I think they are.
+What can be attacked must be defended, and since tradition requires all security
+features to be a bolted-on afterthought, things… got a little complicated. This
+article explains what secure headers are and how to implement these headers
+in Rails, Django, Express.js, Go, Nginx, and Apache. 
 
-I'll tell you how to implement these headers in Rails, Django, Express.js, Go,
-Nginx, and Apache. Note that for some headers it makes a lot of sense to set
-them up on your HTTP servers, while others should be set up on the application
-layer. Use your own discretion here.
+Please note that some
+headers may be best configured in on your HTTP servers, while others should be
+set on the application layer. Use your own discretion here. You can test how well you're doing with Mozilla's
+[Observatory](https://observatory.mozilla.org/analyze.html?host=appcanary.com).
 
-You can test how well you're doing with Mozilla's [Observatory](https://observatory.mozilla.org/analyze.html?host=appcanary.com).
-
-1. toc goes here
+1. toc goes here 
 {:toc}
 
 # X-XSS-Protection
