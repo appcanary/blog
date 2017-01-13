@@ -13,7 +13,7 @@ module MiddlemanCasperHelpers
     elsif is_blog_article?
       title << current_article.title
     end
-    title << " - #{blog_settings.name}"
+    [title, blog_settings.name].reject(&:empty?).join(" - ")
   end
 
   def page_description
