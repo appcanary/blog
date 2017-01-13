@@ -53,7 +53,7 @@ never open attachments, and if at all possible, stop using computers altogether.
 
 &lt;p&gt;This is the phishing equivalent of the Double Tap. No, not the one from &lt;a href="https://www.youtube.com/watch?v=w4sWxsrEFFs"&gt;Zombieland&lt;/a&gt;. The Double Tap I&amp;rsquo;m talking about is a controversial &lt;a href="http://www.businessinsider.com/drone-double-tap-first-responders-2012-9"&gt;military technique&lt;/a&gt; where after attacking a target, you follow up by sending another missile at the first responders. You do some damage, and then attack the response to that damage.&lt;/p&gt;
 
-&lt;h3&gt;Symantec is Having a Bad Week&lt;/h3&gt;
+&lt;h3 id="symantec-is-having-a-bad-week"&gt;Symantec is Having a Bad Week&lt;/h3&gt;
 
 &lt;p&gt;Last week &lt;a href="https://twitter.com/taviso"&gt;Tavis Ormandy&lt;/a&gt; dropped 8 vulns against every single Symantec/Norton antivirus product. Judging by &lt;a href="http://fortune.com/2016/07/02/symantec-security-irony/"&gt;the press&lt;/a&gt;, things are &lt;a href="http://www.pcworld.com/article/3089463/security/wormable-flaws-in-symantec-products-expose-millions-of-computers-to-hacking.html"&gt;not looking good&lt;/a&gt; for them.&lt;/p&gt;
 
@@ -70,7 +70,7 @@ blog&lt;/a&gt;, and the issues for all 8 vulnerabilities can &lt;a href="https:/
 
 &lt;p&gt;The exploit pretends to be a certain kind of known malware in order to trigger some special aggressive checks, which are the exploit&amp;rsquo;s true target. The Double Tap!&lt;/p&gt;
 
-&lt;h3&gt;Vulnerability Management&lt;/h3&gt;
+&lt;h3 id="vulnerability-management"&gt;Vulnerability Management&lt;/h3&gt;
 
 &lt;p&gt;While the above vulnerability is pretty cool, the Symantec bugs that are most interesting to us at Appcanary are &lt;a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=810"&gt;CVE-2016-2207&lt;/a&gt; and &lt;a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=816"&gt;CVE-2016-2211&lt;/a&gt;. &lt;/p&gt;
 
@@ -78,7 +78,7 @@ blog&lt;/a&gt;, and the issues for all 8 vulnerabilities can &lt;a href="https:/
 
 &lt;p&gt;Ironically, Symantec sells a product called Enterprise Vulnerability Management! This is a hard problem for everyone. At Appcanary, we&amp;rsquo;re working on solving it.&lt;/p&gt;
 
-&lt;h3&gt;P.S.&lt;/h3&gt;
+&lt;h3 id="p-s"&gt;P.S.&lt;/h3&gt;
 
 &lt;p&gt;&lt;link href="//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css" rel="stylesheet" type="text/css"&gt;
 &lt;style type="text/css"&gt;
@@ -101,7 +101,7 @@ blog&lt;/a&gt;, and the issues for all 8 vulnerabilities can &lt;a href="https:/
 
 &lt;hr&gt;
 
-&lt;h4&gt;Paying the Bills&lt;/h4&gt;
+&lt;h4 id="paying-the-bills"&gt;Paying the Bills&lt;/h4&gt;
 
 &lt;p&gt;One quarter of the critical vulnerabilities found in Symantec&amp;rsquo;s products last week were there because they relied on out-of-date libraries with known security holes.&lt;/p&gt;
 
@@ -130,7 +130,7 @@ blog&lt;/a&gt;, and the issues for all 8 vulnerabilities can &lt;a href="https:/
     <link rel="alternate" href="http://blog.appcanary.com/2016/tale-of-two-worms.html"/>
     <id>http://blog.appcanary.com/2016/tale-of-two-worms.html</id>
     <published>2016-08-23T20:00:00-04:00</published>
-    <updated>2017-01-12T13:49:36-05:00</updated>
+    <updated>2017-01-13T09:15:13-05:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
@@ -166,7 +166,7 @@ community for peer review, but unfortunately no credible researcher&lt;sup id="f
 
 &lt;p&gt;&lt;img alt="Morris Worm" src="/images/morris_worm.jpg" /&gt;&lt;/p&gt;
 
-&lt;h2&gt;The Morris Worm&lt;/h2&gt;
+&lt;h2 id="the-morris-worm"&gt;The Morris Worm&lt;/h2&gt;
 
 &lt;p&gt;It&amp;rsquo;s November 2nd 1988, almost exactly 25 years before badBIOS became a
 hashtag. Robert Tappan Morris, a graduate student at Cornell, executes some
@@ -194,13 +194,13 @@ through Soviet air defenses in May 1987 and landed in Moscow.&lt;/p&gt;
 himself a stealth bomber by hand and then flown into Red Square,&amp;rdquo; he said.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3&gt;What did the Morris Worm actually do?&lt;/h3&gt;
+&lt;h3 id="what-did-the-morris-worm-actually-do"&gt;What did the Morris Worm actually do?&lt;/h3&gt;
 
 &lt;p&gt;The Morris Worm&lt;sup id="fnref4"&gt;&lt;a href="#fn4" rel="footnote"&gt;4&lt;/a&gt;&lt;/sup&gt; exploited three separate vulnerabilities. It guessed
 passwords for &lt;code&gt;rsh&lt;/code&gt;/&lt;code&gt;rexec&lt;/code&gt;, it exploited a debug-mode backdoor in sendmail and it used &amp;ldquo;one
 very neat trick&amp;rdquo;. I&amp;rsquo;ll go over each of these in detail, and you can find an archive (decompiled and commented) of the code for yourself &lt;a href="https://github.com/arialdomartini/morris-worm" target="_blank"&gt;here&lt;/a&gt;.&lt;/p&gt;
 
-&lt;h4&gt;1. Rsh and Rexec&lt;/h4&gt;
+&lt;h4 id="1-rsh-and-rexec"&gt;1. Rsh and Rexec&lt;/h4&gt;
 
 &lt;p&gt;&lt;code&gt;rsh&lt;/code&gt; and &lt;code&gt;rexec&lt;/code&gt; are remote shell protocols from the BSD era that are almost
 unused today (since supplanted by &lt;code&gt;ssh&lt;/code&gt;). &lt;code&gt;rsh&lt;/code&gt; can allow passwordless
@@ -218,7 +218,7 @@ worm shipped with an optimized implementation of
 &lt;a href="https://en.wikipedia.org/wiki/Crypt_(Unix)" target="_blank"&gt;&lt;code&gt;crypt&lt;/code&gt;&lt;/a&gt; and a dictionary, and went to town. Once it cracked a password, it tried it against
 all the likely hosts it could find.&lt;/p&gt;
 
-&lt;h4&gt;2. Sendmail&amp;rsquo;s Backdoor&lt;/h4&gt;
+&lt;h4 id="2-sendmail-39-s-backdoor"&gt;2. Sendmail&amp;rsquo;s Backdoor&lt;/h4&gt;
 
 &lt;p&gt;In the absence of any friendly hosts, the Morris Worm would then exploit a
 backdoor in &lt;a href="https://en.wikipedia.org/wiki/Sendmail" target="_blank"&gt;Sendmail&lt;/a&gt;. You see, Sendmail had a &amp;ldquo;debug&amp;rdquo; mode that allowed anyone to route an
@@ -265,7 +265,7 @@ Play:    paul@vixie.sf.ca.us     vixie!paul      +1 415 864 7013
 
 &lt;p&gt;The Internet was a polite place, indeed.&lt;/p&gt;
 
-&lt;h4&gt;3. One Very Neat Trick&lt;/h4&gt;
+&lt;h4 id="3-one-very-neat-trick"&gt;3. One Very Neat Trick&lt;/h4&gt;
 
 &lt;p&gt;The Very Neat Trick that Vixie was talking about is the now-standard
 &lt;a href="https://en.wikipedia.org/wiki/Buffer_overflow" target="_blank"&gt;stack buffer overflow&lt;/a&gt;. It&amp;rsquo;s
@@ -310,7 +310,7 @@ of the &lt;code&gt;main&lt;/code&gt; function. This allowed Morris to overwrite 
 he sent over the network. The beginning of the buffer contained
 &lt;a href="https://en.wikipedia.org/wiki/Shellcode" target="_blank"&gt;shellcode&lt;/a&gt; that called &lt;code&gt;/bin/sh&lt;/code&gt;. Game over.&lt;/p&gt;
 
-&lt;h2&gt;Aftermath&lt;/h2&gt;
+&lt;h2 id="aftermath"&gt;Aftermath&lt;/h2&gt;
 
 &lt;p&gt;Robert Tappan Morris was convicted and sentenced to three years probation, 400
 hours of community service and a $10,050 fine (about $20,000 in today&amp;rsquo;s dollars)
@@ -332,7 +332,7 @@ Distributed Systems Groups.&lt;/p&gt;
 
 &lt;hr&gt;
 
-&lt;h4&gt;Paying the Bills&lt;/h4&gt;
+&lt;h4 id="paying-the-bills"&gt;Paying the Bills&lt;/h4&gt;
 
 &lt;p&gt;We&amp;rsquo;re trying our best, but we&amp;rsquo;ll only be able to blog about a minuscule percentage of the world&amp;rsquo;s vulnerabilities. And starting with 1988 means we have a lot of catching up to do. How will you ever find about the ones that actually affect you?&lt;/p&gt;
 

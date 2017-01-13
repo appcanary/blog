@@ -11,7 +11,7 @@
     <link rel="alternate" href="http://blog.appcanary.com/2016/new-api-centos-support.html"/>
     <id>http://blog.appcanary.com/2016/new-api-centos-support.html</id>
     <published>2016-03-06T19:00:00-05:00</published>
-    <updated>2017-01-12T13:49:36-05:00</updated>
+    <updated>2017-01-13T09:15:13-05:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
@@ -70,7 +70,7 @@
 
 &lt;p&gt;Which reminds us,&lt;/p&gt;
 
-&lt;h2&gt;We now support CentOS 7!&lt;/h2&gt;
+&lt;h2 id="we-now-support-centos-7"&gt;We now support CentOS 7!&lt;/h2&gt;
 
 &lt;p&gt;Appcanary now fully supports &lt;strong&gt;CentoOS 7&lt;/strong&gt;. If you install our agent on a CentOS 7 server, we will email you notifications whenever any rpm package you have installed on your system has a known vulnerability.&lt;/p&gt;
 
@@ -84,7 +84,7 @@
     <link rel="alternate" href="http://blog.appcanary.com/2016/two-new-apis.html"/>
     <id>http://blog.appcanary.com/2016/two-new-apis.html</id>
     <published>2016-04-05T20:00:00-04:00</published>
-    <updated>2017-01-12T13:49:36-05:00</updated>
+    <updated>2017-01-13T09:15:13-05:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
@@ -96,7 +96,7 @@
 
 &lt;p&gt;So we went ahead and built both.&lt;/p&gt;
 
-&lt;h2&gt;The Monitor API&lt;/h2&gt;
+&lt;h2 id="the-monitor-api"&gt;The Monitor API&lt;/h2&gt;
 
 &lt;p&gt;The &amp;ldquo;Monitor&amp;rdquo; API lets you register a Gemfile or an Ubuntu/CentOS package list to be emailed when new vulnerabilities are discovered. It like what our agent does, but in situations where it doesn&amp;rsquo;t make sense like when you use Docker or deploy on a PaaS like Heroku.&lt;/p&gt;
 
@@ -123,7 +123,7 @@
 
 &lt;p&gt;You can also list, inspect, or delete monitors via the API. More information &lt;a href="https://appcanary.com/docs#create-monitor"&gt;here&lt;/a&gt;.&lt;/p&gt;
 
-&lt;h2&gt;The Server API&lt;/h2&gt;
+&lt;h2 id="the-server-api"&gt;The Server API&lt;/h2&gt;
 
 &lt;p&gt;The &amp;ldquo;Server&amp;rdquo; API allows you to navigate the servers you have the Appcanary agent running on via API, and list any vulnerabilities that affect them!&lt;/p&gt;
 
@@ -228,19 +228,19 @@ notifications if a set of Debian packages ever has new vulnerabilities.&lt;/p&gt
     <link rel="alternate" href="http://blog.appcanary.com/2016/making-appcanary-easier.html"/>
     <id>http://blog.appcanary.com/2016/making-appcanary-easier.html</id>
     <published>2016-07-13T20:00:00-04:00</published>
-    <updated>2017-01-12T13:49:36-05:00</updated>
+    <updated>2017-01-13T09:15:13-05:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
     <content type="html">&lt;p&gt;I&amp;rsquo;m excited to announce that we&amp;rsquo;ve added two features that make Appcanary a heck of a lot easier to use!&lt;/p&gt;
 
-&lt;h2&gt;Add monitors by uploading a file&lt;/h2&gt;
+&lt;h2 id="add-monitors-by-uploading-a-file"&gt;Add monitors by uploading a file&lt;/h2&gt;
 
 &lt;p&gt;Our Monitor API is great if you want to track a set of Linux packages or your Gemfile. We give you a dashboard showing which packages are vulnerable, and email you whenever new vulnerabilities that affect you come out. However, there&amp;rsquo;s always a bunch of setup to get a new API going.&lt;/p&gt;
 
 &lt;p&gt;With that in mind, we made the interface a lot more user friendly! You can now upload a file to watch directly through the website. Just go to &lt;a href="https://appcanary.com/monitors/new"&gt;add monitors&lt;/a&gt; to be able to upload a file directly. Monitors support Ruby&amp;rsquo;s &lt;code&gt;Gemfile.lock&lt;/code&gt;, &lt;code&gt;/var/lib/dpkg/status&lt;/code&gt; for Ubuntu and Debian, and the output of &lt;code&gt;rpm -qa&lt;/code&gt; for Centos and Amazon Linux!&lt;/p&gt;
 
-&lt;h2&gt;Automatically upgrade vulnerable packages&lt;/h2&gt;
+&lt;h2 id="automatically-upgrade-vulnerable-packages"&gt;Automatically upgrade vulnerable packages&lt;/h2&gt;
 
 &lt;p&gt;A few of our customers told us that knowing about vulnerabilities is nice, but you know what would be &lt;em&gt;great&lt;/em&gt;? If we could somehow &lt;em&gt;patch&lt;/em&gt; them automatically. We thought about it and said, sure, why not!&lt;/p&gt;
 
@@ -258,7 +258,7 @@ notifications if a set of Debian packages ever has new vulnerabilities.&lt;/p&gt
 
 &lt;p&gt;Now you can manage vulnerabilities, learn about new ones that affect you, and apply patches, all through Appcanary!&lt;/p&gt;
 
-&lt;h4&gt;If you haven&amp;rsquo;t tried us yet&lt;/h4&gt;
+&lt;h4 id="if-you-haven-39-t-tried-us-yet"&gt;If you haven&amp;rsquo;t tried us yet&lt;/h4&gt;
 
 &lt;p&gt;Stay on top of the security vulnerabilities that affect you, today.&lt;/p&gt;
 

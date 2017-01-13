@@ -11,7 +11,7 @@
     <link rel="alternate" href="http://blog.appcanary.com/2016/slippery-exception-clojure-ruby.html"/>
     <id>http://blog.appcanary.com/2016/slippery-exception-clojure-ruby.html</id>
     <published>2016-02-15T19:00:00-05:00</published>
-    <updated>2017-01-12T13:49:36-05:00</updated>
+    <updated>2017-01-13T09:15:13-05:00</updated>
     <author>
       <name>Phillip Mendonça-Vieira</name>
     </author>
@@ -102,7 +102,7 @@
 12th we were down to zero. We replaced it by adding another 5,700 lines of Ruby to our codebase. 
 &lt;a href="https://twitter.com/phillmv"&gt;Phill&lt;/a&gt; will be discussing why we left, and what we learned both here and &lt;a href="http://rubyconf.org/program#prop_19"&gt;at this year&amp;rsquo;s RubyConf&lt;/a&gt;. For now, I want to talk about what I&amp;rsquo;ll miss.&lt;/p&gt;
 
-&lt;h3&gt;1) The joy of Lisp&lt;/h3&gt;
+&lt;h3 id="1-the-joy-of-lisp"&gt;1) The joy of Lisp&lt;/h3&gt;
 
 &lt;p&gt;&lt;a href="https://xkcd.com/297/"&gt;&lt;img alt="XKCD #297" src="http://imgs.xkcd.com/comics/lisp_cycles.png" /&gt;&lt;/a&gt;&lt;/p&gt;
 
@@ -121,7 +121,7 @@ and lisp might
 Clojure is a more than acceptable lisp. If we avoid the minefield of type
 systems, Clojure addresses the other 4 problems Steve Yegge discusses in the previous link&lt;sup id="fnref2"&gt;&lt;a href="#fn2" rel="footnote"&gt;2&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
 
-&lt;h3&gt;2) Immutability&lt;/h3&gt;
+&lt;h3 id="2-immutability"&gt;2) Immutability&lt;/h3&gt;
 
 &lt;p&gt;The core data structures in clojure are immutable. If I define &lt;code&gt;car&lt;/code&gt; to be &lt;code&gt;&amp;quot;a dirty van&amp;quot;&lt;/code&gt;,
 nothing can ever change that. I can name some other thing &lt;code&gt;car&lt;/code&gt; later, but
@@ -165,7 +165,7 @@ to somewhere else?&lt;/p&gt;
 
 &lt;p&gt;Not having the choice to mutate state is as liberating as getting rid of your Facebook account.&lt;/p&gt;
 
-&lt;h3&gt;3) Data first programming&lt;/h3&gt;
+&lt;h3 id="3-data-first-programming"&gt;3) Data first programming&lt;/h3&gt;
 
 &lt;p&gt;Walking away from object-oriented languages is very freeing. &lt;/p&gt;
 
@@ -196,7 +196,7 @@ functions).&lt;/p&gt;
 do this in any language; but I find Clojure draws me towards it, while OO
 languages push me away from it.&lt;/p&gt;
 
-&lt;h3&gt;4) Unit Testing&lt;/h3&gt;
+&lt;h3 id="4-unit-testing"&gt;4) Unit Testing&lt;/h3&gt;
 
 &lt;p&gt;The majority of your code is made up of pure functions. A pure function is one
 which always gives the same output for a given input &amp;mdash; doesn&amp;rsquo;t that sound
@@ -213,7 +213,7 @@ whether your version of OpenSSL is vulnerable to HeartBleed. &lt;/p&gt;
 to make that bit of code a pure function that&amp;rsquo;s testable without setting
 up complicated state.&lt;/p&gt;
 
-&lt;h3&gt;5) Refactoring&lt;/h3&gt;
+&lt;h3 id="5-refactoring"&gt;5) Refactoring&lt;/h3&gt;
 
 &lt;p&gt;Here&amp;rsquo;s a typical clojure function&lt;/p&gt;
 &lt;pre class="highlight clojure"&gt;&lt;code&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;defn&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;foo&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="w"&gt;
@@ -328,7 +328,7 @@ linux systems (and even if you do!), we implore you: set up &lt;code&gt;unattend
 
 &lt;p&gt;Ubuntu enabling this by default is a great sign for the future.&lt;/p&gt;
 
-&lt;h2&gt;Not running Ubuntu 16.10?&lt;/h2&gt;
+&lt;h2 id="not-running-ubuntu-16-10"&gt;Not running Ubuntu 16.10?&lt;/h2&gt;
 
 &lt;p&gt;Here&amp;rsquo;s how to turn on unattended upgrades&lt;/p&gt;
 

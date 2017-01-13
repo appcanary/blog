@@ -94,7 +94,7 @@ on <a href='/tag/clojure.html'>Clojure</a>, <a href='/tag/programming.html'>Prog
 12th we were down to zero. We replaced it by adding another 5,700 lines of Ruby to our codebase. 
 <a href="https://twitter.com/phillmv">Phill</a> will be discussing why we left, and what we learned both here and <a href="http://rubyconf.org/program#prop_19">at this year&rsquo;s RubyConf</a>. For now, I want to talk about what I&rsquo;ll miss.</p>
 
-<h3>1) The joy of Lisp</h3>
+<h3 id="1-the-joy-of-lisp">1) The joy of Lisp</h3>
 
 <p><a href="https://xkcd.com/297/"><img alt="XKCD #297" src="http://imgs.xkcd.com/comics/lisp_cycles.png" /></a></p>
 
@@ -113,7 +113,7 @@ and lisp might
 Clojure is a more than acceptable lisp. If we avoid the minefield of type
 systems, Clojure addresses the other 4 problems Steve Yegge discusses in the previous link<sup id="fnref2"><a href="#fn2" rel="footnote">2</a></sup>.</p>
 
-<h3>2) Immutability</h3>
+<h3 id="2-immutability">2) Immutability</h3>
 
 <p>The core data structures in clojure are immutable. If I define <code>car</code> to be <code>&quot;a dirty van&quot;</code>,
 nothing can ever change that. I can name some other thing <code>car</code> later, but
@@ -157,7 +157,7 @@ to somewhere else?</p>
 
 <p>Not having the choice to mutate state is as liberating as getting rid of your Facebook account.</p>
 
-<h3>3) Data first programming</h3>
+<h3 id="3-data-first-programming">3) Data first programming</h3>
 
 <p>Walking away from object-oriented languages is very freeing. </p>
 
@@ -188,7 +188,7 @@ functions).</p>
 do this in any language; but I find Clojure draws me towards it, while OO
 languages push me away from it.</p>
 
-<h3>4) Unit Testing</h3>
+<h3 id="4-unit-testing">4) Unit Testing</h3>
 
 <p>The majority of your code is made up of pure functions. A pure function is one
 which always gives the same output for a given input &mdash; doesn&rsquo;t that sound
@@ -205,7 +205,7 @@ whether your version of OpenSSL is vulnerable to HeartBleed. </p>
 to make that bit of code a pure function that&rsquo;s testable without setting
 up complicated state.</p>
 
-<h3>5) Refactoring</h3>
+<h3 id="5-refactoring">5) Refactoring</h3>
 
 <p>Here&rsquo;s a typical clojure function</p>
 <pre class="highlight clojure"><code><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">foo</span><span class="w"> </span><span class="p">[</span><span class="n">a</span><span class="w"> </span><span class="n">b</span><span class="p">]</span><span class="w">

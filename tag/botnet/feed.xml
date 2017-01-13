@@ -28,7 +28,7 @@ which takes advantage of Internet of Things devices like cameras and DVRs.&lt;/p
 &lt;p&gt;&lt;blockquote class="twitter-tweet" data-lang="en"&gt;&lt;p lang="en" dir="ltr"&gt;&amp;ldquo;Oh &amp;amp; also, evil sorcerers crippled our divination network Friday by getting millions of coffee makers &amp;amp; lightswitches to shout real loud&amp;rdquo; &lt;a href="https://t.co/OPhdOJLwc1"&gt;https://t.co/OPhdOJLwc1&lt;/a&gt;&lt;/p&gt;&amp;mdash; Max Gladstone (@maxgladstone) &lt;a href="https://twitter.com/maxgladstone/status/790890882543288320"&gt;October 25, 2016&lt;/a&gt;&lt;/blockquote&gt;
 &lt;script async src="//platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;&lt;/p&gt;
 
-&lt;h3&gt;So, what&amp;rsquo;s new about Mirai?&lt;/h3&gt;
+&lt;h3 id="so-what-39-s-new-about-mirai"&gt;So, what&amp;rsquo;s new about Mirai?&lt;/h3&gt;
 
 &lt;p&gt;I&amp;rsquo;ve written about
 1988&amp;rsquo;s &lt;a href="https://blog.appcanary.com/2016/tale-of-two-worms.html"&gt;Morris worm&lt;/a&gt;, 
@@ -56,7 +56,7 @@ its buffer overflow and sendmail backdoor exploits failed. &lt;/p&gt;
 
 &lt;p&gt;Oh, and Morris&amp;rsquo; password dictionary was larger, too.&lt;/p&gt;
 
-&lt;h3&gt;How do we keep getting this wrong?&lt;/h3&gt;
+&lt;h3 id="how-do-we-keep-getting-this-wrong"&gt;How do we keep getting this wrong?&lt;/h3&gt;
 
 &lt;p&gt;Around the world, we spend $75 billion a year on information security.
 And for what, when we keep getting such basic things wrong? Suppose I waved a
@@ -70,7 +70,7 @@ systems are going to get us all killed. Users are clicking phishing links like
 sheep. We&amp;rsquo;re all doomed. And somehow, it&amp;rsquo;s always the fault of shitty
 programmers or dumb users. Let&amp;rsquo;s all laugh at their fails.&lt;/p&gt;
 
-&lt;h3&gt;It&amp;rsquo;s all bullshit.&lt;/h3&gt;
+&lt;h3 id="it-39-s-all-bullshit"&gt;It&amp;rsquo;s all bullshit.&lt;/h3&gt;
 
 &lt;p&gt;We sell biometric authentication systems to people who need a good password
 manager. We sell live threat attribution intelligence with colorful maps to
@@ -95,7 +95,7 @@ any progress in 28 years. Lots of money in it, though.&lt;/p&gt;
 
 &lt;hr&gt;
 
-&lt;h4&gt;Paying the Bills&lt;/h4&gt;
+&lt;h4 id="paying-the-bills"&gt;Paying the Bills&lt;/h4&gt;
 
 &lt;p&gt;Surprise, I also sell a security product! But I will say this: Appcanary
 isn&amp;rsquo;t going to protect you from shipping millions of internet-accessible

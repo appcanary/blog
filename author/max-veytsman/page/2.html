@@ -84,7 +84,7 @@
 </span>
 <span class='author-stats'>
 <i class='icon-stats'></i>
-13 posts
+14 posts
 </span>
 </div>
 </section>
@@ -97,6 +97,131 @@
 </nav>
 
 </div>
+<article class='post'>
+<header class='post-header'>
+<h1 class='post-title'><a href="../../../2016/vikhal-symantec.html">Vulnerabilities I Have Known and Loved #1: Symantec's Bad Week</a></h1>
+<section class='post-meta'>
+</section>
+</header>
+<section class='post-content'>
+<p><strong>tl;dr:</strong> If you use software with &ldquo;Symantec&rdquo; or &ldquo;Norton&rdquo; somewhere in its name, <strong>stop what you&rsquo;re doing and <a href="https://www.symantec.com/support-center/upgrades">upgrade</a></strong>.</p>
+
+<p>Back in my security consulting days, a mentor taught me One Weird Trick to
+increase conversions on your phishing campaign.  It goes like this: set up an email server, get as many employee addresses you can find, and spoof a mass message that reads:</p>
+
+<blockquote>
+<p>Hello this is your boss. </p>
+
+<p>I&rsquo;m going to fire someone next week and you get to vote on who! To get your arch-nemisis fired, please log into this website that looks exactly like our company portal, but has one character in the domain name mispelled. </p>
+
+<p>Thanks, Your Boss.</p>
+</blockquote>
+
+<p>Then you sit back and count how many people fell for it.</p>
+
+<p>The executive who hired you is happy because they get to demonstrate the value of increasing their
+security budget. The consultancy you work for is happy, because they get to upsell a bunch of &ldquo;security awareness
+training&rdquo;. </p>
+
+<p>Soon, you&rsquo;ll be spending three days telling your victims about the
+importance of that little green lock in their browser&rsquo;s address bar (but only
+when it&rsquo;s in the right place!) and that they should never ever click on links,
+never open attachments, and if at all possible, stop using computers altogether. Everybody wins.</p>
+
+<p>Obviously, everyone at this stage wants to increase the conversion rate<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup> of these phishing emails. This is where The One Weird Trick comes in: after you send out your first campaign, you craft another one. Before you know it, everyone on your list receives a helpful tip from the IT Helpdesk:</p>
+
+<blockquote>
+<p>Hi, </p>
+
+<p>We&rsquo;ve heard reports of a phishing campaign being waged against us. Don&rsquo;t open those emails! It&rsquo;s critically important that you reset your password to protect against those evil hackers who tried to phish us. </p>
+
+<p>Click here to do it!</p>
+</blockquote>
+
+<p>It turns out that round two gets <em>way</em> more clicks than round one. Most people will figure out that email #1 is a little fishy. Email #2 manages to reaffirm that, and so they dutifully click, like lambs to slaughter.</p>
+
+<p>This is the phishing equivalent of the Double Tap. No, not the one from <a href="https://www.youtube.com/watch?v=w4sWxsrEFFs">Zombieland</a>. The Double Tap I&rsquo;m talking about is a controversial <a href="http://www.businessinsider.com/drone-double-tap-first-responders-2012-9">military technique</a> where after attacking a target, you follow up by sending another missile at the first responders. You do some damage, and then attack the response to that damage.</p>
+
+<h3 id="symantec-is-having-a-bad-week">Symantec is Having a Bad Week</h3>
+
+<p>Last week <a href="https://twitter.com/taviso">Tavis Ormandy</a> dropped 8 vulns against every single Symantec/Norton antivirus product. Judging by <a href="http://fortune.com/2016/07/02/symantec-security-irony/">the press</a>, things are <a href="http://www.pcworld.com/article/3089463/security/wormable-flaws-in-symantec-products-expose-millions-of-computers-to-hacking.html">not looking good</a> for them.</p>
+
+<p>You can find a writeup up on the <a href="http://googleprojectzero.blogspot.ca/2016/06/how-to-compromise-enterprise-endpoint.html">Google Project Zero
+blog</a>, and the issues for all 8 vulnerabilities can <a href="https://bugs.chromium.org/p/project-zero/issues/list?can=1&amp;q=label%3AVendor-Symantec">be found here</a>. They&rsquo;re all remotely exploitable,<sup id="fnref2"><a href="#fn2" rel="footnote">2</a></sup> and they all should give an attacker remote code execution as root/SYSTEM (and in ring 0 for one of them to boot!)</p>
+
+<p>If you&rsquo;re using a Symantec product I can&rsquo;t stress this enough: <strong>stop what you&rsquo;re doing and <a href="https://www.symantec.com/support-center/upgrades">upgrade</a></strong>.</p>
+
+<p>These vulnerabilities reminded me of phishing and the Double Tap for two reasons. First, every one of these vulns can be exploited by just sending an email. Since the product is an antivirus, so it&rsquo;s going to scan every file that touches your disk and every email you get for viruses. You don&rsquo;t have to get your target to click a link or even open the message you sent &mdash; Symantec will happily try to parse every email you receive. </p>
+
+<p>Second, the <a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=823&amp;can=1&amp;q=label%3AVendor-Symantec">stack overflow in Symantec&rsquo;s PowerPoint parser</a> depends on a Double Tap-like attack! This parser is used to extract metadata and macros from PowerPoint decks (and presumably scan them for known malware) by exposing an I/O abstraction layer &mdash; which it then caches for performance. Tavis found that he could get that cache into a misaligned state, which resulted in the stack buffer overflow. </p>
+
+<p>This vulnerable codepath is in something called “Bloodhound Heuristics”, which Symantec promotes as a more advanced set of malware detection checks. Since they&rsquo;re not always run, you&rsquo;d think that the vulnerability wouldn&rsquo;t be very exploitable. And yet, it can be targetted every time! Under the default configuration, the system dynamically decides which set of checks to run. All Tavis had to do was try a bunch of known PowerPoint malware, see which one triggered the automatic mode to turn on &ldquo;Bloodhound Heuristics,&rdquo; and put his payload into them.</p>
+
+<p>The exploit pretends to be a certain kind of known malware in order to trigger some special aggressive checks, which are the exploit&rsquo;s true target. The Double Tap!</p>
+
+<h3 id="vulnerability-management">Vulnerability Management</h3>
+
+<p>While the above vulnerability is pretty cool, the Symantec bugs that are most interesting to us at Appcanary are <a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=810">CVE-2016-2207</a> and <a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=816">CVE-2016-2211</a>. </p>
+
+<p>Symantec was shipping its product with out of date versions of <a href="http://www.cabextract.org.uk/libmspack/">libmspack</a> and <a href="http://www.rarlab.com/rar_add.htm">unrarsrc</a>. Out of date versions that have dozens of known vulnerabilities with public exploits! All Tavis had to do was download public exploits for these known vulnerabilities, and he had an attack against Symantec.</p>
+
+<p>Ironically, Symantec sells a product called Enterprise Vulnerability Management! This is a hard problem for everyone. At Appcanary, we&rsquo;re working on solving it.</p>
+
+<h3 id="p-s">P.S.</h3>
+
+<p><link href="//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+ #mc<em>embed</em>signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; width:100%;}
+ /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+      We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+</style>
+<div id="mc_embed_signup">
+<form action="//appcanary.us10.list-manage.com/subscribe/post?u=303b378f377508300c0b5469a&amp;id=dc58e8f56f" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+<div id="mc_embed_signup_scroll">
+<label for="mce-EMAIL">Liked this post? Subscribe to our newsletter for more!</label>
+<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+<div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_303b378f377508300c0b5469a_dc58e8f56f" tabindex="-1" value=""></div>
+<div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+</div>
+</form>
+</div></p>
+
+<p>Do you have suggestions for vulnerabilities you&rsquo;d like me to write about? You can let me know at <a href="mailto:max@appcanary.com">max@appcanary.com</a>.</p>
+
+<hr>
+
+<h4 id="paying-the-bills">Paying the Bills</h4>
+
+<p>One quarter of the critical vulnerabilities found in Symantec&rsquo;s products last week were there because they relied on out-of-date libraries with known security holes.</p>
+
+<p>Our product, <a href="https://appcanary.com/?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=symantec">Appcanary</a>, monitors your apps and servers, and notifies you whenever a new vulnerability is discovered in a package you rely on. </p>
+
+<p><a href="https://appcanary.com/sign_up?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=symantec">Sign up</a> today!</p>
+
+<div class="footnotes">
+<hr>
+<ol>
+
+<li id="fn1">
+<p>You know, it&rsquo;s interesting that before I became the CEO of a startup, the only time I thought about &ldquo;conversion rates&rdquo; of emails in my career was when I was involved in phishing campaigns.&nbsp;<a href="#fnref1" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn2">
+<p>I&rsquo;m going to well-actually myself here so you don&rsquo;t have to. Tavis gives a clear path to exploit for 6 of the 8. Of the two that are left, <a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=821">one</a> is a lack of bounds checking on an array index, and the <a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=819">other</a> is an integer overflow bug. I&rsquo;m going to go out on a limb and say I think both can lead to code execution. I can&rsquo;t fault the researcher for not going further though; after you find the first 6 remote code executions, you stop feeling the need to keep proving the point&hellip;&nbsp;<a href="#fnref2" rev="footnote">&#8617;</a></p>
+</li>
+
+</ol>
+</div>
+
+</section>
+<footer class='post-meta'>
+<a href='/author/max-veytsman.html'>Max Veytsman</a>
+on <a href='/tag/vihkal.html'>vihkal</a>, <a href='/tag/security.html'>security</a>
+<time class='post-date' datetime='2016-07-07'>
+07 July 2016
+</time>
+</footer>
+</article>
 <article class='post'>
 <header class='post-header'>
 <h1 class='post-title'><a href="../../../2016/encrypt-or-compress.html">Should you encrypt or compress first?</a></h1>
@@ -194,7 +319,7 @@ phonemes as sequences of lengths of encrypted packets.</p>
 
 <hr>
 
-<h2>Epilogue</h2>
+<h2 id="epilogue">Epilogue</h2>
 
 <p>After passing the rigorous all-night culture fit screening, you end up getting the job. Six months later, Mont Piper is sold to a large conglomerate. Gary refuses to trade in his Norwegian metal t-shirts for a button-down and is summarily fired. You now spend your days going on-site to a big bank, &ldquo;advising&rdquo; a team that hates your guts.</p>
 
@@ -202,7 +327,7 @@ phonemes as sequences of lengths of encrypted packets.</p>
 
 <hr>
 
-<h3>P.S.</h3>
+<h3 id="p-s">P.S.</h3>
 
 <p><link href="//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css" rel="stylesheet" type="text/css">
 <style type="text/css">
@@ -223,7 +348,7 @@ phonemes as sequences of lengths of encrypted packets.</p>
 
 <hr>
 
-<h4>Paying the Bills</h4>
+<h4 id="paying-the-bills">Paying the Bills</h4>
 
 <p>Vulnerabilities come out every day, and most don&rsquo;t get blog posts like this written about them.</p>
 
@@ -286,7 +411,7 @@ on <a href='/tag/announcements.html'>Announcements</a>, <a href='/tag/product.ht
 
 <p>So we went ahead and built both.</p>
 
-<h2>The Monitor API</h2>
+<h2 id="the-monitor-api">The Monitor API</h2>
 
 <p>The &ldquo;Monitor&rdquo; API lets you register a Gemfile or an Ubuntu/CentOS package list to be emailed when new vulnerabilities are discovered. It like what our agent does, but in situations where it doesn&rsquo;t make sense like when you use Docker or deploy on a PaaS like Heroku.</p>
 
@@ -313,7 +438,7 @@ on <a href='/tag/announcements.html'>Announcements</a>, <a href='/tag/product.ht
 
 <p>You can also list, inspect, or delete monitors via the API. More information <a href="https://appcanary.com/docs#create-monitor">here</a>.</p>
 
-<h2>The Server API</h2>
+<h2 id="the-server-api">The Server API</h2>
 
 <p>The &ldquo;Server&rdquo; API allows you to navigate the servers you have the Appcanary agent running on via API, and list any vulnerabilities that affect them!</p>
 
@@ -458,7 +583,7 @@ on <a href='/tag/announcements.html'>Announcements</a>, <a href='/tag/product.ht
 
 <p>Which reminds us,</p>
 
-<h2>We now support CentOS 7!</h2>
+<h2 id="we-now-support-centos-7">We now support CentOS 7!</h2>
 
 <p>Appcanary now fully supports <strong>CentoOS 7</strong>. If you install our agent on a CentOS 7 server, we will email you notifications whenever any rpm package you have installed on your system has a known vulnerability.</p>
 
@@ -496,141 +621,6 @@ on <a href='/tag/announcements.html'>Announcements</a>, <a href='/tag/product.ht
 on <a href='/tag/clojure.html'>Clojure</a>, <a href='/tag/datomic.html'>Datomic</a>, <a href='/tag/programming.html'>Programming</a>, <a href='/tag/talks.html'>Talks</a>
 <time class='post-date' datetime='2016-02-09'>
 09 February 2016
-</time>
-</footer>
-</article>
-<article class='post'>
-<header class='post-header'>
-<h1 class='post-title'><a href="../../../2016/state-management-downtime.html">How being lazy about state management in Clojure caused us downtime</a></h1>
-<section class='post-meta'>
-</section>
-</header>
-<section class='post-content'>
-<p>On November 10th, we suffered some downtime as our backend application mysteriously crashed and had to be restarted. After looking at our process monitoring service, I found a very suspicious graph:</p>
-
-<p><img alt="image" src="../../../images/system.process.threads.png" /></p>
-
-<p>Somehow, we managed to spin up more then 30,000 threads right before the application crashed. This was very likely the cause of the failure, but how did it happen?</p>
-
-<p>An easy way to get an idea of where a thread leak is coming from is to look at the thread names. In Java you can do this with <code>jstack -l $PID</code>.</p>
-
-<p>To get a list of all thread names of a Java application sorted by most common name, you can do:</p>
-<pre class="highlight plaintext"><code>jstack -l $PID | grep daemon |  awk '{ print $1 }' | sort | uniq -c |   sort -nr
-</code></pre>
-
-<p>Which on our end yielded something like this:</p>
-<pre class="highlight plaintext"><code>  30000 "Analytics"
-      2 "Datomic
-      2 "C2
-      1 "worker-4"
-      1 "worker-3"
-      1 "worker-2"
-      1 "worker-1"
-      1 "Timer-0"
-      1 "Thread-5"
-      1 "Thread-4
-      1 "Thread-3
-      1 "Thread-2
-      1 "Thread-1
-      1 "Thread-0
-</code></pre>
-
-<p>Hmm&hellip;</p>
-
-<h3>Background</h3>
-
-<p>Our backend is written in Clojure and we use Stuart Sierra&rsquo;s <a href="https://github.com/stuartsierra/component">component</a> framework to manage most of our application&rsquo;s state and lifecycle. Normally this should prevent runaway threads, but unfortunately for us our analytics client&rsquo;s state was managed independently of the framework. To explain why, I need to first delve a little in to how component works.</p>
-
-<p>Regardless of how beautiful and functional it may be, any application that talks to the outside world will need to manage some state representing these external resources. We need to manage our database connections, our clients for external APIs, our background workers, etc.</p>
-
-<p>One way to deal with this in Clojureland is to create a global singleton object for representing each stateful piece, possibly wrapped in an <code>atom</code>. This feels lacking, though. You still need a way to initialize all these singletons on startup, and having mutable singletons everywhere goes against what I would consider good Clojure style.</p>
-
-<p>Component solves this problem by implementing dependency injection in a Clojurelike way. You define a graph that represents each stateful piece, how they depend on each other, and how each piece starts and stops. On system start, component boots each piece in the right order, passing along references to dependencies when they&rsquo;re needed.</p>
-
-<p>For example, Appcanary&rsquo;s dependency graph looks (something) like this:</p>
-<pre class="highlight clojure"><code><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">canary-system</span><span class="w">
-  </span><span class="p">[]</span><span class="w">
-  </span><span class="c1">;;Initialize logging
-</span><span class="w">  </span><span class="p">(</span><span class="nf">component/system-map</span><span class="w">
-   </span><span class="no">:datomic</span><span class="w"> </span><span class="p">(</span><span class="nf">new-datomic</span><span class="w"> </span><span class="p">(</span><span class="nf">env</span><span class="w"> </span><span class="no">:datomic-uri</span><span class="p">))</span><span class="w">
-   </span><span class="no">:scheduler</span><span class="w"> </span><span class="p">(</span><span class="nf">new-scheduler</span><span class="p">)</span><span class="w">
-   </span><span class="no">:mailer</span><span class="w"> </span><span class="p">(</span><span class="nf">component/using</span><span class="w">  </span><span class="p">(</span><span class="nf">new-mailer</span><span class="w"> </span><span class="p">(</span><span class="nf">env</span><span class="w"> </span><span class="no">:mandrill-key</span><span class="p">))</span><span class="w">
-                             </span><span class="p">[</span><span class="no">:datomic</span><span class="w"> </span><span class="no">:scheduler</span><span class="p">])</span><span class="w">
-   </span><span class="no">:web-server</span><span class="w"> </span><span class="p">(</span><span class="nf">component/using</span><span class="w"> </span><span class="p">(</span><span class="nf">new-web-server</span><span class="w"> </span><span class="p">(</span><span class="nf">env</span><span class="w"> </span><span class="no">:http-ip</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nf">Integer.</span><span class="w"> </span><span class="p">(</span><span class="nf">env</span><span class="w"> </span><span class="no">:http-port</span><span class="p">))</span><span class="w"> </span><span class="n">canary-api</span><span class="p">)</span><span class="w">
-                             </span><span class="p">[</span><span class="no">:datomic</span><span class="p">])))</span><span class="w">
-</span></code></pre>
-
-<p>The <code>mailer</code> depends on <code>datomic</code> and the <code>scheduler</code>, the web server depends on <code>datomic</code>, and both <code>datomic</code> and the <code>scheduler</code> don&rsquo;t depend on anything.</p>
-
-<p>Like all the other components, the <code>new-datomic</code> function is a constructor for a record that knows how to start and stop itself. On system start, all the components are started, and the dependencies are filled in.</p>
-
-<h3>Sometimes component feels like overkill</h3>
-
-<p>Component is great, but it didn&rsquo;t fit our analytics engine usecase. We use <a href="https://segment.io">segment.io</a> to handle our app analytics, and we needed to maintain a client to talk to it. An analytics event can potentially be called from anywhere in the app, but it&rsquo;s cumbersome to pass an analytics client reference to every component, and into every analytics call. If every component depends on something, it feels like maybe it should be a global singleton. Futhermore, I don&rsquo;t want my components to know much about the analytics client at all; I just want them to know how to trigger events.</p>
-
-<p>What I want to have is an analytics namespace which contains all the events I may want to trigger, and wraps the client inside all of them. This lets me  do something like <code>(analytics/user-added-server user)</code> inside of the code that handles server creation.</p>
-
-<p>(One thing to note is that while there is a clojure segment.io <a href="https://github.com/ardoq/analytics-clj">client</a>, it&rsquo;s based off a 1.x release of the underlying <a href="https://github.com/segmentio/analytics-java">java library</a>, while we wanted to use features only available in the 2.0 release. Because of that, I wrote an analytics namespace that called the java library directly).</p>
-
-<p>The first pass of creating the client looked something like this:</p>
-<pre class="highlight clojure"><code><span class="p">(</span><span class="nf">defonce</span><span class="w"> </span><span class="n">client</span><span class="w">
-  </span><span class="p">(</span><span class="nf">.build</span><span class="w"> </span><span class="p">(</span><span class="nf">Analytics/builder</span><span class="w"> </span><span class="p">(</span><span class="nf">env</span><span class="w"> </span><span class="no">:segment-api-key</span><span class="p">))))</span><span class="w">
-
-</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">track</span><span class="w">
-  </span><span class="s">"Wrapper for analytics/track"</span><span class="w">
-  </span><span class="p">[</span><span class="n">id</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="n">properties</span><span class="w"> </span><span class="p">{</span><span class="no">:keys</span><span class="w"> </span><span class="p">[</span><span class="n">timestamp</span><span class="p">]</span><span class="w"> </span><span class="no">:as</span><span class="w"> </span><span class="n">options</span><span class="p">}]</span><span class="w">
-  </span><span class="p">(</span><span class="nb">when</span><span class="w"> </span><span class="p">(</span><span class="nf">production?</span><span class="p">)</span><span class="w">
-    </span><span class="p">(</span><span class="nf">.enqueue</span><span class="w"> </span><span class="n">client</span><span class="w">
-              </span><span class="c1">;; Java interop to build the analytics message here)))
-</span></code></pre>
-
-<p>There&rsquo;s only one problem with the above code: the segment api key is loaded from an environment variable. </p>
-
-<p>We deploy appcanary in a pretty standard way &ndash; we compile an uberjar and rsync it to the server. API keys live in environment variables, and the production API key is only going to live on the production server. So, at compile time, we have no way of knowing what the segment api key is. As a result, the analytics client needs to be built at runtime and not compile time in order to have access to the api key.</p>
-
-<h3>This is where I get lazy</h3>
-
-<p>The obvious thing to do to build the analytics client at runtime is to wrap it as a function:</p>
-<pre class="highlight clojure"><code><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">client</span><span class="w">
-  </span><span class="p">[]</span><span class="w">
-  </span><span class="p">(</span><span class="nf">.build</span><span class="w"> </span><span class="p">(</span><span class="nf">Analytics/builder</span><span class="w"> </span><span class="p">(</span><span class="nf">env</span><span class="w"> </span><span class="no">:segment-api-key</span><span class="p">))))</span><span class="w">
-
-</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">track</span><span class="w">
-  </span><span class="s">"Wrapper for analytics/track"</span><span class="w">
-  </span><span class="p">[</span><span class="n">id</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="n">properties</span><span class="w"> </span><span class="p">{</span><span class="no">:keys</span><span class="w"> </span><span class="p">[</span><span class="n">timestamp</span><span class="p">]</span><span class="w"> </span><span class="no">:as</span><span class="w"> </span><span class="n">options</span><span class="p">}]</span><span class="w">
-  </span><span class="p">(</span><span class="nb">when</span><span class="w"> </span><span class="p">(</span><span class="nf">production?</span><span class="p">)</span><span class="w">
-    </span><span class="p">(</span><span class="nf">.enqueue</span><span class="w"> </span><span class="p">(</span><span class="nf">client</span><span class="p">)</span><span class="w">
-              </span><span class="c1">;; Java interop to build the analytics message here)))
-</span></code></pre>
-
-<p>I saw three downsides here:</p>
-
-<ol>
-<li>We&rsquo;ll lose some efficiency from not reusing the TCP connection to segment.io</li>
-<li>It&rsquo;s possible that we&rsquo;ll have to waste a bit of time authenticating the analytics client on each call</li>
-<li>We&rsquo;ll spawn an extra client object per call, which will be garbage collected right away as it goes out of scope immediately after the <code>track</code> call</li>
-</ol>
-
-<p>The above three things aren&rsquo;t intrinsically bad, and it seemed like optimizing the performance of your analytics engine early on was a wasteful thing to do in a fast-paced startup environment.</p>
-
-<p>What I didn&rsquo;t consider is that the java library uses <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ExecutorService.html"><code>ExecutorService</code></a> to manage a threadpool, and <code>shutdown</code> must be called explicitly. Otherwise, the threads are put on hold instead of being marked for GC (see also <a href="http://stackoverflow.com/questions/16122987/reason-for-calling-shutdown-on-executorservice">this stackoverflow</a>).</p>
-
-<p>The fact that each client spawns a thread that isn&rsquo;t cleaned up by garbage collection was not <a href="https://segment.com/docs/libraries/java/">documented</a> unfortunately.</p>
-
-<h3>Outcome</h3>
-
-<p>Every analytics call we made spawned another threadpool, which caused the thread count to grow proportionally with user activity. We hit 40,000 threads before our application crashed.</p>
-
-<h3>TL;DR:</h3>
-
-<p>We spawned a new client object on every analytics call, not realizing that the underlying library uses a thread pool that&rsquo;s not shutdown on garbage collection. This is how we ended up killing the server by hitting 40,000 threads</p>
-
-</section>
-<footer class='post-meta'>
-<a href='/author/max-veytsman.html'>Max Veytsman</a>
-on <a href='/tag/clojure.html'>Clojure</a>, <a href='/tag/programming.html'>Programming</a>, <a href='/tag/developer-diary.html'>Developer Diary</a>, <a href='/tag/bugs.html'>Bugs</a>
-<time class='post-date' datetime='2016-02-02'>
-02 February 2016
 </time>
 </footer>
 </article>

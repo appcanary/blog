@@ -77,13 +77,13 @@
 <section class='post-content'>
 <p>I&rsquo;m excited to announce that we&rsquo;ve added two features that make Appcanary a heck of a lot easier to use!</p>
 
-<h2>Add monitors by uploading a file</h2>
+<h2 id="add-monitors-by-uploading-a-file">Add monitors by uploading a file</h2>
 
 <p>Our Monitor API is great if you want to track a set of Linux packages or your Gemfile. We give you a dashboard showing which packages are vulnerable, and email you whenever new vulnerabilities that affect you come out. However, there&rsquo;s always a bunch of setup to get a new API going.</p>
 
 <p>With that in mind, we made the interface a lot more user friendly! You can now upload a file to watch directly through the website. Just go to <a href="https://appcanary.com/monitors/new">add monitors</a> to be able to upload a file directly. Monitors support Ruby&rsquo;s <code>Gemfile.lock</code>, <code>/var/lib/dpkg/status</code> for Ubuntu and Debian, and the output of <code>rpm -qa</code> for Centos and Amazon Linux!</p>
 
-<h2>Automatically upgrade vulnerable packages</h2>
+<h2 id="automatically-upgrade-vulnerable-packages">Automatically upgrade vulnerable packages</h2>
 
 <p>A few of our customers told us that knowing about vulnerabilities is nice, but you know what would be <em>great</em>? If we could somehow <em>patch</em> them automatically. We thought about it and said, sure, why not!</p>
 
@@ -101,7 +101,7 @@
 
 <p>Now you can manage vulnerabilities, learn about new ones that affect you, and apply patches, all through Appcanary!</p>
 
-<h4>If you haven&rsquo;t tried us yet</h4>
+<h4 id="if-you-haven-39-t-tried-us-yet">If you haven&rsquo;t tried us yet</h4>
 
 <p>Stay on top of the security vulnerabilities that affect you, today.</p>
 
@@ -164,7 +164,7 @@ on <a href='/tag/announcements.html'>Announcements</a>, <a href='/tag/product.ht
 
 <p>So we went ahead and built both.</p>
 
-<h2>The Monitor API</h2>
+<h2 id="the-monitor-api">The Monitor API</h2>
 
 <p>The &ldquo;Monitor&rdquo; API lets you register a Gemfile or an Ubuntu/CentOS package list to be emailed when new vulnerabilities are discovered. It like what our agent does, but in situations where it doesn&rsquo;t make sense like when you use Docker or deploy on a PaaS like Heroku.</p>
 
@@ -191,7 +191,7 @@ on <a href='/tag/announcements.html'>Announcements</a>, <a href='/tag/product.ht
 
 <p>You can also list, inspect, or delete monitors via the API. More information <a href="https://appcanary.com/docs#create-monitor">here</a>.</p>
 
-<h2>The Server API</h2>
+<h2 id="the-server-api">The Server API</h2>
 
 <p>The &ldquo;Server&rdquo; API allows you to navigate the servers you have the Appcanary agent running on via API, and list any vulnerabilities that affect them!</p>
 
@@ -336,7 +336,7 @@ on <a href='/tag/announcements.html'>Announcements</a>, <a href='/tag/product.ht
 
 <p>Which reminds us,</p>
 
-<h2>We now support CentOS 7!</h2>
+<h2 id="we-now-support-centos-7">We now support CentOS 7!</h2>
 
 <p>Appcanary now fully supports <strong>CentoOS 7</strong>. If you install our agent on a CentOS 7 server, we will email you notifications whenever any rpm package you have installed on your system has a known vulnerability.</p>
 

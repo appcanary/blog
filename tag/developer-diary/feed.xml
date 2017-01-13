@@ -11,7 +11,7 @@
     <link rel="alternate" href="http://blog.appcanary.com/2016/state-management-downtime.html"/>
     <id>http://blog.appcanary.com/2016/state-management-downtime.html</id>
     <published>2016-02-01T19:00:00-05:00</published>
-    <updated>2017-01-12T13:49:36-05:00</updated>
+    <updated>2017-01-13T09:15:13-05:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
@@ -46,7 +46,7 @@
 
 &lt;p&gt;Hmm&amp;hellip;&lt;/p&gt;
 
-&lt;h3&gt;Background&lt;/h3&gt;
+&lt;h3 id="background"&gt;Background&lt;/h3&gt;
 
 &lt;p&gt;Our backend is written in Clojure and we use Stuart Sierra&amp;rsquo;s &lt;a href="https://github.com/stuartsierra/component"&gt;component&lt;/a&gt; framework to manage most of our application&amp;rsquo;s state and lifecycle. Normally this should prevent runaway threads, but unfortunately for us our analytics client&amp;rsquo;s state was managed independently of the framework. To explain why, I need to first delve a little in to how component works.&lt;/p&gt;
 
@@ -73,7 +73,7 @@
 
 &lt;p&gt;Like all the other components, the &lt;code&gt;new-datomic&lt;/code&gt; function is a constructor for a record that knows how to start and stop itself. On system start, all the components are started, and the dependencies are filled in.&lt;/p&gt;
 
-&lt;h3&gt;Sometimes component feels like overkill&lt;/h3&gt;
+&lt;h3 id="sometimes-component-feels-like-overkill"&gt;Sometimes component feels like overkill&lt;/h3&gt;
 
 &lt;p&gt;Component is great, but it didn&amp;rsquo;t fit our analytics engine usecase. We use &lt;a href="https://segment.io"&gt;segment.io&lt;/a&gt; to handle our app analytics, and we needed to maintain a client to talk to it. An analytics event can potentially be called from anywhere in the app, but it&amp;rsquo;s cumbersome to pass an analytics client reference to every component, and into every analytics call. If every component depends on something, it feels like maybe it should be a global singleton. Futhermore, I don&amp;rsquo;t want my components to know much about the analytics client at all; I just want them to know how to trigger events.&lt;/p&gt;
 
@@ -97,7 +97,7 @@
 
 &lt;p&gt;We deploy appcanary in a pretty standard way &amp;ndash; we compile an uberjar and rsync it to the server. API keys live in environment variables, and the production API key is only going to live on the production server. So, at compile time, we have no way of knowing what the segment api key is. As a result, the analytics client needs to be built at runtime and not compile time in order to have access to the api key.&lt;/p&gt;
 
-&lt;h3&gt;This is where I get lazy&lt;/h3&gt;
+&lt;h3 id="this-is-where-i-get-lazy"&gt;This is where I get lazy&lt;/h3&gt;
 
 &lt;p&gt;The obvious thing to do to build the analytics client at runtime is to wrap it as a function:&lt;/p&gt;
 &lt;pre class="highlight clojure"&gt;&lt;code&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;defn&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;client&lt;/span&gt;&lt;span class="w"&gt;
@@ -126,11 +126,11 @@
 
 &lt;p&gt;The fact that each client spawns a thread that isn&amp;rsquo;t cleaned up by garbage collection was not &lt;a href="https://segment.com/docs/libraries/java/"&gt;documented&lt;/a&gt; unfortunately.&lt;/p&gt;
 
-&lt;h3&gt;Outcome&lt;/h3&gt;
+&lt;h3 id="outcome"&gt;Outcome&lt;/h3&gt;
 
 &lt;p&gt;Every analytics call we made spawned another threadpool, which caused the thread count to grow proportionally with user activity. We hit 40,000 threads before our application crashed.&lt;/p&gt;
 
-&lt;h3&gt;TL;DR:&lt;/h3&gt;
+&lt;h3 id="tl-dr"&gt;TL;DR:&lt;/h3&gt;
 
 &lt;p&gt;We spawned a new client object on every analytics call, not realizing that the underlying library uses a thread pool that&amp;rsquo;s not shutdown on garbage collection. This is how we ended up killing the server by hitting 40,000 threads&lt;/p&gt;
 </content>
@@ -140,7 +140,7 @@
     <link rel="alternate" href="http://blog.appcanary.com/2016/slippery-exception-clojure-ruby.html"/>
     <id>http://blog.appcanary.com/2016/slippery-exception-clojure-ruby.html</id>
     <published>2016-02-15T19:00:00-05:00</published>
-    <updated>2017-01-12T13:49:36-05:00</updated>
+    <updated>2017-01-13T09:15:13-05:00</updated>
     <author>
       <name>Phillip Mendonça-Vieira</name>
     </author>

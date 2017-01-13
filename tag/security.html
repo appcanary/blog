@@ -88,7 +88,7 @@ which takes advantage of Internet of Things devices like cameras and DVRs.</p>
 <p><blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">&ldquo;Oh &amp; also, evil sorcerers crippled our divination network Friday by getting millions of coffee makers &amp; lightswitches to shout real loud&rdquo; <a href="https://t.co/OPhdOJLwc1">https://t.co/OPhdOJLwc1</a></p>&mdash; Max Gladstone (@maxgladstone) <a href="https://twitter.com/maxgladstone/status/790890882543288320">October 25, 2016</a></blockquote>
 <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script></p>
 
-<h3>So, what&rsquo;s new about Mirai?</h3>
+<h3 id="so-what-39-s-new-about-mirai">So, what&rsquo;s new about Mirai?</h3>
 
 <p>I&rsquo;ve written about
 1988&rsquo;s <a href="https://blog.appcanary.com/2016/tale-of-two-worms.html">Morris worm</a>, 
@@ -116,7 +116,7 @@ its buffer overflow and sendmail backdoor exploits failed. </p>
 
 <p>Oh, and Morris&rsquo; password dictionary was larger, too.</p>
 
-<h3>How do we keep getting this wrong?</h3>
+<h3 id="how-do-we-keep-getting-this-wrong">How do we keep getting this wrong?</h3>
 
 <p>Around the world, we spend $75 billion a year on information security.
 And for what, when we keep getting such basic things wrong? Suppose I waved a
@@ -130,7 +130,7 @@ systems are going to get us all killed. Users are clicking phishing links like
 sheep. We&rsquo;re all doomed. And somehow, it&rsquo;s always the fault of shitty
 programmers or dumb users. Let&rsquo;s all laugh at their fails.</p>
 
-<h3>It&rsquo;s all bullshit.</h3>
+<h3 id="it-39-s-all-bullshit">It&rsquo;s all bullshit.</h3>
 
 <p>We sell biometric authentication systems to people who need a good password
 manager. We sell live threat attribution intelligence with colorful maps to
@@ -155,7 +155,7 @@ any progress in 28 years. Lots of money in it, though.</p>
 
 <hr>
 
-<h4>Paying the Bills</h4>
+<h4 id="paying-the-bills">Paying the Bills</h4>
 
 <p>Surprise, I also sell a security product! But I will say this: Appcanary
 isn&rsquo;t going to protect you from shipping millions of internet-accessible
@@ -224,7 +224,7 @@ community for peer review, but unfortunately no credible researcher<sup id="fnre
 
 <p><img alt="Morris Worm" src="../images/morris_worm.jpg" /></p>
 
-<h2>The Morris Worm</h2>
+<h2 id="the-morris-worm">The Morris Worm</h2>
 
 <p>It&rsquo;s November 2nd 1988, almost exactly 25 years before badBIOS became a
 hashtag. Robert Tappan Morris, a graduate student at Cornell, executes some
@@ -252,13 +252,13 @@ through Soviet air defenses in May 1987 and landed in Moscow.</p>
 himself a stealth bomber by hand and then flown into Red Square,&rdquo; he said.</p>
 </blockquote>
 
-<h3>What did the Morris Worm actually do?</h3>
+<h3 id="what-did-the-morris-worm-actually-do">What did the Morris Worm actually do?</h3>
 
 <p>The Morris Worm<sup id="fnref4"><a href="#fn4" rel="footnote">4</a></sup> exploited three separate vulnerabilities. It guessed
 passwords for <code>rsh</code>/<code>rexec</code>, it exploited a debug-mode backdoor in sendmail and it used &ldquo;one
 very neat trick&rdquo;. I&rsquo;ll go over each of these in detail, and you can find an archive (decompiled and commented) of the code for yourself <a href="https://github.com/arialdomartini/morris-worm" target="_blank">here</a>.</p>
 
-<h4>1. Rsh and Rexec</h4>
+<h4 id="1-rsh-and-rexec">1. Rsh and Rexec</h4>
 
 <p><code>rsh</code> and <code>rexec</code> are remote shell protocols from the BSD era that are almost
 unused today (since supplanted by <code>ssh</code>). <code>rsh</code> can allow passwordless
@@ -276,7 +276,7 @@ worm shipped with an optimized implementation of
 <a href="https://en.wikipedia.org/wiki/Crypt_(Unix)" target="_blank"><code>crypt</code></a> and a dictionary, and went to town. Once it cracked a password, it tried it against
 all the likely hosts it could find.</p>
 
-<h4>2. Sendmail&rsquo;s Backdoor</h4>
+<h4 id="2-sendmail-39-s-backdoor">2. Sendmail&rsquo;s Backdoor</h4>
 
 <p>In the absence of any friendly hosts, the Morris Worm would then exploit a
 backdoor in <a href="https://en.wikipedia.org/wiki/Sendmail" target="_blank">Sendmail</a>. You see, Sendmail had a &ldquo;debug&rdquo; mode that allowed anyone to route an
@@ -323,7 +323,7 @@ Play:    paul@vixie.sf.ca.us     vixie!paul      +1 415 864 7013
 
 <p>The Internet was a polite place, indeed.</p>
 
-<h4>3. One Very Neat Trick</h4>
+<h4 id="3-one-very-neat-trick">3. One Very Neat Trick</h4>
 
 <p>The Very Neat Trick that Vixie was talking about is the now-standard
 <a href="https://en.wikipedia.org/wiki/Buffer_overflow" target="_blank">stack buffer overflow</a>. It&rsquo;s
@@ -368,7 +368,7 @@ of the <code>main</code> function. This allowed Morris to overwrite the pointer 
 he sent over the network. The beginning of the buffer contained
 <a href="https://en.wikipedia.org/wiki/Shellcode" target="_blank">shellcode</a> that called <code>/bin/sh</code>. Game over.</p>
 
-<h2>Aftermath</h2>
+<h2 id="aftermath">Aftermath</h2>
 
 <p>Robert Tappan Morris was convicted and sentenced to three years probation, 400
 hours of community service and a $10,050 fine (about $20,000 in today&rsquo;s dollars)
@@ -390,7 +390,7 @@ Distributed Systems Groups.</p>
 
 <hr>
 
-<h4>Paying the Bills</h4>
+<h4 id="paying-the-bills">Paying the Bills</h4>
 
 <p>We&rsquo;re trying our best, but we&rsquo;ll only be able to blog about a minuscule percentage of the world&rsquo;s vulnerabilities. And starting with 1988 means we have a lot of catching up to do. How will you ever find about the ones that actually affect you?</p>
 
@@ -522,7 +522,7 @@ never open attachments, and if at all possible, stop using computers altogether.
 
 <p>This is the phishing equivalent of the Double Tap. No, not the one from <a href="https://www.youtube.com/watch?v=w4sWxsrEFFs">Zombieland</a>. The Double Tap I&rsquo;m talking about is a controversial <a href="http://www.businessinsider.com/drone-double-tap-first-responders-2012-9">military technique</a> where after attacking a target, you follow up by sending another missile at the first responders. You do some damage, and then attack the response to that damage.</p>
 
-<h3>Symantec is Having a Bad Week</h3>
+<h3 id="symantec-is-having-a-bad-week">Symantec is Having a Bad Week</h3>
 
 <p>Last week <a href="https://twitter.com/taviso">Tavis Ormandy</a> dropped 8 vulns against every single Symantec/Norton antivirus product. Judging by <a href="http://fortune.com/2016/07/02/symantec-security-irony/">the press</a>, things are <a href="http://www.pcworld.com/article/3089463/security/wormable-flaws-in-symantec-products-expose-millions-of-computers-to-hacking.html">not looking good</a> for them.</p>
 
@@ -539,7 +539,7 @@ blog</a>, and the issues for all 8 vulnerabilities can <a href="https://bugs.chr
 
 <p>The exploit pretends to be a certain kind of known malware in order to trigger some special aggressive checks, which are the exploit&rsquo;s true target. The Double Tap!</p>
 
-<h3>Vulnerability Management</h3>
+<h3 id="vulnerability-management">Vulnerability Management</h3>
 
 <p>While the above vulnerability is pretty cool, the Symantec bugs that are most interesting to us at Appcanary are <a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=810">CVE-2016-2207</a> and <a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=816">CVE-2016-2211</a>. </p>
 
@@ -547,7 +547,7 @@ blog</a>, and the issues for all 8 vulnerabilities can <a href="https://bugs.chr
 
 <p>Ironically, Symantec sells a product called Enterprise Vulnerability Management! This is a hard problem for everyone. At Appcanary, we&rsquo;re working on solving it.</p>
 
-<h3>P.S.</h3>
+<h3 id="p-s">P.S.</h3>
 
 <p><link href="//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css" rel="stylesheet" type="text/css">
 <style type="text/css">
@@ -570,7 +570,7 @@ blog</a>, and the issues for all 8 vulnerabilities can <a href="https://bugs.chr
 
 <hr>
 
-<h4>Paying the Bills</h4>
+<h4 id="paying-the-bills">Paying the Bills</h4>
 
 <p>One quarter of the critical vulnerabilities found in Symantec&rsquo;s products last week were there because they relied on out-of-date libraries with known security holes.</p>
 
@@ -699,7 +699,7 @@ phonemes as sequences of lengths of encrypted packets.</p>
 
 <hr>
 
-<h2>Epilogue</h2>
+<h2 id="epilogue">Epilogue</h2>
 
 <p>After passing the rigorous all-night culture fit screening, you end up getting the job. Six months later, Mont Piper is sold to a large conglomerate. Gary refuses to trade in his Norwegian metal t-shirts for a button-down and is summarily fired. You now spend your days going on-site to a big bank, &ldquo;advising&rdquo; a team that hates your guts.</p>
 
@@ -707,7 +707,7 @@ phonemes as sequences of lengths of encrypted packets.</p>
 
 <hr>
 
-<h3>P.S.</h3>
+<h3 id="p-s">P.S.</h3>
 
 <p><link href="//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css" rel="stylesheet" type="text/css">
 <style type="text/css">
@@ -728,7 +728,7 @@ phonemes as sequences of lengths of encrypted packets.</p>
 
 <hr>
 
-<h4>Paying the Bills</h4>
+<h4 id="paying-the-bills">Paying the Bills</h4>
 
 <p>Vulnerabilities come out every day, and most don&rsquo;t get blog posts like this written about them.</p>
 

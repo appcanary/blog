@@ -122,7 +122,7 @@ community for peer review, but unfortunately no credible researcher<sup id="fnre
 
 <p><img alt="Morris Worm" src="../images/morris_worm.jpg" /></p>
 
-<h2>The Morris Worm</h2>
+<h2 id="the-morris-worm">The Morris Worm</h2>
 
 <p>It&rsquo;s November 2nd 1988, almost exactly 25 years before badBIOS became a
 hashtag. Robert Tappan Morris, a graduate student at Cornell, executes some
@@ -150,13 +150,13 @@ through Soviet air defenses in May 1987 and landed in Moscow.</p>
 himself a stealth bomber by hand and then flown into Red Square,&rdquo; he said.</p>
 </blockquote>
 
-<h3>What did the Morris Worm actually do?</h3>
+<h3 id="what-did-the-morris-worm-actually-do">What did the Morris Worm actually do?</h3>
 
 <p>The Morris Worm<sup id="fnref4"><a href="#fn4" rel="footnote">4</a></sup> exploited three separate vulnerabilities. It guessed
 passwords for <code>rsh</code>/<code>rexec</code>, it exploited a debug-mode backdoor in sendmail and it used &ldquo;one
 very neat trick&rdquo;. I&rsquo;ll go over each of these in detail, and you can find an archive (decompiled and commented) of the code for yourself <a href="https://github.com/arialdomartini/morris-worm" target="_blank">here</a>.</p>
 
-<h4>1. Rsh and Rexec</h4>
+<h4 id="1-rsh-and-rexec">1. Rsh and Rexec</h4>
 
 <p><code>rsh</code> and <code>rexec</code> are remote shell protocols from the BSD era that are almost
 unused today (since supplanted by <code>ssh</code>). <code>rsh</code> can allow passwordless
@@ -174,7 +174,7 @@ worm shipped with an optimized implementation of
 <a href="https://en.wikipedia.org/wiki/Crypt_(Unix)" target="_blank"><code>crypt</code></a> and a dictionary, and went to town. Once it cracked a password, it tried it against
 all the likely hosts it could find.</p>
 
-<h4>2. Sendmail&rsquo;s Backdoor</h4>
+<h4 id="2-sendmail-39-s-backdoor">2. Sendmail&rsquo;s Backdoor</h4>
 
 <p>In the absence of any friendly hosts, the Morris Worm would then exploit a
 backdoor in <a href="https://en.wikipedia.org/wiki/Sendmail" target="_blank">Sendmail</a>. You see, Sendmail had a &ldquo;debug&rdquo; mode that allowed anyone to route an
@@ -221,7 +221,7 @@ Play:    paul@vixie.sf.ca.us     vixie!paul      +1 415 864 7013
 
 <p>The Internet was a polite place, indeed.</p>
 
-<h4>3. One Very Neat Trick</h4>
+<h4 id="3-one-very-neat-trick">3. One Very Neat Trick</h4>
 
 <p>The Very Neat Trick that Vixie was talking about is the now-standard
 <a href="https://en.wikipedia.org/wiki/Buffer_overflow" target="_blank">stack buffer overflow</a>. It&rsquo;s
@@ -266,7 +266,7 @@ of the <code>main</code> function. This allowed Morris to overwrite the pointer 
 he sent over the network. The beginning of the buffer contained
 <a href="https://en.wikipedia.org/wiki/Shellcode" target="_blank">shellcode</a> that called <code>/bin/sh</code>. Game over.</p>
 
-<h2>Aftermath</h2>
+<h2 id="aftermath">Aftermath</h2>
 
 <p>Robert Tappan Morris was convicted and sentenced to three years probation, 400
 hours of community service and a $10,050 fine (about $20,000 in today&rsquo;s dollars)
@@ -288,7 +288,7 @@ Distributed Systems Groups.</p>
 
 <hr>
 
-<h4>Paying the Bills</h4>
+<h4 id="paying-the-bills">Paying the Bills</h4>
 
 <p>We&rsquo;re trying our best, but we&rsquo;ll only be able to blog about a minuscule percentage of the world&rsquo;s vulnerabilities. And starting with 1988 means we have a lot of catching up to do. How will you ever find about the ones that actually affect you?</p>
 

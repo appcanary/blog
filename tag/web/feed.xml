@@ -1,29 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>Appcanary: Security</title>
-  <subtitle>Posts tagged with Security</subtitle>
+  <title>Appcanary: Web</title>
+  <subtitle>Posts tagged with Web</subtitle>
   <id>http://blog.appcanary.com</id>
   <link href="http://blog.appcanary.com"/>
-  <link href="http://blog.appcanary.com/tag/security/feed.xml" rel="self"/>
-  <updated>2016-01-28T19:00:00-05:00</updated>
-  <entry>
-    <title>Maven Central Security</title>
-    <link rel="alternate" href="http://blog.appcanary.com/2016/maven-central-security.html"/>
-    <id>http://blog.appcanary.com/2016/maven-central-security.html</id>
-    <published>2016-01-28T19:00:00-05:00</published>
-    <updated>2017-01-10T17:51:38-05:00</updated>
-    <author>
-      <name>Max Veytsman</name>
-    </author>
-    <content type="html">&lt;p&gt;The security of your package manager is very important to us at appcanary, and it’s important to make sure the packages you’re downloading are secure in transit.&lt;/p&gt;
-
-&lt;p&gt;Back in the summer of 2014, I discovered that &lt;a href="http://search.maven.org/"&gt;Maven Central&lt;/a&gt;  wasn’t using TLS or any signature verification when serving up java packages.&lt;/p&gt;
-
-&lt;p&gt;I gave a talk at &lt;a href="http://bangbangcon.com/index.html"&gt;!!con 2015&lt;/a&gt; about what I did to help convince them to start using encryption.&lt;/p&gt;
-
-&lt;iframe width="560" height="315" src="https://www.youtube.com/embed/6NdLZl16OkA" frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;
-</content>
-  </entry>
+  <link href="http://blog.appcanary.com/tag/web/feed.xml" rel="self"/>
+  <updated>2017-01-12T19:00:00-05:00</updated>
   <entry>
     <title>Everything you need to know about HTTP security headers</title>
     <link rel="alternate" href="http://blog.appcanary.com/2017/http-security-headers.html"/>

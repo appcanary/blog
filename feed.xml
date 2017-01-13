@@ -5,7 +5,881 @@
   <id>http://blog.appcanary.com</id>
   <link href="http://blog.appcanary.com"/>
   <link href="http://blog.appcanary.com/feed.xml" rel="self"/>
-  <updated>2016-11-14T19:00:00-05:00</updated>
+  <updated>2017-01-12T19:00:00-05:00</updated>
+  <entry>
+    <title>Everything you need to know about HTTP security headers</title>
+    <link rel="alternate" href="http://blog.appcanary.com/2017/http-security-headers.html"/>
+    <id>http://blog.appcanary.com/2017/http-security-headers.html</id>
+    <published>2017-01-12T19:00:00-05:00</published>
+    <updated>2017-01-13T10:58:40-05:00</updated>
+    <author>
+      <name>Max Veytsman</name>
+    </author>
+    <content type="html">&lt;p&gt;Some physicists 28 years ago needed a way to easily share experimental data and
+thus the web was born.  This was generally considered to be a good move.
+Unfortunately, everything physicists touch &amp;mdash; from trigonometry to the
+strong nuclear force &amp;mdash; eventually becomes weaponized and so too has the
+Hypertext Transfer Protocol. &lt;/p&gt;
+
+&lt;p&gt;What can be attacked must be defended, and since tradition requires all security
+features to be a bolted-on afterthought, things… got a little complicated. &lt;/p&gt;
+
+&lt;p&gt;This article explains what secure headers are and how to implement these headers
+in Rails, Django, Express.js, Go, Nginx, and Apache.&lt;/p&gt;
+
+&lt;p&gt;Please note that some
+headers may be best configured in on your HTTP servers, while others should be
+set on the application layer. Use your own discretion here. You can test how well you&amp;rsquo;re doing with Mozilla&amp;rsquo;s
+&lt;a href="https://observatory.mozilla.org/analyze.html?host=appcanary.com"&gt;Observatory&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2&gt;HTTP Security Headers&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;
+&lt;a href="#tags-security-programming-web"&gt;tags: Security, Programming, Web&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href="#x-xss-protection"&gt;X-XSS-Protection&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;a href="#why"&gt;Why?&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href="#should-i-use-it"&gt;Should I use it?&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href="#how"&gt;How?&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href="#i-want-to-know-more"&gt;I want to know more&lt;/a&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;a href="#content-security-policy"&gt;Content Security Policy&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;a href="#why"&gt;Why?&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href="#should-i-use-it"&gt;Should I use it?&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href="#how"&gt;How?&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href="#i-want-to-know-more"&gt;I want to know more&lt;/a&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href="#http-strict-transport-security-hsts"&gt;HTTP Strict Transport Security (HSTS)&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;a href="#why"&gt;Why?&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href="#should-i-use-it"&gt;Should I use it?&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href="#how"&gt;How?&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href="#i-want-to-know-more"&gt;I want to know more&lt;/a&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href="#http-public-key-pinning-hpkp"&gt;HTTP Public Key Pinning (HPKP)&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;a href="#why"&gt;Why?&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href="#should-i-use-it"&gt;Should I use it?&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href="#how"&gt;How?&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href="#i-want-to-know-more"&gt;I want to know more&lt;/a&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href="#x-frame-options"&gt;X-Frame-Options&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;a href="#why"&gt;Why?&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href="#should-i-use-it"&gt;Should I use it?&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href="#how"&gt;How?&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href="#i-want-to-know-more"&gt;I want to know more&lt;/a&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href="#x-content-type-options"&gt;X-Content-Type-Options&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;a href="#why"&gt;Why?&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href="#should-i-use-it"&gt;Should I use it?&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href="#how"&gt;How?&lt;/a&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href="#referrer-policy"&gt;Referrer-Policy&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;a href="#why"&gt;Why?&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href="#should-i-use-it"&gt;Should I use it?&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href="#how"&gt;How?&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href="#i-want-to-know-more"&gt;I want to know more&lt;/a&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href="#cookie-options"&gt;Cookie Options&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;a href="#why"&gt;Why?&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href="#should-i-use-it"&gt;Should I use it?&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;a href="#how"&gt;How?&lt;/a&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;&lt;/p&gt;
+
+&lt;h2 id="x-xss-protection"&gt;X-XSS-Protection&lt;/h2&gt;
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;X-XSS-Protection: 0;
+X-XSS-Protection: 1;
+X-XSS-Protection: 1; mode=block
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="why"&gt;Why?&lt;/h3&gt;
+
+&lt;p&gt;Cross Site Scripting, commonly abbreviated XSS, is an attack where the attacker
+causes a page to load some malicious javascript.  &lt;code&gt;X-XSS-Protection&lt;/code&gt; is a
+feature in Chrome and Internet Explorer that is designed to protect against
+&amp;ldquo;reflected&amp;rdquo; XSS attacks &amp;mdash; where an attacker is sending the malicious
+payload as part of the request&lt;sup id="fnref1"&gt;&lt;a href="#fn1" rel="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;X-XSS-Protection: 0&lt;/code&gt; turns it off.&lt;br/&gt;
+&lt;code&gt;X-XSS-Protection: 1&lt;/code&gt; will filter out scripts that came from the request - but
+will still render the page&lt;br/&gt; 
+&lt;code&gt;X-XSS-Protection: 1; mode=block&lt;/code&gt; when triggered, will block the whole page from being rendered.&lt;/p&gt;
+
+&lt;h3 id="should-i-use-it"&gt;Should I use it?&lt;/h3&gt;
+
+&lt;p&gt;Yes. Set &lt;code&gt;X-XSS-Protection: 1; mode=block&lt;/code&gt;. The &amp;ldquo;filter bad scripts&amp;rdquo; mechanism is problematic; see &lt;a href="http://blog.innerht.ml/the-misunderstood-x-xss-protection/"&gt;here&lt;/a&gt; for why.&lt;/p&gt;
+
+&lt;h3 id="how"&gt;How?&lt;/h3&gt;
+
+&lt;table&gt;&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Platform&lt;/th&gt;
+&lt;th&gt;What do I do?&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Rails 4 and 5&lt;/td&gt;
+&lt;td&gt;On by default&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Django&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;SECURE_BROWSER_XSS_FILTER = True&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Express.js&lt;/td&gt;
+&lt;td&gt;Use &lt;a href="https://helmetjs.github.io/docs/xss-filter/"&gt;helmet&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Go&lt;/td&gt;
+&lt;td&gt;Use &lt;a href="https://github.com/unrolled/secure"&gt;unrolled/secure&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Nginx&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;add_header X-XSS-Protection &amp;quot;1; mode=block&amp;quot;;&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Apache&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;Header always set X-XSS-Protection &amp;quot;1; mode=block&amp;quot;&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+
+&lt;h3 id="i-want-to-know-more"&gt;I want to know more&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection"&gt;X-XSS-Protection - MDN&lt;/a&gt;&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id="content-security-policy"&gt;Content Security Policy&lt;/h2&gt;
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;Content-Security-Policy: &amp;lt;policy&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="why"&gt;Why?&lt;/h3&gt;
+
+&lt;p&gt;Content Security Policy can be thought of as much more advanced version of the
+&lt;code&gt;X-XSS-Protection&lt;/code&gt; header above. While &lt;code&gt;X-XSS-Protection&lt;/code&gt; will block scripts
+that come from the request, it&amp;rsquo;s not going to stop an XSS attack that involves
+storing a malicious script on your server or loading an external resource with a
+malicious script in it.&lt;/p&gt;
+
+&lt;p&gt;CSP gives you a language to define where the browser can load resources from.
+You can white list origins for scripts, images, fonts, stylesheets, etc in a very
+granular manner. You can also compare any loaded content against a hash or
+signature.&lt;/p&gt;
+
+&lt;h3 id="should-i-use-it"&gt;Should I use it?&lt;/h3&gt;
+
+&lt;p&gt;Yes. It won&amp;rsquo;t prevent all XSS attacks, but it&amp;rsquo;s a significant mitigation against
+their impact, and an important aspect of defense-in-depth. That said, it can be
+hard to implement. If you&amp;rsquo;re an intrepid reader and went ahead and checked the
+headers &lt;a href="https://appcanary.com"&gt;appcanary.com&lt;/a&gt; returns&lt;sup id="fnref2"&gt;&lt;a href="#fn2" rel="footnote"&gt;2&lt;/a&gt;&lt;/sup&gt;, you&amp;rsquo;ll see that we don&amp;rsquo;t
+have CSP implemented yet. There are some rails development plugins we&amp;rsquo;re using
+that are holding us back from a CSP implementation that will have an actually security impact.
+We&amp;rsquo;re working on it, and will write about it in the next instalment!&lt;/p&gt;
+
+&lt;h3 id="how"&gt;How?&lt;/h3&gt;
+
+&lt;p&gt;Writing a CSP policy can be challenging.
+See
+&lt;a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy"&gt;here&lt;/a&gt; for
+a list of all the directives you can employ. A good place to start
+is &lt;a href="https://csp.withgoogle.com/docs/adopting-csp.html"&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;table&gt;&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Platform&lt;/th&gt;
+&lt;th&gt;What do I do?&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Rails 4 and 5&lt;/td&gt;
+&lt;td&gt;Use &lt;a href="https://github.com/twitter/secureheaders"&gt;secureheaders&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Django&lt;/td&gt;
+&lt;td&gt;Use &lt;a href="https://github.com/mozilla/django-csp"&gt;django-csp&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Express.js&lt;/td&gt;
+&lt;td&gt;Use &lt;a href="https://github.com/helmetjs/csp"&gt;helmet/csp&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Go&lt;/td&gt;
+&lt;td&gt;Use &lt;a href="https://github.com/unrolled/secure"&gt;unrolled/secure&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Nginx&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;add_header Content-Security-Policy &amp;quot;&amp;lt;policy&amp;gt;&amp;quot;;&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Apache&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;Header always set Content-Security-Policy &amp;quot;&amp;lt;policy&amp;gt;&amp;quot;&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+
+&lt;h3 id="i-want-to-know-more"&gt;I want to know more&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy"&gt;Content-Security-Policy - MDN&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://content-security-policy.com/"&gt;CSP Quick Reference Guide&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://csp.withgoogle.com/docs/index.html"&gt;Google&amp;rsquo;s CSP Guide&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id="http-strict-transport-security-hsts"&gt;HTTP Strict Transport Security (HSTS)&lt;/h2&gt;
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;Strict-Transport-Security: max-age=&amp;lt;expire-time&amp;gt;
+Strict-Transport-Security: max-age=&amp;lt;expire-time&amp;gt;; includeSubDomains
+Strict-Transport-Security: max-age=&amp;lt;expire-time&amp;gt;; preload
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="why"&gt;Why?&lt;/h3&gt;
+
+&lt;p&gt;When we want to securely communicate with someone, we face two problems. The
+first problem is privacy; we want to make sure the messages we send can only
+be read by the recipient, and no one else. The other problem is that of
+authentication: how do we know the recipient is who they say they are?&lt;/p&gt;
+
+&lt;p&gt;HTTPS solves the first problem with encryption, though it has some major issues
+with authentication (more on this later, see &lt;a href="#http-public-key-pinning-hpkp"&gt;Public Key
+Pinning&lt;/a&gt;). The HSTS header solves the
+meta-problem: how do you know if the person you&amp;rsquo;re talking to actually supports
+encryption?&lt;/p&gt;
+
+&lt;p&gt;HSTS mitigates an attack called
+&lt;a href="https://moxie.org/software/sslstrip/"&gt;sslstrip&lt;/a&gt;. Suppose you&amp;rsquo;re using a hostile
+network, where a malicious attacker controls the wifi router. The attacker can
+disable encryption between you and the websites you&amp;rsquo;re browsing. Even if the
+site you&amp;rsquo;re accessing is only available over HTTPS, the attacker can
+man-in-the-middle the HTTP traffic and make it look like the site works over
+unencrypted HTTP. No need for SSL certs, just disable the encryption.&lt;/p&gt;
+
+&lt;p&gt;Enter the HSTS. The &lt;code&gt;Strict-Transport-Security&lt;/code&gt; header solves this by letting
+your browser know that it must always use encryption with your site. As long as
+your browser has seen an HSTS header &amp;mdash; and it hasn&amp;rsquo;t expired &amp;mdash; it
+will not access the site unencrypted, and will error out if it&amp;rsquo;s not available
+over HTTPS.&lt;/p&gt;
+
+&lt;h3 id="should-i-use-it"&gt;Should I use it?&lt;/h3&gt;
+
+&lt;p&gt;Yes. Your app is only available over HTTPS, right? Trying to browse over regular
+old HTTP will redirect to the secure site, right? (Hint: Use
+&lt;a href="https://letsencrypt.org/"&gt;letsencrypt&lt;/a&gt; if you want to avoid the racket that are
+commercial certificate authorities.)&lt;/p&gt;
+
+&lt;p&gt;The one downside of the HSTS header is that it allows for a &lt;a href="http://www.radicalresearch.co.uk/lab/hstssupercookies"&gt;clever
+technique&lt;/a&gt; to create
+supercookies that can fingerprint your users. As a website operator, you
+probably already track your users somewhat - but try to only use HSTS for good
+and not for supercookies.&lt;/p&gt;
+
+&lt;h3 id="how"&gt;How?&lt;/h3&gt;
+
+&lt;p&gt;The two options are&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;includeSubDomains&lt;/code&gt; - HSTS applies to subdomains&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;preload&lt;/code&gt; - Google maintains a &lt;a href="https://hstspreload.appspot.com/"&gt;service&lt;/a&gt;
+that hardcodes&lt;sup id="fnref3"&gt;&lt;a href="#fn3" rel="footnote"&gt;3&lt;/a&gt;&lt;/sup&gt; your site as being HTTPS only into browsers. This
+way, a user doesn&amp;rsquo;t even have to visit your site: their browser already knows
+it should reject unencrypted connections.
+Getting off that list is hard, by the way, so only turn it on if you know you
+can support HTTPS forever on all your subdomains.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;table&gt;&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Platform&lt;/th&gt;
+&lt;th&gt;What do I do?&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Rails 4&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;config.force_ssl = true&lt;/code&gt;&lt;br/&gt;Does not include subdomains by default. To set it:&lt;br/&gt;&lt;code&gt;config.ssl_options = { hsts: { subdomains: true } }&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Rails 5&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;config.force_ssl = true&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Django&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;SECURE_HSTS_SECONDS = 31536000&lt;/code&gt; &lt;br/&gt; &lt;code&gt;SECURE_HSTS_INCLUDE_SUBDOMAINS = True&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Express.js&lt;/td&gt;
+&lt;td&gt;Use &lt;a href="https://helmetjs.github.io/docs/hsts/"&gt;helmet&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Go&lt;/td&gt;
+&lt;td&gt;Use &lt;a href="https://github.com/unrolled/secure"&gt;unrolled/secure&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Nginx&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;add_header Strict-Transport-Security &amp;quot;max-age=31536000; includeSubdomains; &amp;quot;;&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Apache&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;Header always set Strict-Transport-Security &amp;quot;max-age=31536000; includeSubdomains;&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+
+&lt;h3 id="i-want-to-know-more"&gt;I want to know more&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://tools.ietf.org/html/rfc6797"&gt;RFC 6797&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security"&gt;Strict-Transport-Security - MDN&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id="http-public-key-pinning-hpkp"&gt;HTTP Public Key Pinning (HPKP)&lt;/h2&gt;
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;Public-Key-Pins: pin-sha256=&amp;lt;base64==&amp;gt;; max-age=&amp;lt;expireTime&amp;gt;;
+Public-Key-Pins: pin-sha256=&amp;lt;base64==&amp;gt;; max-age=&amp;lt;expireTime&amp;gt;; includeSubDomains
+Public-Key-Pins: pin-sha256=&amp;lt;base64==&amp;gt;; max-age=&amp;lt;expireTime&amp;gt;; report-uri=&amp;lt;reportURI&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="why"&gt;Why?&lt;/h3&gt;
+
+&lt;p&gt;The HSTS header described above was designed to ensure that all connections to your
+website are encrypted. However, nowhere does it specify what key to use! &lt;/p&gt;
+
+&lt;p&gt;Trust on the
+web is based on the certificate authority (CA) model. Your browser and operating system
+ship with the public keys of some trusted certificate authorities which are
+usually specialized companies and/or nation states. When a CA issues you a
+certificate for a given domain that means anyone who trusts that CA will
+automatically trust the SSL traffic you encrypt using that certificate.  The CAs
+are responsible for verifying that you actually own a domain (this can be
+anything from sending an email, to asking you to host a file, to investigating
+your company).&lt;/p&gt;
+
+&lt;p&gt;Two CAs can issue a certificate for the same domain to two different people, and
+browsers will trust both. This creates a problem, especially since CAs &lt;a href="https://technet.microsoft.com/library/security/2524375"&gt;can be
+and are&lt;/a&gt; compromised.
+This allows attackers to MiTM any domain they want, even if that domain uses SSL
+&amp;amp; HSTS!&lt;/p&gt;
+
+&lt;p&gt;The HPKP header tries to mitigate this. This header lets you to &amp;ldquo;pin&amp;rdquo; a
+certificate. When a browser sees the header for the first time, it will save the
+certificate. For every request up to &lt;code&gt;max-age&lt;/code&gt;, the browser will fail unless at
+least one certificate in the chain sent from the server has a fingerprint that
+was pinned.&lt;/p&gt;
+
+&lt;p&gt;This means that you can pin to the CA or a intermediate certificate along with
+the leaf in order to not shoot yourself in the foot (more on this later).&lt;/p&gt;
+
+&lt;p&gt;Much like HSTS above, the HPKP header also has some privacy implications.
+These were laid out in the &lt;a href="https://tools.ietf.org/html/rfc7469#section-5"&gt;RFC&lt;/a&gt;
+itself.&lt;/p&gt;
+
+&lt;h3 id="should-i-use-it"&gt;Should I use it?&lt;/h3&gt;
+
+&lt;p&gt;Probably not. &lt;/p&gt;
+
+&lt;p&gt;HPKP is a very very sharp knife. Consider this: if you pin to the wrong
+certificate, or you lose your keys, or something else goes wrong, you&amp;rsquo;ve locked
+your users out of your site. All you can do is wait for the pin to expire.&lt;/p&gt;
+
+&lt;p&gt;This
+&lt;a href="https://blog.qualys.com/ssllabs/2016/09/06/is-http-public-key-pinning-dead"&gt;article&lt;/a&gt;
+lays out the case against it, and includes a fun way for attackers to use HPKP
+to hold their victims ransom.&lt;/p&gt;
+
+&lt;p&gt;One alternative is using the &lt;code&gt;Public-Key-Pins-Report-Only&lt;/code&gt; header, which will
+just report that something went wrong, but not lock anyone out. This allows you
+to at least know your users are being MiTMed with fake certificates.&lt;/p&gt;
+
+&lt;h3 id="how"&gt;How?&lt;/h3&gt;
+
+&lt;p&gt;The two options are&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;includeSubDomains&lt;/code&gt; - HPKP applies to subdomains&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;report-uri&lt;/code&gt; - Inavlid attempts will be reported here&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;You have to generate a base64 encoded fingerprint for the key you pin to, and
+you &lt;strong&gt;have&lt;/strong&gt; to use a backup key.  Check &lt;a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Public_Key_Pinning#Extracting_the_Base64_encoded_public_key_information"&gt;this
+guide&lt;/a&gt;
+for how to do it.&lt;/p&gt;
+
+&lt;table&gt;&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Platform&lt;/th&gt;
+&lt;th&gt;What do I do?&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Rails 4 and 5&lt;/td&gt;
+&lt;td&gt;Use &lt;a href="https://github.com/twitter/secureheaders/blob/master/docs/HPKP.md"&gt;secureheaders&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Django&lt;/td&gt;
+&lt;td&gt;Write custom middleware&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Express.js&lt;/td&gt;
+&lt;td&gt;Use &lt;a href="https://helmetjs.github.io/docs/hpkp/"&gt;helmet&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Go&lt;/td&gt;
+&lt;td&gt;Use &lt;a href="https://github.com/unrolled/secure"&gt;unrolled/secure&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Nginx&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;add_header Public-Key-Pins &amp;#39;pin-sha256=&amp;quot;&amp;lt;primary&amp;gt;&amp;quot;; pin-sha256=&amp;quot;&amp;lt;backup&amp;gt;&amp;quot;; max-age=5184000; includeSubDomains&amp;#39;;&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Apache&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;Header always set Public-Key-Pins &amp;#39;pin-sha256=&amp;quot;&amp;lt;primary&amp;gt;&amp;quot;; pin-sha256=&amp;quot;&amp;lt;backup&amp;gt;&amp;quot;; max-age=5184000; includeSubDomains&amp;#39;;&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+
+&lt;h3 id="i-want-to-know-more"&gt;I want to know more&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://tools.ietf.org/html/rfc7469"&gt;RFC 7469&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Public_Key_Pinning"&gt;HTTP Public Key Pinning (HPKP) - MDN&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id="x-frame-options"&gt;X-Frame-Options&lt;/h2&gt;
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;X-Frame-Options: DENY
+X-Frame-Options: SAMEORIGIN
+X-Frame-Options: ALLOW-FROM https://example.com/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="why"&gt;Why?&lt;/h3&gt;
+
+&lt;p&gt;Before we started giving dumb names to vulnerabilities, we used to give dumb
+names to hacking techniques. &amp;ldquo;Clickjacking&amp;rdquo; is one of those dumb names. &lt;/p&gt;
+
+&lt;p&gt;The idea goes like this: you create an invisible iframe, place it in focus and
+route user input into it. As an attacker, you can then trick people into playing
+a browser-based game while their clicks are being registered by a hidden iframe
+displaying twitter - forcing them to non-consensually retweet all of your
+tweets.&lt;/p&gt;
+
+&lt;p&gt;It sounds dumb, but it&amp;rsquo;s an effective attack.&lt;/p&gt;
+
+&lt;h3 id="should-i-use-it"&gt;Should I use it?&lt;/h3&gt;
+
+&lt;p&gt;Yes. Your app is a beautiful snowflake. Do you really want some
+&lt;a href="https://techcrunch.com/2015/04/08/annotate-this/"&gt;genius&lt;/a&gt; shoving it into an
+iframe so they can vandalize it?&lt;/p&gt;
+
+&lt;h3 id="how"&gt;How?&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;X-Frame-Options&lt;/code&gt; has three modes, which are pretty self explanatory.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;DENY&lt;/code&gt; - No one can put this page in an iframe&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;SAMEORIGIN&lt;/code&gt; - The page can only be displayed in an iframe by someone on the same origin.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ALLOW-FROM&lt;/code&gt; - Specify a specific url that can put the page in an iframe&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;One thing to remember is that you can stack iframes as deep as you want, and in
+that case, the behavior of &lt;code&gt;SAMEORIGIN&lt;/code&gt; and &lt;code&gt;ALLOW-FROM&lt;/code&gt; isn&amp;rsquo;t
+&lt;a href="https://tools.ietf.org/html/rfc7034#section-2.3.2.2"&gt;specified&lt;/a&gt;. That is, if we
+have a triple-decker iframe sandwich and the innermost iframe has &lt;code&gt;SAMEORIGIN&lt;/code&gt;,
+do we care about the origin of the iframe around it, or the topmost one on the
+page? ¯\_(ツ)_/¯.&lt;/p&gt;
+
+&lt;table&gt;&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Platform&lt;/th&gt;
+&lt;th&gt;What do I do?&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Rails 4 and 5&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;SAMEORIGIN&lt;/code&gt; is set by default.&lt;br/&gt;&lt;br/&gt;To set &lt;code&gt;DENY&lt;/code&gt;:&lt;br/&gt;&lt;code&gt;config.action_dispatch.default_headers[&amp;#39;X-Frame-Options&amp;#39;] = &amp;quot;DENY&amp;quot;&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Django&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;MIDDLEWARE = [ ... &amp;#39;django.middleware.clickjacking.XFrameOptionsMiddleware&amp;#39;, ... ]&lt;/code&gt;&lt;br/&gt; This defaults to &lt;code&gt;SAMORIGIN&lt;/code&gt;.&lt;br/&gt;&lt;br/&gt;To set &lt;code&gt;DENY&lt;/code&gt;: &lt;code&gt;X_FRAME_OPTIONS = &amp;#39;DENY&amp;#39;&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Express.js&lt;/td&gt;
+&lt;td&gt;Use &lt;a href="https://helmetjs.github.io/docs/frameguard/"&gt;helmet&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Go&lt;/td&gt;
+&lt;td&gt;Use &lt;a href="https://github.com/unrolled/secure"&gt;unrolled/secure&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Nginx&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;add_header Referrer-Policy &amp;quot;deny&amp;quot;;&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Apache&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;Header always set Referrer-Policy &amp;quot;deny&amp;quot;&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+
+&lt;h3 id="i-want-to-know-more"&gt;I want to know more&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://tools.ietf.org/html/rfc7034"&gt;RFC 7034&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options"&gt;X-Frame-Options - MDN&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id="x-content-type-options"&gt;X-Content-Type-Options&lt;/h2&gt;
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;X-Content-Type-Options: nosniff;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="why"&gt;Why?&lt;/h3&gt;
+
+&lt;p&gt;The problem this header solves is called &amp;ldquo;MIME sniffing&amp;rdquo;, which is actually a
+browser &amp;ldquo;feature&amp;rdquo;. &lt;/p&gt;
+
+&lt;p&gt;In theory, every time your server responds to a request it is supposed to set a
+&lt;code&gt;Content-Type&lt;/code&gt; header in order to tell the browser if it&amp;rsquo;s getting some HTML, a
+cat gif, or a Flash cartoon from 2008. Unfortunately, the web has always been
+broken and has never really followed a spec for anything; back in the day lots
+of people didn&amp;rsquo;t bother to set the content type header properly. &lt;/p&gt;
+
+&lt;p&gt;As a result, browser vendors decided they should be really helpful and try to
+infer the content type by inspecting the content itself while completely ignore
+the content type header.  If it looks like a gif, display a gif!, even though
+the content type is &lt;code&gt;text/html&lt;/code&gt;.  Likewise, if it looks like we got some HTML,
+we should render it as such even if the server said it&amp;rsquo;s a gif.&lt;/p&gt;
+
+&lt;p&gt;This is great, except when you&amp;rsquo;re running a photo-sharing site, and users can
+upload photos that look like HTML with javascript included, and suddenly you
+have a stored XSS attack on your hand.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code&gt;X-Content-Type-Options&lt;/code&gt; headers exist to tell the browser to shut up and
+set the damn content type to what I tell you, thank you.&lt;/p&gt;
+
+&lt;h3 id="should-i-use-it"&gt;Should I use it?&lt;/h3&gt;
+
+&lt;p&gt;Yes, just make sure to set your content types correctly.&lt;/p&gt;
+
+&lt;h3 id="how"&gt;How?&lt;/h3&gt;
+
+&lt;table&gt;&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Platform&lt;/th&gt;
+&lt;th&gt;What do I do?&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Rails 4 and 5&lt;/td&gt;
+&lt;td&gt;On by default&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Django&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;SECURE_CONTENT_TYPE_NOSNIFF = True&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Express.js&lt;/td&gt;
+&lt;td&gt;Use &lt;a href="https://helmetjs.github.io/docs/dont-sniff-mimetype/"&gt;helmet&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Go&lt;/td&gt;
+&lt;td&gt;Use &lt;a href="https://github.com/unrolled/secure"&gt;unrolled/secure&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Nginx&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;add_header X-Content-Type-Options nosniff;&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Apache&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;Header always set X-Content-Type-Options nosniff&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id="referrer-policy"&gt;Referrer-Policy&lt;/h2&gt;
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;Referrer-Policy: "no-referrer" 
+Referrer-Policy: "no-referrer-when-downgrade" 
+Referrer-Policy: "origin" 
+Referrer-Policy: "origin-when-cross-origin"
+Referrer-Policy: "same-origin" 
+Referrer-Policy: "strict-origin" 
+Referrer-Policy: "strict-origin-when-cross-origin" 
+Referrer-Policy: "unsafe-url"
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="why"&gt;Why?&lt;/h3&gt;
+
+&lt;p&gt;Ah, the &lt;code&gt;Referer&lt;/code&gt; header. Great for analytics, bad for your users&amp;rsquo; privacy. At
+some point the web got woke and decided that maybe it wasn&amp;rsquo;t a good idea to send
+it all the time. And while we&amp;rsquo;re at it, let&amp;rsquo;s spell &amp;ldquo;Referrer&amp;rdquo;
+correctly&lt;sup id="fnref4"&gt;&lt;a href="#fn4" rel="footnote"&gt;4&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code&gt;Referrer-Policy&lt;/code&gt; header allows you to specify when the browser will set a
+&lt;code&gt;Referer&lt;/code&gt; header.&lt;/p&gt;
+
+&lt;h3 id="should-i-use-it"&gt;Should I use it?&lt;/h3&gt;
+
+&lt;p&gt;It&amp;rsquo;s up to you, but it&amp;rsquo;s probably a good idea. If you don&amp;rsquo;t care about your
+users&amp;rsquo; privacy, think of it as a way to keep your sweet sweet analytics to
+yourself and out of your competitors&amp;rsquo; grubby hands.&lt;/p&gt;
+
+&lt;p&gt;Set &lt;code&gt;Referrer-Policy: &amp;quot;no-referrer&amp;quot;&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id="how"&gt;How?&lt;/h3&gt;
+
+&lt;table&gt;&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Platform&lt;/th&gt;
+&lt;th&gt;What do I do?&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Rails 4 and 5&lt;/td&gt;
+&lt;td&gt;Use &lt;a href="https://github.com/twitter/secureheaders"&gt;secureheaders&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Django&lt;/td&gt;
+&lt;td&gt;Write custom middleware&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Express.js&lt;/td&gt;
+&lt;td&gt;Use &lt;a href="https://helmetjs.github.io/docs/referrer-policy/"&gt;helmet&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Go&lt;/td&gt;
+&lt;td&gt;Write custom middleware&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Nginx&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;add_header Referrer-Policy &amp;quot;no-referrer&amp;quot;;&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Apache&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;Header always set Referrer-Policy &amp;quot;no-referrer&amp;quot;&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+
+&lt;h3 id="i-want-to-know-more"&gt;I want to know more&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection"&gt;X-XSS-Protection - MDN&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id="cookie-options"&gt;Cookie Options&lt;/h2&gt;
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;Set-Cookie: &amp;lt;key&amp;gt;=&amp;lt;value&amp;gt;; Expires=&amp;lt;expiryDate&amp;gt;; Secure; HttpOnly; SameSite=strict
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="why"&gt;Why?&lt;/h3&gt;
+
+&lt;p&gt;This isn&amp;rsquo;t a security header per se, but there are three different options for
+cookies that you should be aware of.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Cookies marked as &lt;code&gt;Secure&lt;/code&gt; will only be served over HTTPS. This prevents
+someone from reading the cookies in a MiTM attack where they can force the
+browser to visit a given page.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;HttpOnly&lt;/code&gt; is a misnomer, and has nothing to do with HTTPS (unlike &lt;code&gt;Secure&lt;/code&gt;
+above). Cookies marked as &lt;code&gt;HttpOnly&lt;/code&gt; can not be accessed from within
+javascript. So if there is an XSS flaw, the attacker can&amp;rsquo;t immediately steal
+the cookies.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;SameSite&lt;/code&gt; helps defend against Cross-Origin Resource Sharing (CSRF) attacks.
+This is an attack where a different website the user may be visiting
+inadvertently tricks them into making a request against your site, i.e. by
+including an image to make a GET request, or using javascript to submit a form
+for a POST request. Generally, people defend against this
+using
+&lt;a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)_Prevention_Cheat_Sheet"&gt;CSRF tokens&lt;/a&gt;.
+A cookie marked as &lt;code&gt;SameSite&lt;/code&gt; won&amp;rsquo;t be sent to a different site.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;It has two modes, lax and strict. Lax mode allows the cookie to be sent in a
+  top-level context for GET requests (i.e. if you clicked a link). Strict
+  doesn&amp;rsquo;t send any third-party cookies.&lt;/p&gt;
+
+&lt;h3 id="should-i-use-it"&gt;Should I use it?&lt;/h3&gt;
+
+&lt;p&gt;You should absolutely set &lt;code&gt;Secure&lt;/code&gt; and &lt;code&gt;HttpOnly&lt;/code&gt;. Unfortunately, as of writing,
+SameSite cookies are &lt;a href="http://caniuse.com/#search=samesite"&gt;available&lt;/a&gt; only in
+Chrome and Opera, so you may want to ignore them for now.&lt;/p&gt;
+
+&lt;h3 id="how"&gt;How?&lt;/h3&gt;
+
+&lt;table&gt;&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Platform&lt;/th&gt;
+&lt;th&gt;What do I do?&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Rails 4 and 5&lt;/td&gt;
+&lt;td&gt;Secure and HttpOnly enabled by default. For SameSite, use &lt;a href="https://github.com/twitter/secureheaders"&gt;secureheaders&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Django&lt;/td&gt;
+&lt;td&gt;Session cookies are HttpOnly by default. To set secure: &lt;code&gt;SESSION_COOKIE_SECURE = True&lt;/code&gt;. &lt;br/&gt;&lt;br/&gt; Not sure about SameSite.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Express.js&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;cookie: { secure: true, httpOnly: true, sameSite: true }&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Go&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;http.Cookie{Name: &amp;quot;foo&amp;quot;, Value: &amp;quot;bar&amp;quot;, HttpOnly: true, Secure: true}&lt;/code&gt; &lt;br/&gt;&lt;br/&gt; For SameSite, see this &lt;a href="https://github.com/golang/go/issues/15867"&gt;issue&lt;/a&gt;.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Nginx&lt;/td&gt;
+&lt;td&gt;You probably won&amp;rsquo;t set session cookies in Nginx&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Apache&lt;/td&gt;
+&lt;td&gt;You probably won&amp;rsquo;t set session cookies in Apache&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+
+&lt;hr&gt;
+
+&lt;p&gt;Thanks to &lt;a href="https://twitter.com/wolever"&gt;@wolever&lt;/a&gt; for python advice&lt;/p&gt;
+
+&lt;p&gt;&lt;link href="//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css" rel="stylesheet" type="text/css"&gt;
+&lt;style type="text/css"&gt;
+ #mc&lt;em&gt;embed&lt;/em&gt;signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; width:100%;}
+ /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+      We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+&lt;/style&gt;
+&lt;div id="mc_embed_signup"&gt;
+&lt;form action="//appcanary.us10.list-manage.com/subscribe/post?u=303b378f377508300c0b5469a&amp;amp;id=dc58e8f56f" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate&gt;
+&lt;div id="mc_embed_signup_scroll"&gt;
+&lt;label for="mce-EMAIL"&gt;Liked this post? Subscribe to our newsletter for more!&lt;/label&gt;
+&lt;input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required&gt;
+&lt;div style="position: absolute; left: -5000px;" aria-hidden="true"&gt;&lt;input type="text" name="b_303b378f377508300c0b5469a_dc58e8f56f" tabindex="-1" value=""&gt;&lt;/div&gt;
+&lt;div class="clear"&gt;&lt;input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/form&gt;
+&lt;/div&gt;&lt;/p&gt;
+
+&lt;div class="footnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+
+&lt;li id="fn1"&gt;
+&lt;p&gt;This is opposed to &amp;ldquo;stored&amp;rdquo; XSS attacks, where the attacker is storing
+the malicious payload somehow, i.e. in a vulnerable comment field of a
+message board.&amp;nbsp;&lt;a href="#fnref1" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+
+&lt;li id="fn2"&gt;
+&lt;p&gt;If you&amp;rsquo;re going to point out in the Hacker News comments that
+this blog itself gets an F from the Mozilla observatory, you&amp;rsquo;re right! On
+the other hand, it&amp;rsquo;s serving static content, and we are comfortable avoiding
+XSS protection and strict SSL enforcement for static content. That, and it&amp;rsquo;s
+served by github pages/cloudflare, so it&amp;rsquo;s hard to get very granular about
+the headers we want set.&amp;nbsp;&lt;a href="#fnref2" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+
+&lt;li id="fn3"&gt;
+&lt;p&gt;So if you&amp;rsquo;re especially paranoid, you might be thinking &amp;ldquo;what if I
+had some secret subdomain that I don&amp;rsquo;t want leaking for some reason?&amp;rdquo; You have
+DNS zone transfers disabled, so someone would have to know what they&amp;rsquo;re looking
+for to find it, but now that it&amp;rsquo;s in the preload list&amp;hellip;&amp;nbsp;&lt;a href="#fnref3" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+
+&lt;li id="fn4"&gt;
+&lt;p&gt;The &lt;code&gt;Referer&lt;/code&gt; header is
+the &lt;a href="http://www.hamsterdance.org/hamsterdance/"&gt;Hampster Dance&lt;/a&gt; in that it&amp;rsquo;s
+notorious for being misspelled. It would break the web to try to backport
+the correct spelling, so instead the W3C decided to go for the worst of both
+worlds and spell it correctly in &lt;code&gt;Referrer-Policy&lt;/code&gt;.&amp;nbsp;&lt;a href="#fnref4" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+
+&lt;/ol&gt;
+&lt;/div&gt;
+</content>
+  </entry>
   <entry>
     <title>Good News: Ubuntu Now Ships With unattended-upgrades On By Default!</title>
     <link rel="alternate" href="http://blog.appcanary.com/2016/unattended-upgrades.html"/>
@@ -74,7 +948,7 @@ linux systems (and even if you do!), we implore you: set up &lt;code&gt;unattend
 
 &lt;p&gt;Ubuntu enabling this by default is a great sign for the future.&lt;/p&gt;
 
-&lt;h2&gt;Not running Ubuntu 16.10?&lt;/h2&gt;
+&lt;h2 id="not-running-ubuntu-16-10"&gt;Not running Ubuntu 16.10?&lt;/h2&gt;
 
 &lt;p&gt;Here&amp;rsquo;s how to turn on unattended upgrades&lt;/p&gt;
 
@@ -145,7 +1019,7 @@ Ubuntu releases. This particular user has a good reason for running 16.10.&amp;n
 12th we were down to zero. We replaced it by adding another 5,700 lines of Ruby to our codebase. 
 &lt;a href="https://twitter.com/phillmv"&gt;Phill&lt;/a&gt; will be discussing why we left, and what we learned both here and &lt;a href="http://rubyconf.org/program#prop_19"&gt;at this year&amp;rsquo;s RubyConf&lt;/a&gt;. For now, I want to talk about what I&amp;rsquo;ll miss.&lt;/p&gt;
 
-&lt;h3&gt;1) The joy of Lisp&lt;/h3&gt;
+&lt;h3 id="1-the-joy-of-lisp"&gt;1) The joy of Lisp&lt;/h3&gt;
 
 &lt;p&gt;&lt;a href="https://xkcd.com/297/"&gt;&lt;img alt="XKCD #297" src="http://imgs.xkcd.com/comics/lisp_cycles.png" /&gt;&lt;/a&gt;&lt;/p&gt;
 
@@ -164,7 +1038,7 @@ and lisp might
 Clojure is a more than acceptable lisp. If we avoid the minefield of type
 systems, Clojure addresses the other 4 problems Steve Yegge discusses in the previous link&lt;sup id="fnref2"&gt;&lt;a href="#fn2" rel="footnote"&gt;2&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
 
-&lt;h3&gt;2) Immutability&lt;/h3&gt;
+&lt;h3 id="2-immutability"&gt;2) Immutability&lt;/h3&gt;
 
 &lt;p&gt;The core data structures in clojure are immutable. If I define &lt;code&gt;car&lt;/code&gt; to be &lt;code&gt;&amp;quot;a dirty van&amp;quot;&lt;/code&gt;,
 nothing can ever change that. I can name some other thing &lt;code&gt;car&lt;/code&gt; later, but
@@ -208,7 +1082,7 @@ to somewhere else?&lt;/p&gt;
 
 &lt;p&gt;Not having the choice to mutate state is as liberating as getting rid of your Facebook account.&lt;/p&gt;
 
-&lt;h3&gt;3) Data first programming&lt;/h3&gt;
+&lt;h3 id="3-data-first-programming"&gt;3) Data first programming&lt;/h3&gt;
 
 &lt;p&gt;Walking away from object-oriented languages is very freeing. &lt;/p&gt;
 
@@ -239,7 +1113,7 @@ functions).&lt;/p&gt;
 do this in any language; but I find Clojure draws me towards it, while OO
 languages push me away from it.&lt;/p&gt;
 
-&lt;h3&gt;4) Unit Testing&lt;/h3&gt;
+&lt;h3 id="4-unit-testing"&gt;4) Unit Testing&lt;/h3&gt;
 
 &lt;p&gt;The majority of your code is made up of pure functions. A pure function is one
 which always gives the same output for a given input &amp;mdash; doesn&amp;rsquo;t that sound
@@ -256,7 +1130,7 @@ whether your version of OpenSSL is vulnerable to HeartBleed. &lt;/p&gt;
 to make that bit of code a pure function that&amp;rsquo;s testable without setting
 up complicated state.&lt;/p&gt;
 
-&lt;h3&gt;5) Refactoring&lt;/h3&gt;
+&lt;h3 id="5-refactoring"&gt;5) Refactoring&lt;/h3&gt;
 
 &lt;p&gt;Here&amp;rsquo;s a typical clojure function&lt;/p&gt;
 &lt;pre class="highlight clojure"&gt;&lt;code&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;defn&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;foo&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="w"&gt;
@@ -325,7 +1199,7 @@ which takes advantage of Internet of Things devices like cameras and DVRs.&lt;/p
 &lt;p&gt;&lt;blockquote class="twitter-tweet" data-lang="en"&gt;&lt;p lang="en" dir="ltr"&gt;&amp;ldquo;Oh &amp;amp; also, evil sorcerers crippled our divination network Friday by getting millions of coffee makers &amp;amp; lightswitches to shout real loud&amp;rdquo; &lt;a href="https://t.co/OPhdOJLwc1"&gt;https://t.co/OPhdOJLwc1&lt;/a&gt;&lt;/p&gt;&amp;mdash; Max Gladstone (@maxgladstone) &lt;a href="https://twitter.com/maxgladstone/status/790890882543288320"&gt;October 25, 2016&lt;/a&gt;&lt;/blockquote&gt;
 &lt;script async src="//platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;&lt;/p&gt;
 
-&lt;h3&gt;So, what&amp;rsquo;s new about Mirai?&lt;/h3&gt;
+&lt;h3 id="so-what-39-s-new-about-mirai"&gt;So, what&amp;rsquo;s new about Mirai?&lt;/h3&gt;
 
 &lt;p&gt;I&amp;rsquo;ve written about
 1988&amp;rsquo;s &lt;a href="https://blog.appcanary.com/2016/tale-of-two-worms.html"&gt;Morris worm&lt;/a&gt;, 
@@ -353,7 +1227,7 @@ its buffer overflow and sendmail backdoor exploits failed. &lt;/p&gt;
 
 &lt;p&gt;Oh, and Morris&amp;rsquo; password dictionary was larger, too.&lt;/p&gt;
 
-&lt;h3&gt;How do we keep getting this wrong?&lt;/h3&gt;
+&lt;h3 id="how-do-we-keep-getting-this-wrong"&gt;How do we keep getting this wrong?&lt;/h3&gt;
 
 &lt;p&gt;Around the world, we spend $75 billion a year on information security.
 And for what, when we keep getting such basic things wrong? Suppose I waved a
@@ -367,7 +1241,7 @@ systems are going to get us all killed. Users are clicking phishing links like
 sheep. We&amp;rsquo;re all doomed. And somehow, it&amp;rsquo;s always the fault of shitty
 programmers or dumb users. Let&amp;rsquo;s all laugh at their fails.&lt;/p&gt;
 
-&lt;h3&gt;It&amp;rsquo;s all bullshit.&lt;/h3&gt;
+&lt;h3 id="it-39-s-all-bullshit"&gt;It&amp;rsquo;s all bullshit.&lt;/h3&gt;
 
 &lt;p&gt;We sell biometric authentication systems to people who need a good password
 manager. We sell live threat attribution intelligence with colorful maps to
@@ -392,7 +1266,7 @@ any progress in 28 years. Lots of money in it, though.&lt;/p&gt;
 
 &lt;hr&gt;
 
-&lt;h4&gt;Paying the Bills&lt;/h4&gt;
+&lt;h4 id="paying-the-bills"&gt;Paying the Bills&lt;/h4&gt;
 
 &lt;p&gt;Surprise, I also sell a security product! But I will say this: Appcanary
 isn&amp;rsquo;t going to protect you from shipping millions of internet-accessible
@@ -419,7 +1293,7 @@ discovered in a package you rely on.&lt;/p&gt;
     <link rel="alternate" href="http://blog.appcanary.com/2016/tale-of-two-worms.html"/>
     <id>http://blog.appcanary.com/2016/tale-of-two-worms.html</id>
     <published>2016-08-23T20:00:00-04:00</published>
-    <updated>2017-01-12T13:49:36-05:00</updated>
+    <updated>2017-01-13T09:15:13-05:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
@@ -455,7 +1329,7 @@ community for peer review, but unfortunately no credible researcher&lt;sup id="f
 
 &lt;p&gt;&lt;img alt="Morris Worm" src="/images/morris_worm.jpg" /&gt;&lt;/p&gt;
 
-&lt;h2&gt;The Morris Worm&lt;/h2&gt;
+&lt;h2 id="the-morris-worm"&gt;The Morris Worm&lt;/h2&gt;
 
 &lt;p&gt;It&amp;rsquo;s November 2nd 1988, almost exactly 25 years before badBIOS became a
 hashtag. Robert Tappan Morris, a graduate student at Cornell, executes some
@@ -483,13 +1357,13 @@ through Soviet air defenses in May 1987 and landed in Moscow.&lt;/p&gt;
 himself a stealth bomber by hand and then flown into Red Square,&amp;rdquo; he said.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3&gt;What did the Morris Worm actually do?&lt;/h3&gt;
+&lt;h3 id="what-did-the-morris-worm-actually-do"&gt;What did the Morris Worm actually do?&lt;/h3&gt;
 
 &lt;p&gt;The Morris Worm&lt;sup id="fnref4"&gt;&lt;a href="#fn4" rel="footnote"&gt;4&lt;/a&gt;&lt;/sup&gt; exploited three separate vulnerabilities. It guessed
 passwords for &lt;code&gt;rsh&lt;/code&gt;/&lt;code&gt;rexec&lt;/code&gt;, it exploited a debug-mode backdoor in sendmail and it used &amp;ldquo;one
 very neat trick&amp;rdquo;. I&amp;rsquo;ll go over each of these in detail, and you can find an archive (decompiled and commented) of the code for yourself &lt;a href="https://github.com/arialdomartini/morris-worm" target="_blank"&gt;here&lt;/a&gt;.&lt;/p&gt;
 
-&lt;h4&gt;1. Rsh and Rexec&lt;/h4&gt;
+&lt;h4 id="1-rsh-and-rexec"&gt;1. Rsh and Rexec&lt;/h4&gt;
 
 &lt;p&gt;&lt;code&gt;rsh&lt;/code&gt; and &lt;code&gt;rexec&lt;/code&gt; are remote shell protocols from the BSD era that are almost
 unused today (since supplanted by &lt;code&gt;ssh&lt;/code&gt;). &lt;code&gt;rsh&lt;/code&gt; can allow passwordless
@@ -507,7 +1381,7 @@ worm shipped with an optimized implementation of
 &lt;a href="https://en.wikipedia.org/wiki/Crypt_(Unix)" target="_blank"&gt;&lt;code&gt;crypt&lt;/code&gt;&lt;/a&gt; and a dictionary, and went to town. Once it cracked a password, it tried it against
 all the likely hosts it could find.&lt;/p&gt;
 
-&lt;h4&gt;2. Sendmail&amp;rsquo;s Backdoor&lt;/h4&gt;
+&lt;h4 id="2-sendmail-39-s-backdoor"&gt;2. Sendmail&amp;rsquo;s Backdoor&lt;/h4&gt;
 
 &lt;p&gt;In the absence of any friendly hosts, the Morris Worm would then exploit a
 backdoor in &lt;a href="https://en.wikipedia.org/wiki/Sendmail" target="_blank"&gt;Sendmail&lt;/a&gt;. You see, Sendmail had a &amp;ldquo;debug&amp;rdquo; mode that allowed anyone to route an
@@ -554,7 +1428,7 @@ Play:    paul@vixie.sf.ca.us     vixie!paul      +1 415 864 7013
 
 &lt;p&gt;The Internet was a polite place, indeed.&lt;/p&gt;
 
-&lt;h4&gt;3. One Very Neat Trick&lt;/h4&gt;
+&lt;h4 id="3-one-very-neat-trick"&gt;3. One Very Neat Trick&lt;/h4&gt;
 
 &lt;p&gt;The Very Neat Trick that Vixie was talking about is the now-standard
 &lt;a href="https://en.wikipedia.org/wiki/Buffer_overflow" target="_blank"&gt;stack buffer overflow&lt;/a&gt;. It&amp;rsquo;s
@@ -599,7 +1473,7 @@ of the &lt;code&gt;main&lt;/code&gt; function. This allowed Morris to overwrite 
 he sent over the network. The beginning of the buffer contained
 &lt;a href="https://en.wikipedia.org/wiki/Shellcode" target="_blank"&gt;shellcode&lt;/a&gt; that called &lt;code&gt;/bin/sh&lt;/code&gt;. Game over.&lt;/p&gt;
 
-&lt;h2&gt;Aftermath&lt;/h2&gt;
+&lt;h2 id="aftermath"&gt;Aftermath&lt;/h2&gt;
 
 &lt;p&gt;Robert Tappan Morris was convicted and sentenced to three years probation, 400
 hours of community service and a $10,050 fine (about $20,000 in today&amp;rsquo;s dollars)
@@ -621,7 +1495,7 @@ Distributed Systems Groups.&lt;/p&gt;
 
 &lt;hr&gt;
 
-&lt;h4&gt;Paying the Bills&lt;/h4&gt;
+&lt;h4 id="paying-the-bills"&gt;Paying the Bills&lt;/h4&gt;
 
 &lt;p&gt;We&amp;rsquo;re trying our best, but we&amp;rsquo;ll only be able to blog about a minuscule percentage of the world&amp;rsquo;s vulnerabilities. And starting with 1988 means we have a lot of catching up to do. How will you ever find about the ones that actually affect you?&lt;/p&gt;
 
@@ -705,19 +1579,19 @@ call here.&lt;/p&gt;
     <link rel="alternate" href="http://blog.appcanary.com/2016/making-appcanary-easier.html"/>
     <id>http://blog.appcanary.com/2016/making-appcanary-easier.html</id>
     <published>2016-07-13T20:00:00-04:00</published>
-    <updated>2017-01-12T13:49:36-05:00</updated>
+    <updated>2017-01-13T09:15:13-05:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
     <content type="html">&lt;p&gt;I&amp;rsquo;m excited to announce that we&amp;rsquo;ve added two features that make Appcanary a heck of a lot easier to use!&lt;/p&gt;
 
-&lt;h2&gt;Add monitors by uploading a file&lt;/h2&gt;
+&lt;h2 id="add-monitors-by-uploading-a-file"&gt;Add monitors by uploading a file&lt;/h2&gt;
 
 &lt;p&gt;Our Monitor API is great if you want to track a set of Linux packages or your Gemfile. We give you a dashboard showing which packages are vulnerable, and email you whenever new vulnerabilities that affect you come out. However, there&amp;rsquo;s always a bunch of setup to get a new API going.&lt;/p&gt;
 
 &lt;p&gt;With that in mind, we made the interface a lot more user friendly! You can now upload a file to watch directly through the website. Just go to &lt;a href="https://appcanary.com/monitors/new"&gt;add monitors&lt;/a&gt; to be able to upload a file directly. Monitors support Ruby&amp;rsquo;s &lt;code&gt;Gemfile.lock&lt;/code&gt;, &lt;code&gt;/var/lib/dpkg/status&lt;/code&gt; for Ubuntu and Debian, and the output of &lt;code&gt;rpm -qa&lt;/code&gt; for Centos and Amazon Linux!&lt;/p&gt;
 
-&lt;h2&gt;Automatically upgrade vulnerable packages&lt;/h2&gt;
+&lt;h2 id="automatically-upgrade-vulnerable-packages"&gt;Automatically upgrade vulnerable packages&lt;/h2&gt;
 
 &lt;p&gt;A few of our customers told us that knowing about vulnerabilities is nice, but you know what would be &lt;em&gt;great&lt;/em&gt;? If we could somehow &lt;em&gt;patch&lt;/em&gt; them automatically. We thought about it and said, sure, why not!&lt;/p&gt;
 
@@ -735,132 +1609,13 @@ call here.&lt;/p&gt;
 
 &lt;p&gt;Now you can manage vulnerabilities, learn about new ones that affect you, and apply patches, all through Appcanary!&lt;/p&gt;
 
-&lt;h4&gt;If you haven&amp;rsquo;t tried us yet&lt;/h4&gt;
+&lt;h4 id="if-you-haven-39-t-tried-us-yet"&gt;If you haven&amp;rsquo;t tried us yet&lt;/h4&gt;
 
 &lt;p&gt;Stay on top of the security vulnerabilities that affect you, today.&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="https://appcanary.com/?utm_source=blog&amp;amp;utm_medium=web&amp;amp;utm_campaign=making_easier"&gt;Appcanary&lt;/a&gt;, monitors your apps and servers, and notifies you whenever a new vulnerability is discovered in a package you rely on. And now it will help you patch vulnerable packages as well.&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="https://appcanary.com/sign_up?utm_source=blog&amp;amp;utm_medium=web&amp;amp;utm_campaign=making_easier"&gt;Sign up&lt;/a&gt; today!&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Vulnerabilities I Have Known and Loved #1: Symantec's Bad Week</title>
-    <link rel="alternate" href="http://blog.appcanary.com/2016/vikhal-symantec.html"/>
-    <id>http://blog.appcanary.com/2016/vikhal-symantec.html</id>
-    <published>2016-07-06T20:00:00-04:00</published>
-    <updated>2016-08-19T13:23:10-04:00</updated>
-    <author>
-      <name>Max Veytsman</name>
-    </author>
-    <content type="html">&lt;p&gt;&lt;strong&gt;tl;dr:&lt;/strong&gt; If you use software with &amp;ldquo;Symantec&amp;rdquo; or &amp;ldquo;Norton&amp;rdquo; somewhere in its name, &lt;strong&gt;stop what you&amp;rsquo;re doing and &lt;a href="https://www.symantec.com/support-center/upgrades"&gt;upgrade&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;Back in my security consulting days, a mentor taught me One Weird Trick to
-increase conversions on your phishing campaign.  It goes like this: set up an email server, get as many employee addresses you can find, and spoof a mass message that reads:&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Hello this is your boss. &lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;m going to fire someone next week and you get to vote on who! To get your arch-nemisis fired, please log into this website that looks exactly like our company portal, but has one character in the domain name mispelled. &lt;/p&gt;
-
-&lt;p&gt;Thanks, Your Boss.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;Then you sit back and count how many people fell for it.&lt;/p&gt;
-
-&lt;p&gt;The executive who hired you is happy because they get to demonstrate the value of increasing their
-security budget. The consultancy you work for is happy, because they get to upsell a bunch of &amp;ldquo;security awareness
-training&amp;rdquo;. &lt;/p&gt;
-
-&lt;p&gt;Soon, you&amp;rsquo;ll be spending three days telling your victims about the
-importance of that little green lock in their browser&amp;rsquo;s address bar (but only
-when it&amp;rsquo;s in the right place!) and that they should never ever click on links,
-never open attachments, and if at all possible, stop using computers altogether. Everybody wins.&lt;/p&gt;
-
-&lt;p&gt;Obviously, everyone at this stage wants to increase the conversion rate&lt;sup id="fnref1"&gt;&lt;a href="#fn1" rel="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt; of these phishing emails. This is where The One Weird Trick comes in: after you send out your first campaign, you craft another one. Before you know it, everyone on your list receives a helpful tip from the IT Helpdesk:&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Hi, &lt;/p&gt;
-
-&lt;p&gt;We&amp;rsquo;ve heard reports of a phishing campaign being waged against us. Don&amp;rsquo;t open those emails! It&amp;rsquo;s critically important that you reset your password to protect against those evil hackers who tried to phish us. &lt;/p&gt;
-
-&lt;p&gt;Click here to do it!&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;It turns out that round two gets &lt;em&gt;way&lt;/em&gt; more clicks than round one. Most people will figure out that email #1 is a little fishy. Email #2 manages to reaffirm that, and so they dutifully click, like lambs to slaughter.&lt;/p&gt;
-
-&lt;p&gt;This is the phishing equivalent of the Double Tap. No, not the one from &lt;a href="https://www.youtube.com/watch?v=w4sWxsrEFFs"&gt;Zombieland&lt;/a&gt;. The Double Tap I&amp;rsquo;m talking about is a controversial &lt;a href="http://www.businessinsider.com/drone-double-tap-first-responders-2012-9"&gt;military technique&lt;/a&gt; where after attacking a target, you follow up by sending another missile at the first responders. You do some damage, and then attack the response to that damage.&lt;/p&gt;
-
-&lt;h3&gt;Symantec is Having a Bad Week&lt;/h3&gt;
-
-&lt;p&gt;Last week &lt;a href="https://twitter.com/taviso"&gt;Tavis Ormandy&lt;/a&gt; dropped 8 vulns against every single Symantec/Norton antivirus product. Judging by &lt;a href="http://fortune.com/2016/07/02/symantec-security-irony/"&gt;the press&lt;/a&gt;, things are &lt;a href="http://www.pcworld.com/article/3089463/security/wormable-flaws-in-symantec-products-expose-millions-of-computers-to-hacking.html"&gt;not looking good&lt;/a&gt; for them.&lt;/p&gt;
-
-&lt;p&gt;You can find a writeup up on the &lt;a href="http://googleprojectzero.blogspot.ca/2016/06/how-to-compromise-enterprise-endpoint.html"&gt;Google Project Zero
-blog&lt;/a&gt;, and the issues for all 8 vulnerabilities can &lt;a href="https://bugs.chromium.org/p/project-zero/issues/list?can=1&amp;amp;q=label%3AVendor-Symantec"&gt;be found here&lt;/a&gt;. They&amp;rsquo;re all remotely exploitable,&lt;sup id="fnref2"&gt;&lt;a href="#fn2" rel="footnote"&gt;2&lt;/a&gt;&lt;/sup&gt; and they all should give an attacker remote code execution as root/SYSTEM (and in ring 0 for one of them to boot!)&lt;/p&gt;
-
-&lt;p&gt;If you&amp;rsquo;re using a Symantec product I can&amp;rsquo;t stress this enough: &lt;strong&gt;stop what you&amp;rsquo;re doing and &lt;a href="https://www.symantec.com/support-center/upgrades"&gt;upgrade&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;These vulnerabilities reminded me of phishing and the Double Tap for two reasons. First, every one of these vulns can be exploited by just sending an email. Since the product is an antivirus, so it&amp;rsquo;s going to scan every file that touches your disk and every email you get for viruses. You don&amp;rsquo;t have to get your target to click a link or even open the message you sent &amp;mdash; Symantec will happily try to parse every email you receive. &lt;/p&gt;
-
-&lt;p&gt;Second, the &lt;a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=823&amp;amp;can=1&amp;amp;q=label%3AVendor-Symantec"&gt;stack overflow in Symantec&amp;rsquo;s PowerPoint parser&lt;/a&gt; depends on a Double Tap-like attack! This parser is used to extract metadata and macros from PowerPoint decks (and presumably scan them for known malware) by exposing an I/O abstraction layer &amp;mdash; which it then caches for performance. Tavis found that he could get that cache into a misaligned state, which resulted in the stack buffer overflow. &lt;/p&gt;
-
-&lt;p&gt;This vulnerable codepath is in something called “Bloodhound Heuristics”, which Symantec promotes as a more advanced set of malware detection checks. Since they&amp;rsquo;re not always run, you&amp;rsquo;d think that the vulnerability wouldn&amp;rsquo;t be very exploitable. And yet, it can be targetted every time! Under the default configuration, the system dynamically decides which set of checks to run. All Tavis had to do was try a bunch of known PowerPoint malware, see which one triggered the automatic mode to turn on &amp;ldquo;Bloodhound Heuristics,&amp;rdquo; and put his payload into them.&lt;/p&gt;
-
-&lt;p&gt;The exploit pretends to be a certain kind of known malware in order to trigger some special aggressive checks, which are the exploit&amp;rsquo;s true target. The Double Tap!&lt;/p&gt;
-
-&lt;h3&gt;Vulnerability Management&lt;/h3&gt;
-
-&lt;p&gt;While the above vulnerability is pretty cool, the Symantec bugs that are most interesting to us at Appcanary are &lt;a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=810"&gt;CVE-2016-2207&lt;/a&gt; and &lt;a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=816"&gt;CVE-2016-2211&lt;/a&gt;. &lt;/p&gt;
-
-&lt;p&gt;Symantec was shipping its product with out of date versions of &lt;a href="http://www.cabextract.org.uk/libmspack/"&gt;libmspack&lt;/a&gt; and &lt;a href="http://www.rarlab.com/rar_add.htm"&gt;unrarsrc&lt;/a&gt;. Out of date versions that have dozens of known vulnerabilities with public exploits! All Tavis had to do was download public exploits for these known vulnerabilities, and he had an attack against Symantec.&lt;/p&gt;
-
-&lt;p&gt;Ironically, Symantec sells a product called Enterprise Vulnerability Management! This is a hard problem for everyone. At Appcanary, we&amp;rsquo;re working on solving it.&lt;/p&gt;
-
-&lt;h3&gt;P.S.&lt;/h3&gt;
-
-&lt;p&gt;&lt;link href="//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css" rel="stylesheet" type="text/css"&gt;
-&lt;style type="text/css"&gt;
- #mc&lt;em&gt;embed&lt;/em&gt;signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; width:100%;}
- /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
-      We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
-&lt;/style&gt;
-&lt;div id="mc_embed_signup"&gt;
-&lt;form action="//appcanary.us10.list-manage.com/subscribe/post?u=303b378f377508300c0b5469a&amp;amp;id=dc58e8f56f" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate&gt;
-&lt;div id="mc_embed_signup_scroll"&gt;
-&lt;label for="mce-EMAIL"&gt;Liked this post? Subscribe to our newsletter for more!&lt;/label&gt;
-&lt;input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required&gt;
-&lt;div style="position: absolute; left: -5000px;" aria-hidden="true"&gt;&lt;input type="text" name="b_303b378f377508300c0b5469a_dc58e8f56f" tabindex="-1" value=""&gt;&lt;/div&gt;
-&lt;div class="clear"&gt;&lt;input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"&gt;&lt;/div&gt;
-&lt;/div&gt;
-&lt;/form&gt;
-&lt;/div&gt;&lt;/p&gt;
-
-&lt;p&gt;Do you have suggestions for vulnerabilities you&amp;rsquo;d like me to write about? You can let me know at &lt;a href="mailto:max@appcanary.com"&gt;max@appcanary.com&lt;/a&gt;.&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h4&gt;Paying the Bills&lt;/h4&gt;
-
-&lt;p&gt;One quarter of the critical vulnerabilities found in Symantec&amp;rsquo;s products last week were there because they relied on out-of-date libraries with known security holes.&lt;/p&gt;
-
-&lt;p&gt;Our product, &lt;a href="https://appcanary.com/?utm_source=blog&amp;amp;utm_medium=web&amp;amp;utm_campaign=symantec"&gt;Appcanary&lt;/a&gt;, monitors your apps and servers, and notifies you whenever a new vulnerability is discovered in a package you rely on. &lt;/p&gt;
-
-&lt;p&gt;&lt;a href="https://appcanary.com/sign_up?utm_source=blog&amp;amp;utm_medium=web&amp;amp;utm_campaign=symantec"&gt;Sign up&lt;/a&gt; today!&lt;/p&gt;
-
-&lt;div class="footnotes"&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-
-&lt;li id="fn1"&gt;
-&lt;p&gt;You know, it&amp;rsquo;s interesting that before I became the CEO of a startup, the only time I thought about &amp;ldquo;conversion rates&amp;rdquo; of emails in my career was when I was involved in phishing campaigns.&amp;nbsp;&lt;a href="#fnref1" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-
-&lt;li id="fn2"&gt;
-&lt;p&gt;I&amp;rsquo;m going to well-actually myself here so you don&amp;rsquo;t have to. Tavis gives a clear path to exploit for 6 of the 8. Of the two that are left, &lt;a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=821"&gt;one&lt;/a&gt; is a lack of bounds checking on an array index, and the &lt;a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=819"&gt;other&lt;/a&gt; is an integer overflow bug. I&amp;rsquo;m going to go out on a limb and say I think both can lead to code execution. I can&amp;rsquo;t fault the researcher for not going further though; after you find the first 6 remote code executions, you stop feeling the need to keep proving the point&amp;hellip;&amp;nbsp;&lt;a href="#fnref2" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-
-&lt;/ol&gt;
-&lt;/div&gt;
 </content>
   </entry>
 </feed>
