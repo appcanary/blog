@@ -144,7 +144,7 @@ redirect '2016/vikhal-morris.html', to: '/2016/tale-of-two-worms.html'
 # Middleman-Syntax - https://github.com/middleman/middleman-syntax
 set :haml, { ugly: true }
 set :markdown_engine, :redcarpet
-set :markdown, fenced_code_blocks: true, smartypants: true, footnotes: true, tables: true
+set :markdown, fenced_code_blocks: true, smartypants: true, footnotes: true, tables: true, with_toc_data: true
 activate :syntax, line_numbers: false
 
 # Methods defined in the helpers block are available in templates
@@ -176,3 +176,12 @@ configure :build do
   ignore 'stylesheets/vendor/*'
 end
 
+helpers do
+  # thanks, https://forum.middlemanapp.com/t/generate-inpage-navigation-nice-api-documentation/1002/2
+  def table_of_contents(resource)
+    content = File.read(resource.source_file)
+    toc_renderer = Redcarpet::Render::HTML_TOC.new
+    markdown = Redcarpet::Markdown.new(toc_renderer, nesting_level: 2) # nesting_level is optional
+    markdown.render(content)
+  end
+end
