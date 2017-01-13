@@ -1,10 +1,10 @@
 ---
 title: Everything you need to know about HTTP security headers 
-date: 2016-12-31
+date: 2017-01-13
 author: mveytsman
 layout: post
-published: false
-
+published: true
+tags: Security, Programming, Web
 ---
 
 Some physicists 28 years ago needed a way to easily share experimental data and
@@ -16,8 +16,8 @@ Hypertext Transfer Protocol.
 What can be attacked must be defended, and since tradition requires all security
 features to be a bolted-on afterthought, things… got a little complicated. 
 
-This article explains what secure HTTP headers are, and how to implement these
-headers in Rails, Django, Express.js, Go, Nginx, and Apache. 
+This article explains what secure headers are and how to implement these headers
+in Rails, Django, Express.js, Go, Nginx, and Apache.
 
 Please note that some
 headers may be best configured in on your HTTP servers, while others should be
@@ -29,11 +29,11 @@ set on the application layer. Use your own discretion here. You can test how wel
 
 ## X-XSS-Protection
 
-~~~
+```
 X-XSS-Protection: 0;
 X-XSS-Protection: 1;
 X-XSS-Protection: 1; mode=block
-~~~
+```
 
 ### Why?
 
@@ -59,7 +59,7 @@ Yes. Set `X-XSS-Protection: 1; mode=block`. The "filter bad scripts" mechanism i
 |---|---|
 | Rails 4 and 5 | On by default |
 | Django | `SECURE_BROWSER_XSS_FILTER = True` |
-| Express.js   | Use [helmet](https://www.npmjs.com/package/helmet) |
+| Express.js   | Use [helmet](https://helmetjs.github.io/docs/xss-filter/) |
 | Go | Use [unrolled/secure](https://github.com/unrolled/secure) |
 | Nginx | `add_header X-XSS-Protection "1; mode=block";` |
 | Apache | `Header always set X-XSS-Protection "1; mode=block"` |
@@ -69,12 +69,11 @@ Yes. Set `X-XSS-Protection: 1; mode=block`. The "filter bad scripts" mechanism i
 [X-XSS-Protection - MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection)
 
 ---
-
 ## Content Security Policy
 
-~~~
+```
 Content-Security-Policy: <policy>
-~~~
+```
 
 ### Why?
 
@@ -91,7 +90,13 @@ signature.
 
 ### Should I use it?
 
-Yes. It won't solve every issue, but it significantly reduces the available XSS attack surface. 
+Yes. It won't prevent all XSS attacks, but it's a significant mitigation against
+their impact, and an important aspect of defense-in-depth. That said, it can be
+hard to implement. If you're an intrepid reader and went ahead and checked the
+headers [appcanary.com](https://appcanary.com) returns[^blogheaders], you'll see that we don't
+have CSP implemented yet. There are some rails development plugins we're using
+that are holding us back from a CSP implementation we feel will have an actually security impact.
+We're working on it, and will write about it in the next instalment!
 
 ### How?
 
@@ -111,15 +116,20 @@ is [here](https://csp.withgoogle.com/docs/adopting-csp.html).
 | Nginx | `add_header Content-Security-Policy "<policy>";` |
 | Apache | `Header always set Content-Security-Policy "<policy>"` |
 
----
+### I want to know more
 
+- [Content-Security-Policy - MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy)
+- [CSP Quick Reference Guide](https://content-security-policy.com/)
+- [Google's CSP Guide](https://csp.withgoogle.com/docs/index.html)
+
+---
 ## HTTP Strict Transport Security (HSTS)
 
-~~~
+```
 Strict-Transport-Security: max-age=<expire-time>
 Strict-Transport-Security: max-age=<expire-time>; includeSubDomains
 Strict-Transport-Security: max-age=<expire-time>; preload
-~~~
+```
 
 ### Why?
 
@@ -180,7 +190,7 @@ The two options are
 | Rails 4 | `config.force_ssl = true`<br/>Does not include subdomains by default. To set it:<br/>`config.ssl_options = { hsts: { subdomains: true } }` |
 | Rails 5 | `config.force_ssl = true` |
 | Django | `SECURE_HSTS_SECONDS = 31536000` <br/> `SECURE_HSTS_INCLUDE_SUBDOMAINS = True` |
-| Express.js   | Use [helmet](https://www.npmjs.com/package/helmet) |
+| Express.js   | Use [helmet](https://helmetjs.github.io/docs/hsts/)                                     |
 | Go | Use [unrolled/secure](https://github.com/unrolled/secure) |
 | Nginx | `add_header Strict-Transport-Security "max-age=31536000; includeSubdomains; ";` |
 | Apache | `Header always set Strict-Transport-Security "max-age=31536000; includeSubdomains;` |
@@ -194,11 +204,11 @@ The two options are
 ---
 ## HTTP Public Key Pinning (HPKP)
 
-~~~
+```
 Public-Key-Pins: pin-sha256=<base64==>; max-age=<expireTime>;
 Public-Key-Pins: pin-sha256=<base64==>; max-age=<expireTime>; includeSubDomains
 Public-Key-Pins: pin-sha256=<base64==>; max-age=<expireTime>; report-uri=<reportURI>
-~~~
+```
 
 ### Why?
 
@@ -283,11 +293,11 @@ for how to do it.
 
 ## X-Frame-Options
 
-~~~
+```
 X-Frame-Options: DENY
 X-Frame-Options: SAMEORIGIN
 X-Frame-Options: ALLOW-FROM https://example.com/
-~~~
+```
 
 ### Why?
 
@@ -327,10 +337,11 @@ page? ¯\\\_(ツ)\_/¯.
 |--- |--- |
 | Rails 4 and 5 | `SAMEORIGIN` is set by default.<br/><br/>To set `DENY`:<br/>`config.action_dispatch.default_headers['X-Frame-Options'] = "DENY"` |
 | Django | `MIDDLEWARE = [ ... 'django.middleware.clickjacking.XFrameOptionsMiddleware', ... ]`<br/> This defaults to `SAMORIGIN`.<br/><br/>To set `DENY`: `X_FRAME_OPTIONS = 'DENY'` |
-| Express.js   | `cookie: { secure: true, httpOnly: true, sameSite: true }` |
-| Go | `http.Cookie{Name: "foo", Value: "bar", HttpOnly: true, Secure: true}` <br/><br/> For SameSite, see this [issue](https://github.com/golang/go/issues/15867).|
-| Nginx | You probably won't set session cookies in Nginx |
-| Apache | You probably won't set session cookies in Apache |
+| Express.js | Use [helmet](https://helmetjs.github.io/docs/frameguard/)|
+| Go | Use [unrolled/secure](https://github.com/unrolled/secure) |
+| Nginx | `add_header Referrer-Policy "deny";`        |
+| Apache | `Header always set Referrer-Policy "deny"`        |
+
 
 ### I want to know more
 - [RFC 7034](https://tools.ietf.org/html/rfc7034)
@@ -340,9 +351,9 @@ page? ¯\\\_(ツ)\_/¯.
 
 ## X-Content-Type-Options
 
-~~~
+```
 X-Content-Type-Options: nosniff;
-~~~
+```
 
 ### Why?
 
@@ -379,7 +390,7 @@ Yes, just make sure to set your content types correctly.
 |--- |--- |
 | Rails 4 and 5 | On by default |
 | Django | `SECURE_CONTENT_TYPE_NOSNIFF = True` |
-| Express.js   | Use [helmet](https://www.npmjs.com/package/helmet) |
+| Express.js   | Use [helmet](https://helmetjs.github.io/docs/dont-sniff-mimetype/)|
 | Go | Use [unrolled/secure](https://github.com/unrolled/secure) |
 | Nginx | `add_header X-Content-Type-Options nosniff;` |
 | Apache | `Header always set X-Content-Type-Options nosniff` |
@@ -388,7 +399,7 @@ Yes, just make sure to set your content types correctly.
 
 ## Referrer-Policy
 
-~~~
+```
 Referrer-Policy: "no-referrer" 
 Referrer-Policy: "no-referrer-when-downgrade" 
 Referrer-Policy: "origin" 
@@ -397,7 +408,7 @@ Referrer-Policy: "same-origin"
 Referrer-Policy: "strict-origin" 
 Referrer-Policy: "strict-origin-when-cross-origin" 
 Referrer-Policy: "unsafe-url"
-~~~
+```
 
 ### Why?
 
@@ -423,9 +434,9 @@ Set `Referrer-Policy: "no-referrer"`
 | Platform | What do I do? |
 | --- | --- |
 | Rails 4 and 5 | Use [secureheaders](https://github.com/twitter/secureheaders)
-| Django | Custom middleware |
+| Django | Write custom middleware |
 | Express.js | Use [helmet](https://helmetjs.github.io/docs/referrer-policy/) |
-| Go | Custom middleware |
+| Go | Write custom middleware |
 | Nginx | `add_header Referrer-Policy "no-referrer";` |
 | Apache | `Header always set Referrer-Policy "no-referrer"` |
 
@@ -438,9 +449,9 @@ Set `Referrer-Policy: "no-referrer"`
 
 ## Cookie Options
 
-~~~
+```
 Set-Cookie: <key>=<value>; Expires=<expiryDate>; Secure; HttpOnly; SameSite=strict
-~~~
+```
 
 ### Why?
 
@@ -481,10 +492,10 @@ Chrome and Opera, so you may want to ignore them for now.
 | ---| --- |
 | Rails 4 and 5 | Secure and HttpOnly enabled by default. For SameSite, use [secureheaders](https://github.com/twitter/secureheaders) |
 | Django | Session cookies are HttpOnly by default. To set secure: `SESSION_COOKIE_SECURE = True`. <br/><br/> Not sure about SameSite. |
-| Express.js | Use [helmet](https://helmetjs.github.io/docs/referrer-policy/) |
-| Go | Custom middleware |
-| Nginx | `add_header Referrer-Policy "no-referrer";` |
-| Apache | `Header always set Referrer-Policy "no-referrer"` |
+| Express.js   | `cookie: { secure: true, httpOnly: true, sameSite: true }` |
+| Go | `http.Cookie{Name: "foo", Value: "bar", HttpOnly: true, Secure: true}` <br/><br/> For SameSite, see this [issue](https://github.com/golang/go/issues/15867).|
+| Nginx | You probably won't set session cookies in Nginx |
+| Apache | You probably won't set session cookies in Apache |
 
 ---
 
@@ -493,6 +504,13 @@ Thanks to [@wolever](https://twitter.com/wolever) for python advice
 [^xss]: This is opposed to "stored" XSS attacks, where the attacker is storing
     the malicious payload somehow, i.e. in a vulnerable comment field of a
     message board.
+
+[^blogheaders]: If you're going to point out in the Hacker News comments that
+    this blog itself gets an F from the mozilla observatory, you're right! On
+    the other hand, it's serving static content, and we are comfortable avoiding
+    XSS protection and strict SSL enforcement for static content. That, and it's
+    served by github pages/cloudflare, so it's hard to get very granular about
+    the headers we want set.
 
 [^filters]: So if you're especially paranoid, you might be thinking "what if I
   had some secret subdomain that I don't want leaking for some reason?" You have
