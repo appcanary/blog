@@ -4,8 +4,8 @@ date: 2017-01-13
 author: mveytsman
 layout: post
 published: true
-tags: Security, Programming, Web
 thumbnail: images/canary_ledger.png
+tags: Security, Programming, Web
 ---
 
 Some physicists 28 years ago needed a way to easily share experimental data and
@@ -96,7 +96,7 @@ their impact, and an important aspect of defense-in-depth. That said, it can be
 hard to implement. If you're an intrepid reader and went ahead and checked the
 headers [appcanary.com](https://appcanary.com) returns[^blogheaders], you'll see that we don't
 have CSP implemented yet. There are some rails development plugins we're using
-that are holding us back from a CSP implementation we feel will have an actually security impact.
+that are holding us back from a CSP implementation that will have an actually security impact.
 We're working on it, and will write about it in the next instalment!
 
 ### How?
@@ -507,7 +507,7 @@ Thanks to [@wolever](https://twitter.com/wolever) for python advice
     message board.
 
 [^blogheaders]: If you're going to point out in the Hacker News comments that
-    this blog itself gets an F from the mozilla observatory, you're right! On
+    this blog itself gets an F from the Mozilla observatory, you're right! On
     the other hand, it's serving static content, and we are comfortable avoiding
     XSS protection and strict SSL enforcement for static content. That, and it's
     served by github pages/cloudflare, so it's hard to get very granular about
