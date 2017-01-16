@@ -84,7 +84,7 @@
 </span>
 <span class='author-stats'>
 <i class='icon-stats'></i>
-14 posts
+15 posts
 </span>
 </div>
 </section>
@@ -97,6 +97,56 @@
 </nav>
 
 </div>
+<article class='post'>
+<header class='post-header'>
+<h1 class='post-title'><a href="../../../2016/making-appcanary-easier.html">Making Appcanary easier to use</a></h1>
+<section class='post-meta'>
+</section>
+</header>
+<section class='post-content'>
+<p>I&rsquo;m excited to announce that we&rsquo;ve added two features that make Appcanary a heck of a lot easier to use!</p>
+
+<h2 id="add-monitors-by-uploading-a-file">Add monitors by uploading a file</h2>
+
+<p>Our Monitor API is great if you want to track a set of Linux packages or your Gemfile. We give you a dashboard showing which packages are vulnerable, and email you whenever new vulnerabilities that affect you come out. However, there&rsquo;s always a bunch of setup to get a new API going.</p>
+
+<p>With that in mind, we made the interface a lot more user friendly! You can now upload a file to watch directly through the website. Just go to <a href="https://appcanary.com/monitors/new">add monitors</a> to be able to upload a file directly. Monitors support Ruby&rsquo;s <code>Gemfile.lock</code>, <code>/var/lib/dpkg/status</code> for Ubuntu and Debian, and the output of <code>rpm -qa</code> for Centos and Amazon Linux!</p>
+
+<h2 id="automatically-upgrade-vulnerable-packages">Automatically upgrade vulnerable packages</h2>
+
+<p>A few of our customers told us that knowing about vulnerabilities is nice, but you know what would be <em>great</em>? If we could somehow <em>patch</em> them automatically. We thought about it and said, sure, why not!</p>
+
+<p>If you have the Appcanary <a href="(https://appcanary.com/servers/new)">agent</a> installed on an Ubuntu server, and you&rsquo;re running the latest version, you can run </p>
+<pre class="highlight plaintext"><code>appcanary upgrade
+</code></pre>
+
+<p>in order to install updates for any packages we know to be vulnerable.</p>
+
+<p>You can also run</p>
+<pre class="highlight plaintext"><code>appcanary upgrade -dry-run
+</code></pre>
+
+<p>in order to see what the agent will do, without it actually touching your system. </p>
+
+<p>Now you can manage vulnerabilities, learn about new ones that affect you, and apply patches, all through Appcanary!</p>
+
+<h4 id="if-you-haven-39-t-tried-us-yet">If you haven&rsquo;t tried us yet</h4>
+
+<p>Stay on top of the security vulnerabilities that affect you, today.</p>
+
+<p><a href="https://appcanary.com/?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=making_easier">Appcanary</a>, monitors your apps and servers, and notifies you whenever a new vulnerability is discovered in a package you rely on. And now it will help you patch vulnerable packages as well.</p>
+
+<p><a href="https://appcanary.com/sign_up?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=making_easier">Sign up</a> today!</p>
+
+</section>
+<footer class='post-meta'>
+<a href='/author/max-veytsman.html'>Max Veytsman</a>
+on <a href='/tag/announcements.html'>Announcements</a>, <a href='/tag/product.html'>Product</a>
+<time class='post-date' datetime='2016-07-14'>
+14 July 2016
+</time>
+</footer>
+</article>
 <article class='post'>
 <header class='post-header'>
 <h1 class='post-title'><a href="../../../2016/vikhal-symantec.html">Vulnerabilities I Have Known and Loved #1: Symantec's Bad Week</a></h1>
@@ -597,30 +647,6 @@ on <a href='/tag/announcements.html'>Announcements</a>, <a href='/tag/product.ht
 on <a href='/tag/announcements.html'>Announcements</a>, <a href='/tag/product.html'>Product</a>
 <time class='post-date' datetime='2016-03-07'>
 07 March 2016
-</time>
-</footer>
-</article>
-<article class='post'>
-<header class='post-header'>
-<h1 class='post-title'><a href="../../../2016/datomic-intro-talk.html">A Gentle Intro to Datomic</a></h1>
-<section class='post-meta'>
-</section>
-</header>
-<section class='post-content'>
-<p>We use <a href="http://www.datomic.com/">Datomic</a> as one of our datastores, and have been really enjoying it so far.</p>
-
-<p>I gave a talk to my local <a href="http://www.meetup.com/Clojure-Toronto/">Clojure meetup</a> that provided a gentle introduction to Datomic and highlighted some cool features.</p>
-
-<p>The slides are below:</p>
-
-<script async="" class="speakerdeck-embed" data-id="dd426e5c924f44eb9050c554137ae030" data-ratio="1.77777777777778" src="//speakerdeck.com/assets/embed.js"></script>
-
-</section>
-<footer class='post-meta'>
-<a href='/author/max-veytsman.html'>Max Veytsman</a>
-on <a href='/tag/clojure.html'>Clojure</a>, <a href='/tag/datomic.html'>Datomic</a>, <a href='/tag/programming.html'>Programming</a>, <a href='/tag/talks.html'>Talks</a>
-<time class='post-date' datetime='2016-02-09'>
-09 February 2016
 </time>
 </footer>
 </article>

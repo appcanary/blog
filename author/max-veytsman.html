@@ -84,7 +84,7 @@
 </span>
 <span class='author-stats'>
 <i class='icon-stats'></i>
-14 posts
+15 posts
 </span>
 </div>
 </section>
@@ -96,6 +96,60 @@
 </nav>
 
 </div>
+<article class='post'>
+<header class='post-header'>
+<h1 class='post-title'><a href="../2017/new-year-new-appcanary.html">New Year, New Appcanary Features</a></h1>
+<section class='post-meta'>
+</section>
+</header>
+<section class='post-content'>
+<p>We&rsquo;ve been hard at work the past few months on lots of features touching every aspect of our product, and to ring in the new year, we&rsquo;re going to announce them all at once.</p>
+
+<h2 id="search-our-vulnerabilities">Search our vulnerabilities</h2>
+
+<p>You can now browse and search every vulnerability Appcanary knows about! It&rsquo;s pretty snazzy:</p>
+
+<p><img alt="browse our vulnerabilities" src="../images/vuln_browse.png" /></p>
+
+<h2 id="automatically-upgrade-packages">Automatically upgrade packages</h2>
+
+<p>We&rsquo;ve had this feature for Ubuntu, and now we&rsquo;re adding it for CentOS.</p>
+
+<p>If you have the appcanary agent installed, you can run <code>appcanary upgrade</code>, and
+we&rsquo;ll automatically upgrade all of your vulnerable packages to the lowest
+version that fixes all the vulnerabilities we know about.</p>
+
+<h2 id="resolve-vulnerabilities">Resolve vulnerabilities</h2>
+
+<p>There&rsquo;s now a &ldquo;marked resolved&rdquo; button that lets us know that you don&rsquo;t want to be notified about a vulnerability. This is used if a vulnerability doesn&rsquo;t affect you, or if you are accepting the risk based on some other mitigation&rsquo;s (i.e. you&rsquo;re not using the vulnerable feature of the package, the port in question is blocked by a firewall, etc). We give you the opportunity to record your reasoning and provide a full audit trail of every vulnerability you mark as resolved:</p>
+
+<p><img alt="audit log" src="../images/audit_log.png" /></p>
+
+<h2 id="brand-new-dashboard">Brand new dashboard</h2>
+
+<p>We just pushed a brand new UX for our dashboard. You can sort and search and sort all of your servers and monitors. Check it <a href="https://appcanary.com/dashboard">out</a>.</p>
+
+<p><img alt="new dashboard" src="../images/new_dashboard.png" /></p>
+
+<h2 id="the-appcanary-rubygem">The Appcanary rubygem</h2>
+
+<p>We released the <a href="https://rubygems.org/gems/appcanary">Appcanary gem</a>. This gives us tighter integration with ruby projects, you can either check your ruby project for vulnerabilities as a one-time check, or set up a monitor with notifications. You can see the source <a href="https://github.com/appcanary/appcanary.rb">here</a>.</p>
+
+<p>Our gem is still very early, so we very much want your feedback. Please let us know what you think at <a href="mailto:hello@appcanary.com">hello@appcanary.com</a></p>
+
+<h2 id="centos-6-support">CentOS 6 support</h2>
+
+<p>Last but not lease, we fully support CentOS 6 along with CentOS 7.</p>
+
+</section>
+<footer class='post-meta'>
+<a href='/author/max-veytsman.html'>Max Veytsman</a>
+on <a href='/tag/announcements.html'>Announcements</a>, <a href='/tag/product.html'>Product</a>
+<time class='post-date' datetime='2017-01-16'>
+16 January 2017
+</time>
+</footer>
+</article>
 <article class='post'>
 <header class='post-header'>
 <h1 class='post-title'><a href="../2017/http-security-headers.html">Everything you need to know about HTTP security headers</a></h1>
@@ -1690,56 +1744,6 @@ call here.</p>
 on <a href='/tag/vihkal.html'>vihkal</a>, <a href='/tag/security.html'>security</a>
 <time class='post-date' datetime='2016-08-24'>
 24 August 2016
-</time>
-</footer>
-</article>
-<article class='post'>
-<header class='post-header'>
-<h1 class='post-title'><a href="../2016/making-appcanary-easier.html">Making Appcanary easier to use</a></h1>
-<section class='post-meta'>
-</section>
-</header>
-<section class='post-content'>
-<p>I&rsquo;m excited to announce that we&rsquo;ve added two features that make Appcanary a heck of a lot easier to use!</p>
-
-<h2 id="add-monitors-by-uploading-a-file">Add monitors by uploading a file</h2>
-
-<p>Our Monitor API is great if you want to track a set of Linux packages or your Gemfile. We give you a dashboard showing which packages are vulnerable, and email you whenever new vulnerabilities that affect you come out. However, there&rsquo;s always a bunch of setup to get a new API going.</p>
-
-<p>With that in mind, we made the interface a lot more user friendly! You can now upload a file to watch directly through the website. Just go to <a href="https://appcanary.com/monitors/new">add monitors</a> to be able to upload a file directly. Monitors support Ruby&rsquo;s <code>Gemfile.lock</code>, <code>/var/lib/dpkg/status</code> for Ubuntu and Debian, and the output of <code>rpm -qa</code> for Centos and Amazon Linux!</p>
-
-<h2 id="automatically-upgrade-vulnerable-packages">Automatically upgrade vulnerable packages</h2>
-
-<p>A few of our customers told us that knowing about vulnerabilities is nice, but you know what would be <em>great</em>? If we could somehow <em>patch</em> them automatically. We thought about it and said, sure, why not!</p>
-
-<p>If you have the Appcanary <a href="(https://appcanary.com/servers/new)">agent</a> installed on an Ubuntu server, and you&rsquo;re running the latest version, you can run </p>
-<pre class="highlight plaintext"><code>appcanary upgrade
-</code></pre>
-
-<p>in order to install updates for any packages we know to be vulnerable.</p>
-
-<p>You can also run</p>
-<pre class="highlight plaintext"><code>appcanary upgrade -dry-run
-</code></pre>
-
-<p>in order to see what the agent will do, without it actually touching your system. </p>
-
-<p>Now you can manage vulnerabilities, learn about new ones that affect you, and apply patches, all through Appcanary!</p>
-
-<h4 id="if-you-haven-39-t-tried-us-yet">If you haven&rsquo;t tried us yet</h4>
-
-<p>Stay on top of the security vulnerabilities that affect you, today.</p>
-
-<p><a href="https://appcanary.com/?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=making_easier">Appcanary</a>, monitors your apps and servers, and notifies you whenever a new vulnerability is discovered in a package you rely on. And now it will help you patch vulnerable packages as well.</p>
-
-<p><a href="https://appcanary.com/sign_up?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=making_easier">Sign up</a> today!</p>
-
-</section>
-<footer class='post-meta'>
-<a href='/author/max-veytsman.html'>Max Veytsman</a>
-on <a href='/tag/announcements.html'>Announcements</a>, <a href='/tag/product.html'>Product</a>
-<time class='post-date' datetime='2016-07-14'>
-14 July 2016
 </time>
 </footer>
 </article>

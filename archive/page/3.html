@@ -88,6 +88,33 @@
 </div>
 <article class='post'>
 <header class='post-header'>
+<h2 class='post-title'><a href="../../2016/slippery-exception-clojure-ruby.html">Slippery exceptions in Clojure and Ruby</a></h2>
+</header>
+<section class='post-excerpt'>
+<p>
+Recently I spent a couple of hours banging my head against code that looks like this:
+(defn parse-file
+  [contents]
+  (remove nil?
+          (code-that throws-an-exception)))
+
+(defn consume-manifest
+  [contents kind]
+  (try+
+    (parse-file kind contents
+<a class="read-more" href="../../2016/slippery-exception-clojure-ruby.html">&raquo;</a>
+</p>
+</section>
+<footer class='post-meta'>
+<a href='/author/phillip-mendonca-vieira.html'>Phillip Mendonça-Vieira</a>
+on <a href='/tag/clojure.html'>Clojure</a>, <a href='/tag/ruby.html'>Ruby</a>, <a href='/tag/programming.html'>Programming</a>, <a href='/tag/bugs.html'>Bugs</a>, <a href='/tag/developer-diary.html'>Developer Diary</a>
+<time class='post-date' datetime='2016-02-16'>
+16 February 2016
+</time>
+</footer>
+</article>
+<article class='post'>
+<header class='post-header'>
 <h2 class='post-title'><a href="../../2016/datomic-intro-talk.html">A Gentle Intro to Datomic</a></h2>
 </header>
 <section class='post-excerpt'>

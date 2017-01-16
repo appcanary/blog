@@ -57,7 +57,7 @@
 <div class='vertical'>
 <div class='main-header-content inner'>
 <h1 class='page-title'>Product</h1>
-<h2 class='page-description'>A 4-post collection</h2>
+<h2 class='page-description'>A 5-post collection</h2>
 </div>
 </div>
 </header>
@@ -68,6 +68,60 @@
 </nav>
 
 </div>
+<article class='post'>
+<header class='post-header'>
+<h1 class='post-title'><a href="../2017/new-year-new-appcanary.html">New Year, New Appcanary Features</a></h1>
+<section class='post-meta'>
+</section>
+</header>
+<section class='post-content'>
+<p>We&rsquo;ve been hard at work the past few months on lots of features touching every aspect of our product, and to ring in the new year, we&rsquo;re going to announce them all at once.</p>
+
+<h2 id="search-our-vulnerabilities">Search our vulnerabilities</h2>
+
+<p>You can now browse and search every vulnerability Appcanary knows about! It&rsquo;s pretty snazzy:</p>
+
+<p><img alt="browse our vulnerabilities" src="../images/vuln_browse.png" /></p>
+
+<h2 id="automatically-upgrade-packages">Automatically upgrade packages</h2>
+
+<p>We&rsquo;ve had this feature for Ubuntu, and now we&rsquo;re adding it for CentOS.</p>
+
+<p>If you have the appcanary agent installed, you can run <code>appcanary upgrade</code>, and
+we&rsquo;ll automatically upgrade all of your vulnerable packages to the lowest
+version that fixes all the vulnerabilities we know about.</p>
+
+<h2 id="resolve-vulnerabilities">Resolve vulnerabilities</h2>
+
+<p>There&rsquo;s now a &ldquo;marked resolved&rdquo; button that lets us know that you don&rsquo;t want to be notified about a vulnerability. This is used if a vulnerability doesn&rsquo;t affect you, or if you are accepting the risk based on some other mitigation&rsquo;s (i.e. you&rsquo;re not using the vulnerable feature of the package, the port in question is blocked by a firewall, etc). We give you the opportunity to record your reasoning and provide a full audit trail of every vulnerability you mark as resolved:</p>
+
+<p><img alt="audit log" src="../images/audit_log.png" /></p>
+
+<h2 id="brand-new-dashboard">Brand new dashboard</h2>
+
+<p>We just pushed a brand new UX for our dashboard. You can sort and search and sort all of your servers and monitors. Check it <a href="https://appcanary.com/dashboard">out</a>.</p>
+
+<p><img alt="new dashboard" src="../images/new_dashboard.png" /></p>
+
+<h2 id="the-appcanary-rubygem">The Appcanary rubygem</h2>
+
+<p>We released the <a href="https://rubygems.org/gems/appcanary">Appcanary gem</a>. This gives us tighter integration with ruby projects, you can either check your ruby project for vulnerabilities as a one-time check, or set up a monitor with notifications. You can see the source <a href="https://github.com/appcanary/appcanary.rb">here</a>.</p>
+
+<p>Our gem is still very early, so we very much want your feedback. Please let us know what you think at <a href="mailto:hello@appcanary.com">hello@appcanary.com</a></p>
+
+<h2 id="centos-6-support">CentOS 6 support</h2>
+
+<p>Last but not lease, we fully support CentOS 6 along with CentOS 7.</p>
+
+</section>
+<footer class='post-meta'>
+<a href='/author/max-veytsman.html'>Max Veytsman</a>
+on <a href='/tag/announcements.html'>Announcements</a>, <a href='/tag/product.html'>Product</a>
+<time class='post-date' datetime='2017-01-16'>
+16 January 2017
+</time>
+</footer>
+</article>
 <article class='post'>
 <header class='post-header'>
 <h1 class='post-title'><a href="../2016/making-appcanary-easier.html">Making Appcanary easier to use</a></h1>
