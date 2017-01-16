@@ -1,6 +1,6 @@
 ---
 title: New Year, New Appcanary Features
-date: 2017-01-12
+date: 2017-01-16
 tags: Announcements, Product
 author: mveytsman
 published: true
