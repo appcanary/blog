@@ -11,7 +11,7 @@
     <link rel="alternate" href="http://blog.appcanary.com/2017/http-security-headers.html"/>
     <id>http://blog.appcanary.com/2017/http-security-headers.html</id>
     <published>2017-01-12T19:00:00-05:00</published>
-    <updated>2017-01-13T10:58:40-05:00</updated>
+    <updated>2017-01-16T10:21:29-05:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
@@ -32,12 +32,11 @@ headers may be best configured in on your HTTP servers, while others should be
 set on the application layer. Use your own discretion here. You can test how well you&amp;rsquo;re doing with Mozilla&amp;rsquo;s
 &lt;a href="https://observatory.mozilla.org/analyze.html?host=appcanary.com"&gt;Observatory&lt;/a&gt;.&lt;/p&gt;
 
+&lt;p&gt;Did we get anything wrong? Contact us at &lt;a href="mailto:hello@appcanary.com"&gt;hello@appcanary.com&lt;/a&gt;.&lt;/p&gt;
+
 &lt;h2&gt;HTTP Security Headers&lt;/h2&gt;
 
 &lt;ul&gt;
-&lt;li&gt;
-&lt;a href="#tags-security-programming-web"&gt;tags: Security, Programming, Web&lt;/a&gt;
-&lt;/li&gt;
 &lt;li&gt;
 &lt;a href="#x-xss-protection"&gt;X-XSS-Protection&lt;/a&gt;
 &lt;ul&gt;
