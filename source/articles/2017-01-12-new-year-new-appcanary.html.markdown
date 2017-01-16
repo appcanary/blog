@@ -35,9 +35,9 @@ We just pushed a brand new UX for our dashboard. You can sort and search and sor
 
 ![new dashboard](new_dashboard.png)
 
-## The appcanary rubygem
+## The Appcanary rubygem
 
-We released the [appcanary gem](https://rubygems.org/gems/appcanary). This gives us tighter integration with ruby projects, you can either check your ruby project for vulnerabilities as a one-time check, or set up a monitor with notifications. You can see the source [here](https://github.com/appcanary/appcanary.rb).
+We released the [Appcanary gem](https://rubygems.org/gems/appcanary). This gives us tighter integration with ruby projects, you can either check your ruby project for vulnerabilities as a one-time check, or set up a monitor with notifications. You can see the source [here](https://github.com/appcanary/appcanary.rb).
 
 Our gem is still very early, so we very much want your feedback. Please let us know what you think at [hello@appcanary.com](mailto:hello@appcanary.com)
 
