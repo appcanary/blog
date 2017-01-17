@@ -59,7 +59,7 @@ version that fixes all the vulnerabilities we know about.&lt;/p&gt;
     <link rel="alternate" href="http://blog.appcanary.com/2017/http-security-headers.html"/>
     <id>http://blog.appcanary.com/2017/http-security-headers.html</id>
     <published>2017-01-12T19:00:00-05:00</published>
-    <updated>2017-01-16T16:09:54-05:00</updated>
+    <updated>2017-01-16T23:41:09-05:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
@@ -641,11 +641,11 @@ page? ¯\_(ツ)_/¯.&lt;/p&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Nginx&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;add_header Referrer-Policy &amp;quot;deny&amp;quot;;&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;add_header X-Frame-Options &amp;quot;deny&amp;quot;;&lt;/code&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Apache&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;Header always set Referrer-Policy &amp;quot;deny&amp;quot;&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;Header always set X-Frame-Options &amp;quot;deny&amp;quot;&lt;/code&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;&lt;/table&gt;
 
