@@ -343,8 +343,8 @@ page? ¯\\\_(ツ)\_/¯.
 | Django | `MIDDLEWARE = [ ... 'django.middleware.clickjacking.XFrameOptionsMiddleware', ... ]`<br/> This defaults to `SAMORIGIN`.<br/><br/>To set `DENY`: `X_FRAME_OPTIONS = 'DENY'` |
 | Express.js | Use [helmet](https://helmetjs.github.io/docs/frameguard/)|
 | Go | Use [unrolled/secure](https://github.com/unrolled/secure) |
-| Nginx | `add_header Referrer-Policy "deny";`        |
-| Apache | `Header always set Referrer-Policy "deny"`        |
+| Nginx | `add_header X-Frame-Options "deny";`        |
+| Apache | `Header always set X-Frame-Options "deny"`        |
 
 
 ### I want to know more
