@@ -74,6 +74,20 @@ You can specify a SYN scan with `nmap -sS`, and a connect scan with `nmap -sT`. 
 By default, nmap will scan the top 1000 most common ports. You can specify a specific ports or a range with `-p`, i.e. `nmap -p22` will scan only port 22, and `nmap -p400-500` will scan ports 400 through 500. `nmap -p-` will scan the complete port range (1-65535).
 
 
+## Portscan yourself
+
+You should be regularly portscanning yourself to make sure you don't have anything listening that shouldn't be. Run nmap against your servers, and make sure that only the ports you expect are open. To make it easier, here's a script to do it for you. This will run nmap, compare the output with predefined ports, and ping you on Slack if there's a mismatch. Run it on a cron job to always be sure nothing extra is listening
+
+
+<script src="https://gist.github.com/mveytsman/7a3366e69401fae6e9a4f9eaf0d3f9b1.js"></script>
+
+## How does Appcanary fit in?
+
+Our mission is to help you do security basics right, so you can be free to worry about the hard stuff. We built the [word's best patch management product](https://appcanary.com) because we had a deep need for one ourselves, and it automated such a vital part of a security team's job.
+
+When I started writing this article, I didn't realize how well it fit into what we're doing with patch management. To do security right, you need to implement systems and continuously verify they are working correctly. [Appcanary](https://appcanary.com) helps you verify your patch management program, the script above helps you verify your firewall. Both without any bullshit.
+
+Maybe you think about these problems the same way I do. Are you using this script or something like it? Would you like it if we started firewall monitoring service? Please let me know: [max@appcanary.com](mailto:max@appcanary.com).
 
 --- 
 [^oldmap]: If you're observant, you may have noticed that this version of nmap is much older than te one on my work computer. If you're really observant, you may have noticed that it has a [vulnerability](https://appcanary.com/vulns/35319).
