@@ -1,5 +1,5 @@
 ---
-title: You should be portscaning yourself
+title: You should be port scanning yourself
 date: 2017-01-16
 author: mveytsman
 layout: post
@@ -14,7 +14,7 @@ The "attack" is so simple it's hardly worth calling it such. The crew scans the 
 
 It's tempting to victim-blame here. Hospitals were at fault because of their antiquated IT departments, sclerotic fiefdoms incapable of moving past Windows 98. We all know that MongoDB [sucks](http://cryto.net/~joepie91/blog/2015/07/19/why-you-should-never-ever-ever-use-mongodb/), and that [Real Programmers](http://www.catb.org/jargon/html/story-of-mel.html) would never be caught dead using it. They probably deserved to get hacked.
 
-No. As I've said on this blog before, victim-blaming in security is a [trap that must be avoided](https://blog.appcanary.com/2016/mirai-botnet-security-broken.html). Attacks are varied an ever changing, best practices can be indistinguishable from cargo cults, and defaults configurations seem almost designed to foil you.
+No. As I've said on this blog before, victim-blaming in security is a [trap that must be avoided](https://blog.appcanary.com/2016/mirai-botnet-security-broken.html). Attacks are varied and ever changing, best practices can be indistinguishable from cargo cults, and defaults configurations seem almost designed to foil you.
 
 Case in point MongoDB, which ships listening to the world and without any authentication. No wonder so many instances got hacked.
 
@@ -29,7 +29,7 @@ I'm not going to tell you how to set up a firewall. What I'm going to tell you i
 
 ![trinity using nmap](images/trinity_nmap.jpg)
 
-A portscanner is a program that checks to see what network ports are open on a computer. [nmap](https://nmap.org/) is an incredibly powerful tool that's almost synonymous with portscanning. It's so ubiquotous, it's been featured in [movies](https://nmap.org/movies/) from the Matrix to Battle Royale.
+A port scanner is a program that checks to see what network ports are open on a computer. [nmap](https://nmap.org/) is an incredibly powerful tool that's almost synonymous with port scanning. It's so ubiquotous, it's been featured in [movies](https://nmap.org/movies/) from the Matrix to Battle Royale.
 
 Here's what scanning appcanary.com with default settings from my work computer looks like:
 
@@ -74,9 +74,9 @@ You can specify a SYN scan with `nmap -sS`, and a connect scan with `nmap -sT`. 
 By default, nmap will scan the top 1000 most common ports. You can specify a specific ports or a range with `-p`, i.e. `nmap -p22` will scan only port 22, and `nmap -p400-500` will scan ports 400 through 500. `nmap -p-` will scan the complete port range (1-65535).
 
 
-## Portscan yourself
+## Port scan yourself
 
-You should be regularly portscanning yourself to make sure you don't have anything listening that shouldn't be. Run nmap against your servers, and make sure that only the ports you expect are open. To make it easier, here's a script to do it for you. This will run nmap, compare the output with predefined ports, and ping you on Slack if there's a mismatch. Run it on a cron job to always be sure nothing extra is listening
+You should be regularly port scanning yourself to make sure you don't have anything listening that shouldn't be. Run nmap against your servers, and make sure that only the ports you expect are open. To make it easier, here's a script to do it for you. This will run nmap, compare the output with predefined ports, and ping you on Slack if there's a mismatch. Run it on a cron job to always be sure nothing extra is listening
 
 
 <script src="https://gist.github.com/mveytsman/7a3366e69401fae6e9a4f9eaf0d3f9b1.js"></script>
@@ -87,7 +87,7 @@ Our mission is to help you do security basics right, so you can be free to worry
 
 When I started writing this article, I didn't realize how well it fit into what we're doing with patch management. To do security right, you need to implement systems and continuously verify they are working correctly. [Appcanary](https://appcanary.com) helps you verify your patch management program, the script above helps you verify your firewall. Both without any bullshit.
 
-Maybe you think about these problems the same way I do. Are you using this script or something like it? Would you like it if we started firewall monitoring service? Please let me know: [max@appcanary.com](mailto:max@appcanary.com).
+Maybe you think about these problems the same way I do. Are you using this script or something like it? Does your business need an automated firewall verification service by Appcanary? Let me know: [max@appcanary.com](mailto:max@appcanary.com).
 
 --- 
 [^oldmap]: If you're observant, you may have noticed that this version of nmap is much older than te one on my work computer. If you're really observant, you may have noticed that it has a [vulnerability](https://appcanary.com/vulns/35319).
