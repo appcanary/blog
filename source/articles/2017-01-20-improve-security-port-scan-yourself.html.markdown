@@ -1,11 +1,11 @@
 ---
 title: "Improve Your Security: Port Scan Yourself"
-date: 2017-01-16
+date: 2017-01-20
 author: mveytsman
 layout: post
 published: false
 thumbnail: images/canary_ledger.png
-tags: Security, Programming
+tags: Security, Programming, Network
 ---
 
 Ransomware crews are no longer satisfied [shutting down hospitals](https://www.wired.com/2016/03/ransomware-why-hospitals-are-the-perfect-targets/) and are now also going after hip tech startups. Last week, a professional crew got involved in [ransoming MongoDB instances](https://www.bleepingcomputer.com/news/security/mongodb-apocalypse-professional-ransomware-group-gets-involved-infections-reach-28k-servers/), and some 28,000 servers were compromised and held for Bitcoin.
