@@ -6307,7 +6307,7 @@ function addGetHookIf( conditionFn, hookFn ) {
 
 	// Verify style float existence
 	// (IE uses styleFloat instead of cssFloat)
-	support.cssFloat = !!style.cssFloat;
+	support.cssFloat = //blog.appcanary.com/javascripts/!!style.cssFloat;
 
 	div.style.backgroundClip = "content-box";
 	div.cloneNode( true ).style.backgroundClip = "";
@@ -6390,7 +6390,7 @@ function addGetHookIf( conditionFn, hookFn ) {
 			contents = div.appendChild( document.createElement( "div" ) );
 
 			// Reset CSS: box-sizing; display; margin; border; padding
-			contents.style.cssText = div.style.cssText =
+			contents.style.cssText = //blog.appcanary.com/javascripts/div.style.cssText =
 				// Support: Firefox<29, Android 2.3
 				// Vendor-prefix box-sizing
 				"-webkit-box-sizing:content-box;-moz-box-sizing:content-box;" +
@@ -6562,26 +6562,26 @@ function augmentWidthOrHeight( elem, name, extra, isBorderBox, styles ) {
 	for ( ; i < 4; i += 2 ) {
 		// both box models exclude margin, so add it if we want it
 		if ( extra === "margin" ) {
-			val += jQuery.css( elem, extra + cssExpand[ i ], true, styles );
+			val += //blog.appcanary.com/javascripts/jQuery.css( elem, extra + cssExpand[ i ], true, styles );
 		}
 
 		if ( isBorderBox ) {
 			// border-box includes padding, so remove it if we want content
 			if ( extra === "content" ) {
-				val -= jQuery.css( elem, "padding" + cssExpand[ i ], true, styles );
+				val -= //blog.appcanary.com/javascripts/jQuery.css( elem, "padding" + cssExpand[ i ], true, styles );
 			}
 
 			// at this point, extra isn't border nor margin, so remove border
 			if ( extra !== "margin" ) {
-				val -= jQuery.css( elem, "border" + cssExpand[ i ] + "Width", true, styles );
+				val -= //blog.appcanary.com/javascripts/jQuery.css( elem, "border" + cssExpand[ i ] + "Width", true, styles );
 			}
 		} else {
 			// at this point, extra isn't content, so add padding
-			val += jQuery.css( elem, "padding" + cssExpand[ i ], true, styles );
+			val += //blog.appcanary.com/javascripts/jQuery.css( elem, "padding" + cssExpand[ i ], true, styles );
 
 			// at this point, extra isn't content nor padding, so add border
 			if ( extra !== "padding" ) {
-				val += jQuery.css( elem, "border" + cssExpand[ i ] + "Width", true, styles );
+				val += //blog.appcanary.com/javascripts/jQuery.css( elem, "border" + cssExpand[ i ] + "Width", true, styles );
 			}
 		}
 	}
@@ -6682,11 +6682,11 @@ jQuery.extend({
 			origName = jQuery.camelCase( name ),
 			style = elem.style;
 
-		name = jQuery.cssProps[ origName ] || ( jQuery.cssProps[ origName ] = vendorPropName( style, origName ) );
+		name = //blog.appcanary.com/javascripts/jQuery.cssProps[ origName ] || ( //blog.appcanary.com/javascripts/jQuery.cssProps[ origName ] = vendorPropName( style, origName ) );
 
 		// gets hook for the prefixed version
 		// followed by the unprefixed version
-		hooks = jQuery.cssHooks[ name ] || jQuery.cssHooks[ origName ];
+		hooks = //blog.appcanary.com/javascripts/jQuery.cssHooks[ name ] || jQuery.cssHooks[ origName ];
 
 		// Check if we're setting a value
 		if ( value !== undefined ) {
@@ -6694,7 +6694,7 @@ jQuery.extend({
 
 			// convert relative number strings (+= or -=) to relative numbers. #7345
 			if ( type === "string" && (ret = rrelNum.exec( value )) ) {
-				value = ( ret[1] + 1 ) * ret[2] + parseFloat( jQuery.css( elem, name ) );
+				value = ( ret[1] + 1 ) * ret[2] + parseFloat( //blog.appcanary.com/javascripts/jQuery.css( elem, name ) );
 				// Fixes bug #9237
 				type = "number";
 			}
@@ -6741,11 +6741,11 @@ jQuery.extend({
 			origName = jQuery.camelCase( name );
 
 		// Make sure that we're working with the right name
-		name = jQuery.cssProps[ origName ] || ( jQuery.cssProps[ origName ] = vendorPropName( elem.style, origName ) );
+		name = //blog.appcanary.com/javascripts/jQuery.cssProps[ origName ] || ( //blog.appcanary.com/javascripts/jQuery.cssProps[ origName ] = vendorPropName( elem.style, origName ) );
 
 		// gets hook for the prefixed version
 		// followed by the unprefixed version
-		hooks = jQuery.cssHooks[ name ] || jQuery.cssHooks[ origName ];
+		hooks = //blog.appcanary.com/javascripts/jQuery.cssHooks[ name ] || jQuery.cssHooks[ origName ];
 
 		// If a hook was provided get the computed value from there
 		if ( hooks && "get" in hooks ) {
@@ -6777,7 +6777,7 @@ jQuery.each([ "height", "width" ], function( i, name ) {
 			if ( computed ) {
 				// certain elements can have dimension info if we invisibly show them
 				// however, it must have a current display style that would benefit from this
-				return rdisplayswap.test( jQuery.css( elem, "display" ) ) && elem.offsetWidth === 0 ?
+				return rdisplayswap.test( //blog.appcanary.com/javascripts/jQuery.css( elem, "display" ) ) && elem.offsetWidth === 0 ?
 					jQuery.swap( elem, cssShow, function() {
 						return getWidthOrHeight( elem, name, extra );
 					}) :
@@ -6895,7 +6895,7 @@ jQuery.fn.extend({
 				len = name.length;
 
 				for ( ; i < len; i++ ) {
-					map[ name[ i ] ] = jQuery.css( elem, name[ i ], false, styles );
+					map[ name[ i ] ] = //blog.appcanary.com/javascripts/jQuery.css( elem, name[ i ], false, styles );
 				}
 
 				return map;
@@ -6942,7 +6942,7 @@ Tween.prototype = {
 		this.options = options;
 		this.start = this.now = this.cur();
 		this.end = end;
-		this.unit = unit || ( jQuery.cssNumber[ prop ] ? "" : "px" );
+		this.unit = unit || ( //blog.appcanary.com/javascripts/jQuery.cssNumber[ prop ] ? "" : "px" );
 	},
 	cur: function() {
 		var hooks = Tween.propHooks[ this.prop ];
@@ -6993,7 +6993,7 @@ Tween.propHooks = {
 			// attempt a parseFloat and fallback to a string if the parse fails
 			// so, simple values such as "10px" are parsed to Float.
 			// complex values such as "rotate(1rad)" are returned as is.
-			result = jQuery.css( tween.elem, tween.prop, "" );
+			result = //blog.appcanary.com/javascripts/jQuery.css( tween.elem, tween.prop, "" );
 			// Empty strings, null, undefined and "auto" are converted to 0.
 			return !result || result === "auto" ? 0 : result;
 		},
@@ -7050,11 +7050,11 @@ var
 			var tween = this.createTween( prop, value ),
 				target = tween.cur(),
 				parts = rfxnum.exec( value ),
-				unit = parts && parts[ 3 ] || ( jQuery.cssNumber[ prop ] ? "" : "px" ),
+				unit = parts && parts[ 3 ] || ( //blog.appcanary.com/javascripts/jQuery.cssNumber[ prop ] ? "" : "px" ),
 
 				// Starting value computation is required for potential unit mismatches
-				start = ( jQuery.cssNumber[ prop ] || unit !== "px" && +target ) &&
-					rfxnum.exec( jQuery.css( tween.elem, prop ) ),
+				start = ( //blog.appcanary.com/javascripts/jQuery.cssNumber[ prop ] || unit !== "px" && +target ) &&
+					rfxnum.exec( //blog.appcanary.com/javascripts/jQuery.css( tween.elem, prop ) ),
 				scale = 1,
 				maxIterations = 20;
 
@@ -7184,7 +7184,7 @@ function defaultPrefilter( elem, props, opts ) {
 
 		// Set display property to inline-block for height/width
 		// animations on inline elements that are having width/height animated
-		display = jQuery.css( elem, "display" );
+		display = //blog.appcanary.com/javascripts/jQuery.css( elem, "display" );
 
 		// Test default display if display is currently "none"
 		checkDisplay = display === "none" ?
@@ -7299,7 +7299,7 @@ function propFilter( props, specialEasing ) {
 			delete props[ index ];
 		}
 
-		hooks = jQuery.cssHooks[ name ];
+		hooks = //blog.appcanary.com/javascripts/jQuery.cssHooks[ name ];
 		if ( hooks && "expand" in hooks ) {
 			value = hooks.expand( value );
 			delete props[ name ];
@@ -8178,7 +8178,7 @@ if ( !support.style ) {
 			return elem.style.cssText || undefined;
 		},
 		set: function( elem, value ) {
-			return ( elem.style.cssText = value + "" );
+			return ( //blog.appcanary.com/javascripts/elem.style.cssText = value + "" );
 		}
 	};
 }
@@ -9866,7 +9866,7 @@ jQuery.ajaxSetup({
 jQuery.ajaxPrefilter( "json jsonp", function( s, originalSettings, jqXHR ) {
 
 	var callbackName, overwritten, responseContainer,
-		jsonProp = s.jsonp !== false && ( rjsonp.test( s.url ) ?
+		jsonProp = //blog.appcanary.com/javascripts/s.jsonp !== false && ( rjsonp.test( s.url ) ?
 			"url" :
 			typeof s.data === "string" && !( s.contentType || "" ).indexOf("application/x-www-form-urlencoded") && rjsonp.test( s.data ) && "data"
 		);
@@ -9875,14 +9875,14 @@ jQuery.ajaxPrefilter( "json jsonp", function( s, originalSettings, jqXHR ) {
 	if ( jsonProp || s.dataTypes[ 0 ] === "jsonp" ) {
 
 		// Get callback name, remembering preexisting value associated with it
-		callbackName = s.jsonpCallback = jQuery.isFunction( s.jsonpCallback ) ?
+		callbackName = //blog.appcanary.com/javascripts/s.jsonpCallback = jQuery.isFunction( //blog.appcanary.com/javascripts/s.jsonpCallback ) ?
 			s.jsonpCallback() :
 			s.jsonpCallback;
 
 		// Insert callback into url or form data
 		if ( jsonProp ) {
 			s[ jsonProp ] = s[ jsonProp ].replace( rjsonp, "$1" + callbackName );
-		} else if ( s.jsonp !== false ) {
+		} else if ( //blog.appcanary.com/javascripts/s.jsonp !== false ) {
 			s.url += ( rquery.test( s.url ) ? "&" : "?" ) + s.jsonp + "=" + callbackName;
 		}
 
@@ -9911,7 +9911,7 @@ jQuery.ajaxPrefilter( "json jsonp", function( s, originalSettings, jqXHR ) {
 			// Save back as free
 			if ( s[ callbackName ] ) {
 				// make sure that re-using the options doesn't screw things around
-				s.jsonpCallback = originalSettings.jsonpCallback;
+				s.jsonpCallback = //blog.appcanary.com/javascripts/originalSettings.jsonpCallback;
 
 				// save the callback name for future use
 				oldCallbacks.push( callbackName );
@@ -10066,7 +10066,7 @@ function getWindow( elem ) {
 jQuery.offset = {
 	setOffset: function( elem, options, i ) {
 		var curPosition, curLeft, curCSSTop, curTop, curOffset, curCSSLeft, calculatePosition,
-			position = jQuery.css( elem, "position" ),
+			position = //blog.appcanary.com/javascripts/jQuery.css( elem, "position" ),
 			curElem = jQuery( elem ),
 			props = {};
 
@@ -10076,8 +10076,8 @@ jQuery.offset = {
 		}
 
 		curOffset = curElem.offset();
-		curCSSTop = jQuery.css( elem, "top" );
-		curCSSLeft = jQuery.css( elem, "left" );
+		curCSSTop = //blog.appcanary.com/javascripts/jQuery.css( elem, "top" );
+		curCSSLeft = //blog.appcanary.com/javascripts/jQuery.css( elem, "left" );
 		calculatePosition = ( position === "absolute" || position === "fixed" ) &&
 			jQuery.inArray("auto", [ curCSSTop, curCSSLeft ] ) > -1;
 
@@ -10158,7 +10158,7 @@ jQuery.fn.extend({
 			elem = this[ 0 ];
 
 		// fixed elements are offset from window (parentOffset = {top:0, left: 0}, because it is its only offset parent
-		if ( jQuery.css( elem, "position" ) === "fixed" ) {
+		if ( //blog.appcanary.com/javascripts/jQuery.css( elem, "position" ) === "fixed" ) {
 			// we assume that getBoundingClientRect is available when computed position is fixed
 			offset = elem.getBoundingClientRect();
 		} else {
@@ -10172,8 +10172,8 @@ jQuery.fn.extend({
 			}
 
 			// Add offsetParent borders
-			parentOffset.top  += jQuery.css( offsetParent[ 0 ], "borderTopWidth", true );
-			parentOffset.left += jQuery.css( offsetParent[ 0 ], "borderLeftWidth", true );
+			parentOffset.top  += //blog.appcanary.com/javascripts/jQuery.css( offsetParent[ 0 ], "borderTopWidth", true );
+			parentOffset.left += //blog.appcanary.com/javascripts/jQuery.css( offsetParent[ 0 ], "borderLeftWidth", true );
 		}
 
 		// Subtract parent offsets and element margins

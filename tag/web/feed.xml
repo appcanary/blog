@@ -11,7 +11,7 @@
     <link rel="alternate" href="http://blog.appcanary.com/2017/http-security-headers.html"/>
     <id>http://blog.appcanary.com/2017/http-security-headers.html</id>
     <published>2017-01-12T19:00:00-05:00</published>
-    <updated>2017-01-16T23:41:09-05:00</updated>
+    <updated>2017-01-20T16:09:23-05:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
@@ -766,7 +766,7 @@ browser to visit a given page.&lt;/p&gt;&lt;/li&gt;
 above). Cookies marked as &lt;code&gt;HttpOnly&lt;/code&gt; can not be accessed from within
 javascript. So if there is an XSS flaw, the attacker can&amp;rsquo;t immediately steal
 the cookies.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;code&gt;SameSite&lt;/code&gt; helps defend against Cross-Origin Resource Sharing (CSRF) attacks.
+&lt;li&gt;&lt;p&gt;&lt;code&gt;SameSite&lt;/code&gt; helps defend against Cross-Origin Request Forgery (CSRF) attacks.
 This is an attack where a different website the user may be visiting
 inadvertently tricks them into making a request against your site, i.e. by
 including an image to make a GET request, or using javascript to submit a form

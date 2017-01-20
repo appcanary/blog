@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>Appcanary</title>
-  <subtitle>&lt;a href="https://appcanary.com"&gt;Appcanary&lt;/a&gt; makes sure you never run vulnerable software on your servers.&lt;br/&gt;Subscribe to our &lt;a href="https://appcanary.us10.list-manage.com/subscribe?u=303b378f377508300c0b5469a&amp;id=dc58e8f56f"&gt;newsletter&lt;/a&gt;!</subtitle>
+  <subtitle>Appcanary makes sure you never run vulnerable software on your servers.Subscribe to our newsletter!</subtitle>
   <id>http://blog.appcanary.com</id>
   <link href="http://blog.appcanary.com"/>
   <link href="http://blog.appcanary.com/rss.xml" rel="self"/>
@@ -11,7 +11,7 @@
     <link rel="alternate" href="http://blog.appcanary.com/2017/new-year-new-appcanary.html"/>
     <id>http://blog.appcanary.com/2017/new-year-new-appcanary.html</id>
     <published>2017-01-15T19:00:00-05:00</published>
-    <updated>2017-01-16T16:09:57-05:00</updated>
+    <updated>2017-01-20T16:09:23-05:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
@@ -59,7 +59,7 @@ version that fixes all the vulnerabilities we know about.&lt;/p&gt;
     <link rel="alternate" href="http://blog.appcanary.com/2017/http-security-headers.html"/>
     <id>http://blog.appcanary.com/2017/http-security-headers.html</id>
     <published>2017-01-12T19:00:00-05:00</published>
-    <updated>2017-01-16T23:41:09-05:00</updated>
+    <updated>2017-01-20T16:09:23-05:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
@@ -814,7 +814,7 @@ browser to visit a given page.&lt;/p&gt;&lt;/li&gt;
 above). Cookies marked as &lt;code&gt;HttpOnly&lt;/code&gt; can not be accessed from within
 javascript. So if there is an XSS flaw, the attacker can&amp;rsquo;t immediately steal
 the cookies.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;code&gt;SameSite&lt;/code&gt; helps defend against Cross-Origin Resource Sharing (CSRF) attacks.
+&lt;li&gt;&lt;p&gt;&lt;code&gt;SameSite&lt;/code&gt; helps defend against Cross-Origin Request Forgery (CSRF) attacks.
 This is an attack where a different website the user may be visiting
 inadvertently tricks them into making a request against your site, i.e. by
 including an image to make a GET request, or using javascript to submit a form
