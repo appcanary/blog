@@ -1,7 +1,7 @@
 articles ||= blog.articles[0..5]
 tag ||= nil
-title = config.casper[:blog][:name]
-subtitle = config.casper[:blog][:description]
+title = strip_tags(config.casper[:blog][:name])
+subtitle = strip_tags(config.casper[:blog][:description])
 
 xml.instruct!
 xml.feed "xmlns" => "http://www.w3.org/2005/Atom" do

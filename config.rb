@@ -166,8 +166,8 @@ configure :build do
   # Enable cache buster
   # activate :asset_hash
 
-  # Use relative URLs
-  activate :relative_assets
+  # Use absolute URLs
+  activate :asset_host, :host => '//blog.appcanary.com'
 
   # Ignoring Files
   ignore 'javascripts/_*'
