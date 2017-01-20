@@ -3,7 +3,7 @@ title: "Improve Your Security: Port Scan Yourself"
 date: 2017-01-20
 author: mveytsman
 layout: post
-published: false
+published: true
 thumbnail: images/canary_ledger.png
 tags: Security, Programming, Network
 ---
@@ -25,11 +25,12 @@ Basically, you should have as little as possible accessible to the outside world
 <blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">If Postgres, MySQL, memcached, redis, etc responds to commands from outside the VPN/firewall/etc, assume you will lose your deployment.</p>&mdash; Patrick McKenzie (@patio11) <a href="https://twitter.com/patio11/status/818728480661590018">January 10, 2017</a></blockquote>
 <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 
-I'm not going to tell you how to set up a firewall. What I'm going to tell you is how to answer the question you have when reading that tweet: "is my firewall actually working right?"
+If you're anything like me, the first thought when confronted with that tweet is: "is my firewall actually working right?" Would you bet money that you know what ports are open on a given server in your fleet?
 
 ### Enter Nmap
 
-![trinity using Nmap](images/trinity_nmap.jpg "NMAP as used in The Matrix")
+![trinity using Nmap](images/trinity_nmap.jpg "Nmap as used in The Matrix")
+*Nmap as used in The Matrix*
 
 [Nmap](https://nmap.org/) is an incredibly powerful tool that's [synonymous](https://nmap.org/movies/) with port scanning. A port scanner is a program that checks to see what network ports are open on a computer.
 
@@ -78,7 +79,7 @@ By default, nmap will scan the top 1000 most common ports. You can specify a spe
 
 ### Developer, port scan thyself
 
-Regularly port scan yourself; it's the only way to be certain your processes are not listening to untoward calls from ungentlemanly visitors. Run Nmap against your servers, and make sure that only the ports you expect are open. 
+Regularly port scan yourself; it's the only way to be certain that your databases aren't listening to the outside world. Run Nmap against your servers, and make sure that only the ports you expect are open. 
 
 To make it easier, here's a script to do it for you. This will run Nmap, compare the output with predefined ports, and ping you on Slack if there's a mismatch. Run it on a cron job, so you can check on the regular.
 
@@ -91,6 +92,10 @@ Our mission is to help you do security basics right, so you can be free to worry
 
 When I started writing this article, I didn't realize how well it fit into what we're doing with patch management. To do security right, you need to implement systems and continuously verify they are working correctly. [Appcanary](https://appcanary.com) helps you verify your patch management program, the script above helps you verify your firewall. Both without any bullshit.
 
-We're considering incorporating automated port scanning into our product. We want to hear from you if you're also convinced it's necessary. Let me know: [max@appcanary.com](mailto:max@appcanary.com).
+### We want to hear from you
+
+Did I convince you to port scan your systems after reading the article? Are you using the script above? Something else? Let me know: [max@appcanary.com](mailto:max@appcanary.com).
 
 [^oldnmap]: If you're observant, you may have noticed that this version of nmap is much older than the one on my work computer. If you're really observant, you may have noticed that it has a [vulnerability](https://appcanary.com/vulns/35319).
+
+<%= partial "shared/newsletter" %>
