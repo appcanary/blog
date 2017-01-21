@@ -15,6 +15,11 @@
     <author>
       <name>Max Veytsman</name>
     </author>
+    <summary type="html">&lt;p&gt;On November 10th, we suffered some downtime as our backend application mysteriously crashed and had to be restarted. After looking at our process monitoring service, I found a very suspicious graph:&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="image" src="/images/system.process.threads.png"&gt;&lt;/p&gt;
+
+&lt;p&gt;Somehow, we managed to spin up more then 30,000...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;On November 10th, we suffered some downtime as our backend application mysteriously crashed and had to be restarted. After looking at our process monitoring service, I found a very suspicious graph:&lt;/p&gt;
 
 &lt;p&gt;&lt;img alt="image" src="/images/system.process.threads.png" /&gt;&lt;/p&gt;
@@ -134,6 +139,10 @@
 
 &lt;p&gt;We spawned a new client object on every analytics call, not realizing that the underlying library uses a thread pool that&amp;rsquo;s not shutdown on garbage collection. This is how we ended up killing the server by hitting 40,000 threads&lt;/p&gt;
 </content>
+    <category term="Clojure"/>
+    <category term="Programming"/>
+    <category term="Developer Diary"/>
+    <category term="Bugs"/>
   </entry>
   <entry>
     <title>Slippery exceptions in Clojure and Ruby</title>
@@ -144,6 +153,16 @@
     <author>
       <name>Phillip Mendonça-Vieira</name>
     </author>
+    <summary type="html">&lt;p&gt;Recently I spent a couple of hours banging my head against code that looks like this:&lt;/p&gt;
+&lt;pre class="highlight clojure"&gt;&lt;code&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;defn&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;parse-file&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;contents&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;remove&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;nil?&lt;/span&gt;&lt;span class="w"&gt;
+          &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;code-that&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;throws-an-exception&lt;/span&gt;&lt;span class="p"&gt;)))&lt;/span&gt;&lt;span class="w"&gt;
+
+&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;defn&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;consume-manifest&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;contents&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;kind&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;try+&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;parse-file&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;kind&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;contents&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;</summary>
     <content type="html">&lt;p&gt;Recently I spent a couple of hours banging my head against code that looks like this:&lt;/p&gt;
 &lt;pre class="highlight clojure"&gt;&lt;code&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;defn&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;parse-file&lt;/span&gt;&lt;span class="w"&gt;
   &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;contents&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="w"&gt;
@@ -217,5 +236,10 @@
 
 &lt;p&gt;And now, things behave as intended.&lt;/p&gt;
 </content>
+    <category term="Clojure"/>
+    <category term="Ruby"/>
+    <category term="Programming"/>
+    <category term="Bugs"/>
+    <category term="Developer Diary"/>
   </entry>
 </feed>

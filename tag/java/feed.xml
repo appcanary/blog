@@ -15,6 +15,9 @@
     <author>
       <name>Max Veytsman</name>
     </author>
+    <summary type="html">&lt;p&gt;The security of your package manager is very important to us at appcanary, and it’s important to make sure the packages you’re downloading are secure in transit.&lt;/p&gt;
+
+&lt;p&gt;Back in the summer of 2014, I discovered that &lt;a href="http://search.maven.org/"&gt;Maven Central&lt;/a&gt;  wasn’t using TLS or any...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;The security of your package manager is very important to us at appcanary, and it’s important to make sure the packages you’re downloading are secure in transit.&lt;/p&gt;
 
 &lt;p&gt;Back in the summer of 2014, I discovered that &lt;a href="http://search.maven.org/"&gt;Maven Central&lt;/a&gt;  wasn’t using TLS or any signature verification when serving up java packages.&lt;/p&gt;
@@ -23,5 +26,11 @@
 
 &lt;iframe width="560" height="315" src="https://www.youtube.com/embed/6NdLZl16OkA" frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;
 </content>
+    <category term="Java"/>
+    <category term="Maven"/>
+    <category term="Clojure"/>
+    <category term="Programming"/>
+    <category term="Security"/>
+    <category term="Talks"/>
   </entry>
 </feed>

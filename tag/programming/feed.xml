@@ -15,6 +15,9 @@
     <author>
       <name>Max Veytsman</name>
     </author>
+    <summary type="html">&lt;p&gt;The security of your package manager is very important to us at appcanary, and it’s important to make sure the packages you’re downloading are secure in transit.&lt;/p&gt;
+
+&lt;p&gt;Back in the summer of 2014, I discovered that &lt;a href="http://search.maven.org/"&gt;Maven Central&lt;/a&gt;  wasn’t using TLS or any...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;The security of your package manager is very important to us at appcanary, and it’s important to make sure the packages you’re downloading are secure in transit.&lt;/p&gt;
 
 &lt;p&gt;Back in the summer of 2014, I discovered that &lt;a href="http://search.maven.org/"&gt;Maven Central&lt;/a&gt;  wasn’t using TLS or any signature verification when serving up java packages.&lt;/p&gt;
@@ -23,6 +26,12 @@
 
 &lt;iframe width="560" height="315" src="https://www.youtube.com/embed/6NdLZl16OkA" frameborder="0" allowfullscreen&gt;&lt;/iframe&gt;
 </content>
+    <category term="Java"/>
+    <category term="Maven"/>
+    <category term="Clojure"/>
+    <category term="Programming"/>
+    <category term="Security"/>
+    <category term="Talks"/>
   </entry>
   <entry>
     <title>How being lazy about state management in Clojure caused us downtime</title>
@@ -33,6 +42,11 @@
     <author>
       <name>Max Veytsman</name>
     </author>
+    <summary type="html">&lt;p&gt;On November 10th, we suffered some downtime as our backend application mysteriously crashed and had to be restarted. After looking at our process monitoring service, I found a very suspicious graph:&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="image" src="/images/system.process.threads.png"&gt;&lt;/p&gt;
+
+&lt;p&gt;Somehow, we managed to spin up more then 30,000...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;On November 10th, we suffered some downtime as our backend application mysteriously crashed and had to be restarted. After looking at our process monitoring service, I found a very suspicious graph:&lt;/p&gt;
 
 &lt;p&gt;&lt;img alt="image" src="/images/system.process.threads.png" /&gt;&lt;/p&gt;
@@ -152,6 +166,10 @@
 
 &lt;p&gt;We spawned a new client object on every analytics call, not realizing that the underlying library uses a thread pool that&amp;rsquo;s not shutdown on garbage collection. This is how we ended up killing the server by hitting 40,000 threads&lt;/p&gt;
 </content>
+    <category term="Clojure"/>
+    <category term="Programming"/>
+    <category term="Developer Diary"/>
+    <category term="Bugs"/>
   </entry>
   <entry>
     <title>A Gentle Intro to Datomic</title>
@@ -162,6 +180,14 @@
     <author>
       <name>Max Veytsman</name>
     </author>
+    <summary type="html">&lt;p&gt;We use &lt;a href="http://www.datomic.com/"&gt;Datomic&lt;/a&gt; as one of our datastores, and have been really enjoying it so far.&lt;/p&gt;
+
+&lt;p&gt;I gave a talk to my local &lt;a href="http://www.meetup.com/Clojure-Toronto/"&gt;Clojure meetup&lt;/a&gt; that provided a gentle introduction to Datomic and highlighted some cool features.&lt;/p&gt;
+
+&lt;p&gt;The slides are below:&lt;/p&gt;
+
+&lt;script async="" class="speakerdeck-embed" data-id="dd426e5c924f44eb9050c554137ae030" data-ratio="1.77777777777778" src="//speakerdeck.com/assets/embed.js"&gt;&lt;/script&gt;
+</summary>
     <content type="html">&lt;p&gt;We use &lt;a href="http://www.datomic.com/"&gt;Datomic&lt;/a&gt; as one of our datastores, and have been really enjoying it so far.&lt;/p&gt;
 
 &lt;p&gt;I gave a talk to my local &lt;a href="http://www.meetup.com/Clojure-Toronto/"&gt;Clojure meetup&lt;/a&gt; that provided a gentle introduction to Datomic and highlighted some cool features.&lt;/p&gt;
@@ -170,6 +196,10 @@
 
 &lt;script async="" class="speakerdeck-embed" data-id="dd426e5c924f44eb9050c554137ae030" data-ratio="1.77777777777778" src="//speakerdeck.com/assets/embed.js"&gt;&lt;/script&gt;
 </content>
+    <category term="Clojure"/>
+    <category term="Datomic"/>
+    <category term="Programming"/>
+    <category term="Talks"/>
   </entry>
   <entry>
     <title>Slippery exceptions in Clojure and Ruby</title>
@@ -180,6 +210,16 @@
     <author>
       <name>Phillip Mendonça-Vieira</name>
     </author>
+    <summary type="html">&lt;p&gt;Recently I spent a couple of hours banging my head against code that looks like this:&lt;/p&gt;
+&lt;pre class="highlight clojure"&gt;&lt;code&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;defn&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;parse-file&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;contents&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;remove&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;nil?&lt;/span&gt;&lt;span class="w"&gt;
+          &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;code-that&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;throws-an-exception&lt;/span&gt;&lt;span class="p"&gt;)))&lt;/span&gt;&lt;span class="w"&gt;
+
+&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;defn&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;consume-manifest&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;contents&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;kind&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="w"&gt;
+  &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;try+&lt;/span&gt;&lt;span class="w"&gt;
+    &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;parse-file&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;kind&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;contents&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;</summary>
     <content type="html">&lt;p&gt;Recently I spent a couple of hours banging my head against code that looks like this:&lt;/p&gt;
 &lt;pre class="highlight clojure"&gt;&lt;code&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;defn&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;parse-file&lt;/span&gt;&lt;span class="w"&gt;
   &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;contents&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="w"&gt;
@@ -253,6 +293,11 @@
 
 &lt;p&gt;And now, things behave as intended.&lt;/p&gt;
 </content>
+    <category term="Clojure"/>
+    <category term="Ruby"/>
+    <category term="Programming"/>
+    <category term="Bugs"/>
+    <category term="Developer Diary"/>
   </entry>
   <entry>
     <title>We Left Clojure. Here's 5 Things I'll Miss.</title>
@@ -263,6 +308,9 @@
     <author>
       <name>Max Veytsman</name>
     </author>
+    <summary type="html">&lt;p&gt;On October 11th, Appcanary relied on about 8,500 lines of clojure code. On the
+12th we were down to zero. We replaced it by adding another 5,700 lines of Ruby to our codebase. 
+&lt;a href="https://twitter.com/phillmv"&gt;Phill&lt;/a&gt; will be discussing why we left, and what we learned both here and...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;On October 11th, Appcanary relied on about 8,500 lines of clojure code. On the
 12th we were down to zero. We replaced it by adding another 5,700 lines of Ruby to our codebase. 
 &lt;a href="https://twitter.com/phillmv"&gt;Phill&lt;/a&gt; will be discussing why we left, and what we learned both here and &lt;a href="http://rubyconf.org/program#prop_19"&gt;at this year&amp;rsquo;s RubyConf&lt;/a&gt;. For now, I want to talk about what I&amp;rsquo;ll miss.&lt;/p&gt;
@@ -424,6 +472,9 @@ programs, but the fact that I have to acknowledge this proves my point.&amp;nbsp
 &lt;/ol&gt;
 &lt;/div&gt;
 </content>
+    <category term="Clojure"/>
+    <category term="Programming"/>
+    <category term="Ruby"/>
   </entry>
   <entry>
     <title>Good News: Ubuntu Now Ships With unattended-upgrades On By Default!</title>
@@ -434,6 +485,21 @@ programs, but the fact that I have to acknowledge this proves my point.&amp;nbsp
     <author>
       <name>Max Veytsman</name>
     </author>
+    <summary type="html">&lt;p&gt;Last week, we got a strange support request. One of our users had received the following notification:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Hey! Good job.&lt;/p&gt;
+
+&lt;p&gt;We’ve detected that you patched some vulnerabilities.&lt;/p&gt;
+
+&lt;p&gt;Here’s what changed:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://appcanary.com/vulns/46220"&gt;CVE-2016-8704&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;is no longer present in:&lt;/p&gt;
+
+&lt;p&gt;[name of...&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
     <content type="html">&lt;p&gt;Last week, we got a strange support request. One of our users had received the following notification:&lt;/p&gt;
 
 &lt;blockquote&gt;
@@ -550,5 +616,8 @@ Ubuntu releases. This particular user has a good reason for running 16.10.&amp;n
 &lt;/ol&gt;
 &lt;/div&gt;
 </content>
+    <category term="Clojure"/>
+    <category term="Programming"/>
+    <category term="Ruby"/>
   </entry>
 </feed>

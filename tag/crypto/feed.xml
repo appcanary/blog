@@ -15,6 +15,11 @@
     <author>
       <name>Max Veytsman</name>
     </author>
+    <summary type="html">&lt;p&gt;Imagine this:&lt;/p&gt;
+
+&lt;p&gt;You work for a big company. Your job is pretty boring. Frankly, your talents are wasted writing boilerplate code for an application whose only users are three people in accounting who can’t stand the sight of you.&lt;/p&gt;
+
+&lt;p&gt;Your real passion...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;Imagine this:&lt;/p&gt;
 
 &lt;p&gt;You work for a big company. Your job is pretty boring. Frankly, your talents are wasted writing boilerplate code for an application whose only users are three people in accounting who can&amp;rsquo;t stand the sight of you.&lt;/p&gt;
@@ -142,5 +147,7 @@ phonemes as sequences of lengths of encrypted packets.&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="https://appcanary.com/sign_up?utm_source=blog&amp;amp;utm_medium=web&amp;amp;utm_campaign=compress"&gt;Sign up&lt;/a&gt; today!&lt;/p&gt;
 </content>
+    <category term="security"/>
+    <category term="crypto"/>
   </entry>
 </feed>

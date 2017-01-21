@@ -15,6 +15,13 @@
     <author>
       <name>Team Appcanary</name>
     </author>
+    <summary type="html">&lt;p&gt;Dear friends, &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;tl;dr&lt;/strong&gt; We launched &lt;a href="https://appcanary.com"&gt;Appcanary&lt;/a&gt;, we’re shutting down Gemcanary Dec 31st 2015, we have great plans for the future, we love you.&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="image" src="/images/gemcanary_comic.jpg"&gt;&lt;/p&gt;
+
+&lt;p&gt;We’ve been busy. We got to spend the summer in sunny California attending Y Combinator. We learned a lot,...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;Dear friends,&amp;nbsp;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;tl;dr&lt;/strong&gt; We launched &lt;a href="https://appcanary.com"&gt;Appcanary&lt;/a&gt;, we’re shutting down Gemcanary Dec 31st 2015, we have great plans for the future, we love you.&lt;/p&gt;
@@ -48,5 +55,6 @@
 
 &lt;p&gt;&lt;a href="https://twitter.com/phillmv"&gt;@phillmv&lt;/a&gt; and &lt;a href="https://twitter.com/mveytsman"&gt;@mveytsman&lt;/a&gt;. Comic by &lt;a href="https://twitter.com/0sn"&gt;Nick Wolfe&lt;/a&gt;.&lt;/p&gt;
 </content>
+    <category term="Retrospective"/>
   </entry>
 </feed>

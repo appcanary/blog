@@ -15,6 +15,12 @@
     <author>
       <name>Max Veytsman</name>
     </author>
+    <summary type="html">&lt;p&gt;Last Friday, my workday was rudely interrupted because I couldn’t access Github.
+To add insult to injury I couldn’t even complain about it on Twitter. I tried to
+drown my sorrows by listening to moody Leonard Cohen songs on Spotify, but
+alas…&lt;/p&gt;
+
+&lt;p&gt;You...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;Last Friday, my workday was rudely interrupted because I couldn&amp;rsquo;t access Github.
 To add insult to injury I couldn&amp;rsquo;t even complain about it on Twitter. I tried to
 drown my sorrows by listening to moody Leonard Cohen songs on Spotify, but
@@ -116,5 +122,8 @@ discovered in a package you rely on.&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="https://appcanary.com/sign_up?utm_source=blog&amp;amp;utm_medium=web&amp;amp;utm_campaign=broken"&gt;Sign up&lt;/a&gt; today!&lt;/p&gt;
 </content>
+    <category term="security"/>
+    <category term="mirai"/>
+    <category term="botnet"/>
   </entry>
 </feed>

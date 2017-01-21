@@ -15,6 +15,10 @@
     <author>
       <name>Max Veytsman</name>
     </author>
+    <summary type="html">&lt;p&gt;Some physicists 28 years ago needed a way to easily share experimental data and
+thus the web was born.  This was generally considered to be a good move.
+Unfortunately, everything physicists touch — from trigonometry to the
+strong nuclear force — eventually...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;Some physicists 28 years ago needed a way to easily share experimental data and
 thus the web was born.  This was generally considered to be a good move.
 Unfortunately, everything physicists touch &amp;mdash; from trigonometry to the
@@ -878,5 +882,8 @@ worlds and spell it correctly in &lt;code&gt;Referrer-Policy&lt;/code&gt;.&amp;n
 &lt;/ol&gt;
 &lt;/div&gt;
 </content>
+    <category term="Security"/>
+    <category term="Programming"/>
+    <category term="Web"/>
   </entry>
 </feed>

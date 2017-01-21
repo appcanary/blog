@@ -15,6 +15,11 @@
     <author>
       <name>Max Veytsman</name>
     </author>
+    <summary type="html">&lt;p&gt;Imagine this:&lt;/p&gt;
+
+&lt;p&gt;You work for a big company. Your job is pretty boring. Frankly, your talents are wasted writing boilerplate code for an application whose only users are three people in accounting who can’t stand the sight of you.&lt;/p&gt;
+
+&lt;p&gt;Your real passion...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;Imagine this:&lt;/p&gt;
 
 &lt;p&gt;You work for a big company. Your job is pretty boring. Frankly, your talents are wasted writing boilerplate code for an application whose only users are three people in accounting who can&amp;rsquo;t stand the sight of you.&lt;/p&gt;
@@ -142,6 +147,8 @@ phonemes as sequences of lengths of encrypted packets.&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="https://appcanary.com/sign_up?utm_source=blog&amp;amp;utm_medium=web&amp;amp;utm_campaign=compress"&gt;Sign up&lt;/a&gt; today!&lt;/p&gt;
 </content>
+    <category term="security"/>
+    <category term="crypto"/>
   </entry>
   <entry>
     <title>Vulnerabilities I Have Known and Loved #1: Symantec's Bad Week</title>
@@ -152,6 +159,10 @@ phonemes as sequences of lengths of encrypted packets.&lt;/p&gt;
     <author>
       <name>Max Veytsman</name>
     </author>
+    <summary type="html">&lt;p&gt;&lt;strong&gt;tl;dr:&lt;/strong&gt; If you use software with “Symantec” or “Norton” somewhere in its name, &lt;strong&gt;stop what you’re doing and &lt;a href="https://www.symantec.com/support-center/upgrades"&gt;upgrade&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Back in my security consulting days, a mentor taught me One Weird Trick to
+increase conversions on your phishing campaign.  It goes like...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;&lt;strong&gt;tl;dr:&lt;/strong&gt; If you use software with &amp;ldquo;Symantec&amp;rdquo; or &amp;ldquo;Norton&amp;rdquo; somewhere in its name, &lt;strong&gt;stop what you&amp;rsquo;re doing and &lt;a href="https://www.symantec.com/support-center/upgrades"&gt;upgrade&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
 
 &lt;p&gt;Back in my security consulting days, a mentor taught me One Weird Trick to
@@ -261,6 +272,8 @@ blog&lt;/a&gt;, and the issues for all 8 vulnerabilities can &lt;a href="https:/
 &lt;/ol&gt;
 &lt;/div&gt;
 </content>
+    <category term="vihkal"/>
+    <category term="security"/>
   </entry>
   <entry>
     <title>A tale of two worms, three vulnerabilities, and one National Security Agency</title>
@@ -271,6 +284,12 @@ blog&lt;/a&gt;, and the issues for all 8 vulnerabilities can &lt;a href="https:/
     <author>
       <name>Max Veytsman</name>
     </author>
+    <summary type="html">&lt;p&gt;Paranoia is natural for security practitioners. &lt;/p&gt;
+
+&lt;p&gt;Hacking can feel like being initiated into a secret society of wizards.
+Once you’re in, you get access to an
+&lt;a href="https://docs.google.com/presentation/d/1Sv8IHkBtBEXjSW7WktEYg4EbAUHtVyXIZBrAGD3WR5Y/edit?pref=2&amp;amp;pli=1#slide=id.p" target="_blank"&gt;addictive drug&lt;/a&gt;
+that gives you super powers. But there are other wizards out there; some are...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;Paranoia is natural for security practitioners. &lt;/p&gt;
 
 &lt;p&gt;Hacking can feel like being initiated into a secret society of wizards.
@@ -547,6 +566,8 @@ call here.&lt;/p&gt;
 &lt;/ol&gt;
 &lt;/div&gt;
 </content>
+    <category term="vihkal"/>
+    <category term="security"/>
   </entry>
   <entry>
     <title>The Mirai Botnet is Proof the Security Industry is Broken</title>
@@ -557,6 +578,12 @@ call here.&lt;/p&gt;
     <author>
       <name>Max Veytsman</name>
     </author>
+    <summary type="html">&lt;p&gt;Last Friday, my workday was rudely interrupted because I couldn’t access Github.
+To add insult to injury I couldn’t even complain about it on Twitter. I tried to
+drown my sorrows by listening to moody Leonard Cohen songs on Spotify, but
+alas…&lt;/p&gt;
+
+&lt;p&gt;You...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;Last Friday, my workday was rudely interrupted because I couldn&amp;rsquo;t access Github.
 To add insult to injury I couldn&amp;rsquo;t even complain about it on Twitter. I tried to
 drown my sorrows by listening to moody Leonard Cohen songs on Spotify, but
@@ -658,5 +685,8 @@ discovered in a package you rely on.&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="https://appcanary.com/sign_up?utm_source=blog&amp;amp;utm_medium=web&amp;amp;utm_campaign=broken"&gt;Sign up&lt;/a&gt; today!&lt;/p&gt;
 </content>
+    <category term="security"/>
+    <category term="mirai"/>
+    <category term="botnet"/>
   </entry>
 </feed>

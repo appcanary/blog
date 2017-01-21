@@ -15,6 +15,11 @@
     <author>
       <name>Max Veytsman</name>
     </author>
+    <summary type="html">&lt;p&gt;We’ve been hard at work the past few months on lots of features touching every aspect of our product, and to ring in the new year, we’re going to announce them all at once.&lt;/p&gt;
+
+&lt;h2 id="search-our-vulnerabilities"&gt;Search our vulnerabilities&lt;/h2&gt;
+
+&lt;p&gt;You can now browse and search every vulnerability...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;We&amp;rsquo;ve been hard at work the past few months on lots of features touching every aspect of our product, and to ring in the new year, we&amp;rsquo;re going to announce them all at once.&lt;/p&gt;
 
 &lt;h2 id="search-our-vulnerabilities"&gt;Search our vulnerabilities&lt;/h2&gt;
@@ -53,6 +58,8 @@ version that fixes all the vulnerabilities we know about.&lt;/p&gt;
 
 &lt;p&gt;Last but not lease, we fully support CentOS 6 along with CentOS 7.&lt;/p&gt;
 </content>
+    <category term="Announcements"/>
+    <category term="Product"/>
   </entry>
   <entry>
     <title>Everything you need to know about HTTP security headers</title>
@@ -63,6 +70,10 @@ version that fixes all the vulnerabilities we know about.&lt;/p&gt;
     <author>
       <name>Max Veytsman</name>
     </author>
+    <summary type="html">&lt;p&gt;Some physicists 28 years ago needed a way to easily share experimental data and
+thus the web was born.  This was generally considered to be a good move.
+Unfortunately, everything physicists touch — from trigonometry to the
+strong nuclear force — eventually...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;Some physicists 28 years ago needed a way to easily share experimental data and
 thus the web was born.  This was generally considered to be a good move.
 Unfortunately, everything physicists touch &amp;mdash; from trigonometry to the
@@ -926,6 +937,9 @@ worlds and spell it correctly in &lt;code&gt;Referrer-Policy&lt;/code&gt;.&amp;n
 &lt;/ol&gt;
 &lt;/div&gt;
 </content>
+    <category term="Security"/>
+    <category term="Programming"/>
+    <category term="Web"/>
   </entry>
   <entry>
     <title>Good News: Ubuntu Now Ships With unattended-upgrades On By Default!</title>
@@ -936,6 +950,21 @@ worlds and spell it correctly in &lt;code&gt;Referrer-Policy&lt;/code&gt;.&amp;n
     <author>
       <name>Max Veytsman</name>
     </author>
+    <summary type="html">&lt;p&gt;Last week, we got a strange support request. One of our users had received the following notification:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Hey! Good job.&lt;/p&gt;
+
+&lt;p&gt;We’ve detected that you patched some vulnerabilities.&lt;/p&gt;
+
+&lt;p&gt;Here’s what changed:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://appcanary.com/vulns/46220"&gt;CVE-2016-8704&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;is no longer present in:&lt;/p&gt;
+
+&lt;p&gt;[name of...&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
     <content type="html">&lt;p&gt;Last week, we got a strange support request. One of our users had received the following notification:&lt;/p&gt;
 
 &lt;blockquote&gt;
@@ -1052,6 +1081,9 @@ Ubuntu releases. This particular user has a good reason for running 16.10.&amp;n
 &lt;/ol&gt;
 &lt;/div&gt;
 </content>
+    <category term="Clojure"/>
+    <category term="Programming"/>
+    <category term="Ruby"/>
   </entry>
   <entry>
     <title>We Left Clojure. Here's 5 Things I'll Miss.</title>
@@ -1062,6 +1094,9 @@ Ubuntu releases. This particular user has a good reason for running 16.10.&amp;n
     <author>
       <name>Max Veytsman</name>
     </author>
+    <summary type="html">&lt;p&gt;On October 11th, Appcanary relied on about 8,500 lines of clojure code. On the
+12th we were down to zero. We replaced it by adding another 5,700 lines of Ruby to our codebase. 
+&lt;a href="https://twitter.com/phillmv"&gt;Phill&lt;/a&gt; will be discussing why we left, and what we learned both here and...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;On October 11th, Appcanary relied on about 8,500 lines of clojure code. On the
 12th we were down to zero. We replaced it by adding another 5,700 lines of Ruby to our codebase. 
 &lt;a href="https://twitter.com/phillmv"&gt;Phill&lt;/a&gt; will be discussing why we left, and what we learned both here and &lt;a href="http://rubyconf.org/program#prop_19"&gt;at this year&amp;rsquo;s RubyConf&lt;/a&gt;. For now, I want to talk about what I&amp;rsquo;ll miss.&lt;/p&gt;
@@ -1223,6 +1258,9 @@ programs, but the fact that I have to acknowledge this proves my point.&amp;nbsp
 &lt;/ol&gt;
 &lt;/div&gt;
 </content>
+    <category term="Clojure"/>
+    <category term="Programming"/>
+    <category term="Ruby"/>
   </entry>
   <entry>
     <title>The Mirai Botnet is Proof the Security Industry is Broken</title>
@@ -1233,6 +1271,12 @@ programs, but the fact that I have to acknowledge this proves my point.&amp;nbsp
     <author>
       <name>Max Veytsman</name>
     </author>
+    <summary type="html">&lt;p&gt;Last Friday, my workday was rudely interrupted because I couldn’t access Github.
+To add insult to injury I couldn’t even complain about it on Twitter. I tried to
+drown my sorrows by listening to moody Leonard Cohen songs on Spotify, but
+alas…&lt;/p&gt;
+
+&lt;p&gt;You...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;Last Friday, my workday was rudely interrupted because I couldn&amp;rsquo;t access Github.
 To add insult to injury I couldn&amp;rsquo;t even complain about it on Twitter. I tried to
 drown my sorrows by listening to moody Leonard Cohen songs on Spotify, but
@@ -1334,6 +1378,9 @@ discovered in a package you rely on.&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="https://appcanary.com/sign_up?utm_source=blog&amp;amp;utm_medium=web&amp;amp;utm_campaign=broken"&gt;Sign up&lt;/a&gt; today!&lt;/p&gt;
 </content>
+    <category term="security"/>
+    <category term="mirai"/>
+    <category term="botnet"/>
   </entry>
   <entry>
     <title>A tale of two worms, three vulnerabilities, and one National Security Agency</title>
@@ -1344,6 +1391,12 @@ discovered in a package you rely on.&lt;/p&gt;
     <author>
       <name>Max Veytsman</name>
     </author>
+    <summary type="html">&lt;p&gt;Paranoia is natural for security practitioners. &lt;/p&gt;
+
+&lt;p&gt;Hacking can feel like being initiated into a secret society of wizards.
+Once you’re in, you get access to an
+&lt;a href="https://docs.google.com/presentation/d/1Sv8IHkBtBEXjSW7WktEYg4EbAUHtVyXIZBrAGD3WR5Y/edit?pref=2&amp;amp;pli=1#slide=id.p" target="_blank"&gt;addictive drug&lt;/a&gt;
+that gives you super powers. But there are other wizards out there; some are...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;Paranoia is natural for security practitioners. &lt;/p&gt;
 
 &lt;p&gt;Hacking can feel like being initiated into a secret society of wizards.
@@ -1620,5 +1673,7 @@ call here.&lt;/p&gt;
 &lt;/ol&gt;
 &lt;/div&gt;
 </content>
+    <category term="vihkal"/>
+    <category term="security"/>
   </entry>
 </feed>
