@@ -84,7 +84,7 @@
 </span>
 <span class='author-stats'>
 <i class='icon-stats'></i>
-15 posts
+16 posts
 </span>
 </div>
 </section>
@@ -96,6 +96,85 @@
 </nav>
 
 </div>
+<article class='post'>
+<header class='post-header'>
+<h1 class='post-title'><a href="../../../2016/new-api-centos-support.html">Hello, new Appcanary API and CentOS support!</a></h1>
+<section class='post-meta'>
+</section>
+</header>
+<section class='post-content'>
+<p>A lot of our users have told us, </p>
+
+<blockquote>
+<p>&ldquo;Gosh, I love knowing exactly which packages I have to update in order to keep my apps and servers secure. Have you thought about an API?&rdquo;</p>
+</blockquote>
+
+<p>We listened carefully to that feedback, and it is with pride and pleasure that we&rsquo;re announcing our new beta! We&rsquo;re still busy improving it, so we won&rsquo;t charge you for it for now.</p>
+
+<p>Once you <a href="https://appcanary.com/sign_up">sign up</a>, all you have to do is issue a curl:</p>
+<pre class="highlight shell"><code>curl -H <span class="s2">"Authorization: Token YOURTOKENHERE"</span> <span class="se">\</span>
+     -X POST -F <span class="nv">file</span><span class="o">=</span>@./Gemfile.lock <span class="se">\</span>
+     https://appcanary.com/api/v2/check/ruby
+</code></pre>
+
+<p>and you&rsquo;ll get a response like:</p>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"vulnerable"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"artifact-version"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"attributes"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rack"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rubygem"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.6.0"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"vulnerabilities"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Potential Denial of Service Vulnerability in Rack"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Carefully crafted requests can cause a `SystemStackError` and potentially \ncause a denial of service attack. \n\nAll users running an affected release should upgrade."</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"criticality"</span><span class="p">:</span><span class="w"> </span><span class="s2">"high"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"cve"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+              </span><span class="s2">"CVE-2015-3225"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="nt">"osvdb"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+            </span><span class="nt">"patched-versions"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+              </span><span class="s2">"~&lt; 1.5.4"</span><span class="p">,</span><span class="w">
+              </span><span class="s2">"~&lt; 1.4.6"</span><span class="p">,</span><span class="w">
+              </span><span class="s2">"&gt;= 1.6.2"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="nt">"unaffected-versions"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+            </span><span class="nt">"uuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"55807540-053f-40f0-9266-a3d1ca6a5838"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"upgrade-to"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+              </span><span class="s2">"&gt;= 1.6.2"</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+          </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<p>Our API fully supports <strong>Ruby</strong>, <strong>Ubuntu</strong>, and <strong>CentOS 7</strong>! You can learn more about how to use it by visiting <a href="https://appcanary.com/docs">the docs page</a>.</p>
+
+<p>Which reminds us,</p>
+
+<h2 id="we-now-support-centos-7">We now support CentOS 7!</h2>
+
+<p>Appcanary now fully supports <strong>CentoOS 7</strong>. If you install our agent on a CentOS 7 server, we will email you notifications whenever any rpm package you have installed on your system has a known vulnerability.</p>
+
+<p>If you&rsquo;re not a current user and want to try out Appcanary&rsquo;s API and/or use us to monitor your CentOS 7 servers, you can <a href="https://appcanary.com/signup">sign up</a>!</p>
+
+<p>You can always let us know what you think at <a href="mailto:hello@appcanary.com">hello@appcanary.com</a>.</p>
+
+</section>
+<footer class='post-meta'>
+<a href='/author/max-veytsman.html'>Max Veytsman</a>
+on <a href='/tag/announcements.html'>Announcements</a>, <a href='/tag/product.html'>Product</a>
+<time class='post-date' datetime='2016-03-07'>
+07 March 2016
+</time>
+</footer>
+</article>
 <article class='post'>
 <header class='post-header'>
 <h1 class='post-title'><a href="../../../2016/datomic-intro-talk.html">A Gentle Intro to Datomic</a></h1>

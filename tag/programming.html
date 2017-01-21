@@ -57,7 +57,7 @@
 <div class='vertical'>
 <div class='main-header-content inner'>
 <h1 class='page-title'>Programming</h1>
-<h2 class='page-description'>A 7-post collection</h2>
+<h2 class='page-description'>A 8-post collection</h2>
 </div>
 </div>
 </header>
@@ -69,6 +69,133 @@
 </nav>
 
 </div>
+<article class='post'>
+<header class='post-header'>
+<h1 class='post-title'><a href="../2017/improve-security-port-scan-yourself.html">Improve Your Security: Port Scan Yourself</a></h1>
+<section class='post-meta'>
+</section>
+</header>
+<section class='post-content'>
+<p>Ransomware crews are no longer satisfied <a href="https://www.wired.com/2016/03/ransomware-why-hospitals-are-the-perfect-targets/">shutting down hospitals</a> and are now also going after hip tech startups. Last week, a professional crew got involved in <a href="https://www.bleepingcomputer.com/news/security/mongodb-apocalypse-professional-ransomware-group-gets-involved-infections-reach-28k-servers/">ransoming MongoDB instances</a>, and some 28,000 servers were compromised and held for Bitcoin.</p>
+
+<p>The &ldquo;attack&rdquo; is so simple it barely deserves the name. The crew scans the internet looking for open and unsecured instances of MongoDB. When they find one, they log in and steal the data. The victims must pay Bitcoin to get their data back. To save on storage costs, sometimes the crew just deletes the data without bothering to save it &mdash; and the mark ends up paying for nothing. Even honor among thieves can&rsquo;t survive the harsh realities of 21st century globalized late cyber-capitalism.</p>
+
+<p>When reading about these attacks, there is a strong temptation blame the victim. Hospitals were at fault because of their antiquated IT departments: huge, sclerotic fiefdoms incapable of moving past Windows 98. We all know that MongoDB <a href="http://cryto.net/~joepie91/blog/2015/07/19/why-you-should-never-ever-ever-use-mongodb/">sucks</a>, and that <a href="http://www.catb.org/jargon/html/story-of-mel.html">Real Programmers</a> would never be caught dead using it. Why, they probably <em>deserved</em> to get hacked!</p>
+
+<p>Don&rsquo;t do it. As I&rsquo;ve said before, victim-blaming in security is a <a href="https://blog.appcanary.com/2016/mirai-botnet-security-broken.html">trap that must be avoided</a>. Attacks are varied and always changing; best practices can be indistinguishable from cargo cults, and default configurations seem almost designed to foil you.</p>
+
+<p>In this case, MongoDB apparently ships without any authentication, listening to the whole wide world. No wonder so many instances got hacked!</p>
+
+<h2 id="howto-not-get-hacked">HOWTO not get hacked</h2>
+
+<p>Basically, you should have as little as possible accessible to the outside world. Set up a firewall. This tweet sums up the idea best:</p>
+
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">If Postgres, MySQL, memcached, redis, etc responds to commands from outside the VPN/firewall/etc, assume you will lose your deployment.</p>&mdash; Patrick McKenzie (@patio11) <a href="https://twitter.com/patio11/status/818728480661590018">January 10, 2017</a></blockquote>
+
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<p>If you&rsquo;re anything like me, the first thought when confronted with that tweet is: &ldquo;is my firewall actually working right?&rdquo; Would you bet money that you know what ports are open on a given server in your fleet?</p>
+
+<h3 id="enter-nmap">Enter Nmap</h3>
+
+<p><img title="Nmap as used in The Matrix" alt="trinity using Nmap" src="//blog.appcanary.com/images/trinity_nmap.jpg" />
+<em>Nmap as used in The Matrix</em></p>
+
+<p><a href="https://nmap.org/">Nmap</a> is an incredibly powerful tool that&rsquo;s <a href="https://nmap.org/movies/">synonymous</a> with port scanning. A port scanner is a program that checks to see what network ports are open on a computer.</p>
+
+<p>Here&rsquo;s what scanning <a href="https://appcanary.com">appcanary.com</a> with default settings from my work computer looks like:</p>
+<pre class="highlight plaintext"><code>$ nmap appcanary.com
+
+Starting Nmap 7.12 ( https://nmap.org ) at 2017-01-16 12:57 EST
+Nmap scan report for appcanary.com (45.55.197.253)
+Host is up (0.030s latency).
+Not shown: 993 closed ports
+PORT    STATE    SERVICE
+22/tcp  open     ssh
+25/tcp  filtered smtp
+80/tcp  open     http
+135/tcp filtered msrpc
+139/tcp filtered netbios-ssn
+443/tcp open     https
+445/tcp filtered microsoft-ds
+</code></pre>
+
+<p>You&rsquo;ll see that 22, 80, and 443 are open. This is because we listen on SSH, HTTP and HTTPS. There are also a bunch of filtered ports. This is because some router or firewall between me and appcanary is blocking that port so it&rsquo;s not clear whether it&rsquo;s open or closed. </p>
+
+<p>Running the same scan from a random<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup> Digital Ocean box gives me the true result without the intermediate network filtering.</p>
+<pre class="highlight plaintext"><code>Starting Nmap 5.21 ( http://nmap.org ) at 2017-01-16 13:04 EST
+Nmap scan report for appcanary.com (45.55.197.253)
+Host is up (0.0012s latency).
+Not shown: 997 closed ports
+PORT    STATE SERVICE
+22/tcp  open  ssh
+80/tcp  open  http
+443/tcp open  https
+</code></pre>
+
+<p>Nmap has a variety of <a href="https://nmap.org/book/man-port-scanning-techniques.html">scanning options</a>, but the most important thing to understand for TCP scans is the difference between SYN scanning and connect scanning.</p>
+
+<p>If you&rsquo;ve ever tried to write a port scanner (which is a great exercise in network programming and concurrency), you&rsquo;ve probably tried to write a connect scanner. A connect scanner tries to connect to a port, and closes the connection after success. Nmap&rsquo;s most popular mode is SYN scanning. In SYN scanning, you send a SYN packet initiating the <a href="https://en.wikipedia.org/wiki/Transmission_Control_Protocol#Connection_establishment">TCP handshake</a>. If you get an SYN-ACK back, the port is open, and you send a RST instead of an ACK as you would if you were actually connecting. This is &ldquo;stealthier&rdquo;, which doesn&rsquo;t matter as much for our purposes, and is more efficient. Unfortunately it requires nmap to be run as root because it needs raw access to the network interface.</p>
+
+<p>You can specify a SYN scan with <code>nmap -sS</code>, and a connect scan with <code>nmap -sT</code>. By default nmap will prefer to do a SYN scan if it is able to.</p>
+
+<p>By default, nmap will scan the top 1000 most common ports. You can specify a specific ports or a range with <code>-p</code>, i.e. <code>nmap -p22</code> will scan only port 22, and <code>nmap -p400-500</code> will scan ports 400 through 500. <code>nmap -p-</code> will scan the complete port range (1-65535).</p>
+
+<h3 id="developer-port-scan-thyself">Developer, port scan thyself</h3>
+
+<p>Regularly port scan yourself; it&rsquo;s the only way to be certain that your databases aren&rsquo;t listening to the outside world. Run Nmap against your servers, and make sure that only the ports you expect are open. </p>
+
+<p>To make it easier, here&rsquo;s a script to do it for you. This will run Nmap, compare the output with predefined ports, and ping you on Slack if there&rsquo;s a mismatch. Run it on a cron job, so you can check on the regular.</p>
+
+<script src="https://gist.github.com/mveytsman/7a3366e69401fae6e9a4f9eaf0d3f9b1.js"></script>
+
+<h2 id="how-does-appcanary-fit-in">How does Appcanary fit in?</h2>
+
+<p>Our mission is to help you do security basics right, so you can be free to worry about the hard stuff. We&rsquo;re building the <a href="https://appcanary.com">world&rsquo;s best patch management product</a> because we had a deep need for one ourselves, and it automated such a vital part of a security team&rsquo;s job.</p>
+
+<p>When I started writing this article, I didn&rsquo;t realize how well it fit into what we&rsquo;re doing with patch management. To do security right, you need to implement systems and continuously verify they are working correctly. <a href="https://appcanary.com">Appcanary</a> helps you verify your patch management program, the script above helps you verify your firewall. Both without any bullshit.</p>
+
+<h3 id="we-want-to-hear-from-you">We want to hear from you</h3>
+
+<p>Did I convince you to port scan your systems after reading the article? Are you using the script above? Something else? Let me know: <a href="mailto:max@appcanary.com">max@appcanary.com</a>.</p>
+
+<p><link href="//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+ #mc<em>embed</em>signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; width:100%;}
+ /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+      We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+</style>
+<div id="mc_embed_signup">
+<form action="//appcanary.us10.list-manage.com/subscribe/post?u=303b378f377508300c0b5469a&amp;id=dc58e8f56f" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+<div id="mc_embed_signup_scroll">
+<label for="mce-EMAIL">Liked this post? Subscribe to our newsletter for more!</label>
+<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+<div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_303b378f377508300c0b5469a_dc58e8f56f" tabindex="-1" value=""></div>
+<div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+</div>
+</form>
+</div></p>
+
+<div class="footnotes">
+<hr>
+<ol>
+
+<li id="fn1">
+<p>If you&rsquo;re observant, you may have noticed that this version of nmap is much older than the one on my work computer. If you&rsquo;re really observant, you may have noticed that it has a <a href="https://appcanary.com/vulns/35319">vulnerability</a>.&nbsp;<a href="#fnref1" rev="footnote">&#8617;</a></p>
+</li>
+
+</ol>
+</div>
+
+</section>
+<footer class='post-meta'>
+<a href='/author/max-veytsman.html'>Max Veytsman</a>
+on <a href='/tag/security.html'>Security</a>, <a href='/tag/programming.html'>Programming</a>, <a href='/tag/network.html'>Network</a>
+<time class='post-date' datetime='2017-01-20'>
+20 January 2017
+</time>
+</footer>
+</article>
 <article class='post'>
 <header class='post-header'>
 <h1 class='post-title'><a href="../2017/http-security-headers.html">Everything you need to know about HTTP security headers</a></h1>
@@ -1367,141 +1494,6 @@ on <a href='/tag/clojure.html'>Clojure</a>, <a href='/tag/ruby.html'>Ruby</a>, <
 on <a href='/tag/clojure.html'>Clojure</a>, <a href='/tag/datomic.html'>Datomic</a>, <a href='/tag/programming.html'>Programming</a>, <a href='/tag/talks.html'>Talks</a>
 <time class='post-date' datetime='2016-02-09'>
 09 February 2016
-</time>
-</footer>
-</article>
-<article class='post'>
-<header class='post-header'>
-<h1 class='post-title'><a href="../2016/state-management-downtime.html">How being lazy about state management in Clojure caused us downtime</a></h1>
-<section class='post-meta'>
-</section>
-</header>
-<section class='post-content'>
-<p>On November 10th, we suffered some downtime as our backend application mysteriously crashed and had to be restarted. After looking at our process monitoring service, I found a very suspicious graph:</p>
-
-<p><img alt="image" src="//blog.appcanary.com/images/system.process.threads.png" /></p>
-
-<p>Somehow, we managed to spin up more then 30,000 threads right before the application crashed. This was very likely the cause of the failure, but how did it happen?</p>
-
-<p>An easy way to get an idea of where a thread leak is coming from is to look at the thread names. In Java you can do this with <code>jstack -l $PID</code>.</p>
-
-<p>To get a list of all thread names of a Java application sorted by most common name, you can do:</p>
-<pre class="highlight plaintext"><code>jstack -l $PID | grep daemon |  awk '{ print $1 }' | sort | uniq -c |   sort -nr
-</code></pre>
-
-<p>Which on our end yielded something like this:</p>
-<pre class="highlight plaintext"><code>  30000 "Analytics"
-      2 "Datomic
-      2 "C2
-      1 "worker-4"
-      1 "worker-3"
-      1 "worker-2"
-      1 "worker-1"
-      1 "Timer-0"
-      1 "Thread-5"
-      1 "Thread-4
-      1 "Thread-3
-      1 "Thread-2
-      1 "Thread-1
-      1 "Thread-0
-</code></pre>
-
-<p>Hmm&hellip;</p>
-
-<h3 id="background">Background</h3>
-
-<p>Our backend is written in Clojure and we use Stuart Sierra&rsquo;s <a href="https://github.com/stuartsierra/component">component</a> framework to manage most of our application&rsquo;s state and lifecycle. Normally this should prevent runaway threads, but unfortunately for us our analytics client&rsquo;s state was managed independently of the framework. To explain why, I need to first delve a little in to how component works.</p>
-
-<p>Regardless of how beautiful and functional it may be, any application that talks to the outside world will need to manage some state representing these external resources. We need to manage our database connections, our clients for external APIs, our background workers, etc.</p>
-
-<p>One way to deal with this in Clojureland is to create a global singleton object for representing each stateful piece, possibly wrapped in an <code>atom</code>. This feels lacking, though. You still need a way to initialize all these singletons on startup, and having mutable singletons everywhere goes against what I would consider good Clojure style.</p>
-
-<p>Component solves this problem by implementing dependency injection in a Clojurelike way. You define a graph that represents each stateful piece, how they depend on each other, and how each piece starts and stops. On system start, component boots each piece in the right order, passing along references to dependencies when they&rsquo;re needed.</p>
-
-<p>For example, Appcanary&rsquo;s dependency graph looks (something) like this:</p>
-<pre class="highlight clojure"><code><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">canary-system</span><span class="w">
-  </span><span class="p">[]</span><span class="w">
-  </span><span class="c1">;;Initialize logging
-</span><span class="w">  </span><span class="p">(</span><span class="nf">component/system-map</span><span class="w">
-   </span><span class="no">:datomic</span><span class="w"> </span><span class="p">(</span><span class="nf">new-datomic</span><span class="w"> </span><span class="p">(</span><span class="nf">env</span><span class="w"> </span><span class="no">:datomic-uri</span><span class="p">))</span><span class="w">
-   </span><span class="no">:scheduler</span><span class="w"> </span><span class="p">(</span><span class="nf">new-scheduler</span><span class="p">)</span><span class="w">
-   </span><span class="no">:mailer</span><span class="w"> </span><span class="p">(</span><span class="nf">component/using</span><span class="w">  </span><span class="p">(</span><span class="nf">new-mailer</span><span class="w"> </span><span class="p">(</span><span class="nf">env</span><span class="w"> </span><span class="no">:mandrill-key</span><span class="p">))</span><span class="w">
-                             </span><span class="p">[</span><span class="no">:datomic</span><span class="w"> </span><span class="no">:scheduler</span><span class="p">])</span><span class="w">
-   </span><span class="no">:web-server</span><span class="w"> </span><span class="p">(</span><span class="nf">component/using</span><span class="w"> </span><span class="p">(</span><span class="nf">new-web-server</span><span class="w"> </span><span class="p">(</span><span class="nf">env</span><span class="w"> </span><span class="no">:http-ip</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nf">Integer.</span><span class="w"> </span><span class="p">(</span><span class="nf">env</span><span class="w"> </span><span class="no">:http-port</span><span class="p">))</span><span class="w"> </span><span class="n">canary-api</span><span class="p">)</span><span class="w">
-                             </span><span class="p">[</span><span class="no">:datomic</span><span class="p">])))</span><span class="w">
-</span></code></pre>
-
-<p>The <code>mailer</code> depends on <code>datomic</code> and the <code>scheduler</code>, the web server depends on <code>datomic</code>, and both <code>datomic</code> and the <code>scheduler</code> don&rsquo;t depend on anything.</p>
-
-<p>Like all the other components, the <code>new-datomic</code> function is a constructor for a record that knows how to start and stop itself. On system start, all the components are started, and the dependencies are filled in.</p>
-
-<h3 id="sometimes-component-feels-like-overkill">Sometimes component feels like overkill</h3>
-
-<p>Component is great, but it didn&rsquo;t fit our analytics engine usecase. We use <a href="https://segment.io">segment.io</a> to handle our app analytics, and we needed to maintain a client to talk to it. An analytics event can potentially be called from anywhere in the app, but it&rsquo;s cumbersome to pass an analytics client reference to every component, and into every analytics call. If every component depends on something, it feels like maybe it should be a global singleton. Futhermore, I don&rsquo;t want my components to know much about the analytics client at all; I just want them to know how to trigger events.</p>
-
-<p>What I want to have is an analytics namespace which contains all the events I may want to trigger, and wraps the client inside all of them. This lets me  do something like <code>(analytics/user-added-server user)</code> inside of the code that handles server creation.</p>
-
-<p>(One thing to note is that while there is a clojure segment.io <a href="https://github.com/ardoq/analytics-clj">client</a>, it&rsquo;s based off a 1.x release of the underlying <a href="https://github.com/segmentio/analytics-java">java library</a>, while we wanted to use features only available in the 2.0 release. Because of that, I wrote an analytics namespace that called the java library directly).</p>
-
-<p>The first pass of creating the client looked something like this:</p>
-<pre class="highlight clojure"><code><span class="p">(</span><span class="nf">defonce</span><span class="w"> </span><span class="n">client</span><span class="w">
-  </span><span class="p">(</span><span class="nf">.build</span><span class="w"> </span><span class="p">(</span><span class="nf">Analytics/builder</span><span class="w"> </span><span class="p">(</span><span class="nf">env</span><span class="w"> </span><span class="no">:segment-api-key</span><span class="p">))))</span><span class="w">
-
-</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">track</span><span class="w">
-  </span><span class="s">"Wrapper for analytics/track"</span><span class="w">
-  </span><span class="p">[</span><span class="n">id</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="n">properties</span><span class="w"> </span><span class="p">{</span><span class="no">:keys</span><span class="w"> </span><span class="p">[</span><span class="n">timestamp</span><span class="p">]</span><span class="w"> </span><span class="no">:as</span><span class="w"> </span><span class="n">options</span><span class="p">}]</span><span class="w">
-  </span><span class="p">(</span><span class="nb">when</span><span class="w"> </span><span class="p">(</span><span class="nf">production?</span><span class="p">)</span><span class="w">
-    </span><span class="p">(</span><span class="nf">.enqueue</span><span class="w"> </span><span class="n">client</span><span class="w">
-              </span><span class="c1">;; Java interop to build the analytics message here)))
-</span></code></pre>
-
-<p>There&rsquo;s only one problem with the above code: the segment api key is loaded from an environment variable. </p>
-
-<p>We deploy appcanary in a pretty standard way &ndash; we compile an uberjar and rsync it to the server. API keys live in environment variables, and the production API key is only going to live on the production server. So, at compile time, we have no way of knowing what the segment api key is. As a result, the analytics client needs to be built at runtime and not compile time in order to have access to the api key.</p>
-
-<h3 id="this-is-where-i-get-lazy">This is where I get lazy</h3>
-
-<p>The obvious thing to do to build the analytics client at runtime is to wrap it as a function:</p>
-<pre class="highlight clojure"><code><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">client</span><span class="w">
-  </span><span class="p">[]</span><span class="w">
-  </span><span class="p">(</span><span class="nf">.build</span><span class="w"> </span><span class="p">(</span><span class="nf">Analytics/builder</span><span class="w"> </span><span class="p">(</span><span class="nf">env</span><span class="w"> </span><span class="no">:segment-api-key</span><span class="p">))))</span><span class="w">
-
-</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">track</span><span class="w">
-  </span><span class="s">"Wrapper for analytics/track"</span><span class="w">
-  </span><span class="p">[</span><span class="n">id</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="n">properties</span><span class="w"> </span><span class="p">{</span><span class="no">:keys</span><span class="w"> </span><span class="p">[</span><span class="n">timestamp</span><span class="p">]</span><span class="w"> </span><span class="no">:as</span><span class="w"> </span><span class="n">options</span><span class="p">}]</span><span class="w">
-  </span><span class="p">(</span><span class="nb">when</span><span class="w"> </span><span class="p">(</span><span class="nf">production?</span><span class="p">)</span><span class="w">
-    </span><span class="p">(</span><span class="nf">.enqueue</span><span class="w"> </span><span class="p">(</span><span class="nf">client</span><span class="p">)</span><span class="w">
-              </span><span class="c1">;; Java interop to build the analytics message here)))
-</span></code></pre>
-
-<p>I saw three downsides here:</p>
-
-<ol>
-<li>We&rsquo;ll lose some efficiency from not reusing the TCP connection to segment.io</li>
-<li>It&rsquo;s possible that we&rsquo;ll have to waste a bit of time authenticating the analytics client on each call</li>
-<li>We&rsquo;ll spawn an extra client object per call, which will be garbage collected right away as it goes out of scope immediately after the <code>track</code> call</li>
-</ol>
-
-<p>The above three things aren&rsquo;t intrinsically bad, and it seemed like optimizing the performance of your analytics engine early on was a wasteful thing to do in a fast-paced startup environment.</p>
-
-<p>What I didn&rsquo;t consider is that the java library uses <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ExecutorService.html"><code>ExecutorService</code></a> to manage a threadpool, and <code>shutdown</code> must be called explicitly. Otherwise, the threads are put on hold instead of being marked for GC (see also <a href="http://stackoverflow.com/questions/16122987/reason-for-calling-shutdown-on-executorservice">this stackoverflow</a>).</p>
-
-<p>The fact that each client spawns a thread that isn&rsquo;t cleaned up by garbage collection was not <a href="https://segment.com/docs/libraries/java/">documented</a> unfortunately.</p>
-
-<h3 id="outcome">Outcome</h3>
-
-<p>Every analytics call we made spawned another threadpool, which caused the thread count to grow proportionally with user activity. We hit 40,000 threads before our application crashed.</p>
-
-<h3 id="tl-dr">TL;DR:</h3>
-
-<p>We spawned a new client object on every analytics call, not realizing that the underlying library uses a thread pool that&rsquo;s not shutdown on garbage collection. This is how we ended up killing the server by hitting 40,000 threads</p>
-
-</section>
-<footer class='post-meta'>
-<a href='/author/max-veytsman.html'>Max Veytsman</a>
-on <a href='/tag/clojure.html'>Clojure</a>, <a href='/tag/programming.html'>Programming</a>, <a href='/tag/developer-diary.html'>Developer Diary</a>, <a href='/tag/bugs.html'>Bugs</a>
-<time class='post-date' datetime='2016-02-02'>
-02 February 2016
 </time>
 </footer>
 </article>
