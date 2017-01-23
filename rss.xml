@@ -136,7 +136,7 @@ PORT    STATE SERVICE
     <link rel="alternate" href="http://blog.appcanary.com/2017/new-year-new-appcanary.html"/>
     <id>http://blog.appcanary.com/2017/new-year-new-appcanary.html</id>
     <published>2017-01-15T19:00:00-05:00</published>
-    <updated>2017-01-20T16:09:23-05:00</updated>
+    <updated>2017-01-23T15:21:44-05:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
@@ -191,7 +191,7 @@ version that fixes all the vulnerabilities we know about.&lt;/p&gt;
     <link rel="alternate" href="http://blog.appcanary.com/2017/http-security-headers.html"/>
     <id>http://blog.appcanary.com/2017/http-security-headers.html</id>
     <published>2017-01-12T19:00:00-05:00</published>
-    <updated>2017-01-20T16:09:23-05:00</updated>
+    <updated>2017-01-23T15:21:44-05:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
@@ -1215,7 +1215,7 @@ Ubuntu releases. This particular user has a good reason for running 16.10.&amp;n
     <link rel="alternate" href="http://blog.appcanary.com/2016/missing-clojure.html"/>
     <id>http://blog.appcanary.com/2016/missing-clojure.html</id>
     <published>2016-11-06T19:00:00-05:00</published>
-    <updated>2017-01-10T17:51:38-05:00</updated>
+    <updated>2017-01-23T15:21:37-05:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
