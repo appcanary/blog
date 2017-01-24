@@ -11,7 +11,7 @@
     <link rel="alternate" href="http://blog.appcanary.com/2016/vikhal-symantec.html"/>
     <id>http://blog.appcanary.com/2016/vikhal-symantec.html</id>
     <published>2016-07-06T20:00:00-04:00</published>
-    <updated>2016-08-19T13:23:10-04:00</updated>
+    <updated>2017-01-24T11:39:33-05:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
@@ -84,23 +84,6 @@ blog&lt;/a&gt;, and the issues for all 8 vulnerabilities can &lt;a href="https:/
 
 &lt;h3 id="p-s"&gt;P.S.&lt;/h3&gt;
 
-&lt;p&gt;&lt;link href="//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css" rel="stylesheet" type="text/css"&gt;
-&lt;style type="text/css"&gt;
- #mc&lt;em&gt;embed&lt;/em&gt;signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; width:100%;}
- /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
-      We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
-&lt;/style&gt;
-&lt;div id="mc_embed_signup"&gt;
-&lt;form action="//appcanary.us10.list-manage.com/subscribe/post?u=303b378f377508300c0b5469a&amp;amp;id=dc58e8f56f" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate&gt;
-&lt;div id="mc_embed_signup_scroll"&gt;
-&lt;label for="mce-EMAIL"&gt;Liked this post? Subscribe to our newsletter for more!&lt;/label&gt;
-&lt;input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required&gt;
-&lt;div style="position: absolute; left: -5000px;" aria-hidden="true"&gt;&lt;input type="text" name="b_303b378f377508300c0b5469a_dc58e8f56f" tabindex="-1" value=""&gt;&lt;/div&gt;
-&lt;div class="clear"&gt;&lt;input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"&gt;&lt;/div&gt;
-&lt;/div&gt;
-&lt;/form&gt;
-&lt;/div&gt;&lt;/p&gt;
-
 &lt;p&gt;Do you have suggestions for vulnerabilities you&amp;rsquo;d like me to write about? You can let me know at &lt;a href="mailto:max@appcanary.com"&gt;max@appcanary.com&lt;/a&gt;.&lt;/p&gt;
 
 &lt;hr&gt;
@@ -136,7 +119,7 @@ blog&lt;/a&gt;, and the issues for all 8 vulnerabilities can &lt;a href="https:/
     <link rel="alternate" href="http://blog.appcanary.com/2016/tale-of-two-worms.html"/>
     <id>http://blog.appcanary.com/2016/tale-of-two-worms.html</id>
     <published>2016-08-23T20:00:00-04:00</published>
-    <updated>2017-01-13T09:15:13-05:00</updated>
+    <updated>2017-01-24T11:39:51-05:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
@@ -353,23 +336,6 @@ Distributed Systems Groups.&lt;/p&gt;
 &lt;p&gt;&lt;a href="https://appcanary.com/sign_up?utm_source=blog&amp;amp;utm_medium=web&amp;amp;utm_campaign=morris"&gt;Sign up&lt;/a&gt; today!&lt;/p&gt;
 
 &lt;hr&gt;
-
-&lt;p&gt;&lt;link href="//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css" rel="stylesheet" type="text/css"&gt;
-&lt;style type="text/css"&gt;
- #mc&lt;em&gt;embed&lt;/em&gt;signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; width:100%;}
- /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
-      We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
-&lt;/style&gt;
-&lt;div id="mc_embed_signup"&gt;
-&lt;form action="//appcanary.us10.list-manage.com/subscribe/post?u=303b378f377508300c0b5469a&amp;amp;id=dc58e8f56f" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate&gt;
-&lt;div id="mc_embed_signup_scroll"&gt;
-&lt;label for="mce-EMAIL"&gt;Liked this post? Subscribe to our newsletter for more!&lt;/label&gt;
-&lt;input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required&gt;
-&lt;div style="position: absolute; left: -5000px;" aria-hidden="true"&gt;&lt;input type="text" name="b_303b378f377508300c0b5469a_dc58e8f56f" tabindex="-1" value=""&gt;&lt;/div&gt;
-&lt;div class="clear"&gt;&lt;input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"&gt;&lt;/div&gt;
-&lt;/div&gt;
-&lt;/form&gt;
-&lt;/div&gt;&lt;/p&gt;
 
 &lt;div class="footnotes"&gt;
 &lt;hr&gt;
