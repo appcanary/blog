@@ -20,12 +20,13 @@
             on #{tags}
 
       %section.post-content= yield
+      %div.newsletter
+        = partial "shared/newsletter"
       %footer.post-footer
         - if gravatar?
           %figure.author-image
             %a.img{href: author_path, style: "background-image: url(#{gravatar})"}
               %span.hidden #{blog_author.name}'s Picture
-        
         %section.author
           %h4
             %a{href: author_path(current_article)}= blog_author.name
@@ -54,7 +55,6 @@
             %span.hidden Facebook
           %a.icon-google-plus{href: google_plus_url, onclick: "window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;"}
             %span.hidden Google+
-
   %aside.read-next
     - if prev_article = current_article.previous_article
       - attributes = { href: prev_article.url }.merge(cover(prev_article))
