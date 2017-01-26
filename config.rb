@@ -167,7 +167,7 @@ configure :build do
   # activate :asset_hash
 
   # Use absolute URLs
-  activate :asset_host, :host => '//blog.appcanary.com'
+  # activate :asset_host, :host => '//blog.appcanary.com'
 
   # Ignoring Files
   ignore 'javascripts/_*'
