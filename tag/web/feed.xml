@@ -11,7 +11,7 @@
     <link rel="alternate" href="http://blog.appcanary.com/2017/http-security-headers.html"/>
     <id>http://blog.appcanary.com/2017/http-security-headers.html</id>
     <published>2017-01-12T19:00:00-05:00</published>
-    <updated>2017-01-24T11:40:09-05:00</updated>
+    <updated>2017-02-02T11:41:26-05:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
@@ -748,7 +748,7 @@ yourself and out of your competitors&amp;rsquo; grubby hands.&lt;/p&gt;
 &lt;h3 id="i-want-to-know-more"&gt;I want to know more&lt;/h3&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection"&gt;X-XSS-Protection - MDN&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy"&gt;Referrer Policy - MDN&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;hr&gt;
