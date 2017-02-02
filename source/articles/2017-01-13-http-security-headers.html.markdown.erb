@@ -29,9 +29,50 @@ set on the application layer. Use your own discretion here. You can test how wel
 Did we get anything wrong? Contact us at [hello@appcanary.com](mailto:hello@appcanary.com).
 
 <h2>HTTP Security Headers</h2>
-<%= table_of_contents(current_page) %>
+* [X-XSS-Protection](#x-xss-protection)
+  * [Why?](#x-xss-protection/why)
+  * [Should I use it?](#x-xss-protection/should)
+  * [How?](#x-xss-protection/how)
+  * [I want to know more](#x-xss-protection/more)
+* [Content Security Policy](#csp)
+  * [Why?](#csp/why)
+  * [Should I use it?](#csp/should)
+  * [How?](#csp/how)
+  * [I want to know more](#csp/more)
+* [HTTP Strict Transport Security (HSTS)](#hsts)
+  * [Why?](#hsts/why)
+  * [Should I use it?](#hsts/should)
+  * [How?](#hsts/how)
+  * [I want to know more](#hsts/more)
+* [HTTP Public Key Pinning (HPKP)](#hpkp)
+  * [Why?](#hpkp/why)
+  * [Should I use it?](#hpkp/should)
+  * [How?](#hpkp/how)
+  * [I want to know more](#hpkp/more)
+* [X-Frame-Options](#x-frame-options)
+  * [Why?](#x-frame-options/why)
+  * [Should I use it?](#x-frame-options/should)
+  * [How?](#x-frame-options/how)
+  * [I want to know more](#x-frame-options/more)
+* [X-Content-Type-Options](#x-content-type-options)
+  * [Why?](#x-content-type-options/why)
+  * [Should I use it?](#x-content-type-options/should)
+  * [How?](#x-content-type-options/how)
+  * [I want to know more](#x-content-type-options/more)
+* [Referrer-Policy](#referrer-policy)
+  * [Why?](#referrer-policy/why)
+  * [Should I use it?](#referrer-policy/should)
+  * [How?](#referrer-policy/how)
+  * [I want to know more](#referrer-policy/more)
+* [Cookie Options](#cookie-options)
+  * [Why?](#cookie-options/why)
+  * [Should I use it?](#cookie-options/should)
+  * [How?](#cookie-options/how)
+  * [I want to know more](#cookie-options/more)
 
-## X-XSS-Protection
+-------------------
+
+<h2 id="x-xss-protection">X-XSS-Protection</h2>
 
 ```
 X-XSS-Protection: 0;
@@ -39,7 +80,7 @@ X-XSS-Protection: 1;
 X-XSS-Protection: 1; mode=block
 ```
 
-### Why?
+<h3 id="x-xss-protection/why">Why?</h3>
 
 Cross Site Scripting, commonly abbreviated XSS, is an attack where the attacker
 causes a page to load some malicious javascript.  `X-XSS-Protection` is a
@@ -52,11 +93,11 @@ payload as part of the request[^xss].
 will still render the page<br/> 
 `X-XSS-Protection: 1; mode=block` when triggered, will block the whole page from being rendered.
 
-### Should I use it? 
+<h3 id=x-xss-protection/should"">Should I use it? </h3>
 
 Yes. Set `X-XSS-Protection: 1; mode=block`. The "filter bad scripts" mechanism is problematic; see [here](http://blog.innerht.ml/the-misunderstood-x-xss-protection/) for why.
 
-### How?
+<h3 id="x-xss-protection/how">How?</h3>
 
 
 | Platform | What do I do? |
@@ -68,18 +109,18 @@ Yes. Set `X-XSS-Protection: 1; mode=block`. The "filter bad scripts" mechanism i
 | Nginx | `add_header X-XSS-Protection "1; mode=block";` |
 | Apache | `Header always set X-XSS-Protection "1; mode=block"` |
 
-### I want to know more
+<h3 id="x-xss-protection/more">I want to know more</h3>
 
 [X-XSS-Protection - MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection)
 
 ---
-## Content Security Policy
+<h2 id="content-security-policy">Content Security Policy</h2>
 
 ```
 Content-Security-Policy: <policy>
 ```
 
-### Why?
+<h3 id="content-security-policy/why">Why?</h3>
 
 Content Security Policy can be thought of as much more advanced version of the
 `X-XSS-Protection` header above. While `X-XSS-Protection` will block scripts
@@ -92,7 +133,7 @@ You can white list origins for scripts, images, fonts, stylesheets, etc in a ver
 granular manner. You can also compare any loaded content against a hash or
 signature.
 
-### Should I use it?
+<h3 id="content-security-policy/should">Should I use it?</h3>
 
 Yes. It won't prevent all XSS attacks, but it's a significant mitigation against
 their impact, and an important aspect of defense-in-depth. That said, it can be
@@ -102,7 +143,7 @@ have CSP implemented yet. There are some rails development plugins we're using
 that are holding us back from a CSP implementation that will have an actually security impact.
 We're working on it, and will write about it in the next instalment!
 
-### How?
+<h3 id="content-security-policy/how">How?</h3>
 
 Writing a CSP policy can be challenging.
 See
@@ -120,14 +161,14 @@ is [here](https://csp.withgoogle.com/docs/adopting-csp.html).
 | Nginx | `add_header Content-Security-Policy "<policy>";` |
 | Apache | `Header always set Content-Security-Policy "<policy>"` |
 
-### I want to know more
+<h3 id="content-security-policy/more">I want to know more</h3>
 
 - [Content-Security-Policy - MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy)
 - [CSP Quick Reference Guide](https://content-security-policy.com/)
 - [Google's CSP Guide](https://csp.withgoogle.com/docs/index.html)
 
 ---
-## HTTP Strict Transport Security (HSTS)
+<h2 id="hsts">HTTP Strict Transport Security (HSTS)</h2>
 
 ```
 Strict-Transport-Security: max-age=<expire-time>
@@ -135,7 +176,7 @@ Strict-Transport-Security: max-age=<expire-time>; includeSubDomains
 Strict-Transport-Security: max-age=<expire-time>; preload
 ```
 
-### Why?
+<h3 id="hsts/why">Why?</h3>
 
 When we want to securely communicate with someone, we face two problems. The
 first problem is privacy; we want to make sure the messages we send can only
@@ -162,7 +203,7 @@ your browser has seen an HSTS header &mdash; and it hasn't expired &mdash; it
 will not access the site unencrypted, and will error out if it's not available
 over HTTPS.
 
-### Should I use it? 
+<h3 id="hsts/should">Should I use it? </h3>
 
 Yes. Your app is only available over HTTPS, right? Trying to browse over regular
 old HTTP will redirect to the secure site, right? (Hint: Use
@@ -175,7 +216,7 @@ supercookies that can fingerprint your users. As a website operator, you
 probably already track your users somewhat - but try to only use HSTS for good
 and not for supercookies.
 
-### How?
+<h3 id="hsts/how">How?</h3>
 
 The two options are
 
@@ -199,14 +240,14 @@ The two options are
 | Nginx | `add_header Strict-Transport-Security "max-age=31536000; includeSubdomains; ";` |
 | Apache | `Header always set Strict-Transport-Security "max-age=31536000; includeSubdomains;` |
 
-### I want to know more
+<h3 id="hsts/more">I want to know more</h3>
 
 - [RFC 6797](https://tools.ietf.org/html/rfc6797)
 - [Strict-Transport-Security - MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security)
 
 
 ---
-## HTTP Public Key Pinning (HPKP)
+<h2 id="hpkp">HTTP Public Key Pinning (HPKP)</h2>
 
 ```
 Public-Key-Pins: pin-sha256=<base64==>; max-age=<expireTime>;
@@ -214,7 +255,7 @@ Public-Key-Pins: pin-sha256=<base64==>; max-age=<expireTime>; includeSubDomains
 Public-Key-Pins: pin-sha256=<base64==>; max-age=<expireTime>; report-uri=<reportURI>
 ```
 
-### Why?
+<h3 id="hpkp/why">Why?</h3>
 
 The HSTS header described above was designed to ensure that all connections to your
 website are encrypted. However, nowhere does it specify what key to use! 
@@ -248,7 +289,7 @@ Much like HSTS above, the HPKP header also has some privacy implications.
 These were laid out in the [RFC](https://tools.ietf.org/html/rfc7469#section-5)
 itself.
 
-### Should I use it? 
+<h3 id="hpkp/should">Should I use it? </h3>
 
 Probably not. 
 
@@ -265,7 +306,7 @@ One alternative is using the `Public-Key-Pins-Report-Only` header, which will
 just report that something went wrong, but not lock anyone out. This allows you
 to at least know your users are being MiTMed with fake certificates.
 
-### How?
+<h3 id="hpkp/how">How?</h3>
 
 The two options are
 
@@ -287,7 +328,7 @@ for how to do it.
 | Nginx | `add_header Public-Key-Pins 'pin-sha256="<primary>"; pin-sha256="<backup>"; max-age=5184000; includeSubDomains';` |
 | Apache | `Header always set Public-Key-Pins 'pin-sha256="<primary>"; pin-sha256="<backup>"; max-age=5184000; includeSubDomains';` |
 
-### I want to know more
+<h3 id="hpkp/more">I want to know more</h3>
 
 - [RFC 7469](https://tools.ietf.org/html/rfc7469)
 - [HTTP Public Key Pinning (HPKP) - MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Public_Key_Pinning)
@@ -295,7 +336,7 @@ for how to do it.
 
 ---
 
-## X-Frame-Options
+<h2 id="x-frame-options">X-Frame-Options</h2>
 
 ```
 X-Frame-Options: DENY
@@ -303,7 +344,7 @@ X-Frame-Options: SAMEORIGIN
 X-Frame-Options: ALLOW-FROM https://example.com/
 ```
 
-### Why?
+<h3 id="x-frame-options/why">Why?</h3>
 
 Before we started giving dumb names to vulnerabilities, we used to give dumb
 names to hacking techniques. "Clickjacking" is one of those dumb names. 
@@ -316,13 +357,13 @@ tweets.
 
 It sounds dumb, but it's an effective attack.
 
-### Should I use it?
+<h3 id="x-frame-options/should">Should I use it?</h3>
 
 Yes. Your app is a beautiful snowflake. Do you really want some
 [genius](https://techcrunch.com/2015/04/08/annotate-this/) shoving it into an
 iframe so they can vandalize it?
 
-### How?
+<h3 id="x-frame-options/how">How?</h3>
 
 `X-Frame-Options` has three modes, which are pretty self explanatory.
 
@@ -347,19 +388,19 @@ page? ¯\\\_(ツ)\_/¯.
 | Apache | `Header always set X-Frame-Options "deny"`        |
 
 
-### I want to know more
+<h3 id="x-frame-options/more">I want to know more</h3>
 - [RFC 7034](https://tools.ietf.org/html/rfc7034)
-- [X-Frame-Options - MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options).
+- [X-Frame-Options - MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options)
 
 ---
 
-## X-Content-Type-Options
+<h2 id="x-content-type-options">X-Content-Type-Options</h2>
 
 ```
 X-Content-Type-Options: nosniff;
 ```
 
-### Why?
+<h3 id="x-content-type-options/why">Why?</h3>
 
 The problem this header solves is called "MIME sniffing", which is actually a
 browser "feature". 
@@ -383,11 +424,11 @@ have a stored XSS attack on your hand.
 The `X-Content-Type-Options` headers exist to tell the browser to shut up and
 set the damn content type to what I tell you, thank you.
 
-### Should I use it?
+<h3 id="x-content-type-options/should">Should I use it?</h3>
 
 Yes, just make sure to set your content types correctly.
 
-### How?
+<h3 id="x-content-type-options/how">How?</h3>
 
 
 | Platform | What do I do? |
@@ -399,9 +440,13 @@ Yes, just make sure to set your content types correctly.
 | Nginx | `add_header X-Content-Type-Options nosniff;` |
 | Apache | `Header always set X-Content-Type-Options nosniff` |
 
+<h3 id="x-content-type-options/more">I want to know more</h3>
+- [X-Content-Type-Options - MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options)
+
+
 ---
 
-## Referrer-Policy
+<h2 id="referrer-policy">Referrer-Policy</h2>
 
 ```
 Referrer-Policy: "no-referrer" 
@@ -414,7 +459,7 @@ Referrer-Policy: "strict-origin-when-cross-origin"
 Referrer-Policy: "unsafe-url"
 ```
 
-### Why?
+<h3 id="referrer-policy/why">Why?</h3>
 
 Ah, the `Referer` header. Great for analytics, bad for your users' privacy. At
 some point the web got woke and decided that maybe it wasn't a good idea to send
@@ -425,7 +470,7 @@ correctly[^spelling].
 The `Referrer-Policy` header allows you to specify when the browser will set a
 `Referer` header.
 
-### Should I use it? 
+<h3 id="referrer-policy/should">Should I use it? </h3>
 
 It's up to you, but it's probably a good idea. If you don't care about your
 users' privacy, think of it as a way to keep your sweet sweet analytics to
@@ -433,7 +478,7 @@ yourself and out of your competitors' grubby hands.
 
 Set `Referrer-Policy: "no-referrer"`
 
-### How?
+<h3 id="referrer-policy/how">How?</h3>
 
 | Platform | What do I do? |
 | --- | --- |
@@ -445,19 +490,19 @@ Set `Referrer-Policy: "no-referrer"`
 | Apache | `Header always set Referrer-Policy "no-referrer"` |
 
 
-### I want to know more
+<h3 id="referrer-policy/more">I want to know more</h3>
 
 - [Referrer Policy - MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy)
 
 ---
 
-## Cookie Options
+<h2 id="cookie-options">Cookie Options</h2>
 
 ```
 Set-Cookie: <key>=<value>; Expires=<expiryDate>; Secure; HttpOnly; SameSite=strict
 ```
 
-### Why?
+<h3 id="cookie-options/why">Why?</h3>
 
 This isn't a security header per se, but there are three different options for
 cookies that you should be aware of.
@@ -484,13 +529,13 @@ cookies that you should be aware of.
   top-level context for GET requests (i.e. if you clicked a link). Strict
   doesn't send any third-party cookies.
   
-### Should I use it?
+<h3 id="cookie-options/should">Should I use it?</h3>
 
 You should absolutely set `Secure` and `HttpOnly`. Unfortunately, as of writing,
 SameSite cookies are [available](http://caniuse.com/#search=samesite) only in
 Chrome and Opera, so you may want to ignore them for now.
   
-### How?
+<h3 id="cookie-options/how">How?</h3>
 
 | Platform | What do I do? |
 | ---| --- |
@@ -500,6 +545,10 @@ Chrome and Opera, so you may want to ignore them for now.
 | Go | `http.Cookie{Name: "foo", Value: "bar", HttpOnly: true, Secure: true}` <br/><br/> For SameSite, see this [issue](https://github.com/golang/go/issues/15867).|
 | Nginx | You probably won't set session cookies in Nginx |
 | Apache | You probably won't set session cookies in Apache |
+
+<h3 id="cookie-options/more">I want to know more</h3>
+
+- [Cookies - MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#Secure_and_HttpOnly_cookies)
 
 ---
 
