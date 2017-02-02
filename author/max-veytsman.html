@@ -289,138 +289,73 @@ set on the application layer. Use your own discretion here. You can test how wel
 <h2>HTTP Security Headers</h2>
 
 <ul>
-<li>
-<a href="#x-xss-protection">X-XSS-Protection</a>
+<li><a href="#x-xss-protection">X-XSS-Protection</a>
+
 <ul>
-<li>
-<a href="#why">Why?</a>
-</li>
-<li>
-<a href="#should-i-use-it">Should I use it?</a>
-</li>
-<li>
-<a href="#how">How?</a>
-</li>
-<li>
-<a href="#i-want-to-know-more">I want to know more</a>
-</li>
+<li><a href="#x-xss-protection/why">Why?</a></li>
+<li><a href="#x-xss-protection/should">Should I use it?</a></li>
+<li><a href="#x-xss-protection/how">How?</a></li>
+<li><a href="#x-xss-protection/more">I want to know more</a></li>
+</ul></li>
+<li><a href="#csp">Content Security Policy</a>
+
+<ul>
+<li><a href="#csp/why">Why?</a></li>
+<li><a href="#csp/should">Should I use it?</a></li>
+<li><a href="#csp/how">How?</a></li>
+<li><a href="#csp/more">I want to know more</a></li>
+</ul></li>
+<li><a href="#hsts">HTTP Strict Transport Security (HSTS)</a>
+
+<ul>
+<li><a href="#hsts/why">Why?</a></li>
+<li><a href="#hsts/should">Should I use it?</a></li>
+<li><a href="#hsts/how">How?</a></li>
+<li><a href="#hsts/more">I want to know more</a></li>
+</ul></li>
+<li><a href="#hpkp">HTTP Public Key Pinning (HPKP)</a>
+
+<ul>
+<li><a href="#hpkp/why">Why?</a></li>
+<li><a href="#hpkp/should">Should I use it?</a></li>
+<li><a href="#hpkp/how">How?</a></li>
+<li><a href="#hpkp/more">I want to know more</a></li>
+</ul></li>
+<li><a href="#x-frame-options">X-Frame-Options</a>
+
+<ul>
+<li><a href="#x-frame-options/why">Why?</a></li>
+<li><a href="#x-frame-options/should">Should I use it?</a></li>
+<li><a href="#x-frame-options/how">How?</a></li>
+<li><a href="#x-frame-options/more">I want to know more</a></li>
+</ul></li>
+<li><a href="#x-content-type-options">X-Content-Type-Options</a>
+
+<ul>
+<li><a href="#x-content-type-options/why">Why?</a></li>
+<li><a href="#x-content-type-options/should">Should I use it?</a></li>
+<li><a href="#x-content-type-options/how">How?</a></li>
+<li><a href="#x-content-type-options/more">I want to know more</a></li>
+</ul></li>
+<li><a href="#referrer-policy">Referrer-Policy</a>
+
+<ul>
+<li><a href="#referrer-policy/why">Why?</a></li>
+<li><a href="#referrer-policy/should">Should I use it?</a></li>
+<li><a href="#referrer-policy/how">How?</a></li>
+<li><a href="#referrer-policy/more">I want to know more</a></li>
+</ul></li>
+<li><a href="#cookie-options">Cookie Options</a>
+
+<ul>
+<li><a href="#cookie-options/why">Why?</a></li>
+<li><a href="#cookie-options/should">Should I use it?</a></li>
+<li><a href="#cookie-options/how">How?</a></li>
+<li><a href="#cookie-options/more">I want to know more</a></li>
+</ul></li>
 </ul>
 
-<p></li>
-<li>
-<a href="#content-security-policy">Content Security Policy</a>
-<ul>
-<li>
-<a href="#why">Why?</a>
-</li>
-<li>
-<a href="#should-i-use-it">Should I use it?</a>
-</li>
-<li>
-<a href="#how">How?</a>
-</li>
-<li>
-<a href="#i-want-to-know-more">I want to know more</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#http-strict-transport-security-hsts">HTTP Strict Transport Security (HSTS)</a>
-<ul>
-<li>
-<a href="#why">Why?</a>
-</li>
-<li>
-<a href="#should-i-use-it">Should I use it?</a>
-</li>
-<li>
-<a href="#how">How?</a>
-</li>
-<li>
-<a href="#i-want-to-know-more">I want to know more</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#http-public-key-pinning-hpkp">HTTP Public Key Pinning (HPKP)</a>
-<ul>
-<li>
-<a href="#why">Why?</a>
-</li>
-<li>
-<a href="#should-i-use-it">Should I use it?</a>
-</li>
-<li>
-<a href="#how">How?</a>
-</li>
-<li>
-<a href="#i-want-to-know-more">I want to know more</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#x-frame-options">X-Frame-Options</a>
-<ul>
-<li>
-<a href="#why">Why?</a>
-</li>
-<li>
-<a href="#should-i-use-it">Should I use it?</a>
-</li>
-<li>
-<a href="#how">How?</a>
-</li>
-<li>
-<a href="#i-want-to-know-more">I want to know more</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#x-content-type-options">X-Content-Type-Options</a>
-<ul>
-<li>
-<a href="#why">Why?</a>
-</li>
-<li>
-<a href="#should-i-use-it">Should I use it?</a>
-</li>
-<li>
-<a href="#how">How?</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#referrer-policy">Referrer-Policy</a>
-<ul>
-<li>
-<a href="#why">Why?</a>
-</li>
-<li>
-<a href="#should-i-use-it">Should I use it?</a>
-</li>
-<li>
-<a href="#how">How?</a>
-</li>
-<li>
-<a href="#i-want-to-know-more">I want to know more</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="#cookie-options">Cookie Options</a>
-<ul>
-<li>
-<a href="#why">Why?</a>
-</li>
-<li>
-<a href="#should-i-use-it">Should I use it?</a>
-</li>
-<li>
-<a href="#how">How?</a>
-</li>
-</ul>
-</li>
-</ul></p>
+<hr>
 
 <h2 id="x-xss-protection">X-XSS-Protection</h2>
 <pre class="highlight plaintext"><code>X-XSS-Protection: 0;
@@ -428,7 +363,7 @@ X-XSS-Protection: 1;
 X-XSS-Protection: 1; mode=block
 </code></pre>
 
-<h3 id="why">Why?</h3>
+<h3 id="x-xss-protection/why">Why?</h3>
 
 <p>Cross Site Scripting, commonly abbreviated XSS, is an attack where the attacker
 causes a page to load some malicious javascript.  <code>X-XSS-Protection</code> is a
@@ -441,11 +376,11 @@ payload as part of the request<sup id="fnref1"><a href="#fn1" rel="footnote">1</
 will still render the page<br/> 
 <code>X-XSS-Protection: 1; mode=block</code> when triggered, will block the whole page from being rendered.</p>
 
-<h3 id="should-i-use-it">Should I use it?</h3>
+<h3 id=x-xss-protection/should"">Should I use it? </h3>
 
 <p>Yes. Set <code>X-XSS-Protection: 1; mode=block</code>. The &ldquo;filter bad scripts&rdquo; mechanism is problematic; see <a href="http://blog.innerht.ml/the-misunderstood-x-xss-protection/">here</a> for why.</p>
 
-<h3 id="how">How?</h3>
+<h3 id="x-xss-protection/how">How?</h3>
 
 <table><thead>
 <tr>
@@ -479,7 +414,7 @@ will still render the page<br/>
 </tr>
 </tbody></table>
 
-<h3 id="i-want-to-know-more">I want to know more</h3>
+<h3 id="x-xss-protection/more">I want to know more</h3>
 
 <p><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection">X-XSS-Protection - MDN</a></p>
 
@@ -489,7 +424,7 @@ will still render the page<br/>
 <pre class="highlight plaintext"><code>Content-Security-Policy: &lt;policy&gt;
 </code></pre>
 
-<h3 id="why">Why?</h3>
+<h3 id="content-security-policy/why">Why?</h3>
 
 <p>Content Security Policy can be thought of as much more advanced version of the
 <code>X-XSS-Protection</code> header above. While <code>X-XSS-Protection</code> will block scripts
@@ -502,7 +437,7 @@ You can white list origins for scripts, images, fonts, stylesheets, etc in a ver
 granular manner. You can also compare any loaded content against a hash or
 signature.</p>
 
-<h3 id="should-i-use-it">Should I use it?</h3>
+<h3 id="content-security-policy/should">Should I use it?</h3>
 
 <p>Yes. It won&rsquo;t prevent all XSS attacks, but it&rsquo;s a significant mitigation against
 their impact, and an important aspect of defense-in-depth. That said, it can be
@@ -512,7 +447,7 @@ have CSP implemented yet. There are some rails development plugins we&rsquo;re u
 that are holding us back from a CSP implementation that will have an actually security impact.
 We&rsquo;re working on it, and will write about it in the next instalment!</p>
 
-<h3 id="how">How?</h3>
+<h3 id="content-security-policy/how">How?</h3>
 
 <p>Writing a CSP policy can be challenging.
 See
@@ -552,7 +487,7 @@ is <a href="https://csp.withgoogle.com/docs/adopting-csp.html">here</a>.</p>
 </tr>
 </tbody></table>
 
-<h3 id="i-want-to-know-more">I want to know more</h3>
+<h3 id="content-security-policy/more">I want to know more</h3>
 
 <ul>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy">Content-Security-Policy - MDN</a></li>
@@ -562,13 +497,13 @@ is <a href="https://csp.withgoogle.com/docs/adopting-csp.html">here</a>.</p>
 
 <hr>
 
-<h2 id="http-strict-transport-security-hsts">HTTP Strict Transport Security (HSTS)</h2>
+<h2 id="hsts">HTTP Strict Transport Security (HSTS)</h2>
 <pre class="highlight plaintext"><code>Strict-Transport-Security: max-age=&lt;expire-time&gt;
 Strict-Transport-Security: max-age=&lt;expire-time&gt;; includeSubDomains
 Strict-Transport-Security: max-age=&lt;expire-time&gt;; preload
 </code></pre>
 
-<h3 id="why">Why?</h3>
+<h3 id="hsts/why">Why?</h3>
 
 <p>When we want to securely communicate with someone, we face two problems. The
 first problem is privacy; we want to make sure the messages we send can only
@@ -595,7 +530,7 @@ your browser has seen an HSTS header &mdash; and it hasn&rsquo;t expired &mdash;
 will not access the site unencrypted, and will error out if it&rsquo;s not available
 over HTTPS.</p>
 
-<h3 id="should-i-use-it">Should I use it?</h3>
+<h3 id="hsts/should">Should I use it? </h3>
 
 <p>Yes. Your app is only available over HTTPS, right? Trying to browse over regular
 old HTTP will redirect to the secure site, right? (Hint: Use
@@ -608,7 +543,7 @@ supercookies that can fingerprint your users. As a website operator, you
 probably already track your users somewhat - but try to only use HSTS for good
 and not for supercookies.</p>
 
-<h3 id="how">How?</h3>
+<h3 id="hsts/how">How?</h3>
 
 <p>The two options are</p>
 
@@ -658,7 +593,7 @@ can support HTTPS forever on all your subdomains.</li>
 </tr>
 </tbody></table>
 
-<h3 id="i-want-to-know-more">I want to know more</h3>
+<h3 id="hsts/more">I want to know more</h3>
 
 <ul>
 <li><a href="https://tools.ietf.org/html/rfc6797">RFC 6797</a></li>
@@ -667,13 +602,13 @@ can support HTTPS forever on all your subdomains.</li>
 
 <hr>
 
-<h2 id="http-public-key-pinning-hpkp">HTTP Public Key Pinning (HPKP)</h2>
+<h2 id="hpkp">HTTP Public Key Pinning (HPKP)</h2>
 <pre class="highlight plaintext"><code>Public-Key-Pins: pin-sha256=&lt;base64==&gt;; max-age=&lt;expireTime&gt;;
 Public-Key-Pins: pin-sha256=&lt;base64==&gt;; max-age=&lt;expireTime&gt;; includeSubDomains
 Public-Key-Pins: pin-sha256=&lt;base64==&gt;; max-age=&lt;expireTime&gt;; report-uri=&lt;reportURI&gt;
 </code></pre>
 
-<h3 id="why">Why?</h3>
+<h3 id="hpkp/why">Why?</h3>
 
 <p>The HSTS header described above was designed to ensure that all connections to your
 website are encrypted. However, nowhere does it specify what key to use! </p>
@@ -707,7 +642,7 @@ the leaf in order to not shoot yourself in the foot (more on this later).</p>
 These were laid out in the <a href="https://tools.ietf.org/html/rfc7469#section-5">RFC</a>
 itself.</p>
 
-<h3 id="should-i-use-it">Should I use it?</h3>
+<h3 id="hpkp/should">Should I use it? </h3>
 
 <p>Probably not. </p>
 
@@ -724,7 +659,7 @@ to hold their victims ransom.</p>
 just report that something went wrong, but not lock anyone out. This allows you
 to at least know your users are being MiTMed with fake certificates.</p>
 
-<h3 id="how">How?</h3>
+<h3 id="hpkp/how">How?</h3>
 
 <p>The two options are</p>
 
@@ -770,7 +705,7 @@ for how to do it.</p>
 </tr>
 </tbody></table>
 
-<h3 id="i-want-to-know-more">I want to know more</h3>
+<h3 id="hpkp/more">I want to know more</h3>
 
 <ul>
 <li><a href="https://tools.ietf.org/html/rfc7469">RFC 7469</a></li>
@@ -785,7 +720,7 @@ X-Frame-Options: SAMEORIGIN
 X-Frame-Options: ALLOW-FROM https://example.com/
 </code></pre>
 
-<h3 id="why">Why?</h3>
+<h3 id="x-frame-options/why">Why?</h3>
 
 <p>Before we started giving dumb names to vulnerabilities, we used to give dumb
 names to hacking techniques. &ldquo;Clickjacking&rdquo; is one of those dumb names. </p>
@@ -798,13 +733,13 @@ tweets.</p>
 
 <p>It sounds dumb, but it&rsquo;s an effective attack.</p>
 
-<h3 id="should-i-use-it">Should I use it?</h3>
+<h3 id="x-frame-options/should">Should I use it?</h3>
 
 <p>Yes. Your app is a beautiful snowflake. Do you really want some
 <a href="https://techcrunch.com/2015/04/08/annotate-this/">genius</a> shoving it into an
 iframe so they can vandalize it?</p>
 
-<h3 id="how">How?</h3>
+<h3 id="x-frame-options/how">How?</h3>
 
 <p><code>X-Frame-Options</code> has three modes, which are pretty self explanatory.</p>
 
@@ -853,11 +788,11 @@ page? ¯\_(ツ)_/¯.</p>
 </tr>
 </tbody></table>
 
-<h3 id="i-want-to-know-more">I want to know more</h3>
+<h3 id="x-frame-options/more">I want to know more</h3>
 
 <ul>
 <li><a href="https://tools.ietf.org/html/rfc7034">RFC 7034</a></li>
-<li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options">X-Frame-Options - MDN</a>.</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options">X-Frame-Options - MDN</a></li>
 </ul>
 
 <hr>
@@ -866,7 +801,7 @@ page? ¯\_(ツ)_/¯.</p>
 <pre class="highlight plaintext"><code>X-Content-Type-Options: nosniff;
 </code></pre>
 
-<h3 id="why">Why?</h3>
+<h3 id="x-content-type-options/why">Why?</h3>
 
 <p>The problem this header solves is called &ldquo;MIME sniffing&rdquo;, which is actually a
 browser &ldquo;feature&rdquo;. </p>
@@ -890,11 +825,11 @@ have a stored XSS attack on your hand.</p>
 <p>The <code>X-Content-Type-Options</code> headers exist to tell the browser to shut up and
 set the damn content type to what I tell you, thank you.</p>
 
-<h3 id="should-i-use-it">Should I use it?</h3>
+<h3 id="x-content-type-options/should">Should I use it?</h3>
 
 <p>Yes, just make sure to set your content types correctly.</p>
 
-<h3 id="how">How?</h3>
+<h3 id="x-content-type-options/how">How?</h3>
 
 <table><thead>
 <tr>
@@ -928,6 +863,12 @@ set the damn content type to what I tell you, thank you.</p>
 </tr>
 </tbody></table>
 
+<h3 id="x-content-type-options/more">I want to know more</h3>
+
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options">X-Content-Type-Options - MDN</a></li>
+</ul>
+
 <hr>
 
 <h2 id="referrer-policy">Referrer-Policy</h2>
@@ -941,7 +882,7 @@ Referrer-Policy: "strict-origin-when-cross-origin"
 Referrer-Policy: "unsafe-url"
 </code></pre>
 
-<h3 id="why">Why?</h3>
+<h3 id="referrer-policy/why">Why?</h3>
 
 <p>Ah, the <code>Referer</code> header. Great for analytics, bad for your users&rsquo; privacy. At
 some point the web got woke and decided that maybe it wasn&rsquo;t a good idea to send
@@ -951,7 +892,7 @@ correctly<sup id="fnref4"><a href="#fn4" rel="footnote">4</a></sup>.</p>
 <p>The <code>Referrer-Policy</code> header allows you to specify when the browser will set a
 <code>Referer</code> header.</p>
 
-<h3 id="should-i-use-it">Should I use it?</h3>
+<h3 id="referrer-policy/should">Should I use it? </h3>
 
 <p>It&rsquo;s up to you, but it&rsquo;s probably a good idea. If you don&rsquo;t care about your
 users&rsquo; privacy, think of it as a way to keep your sweet sweet analytics to
@@ -959,7 +900,7 @@ yourself and out of your competitors&rsquo; grubby hands.</p>
 
 <p>Set <code>Referrer-Policy: &quot;no-referrer&quot;</code></p>
 
-<h3 id="how">How?</h3>
+<h3 id="referrer-policy/how">How?</h3>
 
 <table><thead>
 <tr>
@@ -993,7 +934,7 @@ yourself and out of your competitors&rsquo; grubby hands.</p>
 </tr>
 </tbody></table>
 
-<h3 id="i-want-to-know-more">I want to know more</h3>
+<h3 id="referrer-policy/more">I want to know more</h3>
 
 <ul>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy">Referrer Policy - MDN</a></li>
@@ -1005,7 +946,7 @@ yourself and out of your competitors&rsquo; grubby hands.</p>
 <pre class="highlight plaintext"><code>Set-Cookie: &lt;key&gt;=&lt;value&gt;; Expires=&lt;expiryDate&gt;; Secure; HttpOnly; SameSite=strict
 </code></pre>
 
-<h3 id="why">Why?</h3>
+<h3 id="cookie-options/why">Why?</h3>
 
 <p>This isn&rsquo;t a security header per se, but there are three different options for
 cookies that you should be aware of.</p>
@@ -1032,13 +973,13 @@ A cookie marked as <code>SameSite</code> won&rsquo;t be sent to a different site
   top-level context for GET requests (i.e. if you clicked a link). Strict
   doesn&rsquo;t send any third-party cookies.</p>
 
-<h3 id="should-i-use-it">Should I use it?</h3>
+<h3 id="cookie-options/should">Should I use it?</h3>
 
 <p>You should absolutely set <code>Secure</code> and <code>HttpOnly</code>. Unfortunately, as of writing,
 SameSite cookies are <a href="http://caniuse.com/#search=samesite">available</a> only in
 Chrome and Opera, so you may want to ignore them for now.</p>
 
-<h3 id="how">How?</h3>
+<h3 id="cookie-options/how">How?</h3>
 
 <table><thead>
 <tr>
@@ -1071,6 +1012,12 @@ Chrome and Opera, so you may want to ignore them for now.</p>
 <td>You probably won&rsquo;t set session cookies in Apache</td>
 </tr>
 </tbody></table>
+
+<h3 id="cookie-options/more">I want to know more</h3>
+
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#Secure_and_HttpOnly_cookies">Cookies - MDN</a></li>
+</ul>
 
 <hr>
 
