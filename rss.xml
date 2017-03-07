@@ -174,7 +174,7 @@ version that fixes all the vulnerabilities we know about.&lt;/p&gt;
     <link rel="alternate" href="http://blog.appcanary.com/2017/http-security-headers.html"/>
     <id>http://blog.appcanary.com/2017/http-security-headers.html</id>
     <published>2017-01-12T19:00:00-05:00</published>
-    <updated>2017-02-02T12:22:04-05:00</updated>
+    <updated>2017-03-07T12:33:34-05:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
@@ -192,7 +192,7 @@ Hypertext Transfer Protocol. &lt;/p&gt;
 features to be a bolted-on afterthought, things… got a little complicated. &lt;/p&gt;
 
 &lt;p&gt;This article explains what secure headers are and how to implement these headers
-in Rails, Django, Express.js, Go, Nginx, and Apache.&lt;/p&gt;
+in Rails, Django, Express.js, Go, Nginx, Apache and Varnish.&lt;/p&gt;
 
 &lt;p&gt;Please note that some
 headers may be best configured in on your HTTP servers, while others should be
@@ -327,6 +327,10 @@ will still render the page&lt;br/&gt;
 &lt;td&gt;Apache&lt;/td&gt;
 &lt;td&gt;&lt;code&gt;Header always set X-XSS-Protection &amp;quot;1; mode=block&amp;quot;&lt;/code&gt;&lt;/td&gt;
 &lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Varnish&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;set resp.http.X-XSS-Protection = &amp;quot;1; mode=block&amp;quot;;&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
 &lt;/tbody&gt;&lt;/table&gt;
 
 &lt;h3 id="x-xss-protection/more"&gt;I want to know more&lt;/h3&gt;
@@ -399,6 +403,10 @@ is &lt;a href="https://csp.withgoogle.com/docs/adopting-csp.html"&gt;here&lt;/a&
 &lt;tr&gt;
 &lt;td&gt;Apache&lt;/td&gt;
 &lt;td&gt;&lt;code&gt;Header always set Content-Security-Policy &amp;quot;&amp;lt;policy&amp;gt;&amp;quot;&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Varnish&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;set resp.http.Content-Security-Policy = &amp;quot;&amp;lt;policy&amp;gt;&amp;quot;;&lt;/code&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;&lt;/table&gt;
 
@@ -505,6 +513,10 @@ can support HTTPS forever on all your subdomains.&lt;/li&gt;
 &lt;tr&gt;
 &lt;td&gt;Apache&lt;/td&gt;
 &lt;td&gt;&lt;code&gt;Header always set Strict-Transport-Security &amp;quot;max-age=31536000; includeSubdomains;&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Varnish&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;set resp.http.Strict-Transport-Security = &amp;quot;max-age=31536000; includeSubdomains; &amp;quot;;&lt;/code&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;&lt;/table&gt;
 
@@ -618,6 +630,10 @@ for how to do it.&lt;/p&gt;
 &lt;td&gt;Apache&lt;/td&gt;
 &lt;td&gt;&lt;code&gt;Header always set Public-Key-Pins &amp;#39;pin-sha256=&amp;quot;&amp;lt;primary&amp;gt;&amp;quot;; pin-sha256=&amp;quot;&amp;lt;backup&amp;gt;&amp;quot;; max-age=5184000; includeSubDomains&amp;#39;;&lt;/code&gt;&lt;/td&gt;
 &lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Varnish&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;set resp.http.Public-Key-Pins = &amp;quot;pin-sha256=&amp;quot;&amp;lt;primary&amp;gt;&amp;quot;; pin-sha256=&amp;quot;&amp;lt;backup&amp;gt;&amp;quot;; max-age=5184000; includeSubDomains&amp;quot;;&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
 &lt;/tbody&gt;&lt;/table&gt;
 
 &lt;h3 id="hpkp/more"&gt;I want to know more&lt;/h3&gt;
@@ -701,6 +717,10 @@ page? ¯\_(ツ)_/¯.&lt;/p&gt;
 &lt;td&gt;Apache&lt;/td&gt;
 &lt;td&gt;&lt;code&gt;Header always set X-Frame-Options &amp;quot;deny&amp;quot;&lt;/code&gt;&lt;/td&gt;
 &lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Varnish&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;set resp.http.X-Frame-Options = &amp;quot;deny&amp;quot;;&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
 &lt;/tbody&gt;&lt;/table&gt;
 
 &lt;h3 id="x-frame-options/more"&gt;I want to know more&lt;/h3&gt;
@@ -776,6 +796,10 @@ set the damn content type to what I tell you, thank you.&lt;/p&gt;
 &lt;td&gt;Apache&lt;/td&gt;
 &lt;td&gt;&lt;code&gt;Header always set X-Content-Type-Options nosniff&lt;/code&gt;&lt;/td&gt;
 &lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Varnish&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;set resp.http.X-Content-Type-Options = &amp;quot;nosniff&amp;quot;;&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
 &lt;/tbody&gt;&lt;/table&gt;
 
 &lt;h3 id="x-content-type-options/more"&gt;I want to know more&lt;/h3&gt;
@@ -846,6 +870,10 @@ yourself and out of your competitors&amp;rsquo; grubby hands.&lt;/p&gt;
 &lt;tr&gt;
 &lt;td&gt;Apache&lt;/td&gt;
 &lt;td&gt;&lt;code&gt;Header always set Referrer-Policy &amp;quot;no-referrer&amp;quot;&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Varnish&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;set resp.http.Referrer-Policy = &amp;quot;no-referrer&amp;quot;;&lt;/code&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;&lt;/table&gt;
 
@@ -936,7 +964,9 @@ Chrome and Opera, so you may want to ignore them for now.&lt;/p&gt;
 
 &lt;hr&gt;
 
-&lt;p&gt;Thanks to &lt;a href="https://twitter.com/wolever"&gt;@wolever&lt;/a&gt; for python advice&lt;/p&gt;
+&lt;p&gt;Thanks to &lt;a href="https://twitter.com/wolever"&gt;@wolever&lt;/a&gt; for python advice.&lt;/p&gt;
+
+&lt;p&gt;Thanks to &lt;a href="https://twitter.com/therealgquintar"&gt;Guillaume Quintard&lt;/a&gt; for Varnish comands.&lt;/p&gt;
 
 &lt;div class="footnotes"&gt;
 &lt;hr&gt;

@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>http://blog.appcanary.com/archive.html</loc>
-    <lastmod>2017-02-02T12:23:41-05:00</lastmod>
+    <lastmod>2017-03-07T12:34:52-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -104,7 +104,7 @@
   </url>
   <url>
     <loc>http://blog.appcanary.com/2017/http-security-headers.html</loc>
-    <lastmod>2017-02-02T12:22:04-05:00</lastmod>
+    <lastmod>2017-03-07T12:33:34-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -122,205 +122,205 @@
   </url>
   <url>
     <loc>http://blog.appcanary.com/index.html</loc>
-    <lastmod>2017-02-02T12:23:41-05:00</lastmod>
+    <lastmod>2017-03-07T12:34:52-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/author/phillip-mendonca-vieira.html</loc>
-    <lastmod>2017-02-02T12:23:41-05:00</lastmod>
+    <lastmod>2017-03-07T12:34:52-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/author/max-veytsman.html</loc>
-    <lastmod>2017-02-02T12:23:41-05:00</lastmod>
+    <lastmod>2017-03-07T12:34:52-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/author/team-appcanary.html</loc>
-    <lastmod>2017-02-02T12:23:41-05:00</lastmod>
+    <lastmod>2017-03-07T12:34:52-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/2016/vikhal-morris.html</loc>
-    <lastmod>2017-02-02T12:23:41-05:00</lastmod>
+    <lastmod>2017-03-07T12:34:52-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/tag/retrospective.html</loc>
-    <lastmod>2017-02-02T12:23:41-05:00</lastmod>
+    <lastmod>2017-03-07T12:34:52-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/tag/java.html</loc>
-    <lastmod>2017-02-02T12:23:41-05:00</lastmod>
+    <lastmod>2017-03-07T12:34:52-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/tag/maven.html</loc>
-    <lastmod>2017-02-02T12:23:41-05:00</lastmod>
+    <lastmod>2017-03-07T12:34:52-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/tag/clojure.html</loc>
-    <lastmod>2017-02-02T12:23:41-05:00</lastmod>
+    <lastmod>2017-03-07T12:34:52-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/tag/programming.html</loc>
-    <lastmod>2017-02-02T12:23:41-05:00</lastmod>
+    <lastmod>2017-03-07T12:34:52-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/tag/security.html</loc>
-    <lastmod>2017-02-02T12:23:41-05:00</lastmod>
+    <lastmod>2017-03-07T12:34:52-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/tag/talks.html</loc>
-    <lastmod>2017-02-02T12:23:41-05:00</lastmod>
+    <lastmod>2017-03-07T12:34:52-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/tag/developer-diary.html</loc>
-    <lastmod>2017-02-02T12:23:41-05:00</lastmod>
+    <lastmod>2017-03-07T12:34:52-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/tag/bugs.html</loc>
-    <lastmod>2017-02-02T12:23:41-05:00</lastmod>
+    <lastmod>2017-03-07T12:34:52-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/tag/datomic.html</loc>
-    <lastmod>2017-02-02T12:23:41-05:00</lastmod>
+    <lastmod>2017-03-07T12:34:52-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/tag/ruby.html</loc>
-    <lastmod>2017-02-02T12:23:41-05:00</lastmod>
+    <lastmod>2017-03-07T12:34:52-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/tag/announcements.html</loc>
-    <lastmod>2017-02-02T12:23:41-05:00</lastmod>
+    <lastmod>2017-03-07T12:34:52-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/tag/product.html</loc>
-    <lastmod>2017-02-02T12:23:41-05:00</lastmod>
+    <lastmod>2017-03-07T12:34:52-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/tag/security.html</loc>
-    <lastmod>2017-02-02T12:23:41-05:00</lastmod>
+    <lastmod>2017-03-07T12:34:52-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/tag/crypto.html</loc>
-    <lastmod>2017-02-02T12:23:41-05:00</lastmod>
+    <lastmod>2017-03-07T12:34:52-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/tag/vihkal.html</loc>
-    <lastmod>2017-02-02T12:23:41-05:00</lastmod>
+    <lastmod>2017-03-07T12:34:52-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/tag/mirai.html</loc>
-    <lastmod>2017-02-02T12:23:41-05:00</lastmod>
+    <lastmod>2017-03-07T12:34:52-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/tag/botnet.html</loc>
-    <lastmod>2017-02-02T12:23:41-05:00</lastmod>
+    <lastmod>2017-03-07T12:34:52-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/tag/web.html</loc>
-    <lastmod>2017-02-02T12:23:41-05:00</lastmod>
+    <lastmod>2017-03-07T12:34:52-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/tag/network.html</loc>
-    <lastmod>2017-02-02T12:23:41-05:00</lastmod>
+    <lastmod>2017-03-07T12:34:52-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/archive/page/2.html</loc>
-    <lastmod>2017-02-02T12:23:41-05:00</lastmod>
+    <lastmod>2017-03-07T12:34:52-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/archive/page/3.html</loc>
-    <lastmod>2017-02-02T12:23:41-05:00</lastmod>
+    <lastmod>2017-03-07T12:34:52-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/archive/page/4.html</loc>
-    <lastmod>2017-02-02T12:23:41-05:00</lastmod>
+    <lastmod>2017-03-07T12:34:52-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/page/2/index.html</loc>
-    <lastmod>2017-02-02T12:23:41-05:00</lastmod>
+    <lastmod>2017-03-07T12:34:52-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/page/3/index.html</loc>
-    <lastmod>2017-02-02T12:23:41-05:00</lastmod>
+    <lastmod>2017-03-07T12:34:52-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/page/4/index.html</loc>
-    <lastmod>2017-02-02T12:23:41-05:00</lastmod>
+    <lastmod>2017-03-07T12:34:52-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/author/max-veytsman/page/2.html</loc>
-    <lastmod>2017-02-02T12:23:41-05:00</lastmod>
+    <lastmod>2017-03-07T12:34:52-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/author/max-veytsman/page/3.html</loc>
-    <lastmod>2017-02-02T12:23:41-05:00</lastmod>
+    <lastmod>2017-03-07T12:34:52-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://blog.appcanary.com/tag/programming/page/2.html</loc>
-    <lastmod>2017-02-02T12:23:41-05:00</lastmod>
+    <lastmod>2017-03-07T12:34:52-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
