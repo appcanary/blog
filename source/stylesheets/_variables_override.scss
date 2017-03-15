@@ -1,0 +1,20 @@
+// override for bitters _variables.scss
+// must be included after that file but before the
+// rest of the bitters files.
+$base-font-size: 1.2em;
+$base-font-color: #000;
+
+// old base-spacing: 1.5 * 1em (1.5em)
+// base-spacing: 1.5 * 1.2em (1.8em)
+
+// decided to make spacing absolute / 
+// relative to *body* font size
+$base-spacing: $base-line-height * 1.2rem;
+
+// force recalc of spacing vars that
+// depend on base-spacing above
+// 1.5em / 2 to
+// 1.8em / 2
+$small-spacing: $base-spacing / 2;
+$medium-spacing: $base-spacing / 1.4;
+$large-spacing: $base-spacing / 1.2;

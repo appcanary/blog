@@ -1,0 +1,20 @@
+---
+pageable: true
+per_page: 12
+---
+
+<section>
+  <div id="author">
+    <div class="bio">
+      <h1><%= post_author(current_article).name %></h1>
+      <% if post_author(current_article).twitter.present? %>
+        <a href="https://twitter.com/<%= post_author(current_article).twitter %>">@<%= post_author(current_article).twitter %></a>
+      <% end %>
+
+      <hr>
+    </div>
+  </div>
+</section>
+
+<%= partial "shared/page_articles" %>
+<%= partial "shared/pagination" %>

@@ -1,0 +1,10 @@
+<% page_articles.each_with_index do |article, i| %>
+  <section>
+    <div class="entry">
+      <div class="short-post">
+        <h2 class="title"><%= link_to article.title, article %></h2>
+        <span><span class="date"><%= article.date.strftime('%B, %d %Y') %></span> <% if (t = tags(article)) && !t.empty? %> on <%= t %><% end %></span>
+      </div>
+    </div>
+  </section>
+<% end %>

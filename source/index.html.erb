@@ -1,0 +1,23 @@
+---
+pageable: true
+per_page: 5
+---
+
+<% page_articles.each_with_index do |article, i| %>
+  <section>
+    <div class="entry">
+      <div class="post">
+        <h1 class="title"><%= link_to article.title, article %></h1>
+
+        <div class="published-tags">By <span class="author"><%= link_to post_author(article).name, author_path(article) %></span> |
+          <span class="date"><%= article.date.strftime('%B, %d %Y') %></span><% if (t = tags(article)) && !t.empty? %> on <%= t %><% end %></div>
+
+        <%= article.body %>
+
+      </div>
+      <hr>
+    </div>
+  </section>
+<% end %>
+
+<%= partial "shared/pagination" %>

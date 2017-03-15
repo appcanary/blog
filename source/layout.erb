@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <%= stylesheet_link_tag "application" %>
+    <%= favicon_tag 'images/favicon.ico' %>
+
+    <title>Appcanary Podcast</title>
+    <%= feed_tag :atom, "#{blog.options.prefix.to_s}/feed.xml", title: "Atom Feed" %>
+  </head>
+  <body>
+    <%= partial "layouts/typekit" %>
+
+    <div class="topbar"></div>
+    <div id="header">
+      <div class="preamble">
+        <a href="https://blog.appcanary.com"><img class="logo" src="/images/appcanary.png" alt="Appcanary logo"></a>
+        <p>
+          <b><a href="https://appcanary.com">Appcanary</a></b> makes sure you never run vulnerable software on your servers.
+          <br/>
+          Like our blog? Subscribe to our <a href="https://appcanary.us10.list-manage.com/subscribe?u=303b378f377508300c0b5469a&id=dc58e8f56f">newsletter</a>.<br/>
+          Browse the <a href="/archive.html">archive</a>, or follow us on <a href="https://twitter.com/appcanary">twitter</a>, <a href="https://github.com/appcanary">github</a> or <a href="/feed.xml">rss</a>.
+        </p>
+      </div>
+    </div>
+
+    <%= yield %>
+
+    <%= partial "layouts/analytics" %>
+    
+  </body>
+</html>

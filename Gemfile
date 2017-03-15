@@ -10,7 +10,7 @@ gem 'tzinfo-data', platforms: [:mswin, :mingw, :jruby]
 
 # Middleman Gems
 gem 'middleman-livereload'
-gem 'middleman', '~> 4.0.0'
+gem 'middleman', '~> 4.1'
 gem 'middleman-blog', '~> 4.0.0'
 gem 'middleman-sprockets', '~> 4.0.0.rc'
 
@@ -25,3 +25,7 @@ gem 'redcarpet', '~> 3.3.4'
 gem 'nokogiri', '~> 1.6.7.1'
 gem 'pry' 
 gem 'rake'
+
+gem 'bitters', "1.0.0"
+gem 'bourbon', "4.2.6"
+gem 'neat', "1.7.2"
