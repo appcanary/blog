@@ -4,7 +4,7 @@
       <div class="post">
         <h1 class="title"><%= link_to current_article.title, current_article %></h1>
         <div class="published-tags">By <span class="author"><%= link_to post_author(current_article).name, author_path(current_article) %></span> |
-          <span class="date"><%= current_article.date.strftime('%B, %d %Y') %></span><% if (t = tags(current_article)) && !t.empty? %> on <%= t %><% end %></div>
+          <span class="date"><%= current_article.date.strftime('%B %d, %Y') %></span><% if (t = tags(current_article)) && !t.empty? %> on <%= t %><% end %></div>
 
         <%= yield %>
 
