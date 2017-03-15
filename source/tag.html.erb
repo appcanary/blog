@@ -1,0 +1,15 @@
+---
+pageable: true
+per_page: 12
+---
+<section>
+  <div class="archive">
+    <div class="title">
+      <h1>Articles tagged "<%= tagname %>"</h1>
+      <hr>
+    </div>
+  </div>
+</section>
+
+<%= partial "shared/page_articles" %>
+<%= partial "shared/pagination" %>

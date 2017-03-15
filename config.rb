@@ -106,7 +106,7 @@ ready do
     proxy "/author/#{author[:name].parameterize}.html",
           '/author.html', ignore: true, :locals => { "page_type" => "author",
                                                      "articles" => sitemap.resources.select { |r| r.data.author == k }.sort_by { |r| r.data.date}.reverse,
-                                                     :current_article => OpenStruct.new({:metadata => {:page => { :author => k }}}) }
+                                                     :author => OpenStruct.new({:metadata => {:page => { :author => k }}}) }
   end
 end
 
