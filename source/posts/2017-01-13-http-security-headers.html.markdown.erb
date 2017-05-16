@@ -115,13 +115,13 @@ Yes. Set `X-XSS-Protection: 1; mode=block`. The "filter bad scripts" mechanism i
 [X-XSS-Protection - MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection)
 
 ---
-<h2 id="content-security-policy">Content Security Policy</h2>
+<h2 id="csp">Content Security Policy</h2>
 
 ```
 Content-Security-Policy: <policy>
 ```
 
-<h3 id="content-security-policy/why">Why?</h3>
+<h3 id="csp/why">Why?</h3>
 
 Content Security Policy can be thought of as much more advanced version of the
 `X-XSS-Protection` header above. While `X-XSS-Protection` will block scripts
@@ -134,7 +134,7 @@ You can white list origins for scripts, images, fonts, stylesheets, etc in a ver
 granular manner. You can also compare any loaded content against a hash or
 signature.
 
-<h3 id="content-security-policy/should">Should I use it?</h3>
+<h3 id="csp/should">Should I use it?</h3>
 
 Yes. It won't prevent all XSS attacks, but it's a significant mitigation against
 their impact, and an important aspect of defense-in-depth. That said, it can be
@@ -144,7 +144,7 @@ have CSP implemented yet. There are some rails development plugins we're using
 that are holding us back from a CSP implementation that will have an actually security impact.
 We're working on it, and will write about it in the next instalment!
 
-<h3 id="content-security-policy/how">How?</h3>
+<h3 id="csp/how">How?</h3>
 
 Writing a CSP policy can be challenging.
 See
@@ -164,7 +164,7 @@ is [here](https://csp.withgoogle.com/docs/adopting-csp.html).
 | Varnish | `set resp.http.Content-Security-Policy = "<policy>";` |
 
 
-<h3 id="content-security-policy/more">I want to know more</h3>
+<h3 id="csp/more">I want to know more</h3>
 
 - [Content-Security-Policy - MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy)
 - [CSP Quick Reference Guide](https://content-security-policy.com/)
