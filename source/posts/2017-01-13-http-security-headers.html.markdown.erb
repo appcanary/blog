@@ -385,7 +385,7 @@ page? ¯\\\_(ツ)\_/¯.
 | Platform | What do I do? |
 |--- |--- |
 | Rails 4 and 5 | `SAMEORIGIN` is set by default.<br/><br/>To set `DENY`:<br/>`config.action_dispatch.default_headers['X-Frame-Options'] = "DENY"` |
-| Django | `MIDDLEWARE = [ ... 'django.middleware.clickjacking.XFrameOptionsMiddleware', ... ]`<br/> This defaults to `SAMORIGIN`.<br/><br/>To set `DENY`: `X_FRAME_OPTIONS = 'DENY'` |
+| Django | `MIDDLEWARE = [ ... 'django.middleware.clickjacking.XFrameOptionsMiddleware', ... ]`<br/> This defaults to `SAMEORIGIN`.<br/><br/>To set `DENY`: `X_FRAME_OPTIONS = 'DENY'` |
 | Express.js | Use [helmet](https://helmetjs.github.io/docs/frameguard/)|
 | Go | Use [unrolled/secure](https://github.com/unrolled/secure) |
 | Nginx | `add_header X-Frame-Options "deny";`        |
