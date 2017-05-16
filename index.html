@@ -416,11 +416,11 @@ will still render the page<br/>
 
 <hr>
 
-<h2 id="content-security-policy">Content Security Policy</h2>
+<h2 id="csp">Content Security Policy</h2>
 <pre class="highlight plaintext"><code>Content-Security-Policy: &lt;policy&gt;
 </code></pre>
 
-<h3 id="content-security-policy/why">Why?</h3>
+<h3 id="csp/why">Why?</h3>
 
 <p>Content Security Policy can be thought of as much more advanced version of the
 <code>X-XSS-Protection</code> header above. While <code>X-XSS-Protection</code> will block scripts
@@ -433,7 +433,7 @@ You can white list origins for scripts, images, fonts, stylesheets, etc in a ver
 granular manner. You can also compare any loaded content against a hash or
 signature.</p>
 
-<h3 id="content-security-policy/should">Should I use it?</h3>
+<h3 id="csp/should">Should I use it?</h3>
 
 <p>Yes. It won&rsquo;t prevent all XSS attacks, but it&rsquo;s a significant mitigation against
 their impact, and an important aspect of defense-in-depth. That said, it can be
@@ -443,7 +443,7 @@ have CSP implemented yet. There are some rails development plugins we&rsquo;re u
 that are holding us back from a CSP implementation that will have an actually security impact.
 We&rsquo;re working on it, and will write about it in the next instalment!</p>
 
-<h3 id="content-security-policy/how">How?</h3>
+<h3 id="csp/how">How?</h3>
 
 <p>Writing a CSP policy can be challenging.
 See
@@ -487,7 +487,7 @@ is <a href="https://csp.withgoogle.com/docs/adopting-csp.html">here</a>.</p>
 </tr>
 </tbody></table>
 
-<h3 id="content-security-policy/more">I want to know more</h3>
+<h3 id="csp/more">I want to know more</h3>
 
 <ul>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy">Content-Security-Policy - MDN</a></li>

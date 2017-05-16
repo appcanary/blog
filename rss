@@ -222,7 +222,7 @@ version that fixes all the vulnerabilities we know about.&lt;/p&gt;
     <link rel="alternate" href="https://blog.appcanary.com/2017/http-security-headers.html"/>
     <id>https://blog.appcanary.com/2017/http-security-headers.html</id>
     <published>2017-01-12T16:00:00-08:00</published>
-    <updated>2017-05-16T12:08:44-07:00</updated>
+    <updated>2017-05-16T12:43:39-07:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
@@ -383,11 +383,11 @@ will still render the page&lt;br/&gt;
 
 &lt;hr&gt;
 
-&lt;h2 id="content-security-policy"&gt;Content Security Policy&lt;/h2&gt;
+&lt;h2 id="csp"&gt;Content Security Policy&lt;/h2&gt;
 &lt;pre class="highlight plaintext"&gt;&lt;code&gt;Content-Security-Policy: &amp;lt;policy&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id="content-security-policy/why"&gt;Why?&lt;/h3&gt;
+&lt;h3 id="csp/why"&gt;Why?&lt;/h3&gt;
 
 &lt;p&gt;Content Security Policy can be thought of as much more advanced version of the
 &lt;code&gt;X-XSS-Protection&lt;/code&gt; header above. While &lt;code&gt;X-XSS-Protection&lt;/code&gt; will block scripts
@@ -400,7 +400,7 @@ You can white list origins for scripts, images, fonts, stylesheets, etc in a ver
 granular manner. You can also compare any loaded content against a hash or
 signature.&lt;/p&gt;
 
-&lt;h3 id="content-security-policy/should"&gt;Should I use it?&lt;/h3&gt;
+&lt;h3 id="csp/should"&gt;Should I use it?&lt;/h3&gt;
 
 &lt;p&gt;Yes. It won&amp;rsquo;t prevent all XSS attacks, but it&amp;rsquo;s a significant mitigation against
 their impact, and an important aspect of defense-in-depth. That said, it can be
@@ -410,7 +410,7 @@ have CSP implemented yet. There are some rails development plugins we&amp;rsquo;
 that are holding us back from a CSP implementation that will have an actually security impact.
 We&amp;rsquo;re working on it, and will write about it in the next instalment!&lt;/p&gt;
 
-&lt;h3 id="content-security-policy/how"&gt;How?&lt;/h3&gt;
+&lt;h3 id="csp/how"&gt;How?&lt;/h3&gt;
 
 &lt;p&gt;Writing a CSP policy can be challenging.
 See
@@ -454,7 +454,7 @@ is &lt;a href="https://csp.withgoogle.com/docs/adopting-csp.html"&gt;here&lt;/a&
 &lt;/tr&gt;
 &lt;/tbody&gt;&lt;/table&gt;
 
-&lt;h3 id="content-security-policy/more"&gt;I want to know more&lt;/h3&gt;
+&lt;h3 id="csp/more"&gt;I want to know more&lt;/h3&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy"&gt;Content-Security-Policy - MDN&lt;/a&gt;&lt;/li&gt;
