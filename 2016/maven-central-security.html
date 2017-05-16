@@ -1,174 +1,55 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-<title>Maven Central Security - Appcanary</title>
-<meta content='The security of your package manager is very important to us at appcanary, and it’s important to make sure the packages you’re downloading are s...' name='description'>
-<meta charset='utf-8'>
-<meta content='width=device-width, initial-scale=1.0' name='viewport'>
-<meta content='IE=edge' http-equiv='X-UA-Compatible'>
-<meta content='True' name='HandheldFriendly'>
-<meta content='Appcanary' property='og:site_name'>
-<meta content='article' property='og:type'>
-<meta content='Maven Central Security' property='og:title'>
-<meta content='The security of your package manager is very important to us at appcanary, and it’s important to make sure the packages you’re downloading are s...' property='og:description'>
-<meta content='http://blog.appcanary.com/2016/maven-central-security.html' property='og:url'>
-<meta content='http://blog.appcanary.com/images/appcanary.png' property='og:image'>
-<meta content='2016-01-29' property='article:published_time'>
-<meta content='summary' name='twitter:card'>
-<meta content='Maven Central Security' name='twitter:title'>
-<meta content='The security of your package manager is very important to us at appcanary, and it’s important to make sure the packages you’re downloading are s...' name='twitter:description'>
-<meta content='http://blog.appcanary.com/2016/maven-central-security.html' name='twitter:url'>
-<meta content='http://blog.appcanary.com/images/appcanary.png' name='twitter:image:src'>
-<link rel="alternate" type="application/atom+xml" title="Atom Feed" href="/feed.xml" />
-<link href="/images/favicon.ico" rel="icon" type="image/ico" />
-<link href="/stylesheets/application.css" rel="stylesheet" />
-<script src="//use.typekit.net/dkz5zwp.js"></script>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/stylesheets/application.css" rel="stylesheet" />
+    <link href="/images/favicon.ico" rel="icon" type="image/ico" />
+
+      <title>Appcanary - Maven Central Security</title>
+    <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="/feed.xml" />
+  </head>
+  <body>
+    <script src="//use.typekit.net/dkz5zwp.js"></script>
 <script>try{Typekit.load({ async: false });}catch(e){}</script>
 
-</head>
-<body class='post-template nav-closed'>
-<div class='topbar'></div>
-<div class='nav'>
-<h3 class='nav-title'>Menu</h3>
-<a class='nav-close' href='#'>
-<span class='hidden'>Close</span>
-</a>
-<ul>
-<li class='nav-home' role='presentation'>
-<a href='/'>Home</a>
-</li>
-<li class='nav-archive' role='presentation'>
-<a href='archive.html'>Archive</a>
-</li>
-<li class='nav-github' role='presentation'>
-<a href='https://github.com/appcanary'>Github</a>
-</li>
-</ul>
-<a class='subscribe-button icon-feed' href='/feed.xml'>Subscribe</a>
-</div>
-<span class='nav-cover'></span>
 
-<div class='site-wrapper'>
-<header class='main-header no-cover'>
-<nav class='main-nav overlay clearfix'>
-</nav>
-<div class='vertical'>
-<div class='main-header-content inner'>
-<a class='appcanary-logo' href='/'>
-<img alt="Appcanary" src="/images/appcanary.png" />
-</a>
-<h2 class='page-description'><a href="https://appcanary.com">Appcanary</a> makes sure you never run vulnerable software on your servers.<br/>Like our blog? Subscribe to our <a href="https://appcanary.us10.list-manage.com/subscribe?u=303b378f377508300c0b5469a&id=dc58e8f56f">newsletter</a>!</h2>
-<div class='more-icons'>
-<a alt='Twitter' href='https://twitter.com/appcanary' title='Twitter'>
-<i class='fa fa-twitter-square'></i>
-</a>
-<a alt='Github' href='https://github.com/appcanary' title='Github'>
-<i class='fa fa-github-square'></i>
-</a>
-<a alt='Archive' href='/archive.html' title='Archive'>
-<i class='fa fa-archive'></i>
-</a>
-<a alt='Feed' href='/feed.xml' title='Feed'>
-<i class='fa fa-rss-square'></i>
-</a>
-</div>
-</div>
-</div>
-<a class='scroll-down icon-arrow-left' data-offset='-45' href='#content'>
-<span class='hidden'>Scroll Down</span>
-</a>
-</header>
+    <div class="topbar"></div>
+    <div id="header">
+      <div class="preamble">
+        <a href="https://blog.appcanary.com"><img class="logo" src="/images/appcanary.png" alt="Appcanary logo"></a>
+        <p>
+          <b><a href="https://appcanary.com">Appcanary</a></b> makes sure you never run vulnerable software on your servers.
+          <br/>
+          Like our blog? Subscribe to our <a href="https://appcanary.us10.list-manage.com/subscribe?u=303b378f377508300c0b5469a&id=dc58e8f56f">newsletter</a>.<br/>
+          Browse the <a href="/archive.html">archive</a>, or follow us on <a href="https://twitter.com/appcanary">twitter</a>, <a href="https://github.com/appcanary">github</a> or <a href="/feed.xml">rss</a>.
+        </p>
+      </div>
+    </div>
 
-<main class='content' role='main'>
-<article class='post'>
-<header class='post-header'>
-<h1 class='post-title'>Maven Central Security</h1>
-<section class='post-meta'>
-<time class='post-date' datetime='2016-01-29'>
-29 January 2016
-</time>
-on <a href='/tag/java.html'>Java</a>, <a href='/tag/maven.html'>Maven</a>, <a href='/tag/clojure.html'>Clojure</a>, <a href='/tag/programming.html'>Programming</a>, <a href='/tag/security.html'>Security</a>, <a href='/tag/talks.html'>Talks</a>
-</section>
-</header>
-<section class='post-content'><p>The security of your package manager is very important to us at appcanary, and it’s important to make sure the packages you’re downloading are secure in transit.</p>
+      <section>
+    <div class="entry">
+      <div class="post">
+        <h1 class="title"><a href="/2016/maven-central-security.html">Maven Central Security</a></h1>
+        <div class="published-tags">By <span class="author"><a href="/author/max-veytsman.html">Max Veytsman</a></span> |
+          <span class="date">January 29, 2016</span> on <a href="/tags/java.html">Java</a>, <a href="/tags/maven.html">Maven</a>, <a href="/tags/clojure.html">Clojure</a>, <a href="/tags/programming.html">Programming</a>, <a href="/tags/security.html">Security</a>, <a href="/tags/talks.html">Talks</a></div>
+
+        <p>The security of your package manager is very important to us at appcanary, and it’s important to make sure the packages you’re downloading are secure in transit.</p>
 
 <p>Back in the summer of 2014, I discovered that <a href="http://search.maven.org/">Maven Central</a>  wasn’t using TLS or any signature verification when serving up java packages.</p>
 
 <p>I gave a talk at <a href="http://bangbangcon.com/index.html">!!con 2015</a> about what I did to help convince them to start using encryption.</p>
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/6NdLZl16OkA" frameborder="0" allowfullscreen></iframe>
-</section>
-<div class='newsletter'>
-<link href="//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css" rel="stylesheet" type="text/css">
-<style type="text/css">
- #mc_embed_signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; width:100%;}
- /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
-	  We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
-</style>
-<div id="mc_embed_signup">
-<form action="//appcanary.us10.list-manage.com/subscribe/post?u=303b378f377508300c0b5469a&amp;id=dc58e8f56f" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
-<div id="mc_embed_signup_scroll">
-<label for="mce-EMAIL">Liked this post? Subscribe to our newsletter for more!</label>
-<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
-<div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_303b378f377508300c0b5469a_dc58e8f56f" tabindex="-1" value=""></div>
-<div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
-</div>
-</form>
-</div>
 
-</div>
-<footer class='post-footer'>
-<section class='author'>
-<h4>
-<a href='/author/max-veytsman.html'>Max Veytsman</a>
-</h4>
-<p></p>
-Read
-<a href='/author/max-veytsman.html'>more posts</a>
-by this author.
-</section>
-<section class='share'>
-<h4>Share this post</h4>
-<a class='icon-twitter' href='https://twitter.com/intent/tweet?text=Maven Central Security&amp;amp;url=http://blog.appcanary.com/2016/maven-central-security.html' onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-<span class='hidden'>Twitter</span>
-</a>
-<a class='icon-facebook' href='https://www.facebook.com/sharer/sharer.php?u=http://blog.appcanary.com/2016/maven-central-security.html' onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-<span class='hidden'>Facebook</span>
-</a>
-<a class='icon-google-plus' href='https://plus.google.com/share?url=http://blog.appcanary.com/2016/maven-central-security.html' onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-<span class='hidden'>Google+</span>
-</a>
-</section>
-</footer>
-</article>
-</main>
-<aside class='read-next'>
-<a class='no-cover read-next-story' href='/2015/hello-appcanary.html'>
-<section class='post'>
-<h2>Hello Appcanary</h2>
-<p>Dear friends,&nbsp; tl;dr We launched Appcanary, we’re shutting down Gemcanary Dec 31st 2015, we have great plans for the&hellip;</p>
-</section>
-</a>
-<a class='no-cover prev read-next-story' href='/2016/state-management-downtime.html'>
-<section class='post'>
-<h2>How being lazy about state management in Clojure caused us downtime</h2>
-<p>On November 10th, we suffered some downtime as our backend application mysteriously crashed and had to be restarted. After&hellip;</p>
-</section>
-</a>
-</aside>
 
-<footer class='site-footer clearfix'>
-<section class='copyright'>
-<a href='/'>Appcanary</a>
-&copy;
-2017
-</section>
-<section class='poweredby'>
-</section>
-</footer>
-</div>
-<script src="/javascripts/application.js"></script>
-<script type="text/javascript">
+      </div>
+    </div>
+  </section>
+
+
+    <script type="text/javascript">
  /* <![CDATA[ */
  var google_conversion_id = 928841383;
  var google_custom_params = window.google_tag_params;
@@ -223,5 +104,6 @@ by this author.
 <!-- DO NOT MODIFY -->
 <!-- End Facebook Pixel Code -->
 
-</body>
+    
+  </body>
 </html>
