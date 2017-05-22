@@ -10,6 +10,24 @@ tags: Programming, Ruby, Clojure
 
 In November 2016, I delivered a talk at RubyConf where I told the story of how we built the first version in Appcanary in Clojure, and then threw it away. 
 
+Here is the talk:
+
+<div style="position:relative;height:0;padding-bottom:56.25%"><iframe src="https://www.youtube.com/embed/doZ0XAc9Wtc?ecver=2" width="640" height="360" frameborder="0" style="position:absolute;width:100%;height:100%;left:0" allowfullscreen></iframe></div>
+
+<small>Jump to 12:10 to start at the section where I begin to talk about my specific problems with Clojure.</small>
+
+But, that talk is like a whole half hour, and who has time for that?
+
+### Three important ideas you should take away:
+
+1. If you're starting a project where you're really pressed for time, you should be biased towards tools you know really well. If you have a startup, you're supposed to be solving a _business problem_. Don't make your life harder than it has to be!, by also having to learn new tools.
+
+2. Avoid building a distributed system for as long as you can. They introduce a lot of expensive complexity that is hard for small teams to pay. Micro services are cool and all, but the way you code and deploy your apps should be a reflection of your team's organization and ability to coordinate.
+
+3. I found it really hard to get into Clojure. I got the sense that Clojure as a community doesn't value "developer happiness", and I think it should! Tools should try to make your life easier at every opportunity.
+
+<hr>
+
 We had [hinted at this before](/2016/missing-clojure.html), but I had avoided posting the talk on this blog for two reasons:
 
 1. I've rewatched it a bunch of times and can think of a half dozen things I'd do differently now.
@@ -26,22 +44,6 @@ Developer tools do not exist in isolation; they are often only useful to the ext
 It was a good learning experience, though. I came to understand that **I did not work hard enough to establish that I was coming from a place of kindness**, and that my talk was **not** a big fuck you! to the community.
 
 I came into the language and its environment with an open heart and invested a ton of resources into it, but, largely because of my specific context and a few mistakes we made early on, continuing to invest in Clojure didn't make sense for us.
-
-Here is the talk:
-
-<div style="position:relative;height:0;padding-bottom:56.25%"><iframe src="https://www.youtube.com/embed/doZ0XAc9Wtc?ecver=2" width="640" height="360" frameborder="0" style="position:absolute;width:100%;height:100%;left:0" allowfullscreen></iframe></div>
-
-<small>Jump to 12:10 to start at the section where I begin to talk about my specific problems with Clojure.</small>
-
-But, that talk is like a whole half hour, and who has time for that?
-
-### Three important ideas you should take away:
-
-1. If you're starting a project where you're really pressed for time, you should be biased towards tools you know really well. If you have a startup, you're supposed to be solving a _business problem_. Don't make your life harder than it has to be!, by also having to learn new tools.
-
-2. Avoid building a distributed system for as long as you can. They introduce a lot of expensive complexity that is hard for small teams to pay. Micro services are cool and all, but the way you code and deploy your apps should be a reflection of your team's organization and ability to coordinate.
-
-3. I found it really hard to get into Clojure. I got the sense that Clojure as a community doesn't value "developer happiness", and I think it should! Tools should try to make your life easier at every opportunity.
 
 <hr>
 
@@ -92,7 +94,7 @@ Here's the uncharitable part:
 
 By separating "simplicity" from "ease of use", and then establishing the _primacy of simplicity_, it gives people an ideological out to discount improving the user interface of our tools and artifacts.
 
-If your chief goal is simplicity, and beauty, and elegance, then it's not really your fault if people don't "get it". It blinds us to critiques of our software: if we don't value the accessibility of our tools then it becomes very difficult to distinguish from "there sure are a lot of arbitrary barriers preventing my understanding" from "I'm lazy and couldn't be bothered to try hard enough"[^criticism].
+If your chief goal is simplicity, and beauty, and elegance, then it's not really your fault if people don't "get it". It blinds us to critiques of our software: if we don't value the accessibility of our tools then it becomes very difficult to distinguish "there are a lot of arbitrary barriers preventing my understanding" from "I'm lazy and couldn't be bothered to try hard enough"[^criticism].
 
 Establishing this narrow view of "simplicity" as wholly separate from "easy to use" prevents us from being able to optimize for ease-of-use.
 
@@ -116,6 +118,6 @@ The truth is, programming isn't that hard. There's just a lot of it to learn and
 
 [^talkcomments]: I called it "abuse" elsewhere, which is maybe a bit much. People were mostly just somewhat rude. It's just not... pleasant to have a bunch of people calling you incompetent over and over again ¯\\_(ツ)\_/¯.
 
-[^meanjerk]: I am exagerating and bear no ill will ;).
+[^meanjerk]: I am exaggerating and bear no ill will ;).
 
 [^criticism]: By far the most common response to my talk was, but are you sure you tried hard enough? If you keep trying, you'll get it. Just work harder at it. There's a hidden insinuation: maybe you're not smart enough to get it. But... I seem to be smart enough for a lot of other things.
