@@ -41,7 +41,7 @@ But, that talk is like a whole half hour, and who has time for that?
 
 2. Avoid building a distributed system for as long as you can. They introduce a lot of expensive complexity that is hard for small teams to pay. Micro services are cool and all, but the way you code and deploy your apps should be a reflection of your team's organization and ability to coordinate.
 
-3. I got the sense that Clojure as a community doesn't value "developer happiness", and I think it should! Tools should try to make your life easier at every opportunity.
+3. I found it really hard to get into Clojure. I got the sense that Clojure as a community doesn't value "developer happiness", and I think it should! Tools should try to make your life easier at every opportunity.
 
 <hr>
 
@@ -70,7 +70,7 @@ In the end, what *is* a [reasonable expectation for developers new to Clojure](h
 
 OKAY, WOW, are you still with me? Incredible. 
 
-It's hard for me to write about Clojureland nowadays since it's been a whole year since I last typed `lein repl`, but I'm about to say something hyperbolic and uncharitable because it's more memorable and entertaining, so please bear with me.
+It's hard for me to write about Clojureland nowadays since it's been a whole year since I last typed `lein repl`, but I'm about to say something hyperbolic and uncharitable because it's more memorable, so please bear with me.
 
 Here it goes. Ready?
 
@@ -84,26 +84,38 @@ Often, when we say something is _easy_, we actually just mean that it is familia
 
 Sometimes the best, most simple solution may be very different from what you were expecting, and may therefore require some elbow grease. 
 
-With me so far? 
+I thought that talk was really insightful when I first watched it. It's trivially true when applied to say, undergraduate calculus or probability. But having seen how people refer to it over the years, I've since soured on the concept.
 
-I thought that talk was really insightful when I first watched it, but having seen how people refer to it, I've since soured on the concept.
-
-It's very intuitively appealing; take for instance the Ruby on Rails web framework.
-
-Rails is very "easy" to use: you herp derp some html and some logic into the right places and by and large it'll Do The Right Thing. This is great as a beginner, but as you learn how to peek under the hood you quickly discover an angry 'complection' of interests and assumptions that make all the magic work in the first place.
-
-This overabundance of "magic" is by far the number one criticism I've heard people make about Rails. It has so many moving parts it can be hard to reason about.
-
-But... in my personal experience, and at least by the standards of developer tools, Rails is also a _friendly_ piece of software. Ten years later people forget this, but getting a web framework to spit out a hello world used to take _epic_ amounts of yak shaving. Rails by and large tries to just Do The Right Thing, and when it fails it tries to point you in the right direction. At least, most of the time.
-
+Here's the uncharitable part:
 
 ### In practice, 'Simple Made Easy' is an elaborate excuse for making software that is hard to use.
 
+By separating "simplicity" from "ease of use", and then establishing the _primacy of simplicity_, it gives people an ideological out to discount improving the user interface of our tools and artifacts.
 
-### Simple 
+If your chief goal is simplicity, and beauty, and elegance, then it's not really your fault if people don't "get it". It blinds us to critiques of our software: if we don't value the accessibility of our tools then it becomes very difficult to distinguish from "there sure are a lot of arbitrary barriers preventing my understanding" from "I'm lazy and couldn't be bothered to try hard enough"[^criticism].
 
-## Ruby Makes Me Happy
+Establishing this narrow view of "simplicity" as wholly separate from "easy to use" prevents us from being able to optimize for ease-of-use.
 
-[^talkcomments]: People weren't _excessively_ rude. Calling it "abuse" is maybe a bit much. It's just not... pleasant to have a large stream of insinuating invectives attached to my name ¯\\_(ツ)\_/¯.
+In my talk I called the Clojureland ecosystem "user-hostile". This contrasts sharply with the community, who are by and large very sweet and personable and well-meaning. 
+
+Undoubtedly, I chafed because Clojureland tools were **unfamiliar**, yes. But past a certain point they were also _unfriendly_, because in their error messages and affordances and failure conditions they assumed a rather high tolerance for digging through code and high-level knowledge of Clojure's concepts and idioms and runtime quirks.
+
+So we went back to Ruby, which we knew really well.
+
+But here is the rub:  Ruby's tooling is [terrible](http://www.virtuouscode.com/2015/07/08/ruby-is-defined-by-terrible-tools/). The interpreter is slow and finicky and it leaks memory like a sieve. There is no static introspection, the meta programming features are basic and slow and it is trivially easy to bleed state and complect the hell out of your programs. It was great compared to Java or PHP in 2004.
+
+But you know what Ruby really has got going for it? Ruby is [designed to be fun and make programmers happy](http://www.artima.com/intv/rubyP.html). I think this is such a dope design philosophy that I'll go one step further:
+
+## All programming languages should strive to be fun and make programmers happy.
+
+I think this is by far the most important contribution Ruby brought to programming, and as Ruby has stabilized and become less exciting and people have moved on, it has been incredible to see ex-Rubyists bring these values with them to their new communities.
+
+You can see this attitude in Elixir, in Rust, in Ember. Our tools should help you achieve success. Our tools should get out of the way. Our tools should Just Work.
+
+The truth is, programming isn't that hard. There's just a lot of it to learn and know and understand. We should strive to be as maximally welcoming as we can, for every level of experience.
+
+[^talkcomments]: I called it "abuse" elsewhere, which is maybe a bit much. People were mostly just somewhat rude. It's just not... pleasant to have a bunch of people calling you incompetent over and over again ¯\\_(ツ)\_/¯.
 
 [^meanjerk]: I am exagerating and bear no ill will ;).
+
+[^criticism]: By far the most common response to my talk was, but are you sure you tried hard enough? If you keep trying, you'll get it. Just work harder at it. There's a hidden insinuation: maybe you're not smart enough to get it. But... I seem to be smart enough for a lot of other things.
