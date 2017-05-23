@@ -1,0 +1,120 @@
+---
+title: "Simple Ain't Easy, but Hard Ain't Simple: Leaving Clojure for Ruby"
+date: 2017-05-22
+author: phillmv
+layout: post
+published: false
+tags: Programming, Ruby, Clojure
+---
+
+In November 2016, I delivered a talk at RubyConf where I told the story of how we built the first version in Appcanary in Clojure, and then threw it away. 
+
+Here is the talk:
+
+<div style="position:relative;height:0;padding-bottom:56.25%"><iframe src="https://www.youtube.com/embed/doZ0XAc9Wtc?ecver=2" width="640" height="360" frameborder="0" style="position:absolute;width:100%;height:100%;left:0" allowfullscreen></iframe></div>
+
+<small>Jump to 12:10 to start at the section where I begin to talk about my specific problems with Clojure.</small>
+
+But, that talk is over a half hour long, and who has time for that?
+
+### Three important ideas you should take away:
+
+1. If you're starting a project where you're really pressed for time, you should be biased towards tools you know really well. If you have a startup, you're supposed to be solving a _business problem_. Don't make your life harder than it has to be by also having to learn new tools.
+
+2. Avoid building a distributed system for as long as you can. They introduce a lot of expensive complexity that is hard for small teams to pay. Micro services are useful for larger teams, but the way you code and deploy your apps should be a reflection of your team's organization and ability to coordinate.
+
+3. I personally found it really hard to get into Clojure. I got the sense that Clojure as a community doesn't value "developer happiness", and I think it should! Tools should try to make your life easier at every opportunity.
+
+<hr>
+
+We had [mentioned the talk before](/2016/missing-clojure.html), but I had avoided actually posting it on this blog for two reasons:
+
+1. I've rewatched it a bunch of times and can think of a half dozen things I'd do differently now.
+2. Some people in the Clojure community got _really mad_.
+
+## Oops
+
+A lot of otherwise well-meaning people looked at the talk and decided that I was a) a bit of an asshole and b) probably incompetent. So many people expressed that view that I felt compelled to ask Confreaks to turn off the comments[^talkcomments].
+
+I don't really blame them.
+
+Developer tools do not exist in isolation; they are often only useful to the extent there is a live community surrounding them. This requires such a degree of investment that many programmers will inevitably come to integrate their favourite programming languages into a part of their identity. When some outsider comes along and criticizes your community and identity, it can be very hard to be charitable to what they have to say.
+
+It was a good learning experience, though. I came to understand that **I did not work hard enough to establish that I was coming from a place of kindness**, and that my talk was **not** a big fuck you! to the community.
+
+I came into the language and its environment with an open heart and invested a ton of resources into it, but, largely because of my specific context and a few mistakes we made early on, continuing to invest in Clojure didn't make sense for us.
+
+<hr>
+
+## Further discussion
+
+So, much to my surprise, my talk became relevant recently when some peeps in the Clojure community looked around and made an observation:
+
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">folks, I&#39;m calling it, clojure&#39;s dying more than it is growing</p>&mdash; 🌹dsa zack🌹 (@ZackMaril) <a href="https://twitter.com/ZackMaril/status/863915988424589312">May 15, 2017</a></blockquote>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+Enabled by Twitter's recent decision to not count usernames towards character limits, this thread gained a whole life of its own. I don't know how to do justice to the whole range of topics that were discussed; Twitter itself hasn't quite figured out how to display threads properly. 
+
+I think some of the ideas brought up deserve a little more investigation, and so I have summarized parts of the discussion in order to address them. Here it goes:
+
+### The Thread
+
+The hype cycle has moved away from Clojure, [and the community feels like it's shrinking](https://twitter.com/ZackMaril/status/863916529674354688) - [though there are many more jobs coming up](https://twitter.com/ztellman/status/864243503999602688). 
+
+It's actually kinda hard to make a [good business case](https://twitter.com/ztellman/status/864244372933443585) for Clojure, since [the JVM makes small tools prohibitive](https://twitter.com/ZackMaril/status/864244440931500033) and, if you do like the JVM, [you now have a lot of options](https://twitter.com/cemerick/status/864931671388409856). In theory, [you should be way more productive in Clojure](https://twitter.com/ericnormand/status/864940158159912960), but it's [hard to tell how true that is](https://twitter.com/CursiveIDE/status/865162192265461764).
+
+That said, [are people actually leaving Clojure](https://twitter.com/mark_engelberg/status/865370061489356800)? Well, [there was a talk recently on that very topic](https://twitter.com/ztellman/status/865372517786984448), and though it may have been written by an [incompetent](https://twitter.com/timbaldridge/status/865640256220962816) and [mean jerk](https://twitter.com/timbaldridge/status/865654433870356480)[^meanjerk], it makes some [good points](https://twitter.com/cemerick/status/865657364317298690).
+
+In the end, what *is* a [reasonable expectation for developers new to Clojure](https://twitter.com/phillmv/status/865690983274430464)? Lisps are a [very different](https://twitter.com/timbaldridge/status/865667405862715392) paradigm. [Things work differently here](https://twitter.com/timbaldridge/status/865667555494551552). Developers get paid to [solve or automate problems](https://twitter.com/timbaldridge/status/865698644724375552), and people [waste tons of time](https://twitter.com/potetm/status/866027765350506496) trying to be "happy". Clojure encourages people to reflect on their work, and [aggressively pare it down](https://twitter.com/potetm/status/866028663644598274). After all, [simple isn't easy](https://twitter.com/potetm/status/866027314009829376)!
+
+<hr>
+
+OKAY, WOW, are you still with me? Incredible. 
+
+It's hard for me to write about Clojureland nowadays since it's been a whole year since I last typed `lein repl`, but I'm about to say something slightly hyperbolic and slightly uncharitable because it's more memorable, so please bear with me. It's a little over the top, but I promise I'm coming from a place of love.
+
+Here it goes. Ready?
+
+## "Simple != Easy" Is One Of The Most Toxic Ideas Ever Introduced To Programming
+
+For those of you outside of Clojureland, this is a reference to well-known 2011 Rich Hickey talk titled "[Simple Made Easy](https://www.infoq.com/presentations/Simple-Made-Easy)". 
+
+Rich's thesis is that the best, most conceptually simple solution to a problem isn't automatically also going to be _simple to use_.
+
+Often, when we say something is _easy_, we actually just mean that it is familiar to us, and that we've used something like it before. Just because we don't have to engage our brain doesn't mean a concept or framework or artifact isn't _complex_. 
+
+Often the simplest solution may be very different from what you were expecting, and may therefore require some elbow grease.
+
+I thought that talk was really insightful when I first watched it. Math, for example, is a place where you can dedicate a lifetime of mental energy to simple but hard things. And it's true that many easy things are needlessly complex. But, having seen how people refer to it over the years, I've since soured on the concept.
+
+### In practice, 'Simple Made Easy' is an elaborate excuse for making software that is hard to use.
+
+By separating "simplicity" from "ease of use", and then establishing the _primacy of simplicity_, it gives people an ideological out to discount improving the user interface of our tools and artifacts.
+
+If your chief goal is simplicity, and beauty, and elegance, then it's not really your fault if people don't "get it". It blinds us to critiques of our software: if we don't value the accessibility of our tools then it becomes very difficult to distinguish "there are a lot of arbitrary barriers preventing my understanding" from "I'm lazy and couldn't be bothered to try hard enough"[^criticism].
+
+Establishing this narrow view of "simplicity" as wholly separate from "easy to use" prevents us from being able to optimize for ease-of-use, aka developer experience.
+
+In my talk I called the Clojureland ecosystem "user-hostile". This contrasts sharply with the community, who are by and large very sweet and personable and well-meaning. 
+
+Undoubtedly, I chafed because Clojureland tools were **unfamiliar**, yes. But past a certain point they were also _unfriendly_, because in their error messages and affordances and failure conditions they assumed a rather high tolerance for digging through code and high-level knowledge of Clojure's concepts and idioms and runtime quirks.
+
+So we went back to Ruby, which we knew really well.
+
+But here is the rub: Ruby's tooling is [terrible](http://www.virtuouscode.com/2015/07/08/ruby-is-defined-by-terrible-tools/). The interpreter is slow and finicky and it used to leak memory like a sieve. There is no static introspection, the meta programming features are basic and slow and it is trivially easy to bleed state and complect the hell out of your programs. It was great compared to Java or PHP in 2004. In 2017, the world is different.
+
+But, do you know what Ruby really has got going for it? Ruby is [designed to be fun and make programmers happy](http://www.artima.com/intv/rubyP.html). I think this is such a dope design philosophy that I'll go one step further:
+
+## All programming languages should strive to be fun and make programmers happy.
+
+I think this is by far the most important contribution Ruby brought to programming, and as Ruby has stabilized and become less exciting and people have moved on, it has been incredible to [ex-Rubyists bring these values with them to their new communities](https://twitter.com/sarahmei/status/849065056746827776).
+
+You can see this attitude in Elixir, in Rust, in Ember. Our tools should help you achieve success. Our tools should get out of the way. Our tools should Just Work.
+
+The truth is, programming can be complex, but it is also often needlessly hard. Programmers are the end-users of programming tools, and to ignore their experience using them is just plain bad design. We should strive to be as maximally welcoming as we can, for every level of experience.
+
+[^talkcomments]: I called it "abuse" elsewhere, which is maybe a bit much. People were mostly just somewhat rude. It's just not... pleasant to have a bunch of people calling you incompetent over and over again ¯\\_(ツ)\_/¯.
+
+[^meanjerk]: I am exaggerating and bear no ill will ;).
+
+[^criticism]: By far the most common response to my talk was, but are you sure you tried hard enough? If you keep trying, you'll get it. Just work harder at it. There's a hidden insinuation: maybe you're not smart enough to get it. I'd like to think that I am.
