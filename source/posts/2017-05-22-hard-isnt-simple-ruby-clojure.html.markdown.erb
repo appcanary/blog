@@ -4,7 +4,6 @@ date: 2017-05-22
 author: phillmv
 layout: post
 published: false
-#thumbnail: images/canary_ledger.png
 tags: Programming, Ruby, Clojure
 ---
 
@@ -22,7 +21,7 @@ But, that talk is over a half hour long, and who has time for that?
 
 1. If you're starting a project where you're really pressed for time, you should be biased towards tools you know really well. If you have a startup, you're supposed to be solving a _business problem_. Don't make your life harder than it has to be by also having to learn new tools.
 
-2. Avoid building a distributed system for as long as you can. They introduce a lot of expensive complexity that is hard for small teams to handle. Micro services are useful for larger teams, but the way you code and deploy your apps should be a reflection of your team's organization and ability to coordinate.
+2. Avoid building a distributed system for as long as you can. They introduce a lot of expensive complexity that is hard for small teams to pay. Micro services are useful for larger teams, but the way you code and deploy your apps should be a reflection of your team's organization and ability to coordinate.
 
 3. I personally found it really hard to get into Clojure. I got the sense that Clojure as a community doesn't value "developer happiness", and I think it should! Tools should try to make your life easier at every opportunity.
 
@@ -72,7 +71,7 @@ In the end, what *is* a [reasonable expectation for developers new to Clojure](h
 
 OKAY, WOW, are you still with me? Incredible. 
 
-It's hard for me to write about Clojureland nowadays since it's been a whole year since I last typed `lein repl`, but I'm about to say something that I've been thinking about for years. It may sound hyperbolic, but I promise, I'm coming from a place of love. I sincerely want Clojure, and all developer tools, to be better.
+It's hard for me to write about Clojureland nowadays since it's been a whole year since I last typed `lein repl`, but I'm about to say something slightly hyperbolic and slightly uncharitable because it's more memorable, so please bear with me. It's a little over the top, but I promise I'm coming from a place of love.
 
 Here it goes. Ready?
 
@@ -86,7 +85,7 @@ Often, when we say something is _easy_, we actually just mean that it is familia
 
 Often the simplest solution may be very different from what you were expecting, and may therefore require some elbow grease.
 
-I thought that talk was really insightful when I first watched it. Math, for example, is a place where you can dedicate a lifetime of mental energy to simple but hard things. And it's true that many easy things are needlessly complex &mdash; Rails is a classic example here. But, having seen how people refer to it over the years, I've since soured on the concept.
+I thought that talk was really insightful when I first watched it. Math, for example, is a place where you can dedicate a lifetime of mental energy to simple but hard things. And it's true that many easy things are needlessly complex. But, having seen how people refer to it over the years, I've since soured on the concept.
 
 ### In practice, 'Simple Made Easy' is an elaborate excuse for making software that is hard to use.
 
@@ -94,7 +93,7 @@ By separating "simplicity" from "ease of use", and then establishing the _primac
 
 If your chief goal is simplicity, and beauty, and elegance, then it's not really your fault if people don't "get it". It blinds us to critiques of our software: if we don't value the accessibility of our tools then it becomes very difficult to distinguish "there are a lot of arbitrary barriers preventing my understanding" from "I'm lazy and couldn't be bothered to try hard enough"[^criticism].
 
-Establishing this narrow view of "simplicity" as wholly separate from "easy to use" prevents us from being able to optimize for developer experience.
+Establishing this narrow view of "simplicity" as wholly separate from "easy to use" prevents us from being able to optimize for ease-of-use, aka developer experience.
 
 In my talk I called the Clojureland ecosystem "user-hostile". This contrasts sharply with the community, who are by and large very sweet and personable and well-meaning. 
 
@@ -102,17 +101,17 @@ Undoubtedly, I chafed because Clojureland tools were **unfamiliar**, yes. But pa
 
 So we went back to Ruby, which we knew really well.
 
-But here is the rub: Ruby's tooling is [terrible](http://www.virtuouscode.com/2015/07/08/ruby-is-defined-by-terrible-tools/). The interpreter is slow and finicky and it leaks memory like a sieve. There is no static introspection, the meta programming features are basic and slow and it is trivially easy to bleed state and complect the hell out of your programs. It was great compared to Java or PHP in 2004. In 2017, the world is different.
+But here is the rub: Ruby's tooling is [terrible](http://www.virtuouscode.com/2015/07/08/ruby-is-defined-by-terrible-tools/). The interpreter is slow and finicky and it used to leak memory like a sieve. There is no static introspection, the meta programming features are basic and slow and it is trivially easy to bleed state and complect the hell out of your programs. It was great compared to Java or PHP in 2004. In 2017, the world is different.
 
 But, do you know what Ruby really has got going for it? Ruby is [designed to be fun and make programmers happy](http://www.artima.com/intv/rubyP.html). I think this is such a dope design philosophy that I'll go one step further:
 
 ## All programming languages should strive to be fun and make programmers happy.
 
-I think this is by far the most important contribution Ruby brought to programming, and as Ruby has stabilized and become less exciting and people have moved on, it has been incredible to see ex-Rubyists bring these values with them to their new communities.
+I think this is by far the most important contribution Ruby brought to programming, and as Ruby has stabilized and become less exciting and people have moved on, it has been incredible to [ex-Rubyists bring these values with them to their new communities](https://twitter.com/sarahmei/status/849065056746827776).
 
 You can see this attitude in Elixir, in Rust, in Ember. Our tools should help you achieve success. Our tools should get out of the way. Our tools should Just Work.
 
-The truth is, programming can be complex, but it is also often needlessly hard. Programmers are the end-users of programming tools, and to ignore their experience using them is just plain bad design. And, we should strive to be as maximally welcoming as we can, for every level of experience.
+The truth is, programming can be complex, but it is also often needlessly hard. Programmers are the end-users of programming tools, and to ignore their experience using them is just plain bad design. We should strive to be as maximally welcoming as we can, for every level of experience.
 
 [^talkcomments]: I called it "abuse" elsewhere, which is maybe a bit much. People were mostly just somewhat rude. It's just not... pleasant to have a bunch of people calling you incompetent over and over again ¯\\_(ツ)\_/¯.
 
