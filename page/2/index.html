@@ -22,13 +22,1042 @@
         <p>
           <b><a href="https://appcanary.com">Appcanary</a></b> makes sure you never run vulnerable software on your servers.
           <br/>
-          Like our blog? Subscribe to our <a href="https://appcanary.us10.list-manage.com/subscribe?u=303b378f377508300c0b5469a&id=dc58e8f56f">newsletter</a>.<br/>
+          Like our blog? Subscribe to our <a href="https://appcanary.us10.list-manage.com/subscribe?u=303b378f377508300c0b5469a&id=dc58e8f56f">newsletter</a> or <a href="https://podcast.appcanary.com">podcast</a>.<br/>
           Browse the <a href="/archive.html">archive</a>, or follow us on <a href="https://twitter.com/appcanary">twitter</a>, <a href="https://github.com/appcanary">github</a> or <a href="/feed.xml">rss</a>.
         </p>
       </div>
     </div>
 
       <section>
+    <div class="entry">
+      <div class="post">
+        <h1 class="title"><a href="/2017/podcast-mongodb-opacity-algorithms.html">Appcanary Podcast Episode 1 - MongoDB, Ransomware and Algorithms</a></h1>
+
+        <div class="published-tags">By <span class="author"><a href="/author/phillip-mendonca-vieira.html">Phillip Mendonça-Vieira</a></span> |
+          <span class="date">March 13, 2017</span> on <a href="/tags/podcast.html">Podcast</a></div>
+
+        <p>Max and I are both avid podcast consumers, and we thought it&rsquo;d be fun and interesting to produce a podcast. So&hellip; we did!</p>
+
+<p>You can follow along on <a href="https://itunes.apple.com/ca/podcast/appcanary-podcast/id1215405635">iTunes</a>, or subscribe directly to <a href="https://podcast.appcanary.com/podcast.rss">the feed</a>. </p>
+
+<p>In our inaugural episode, we discuss MongoDB ransomware, and the opacity of algorithms. Produced by <a href="https://twitter.com/katiejensen">Katie Jensen</a>.</p>
+
+<audio controls preload="metadata" style=" width:300px;">
+    <source src="https://podcast.appcanary.com/mp3/appcanary-ep1.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+
+<h3 id="show-notes">Show Notes</h3>
+
+<ul>
+<li><p><a href="https://blog.appcanary.com/2017/improve-security-port-scan-yourself.html">Improve Your Security: Port Scan Yourself</a></p></li>
+<li><p><a href="http://journals.sagepub.com/doi/abs/10.1177/2053951715622512">How the machine ‘thinks’: Understanding opacity in machine learning algorithms</a>, by Jenna Burrell (Big Data &amp; Society, Jan 6th 2016)</p></li>
+<li><p><a href="https://www.propublica.org/article/machine-bias-risk-assessments-in-criminal-sentencing">Machine Bias</a> - Julia Angwin, Jeff Larson, Surya Mattu and Lauren Kirchner (Pro Publica, May 23rd 2016)</p></li>
+<li><p>Benjamin Walker&rsquo;s <a href="https://toe.prx.org/">Theory of Everything</a></p></li>
+<li><p><a href="https://www.buzzfeed.com/craigsilverman/how-macedonia-became-a-global-hub-for-pro-trump-misinfo?utm_term=.sipLg3Ewn7#.ucL3vZkmXD">Macedonian Teens &amp; Fake News</a></p></li>
+<li><p><a href="http://www.theverge.com/2016/10/28/13453344/comma-ai-self-driving-car-comma-one-kit-canceled">Geohot&rsquo;s self-driving car</a></p></li>
+</ul>
+
+
+      </div>
+      <hr>
+    </div>
+  </section>
+  <section>
+    <div class="entry">
+      <div class="post">
+        <h1 class="title"><a href="/2017/improve-security-port-scan-yourself.html">Improve Your Security: Port Scan Yourself</a></h1>
+
+        <div class="published-tags">By <span class="author"><a href="/author/max-veytsman.html">Max Veytsman</a></span> |
+          <span class="date">January 20, 2017</span> on <a href="/tags/security.html">Security</a>, <a href="/tags/programming.html">Programming</a>, <a href="/tags/network.html">Network</a></div>
+
+        <p>Ransomware crews are no longer satisfied <a href="https://www.wired.com/2016/03/ransomware-why-hospitals-are-the-perfect-targets/">shutting down hospitals</a> and are now also going after hip tech startups. Last week, a professional crew got involved in <a href="https://www.bleepingcomputer.com/news/security/mongodb-apocalypse-professional-ransomware-group-gets-involved-infections-reach-28k-servers/">ransoming MongoDB instances</a>, and some 28,000 servers were compromised and held for Bitcoin.</p>
+
+<p>The &ldquo;attack&rdquo; is so simple it barely deserves the name. The crew scans the internet looking for open and unsecured instances of MongoDB. When they find one, they log in and steal the data. The victims must pay Bitcoin to get their data back. To save on storage costs, sometimes the crew just deletes the data without bothering to save it &mdash; and the mark ends up paying for nothing. Even honor among thieves can&rsquo;t survive the harsh realities of 21st century globalized late cyber-capitalism.</p>
+
+<p>When reading about these attacks, there is a strong temptation blame the victim. Hospitals were at fault because of their antiquated IT departments: huge, sclerotic fiefdoms incapable of moving past Windows 98. We all know that MongoDB <a href="http://cryto.net/~joepie91/blog/2015/07/19/why-you-should-never-ever-ever-use-mongodb/">sucks</a>, and that <a href="http://www.catb.org/jargon/html/story-of-mel.html">Real Programmers</a> would never be caught dead using it. Why, they probably <em>deserved</em> to get hacked!</p>
+
+<p>Don&rsquo;t do it. As I&rsquo;ve said before, victim-blaming in security is a <a href="https://blog.appcanary.com/2016/mirai-botnet-security-broken.html">trap that must be avoided</a>. Attacks are varied and always changing; best practices can be indistinguishable from cargo cults, and default configurations seem almost designed to foil you.</p>
+
+<p>In this case, MongoDB apparently ships without any authentication, listening to the whole wide world. No wonder so many instances got hacked!</p>
+
+<h2 id="howto-not-get-hacked">HOWTO not get hacked</h2>
+
+<p>Basically, you should have as little as possible accessible to the outside world. Set up a firewall. This tweet sums up the idea best:</p>
+
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">If Postgres, MySQL, memcached, redis, etc responds to commands from outside the VPN/firewall/etc, assume you will lose your deployment.</p>&mdash; Patrick McKenzie (@patio11) <a href="https://twitter.com/patio11/status/818728480661590018">January 10, 2017</a></blockquote>
+
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<p>If you&rsquo;re anything like me, the first thought when confronted with that tweet is: &ldquo;is my firewall actually working right?&rdquo; Would you bet money that you know what ports are open on a given server in your fleet?</p>
+
+<h3 id="enter-nmap">Enter Nmap</h3>
+
+<p><img src="/images/trinity_nmap.jpg" title="Nmap as used in The Matrix" alt="trinity using Nmap" />
+<em>Nmap as used in The Matrix</em></p>
+
+<p><a href="https://nmap.org/">Nmap</a> is an incredibly powerful tool that&rsquo;s <a href="https://nmap.org/movies/">synonymous</a> with port scanning. A port scanner is a program that checks to see what network ports are open on a computer.</p>
+
+<p>Here&rsquo;s what scanning <a href="https://appcanary.com">appcanary.com</a> with default settings from my work computer looks like:</p>
+<pre class="highlight plaintext"><code>$ nmap appcanary.com
+
+Starting Nmap 7.12 ( https://nmap.org ) at 2017-01-16 12:57 EST
+Nmap scan report for appcanary.com (45.55.197.253)
+Host is up (0.030s latency).
+Not shown: 993 closed ports
+PORT    STATE    SERVICE
+22/tcp  open     ssh
+25/tcp  filtered smtp
+80/tcp  open     http
+135/tcp filtered msrpc
+139/tcp filtered netbios-ssn
+443/tcp open     https
+445/tcp filtered microsoft-ds
+</code></pre>
+
+<p>You&rsquo;ll see that 22, 80, and 443 are open. This is because we listen on SSH, HTTP and HTTPS. There are also a bunch of filtered ports. This is because some router or firewall between me and appcanary is blocking that port so it&rsquo;s not clear whether it&rsquo;s open or closed. </p>
+
+<p>Running the same scan from a random<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup> Digital Ocean box gives me the true result without the intermediate network filtering.</p>
+<pre class="highlight plaintext"><code>Starting Nmap 5.21 ( http://nmap.org ) at 2017-01-16 13:04 EST
+Nmap scan report for appcanary.com (45.55.197.253)
+Host is up (0.0012s latency).
+Not shown: 997 closed ports
+PORT    STATE SERVICE
+22/tcp  open  ssh
+80/tcp  open  http
+443/tcp open  https
+</code></pre>
+
+<p>Nmap has a variety of <a href="https://nmap.org/book/man-port-scanning-techniques.html">scanning options</a>, but the most important thing to understand for TCP scans is the difference between SYN scanning and connect scanning.</p>
+
+<p>If you&rsquo;ve ever tried to write a port scanner (which is a great exercise in network programming and concurrency), you&rsquo;ve probably tried to write a connect scanner. A connect scanner tries to connect to a port, and closes the connection after success. Nmap&rsquo;s most popular mode is SYN scanning. In SYN scanning, you send a SYN packet initiating the <a href="https://en.wikipedia.org/wiki/Transmission_Control_Protocol#Connection_establishment">TCP handshake</a>. If you get an SYN-ACK back, the port is open, and you send a RST instead of an ACK as you would if you were actually connecting. This is &ldquo;stealthier&rdquo;, which doesn&rsquo;t matter as much for our purposes, and is more efficient. Unfortunately it requires nmap to be run as root because it needs raw access to the network interface.</p>
+
+<p>You can specify a SYN scan with <code>nmap -sS</code>, and a connect scan with <code>nmap -sT</code>. By default nmap will prefer to do a SYN scan if it is able to.</p>
+
+<p>By default, nmap will scan the top 1000 most common ports. You can specify a specific ports or a range with <code>-p</code>, i.e. <code>nmap -p22</code> will scan only port 22, and <code>nmap -p400-500</code> will scan ports 400 through 500. <code>nmap -p-</code> will scan the complete port range (1-65535).</p>
+
+<h3 id="developer-port-scan-thyself">Developer, port scan thyself</h3>
+
+<p>Regularly port scan yourself; it&rsquo;s the only way to be certain that your databases aren&rsquo;t listening to the outside world. Run Nmap against your servers, and make sure that only the ports you expect are open. </p>
+
+<p>To make it easier, here&rsquo;s a script to do it for you. This will run Nmap, compare the output with predefined ports, and ping you on Slack if there&rsquo;s a mismatch. Run it on a cron job, so you can check on the regular.</p>
+
+<script src="https://gist.github.com/mveytsman/7a3366e69401fae6e9a4f9eaf0d3f9b1.js"></script>
+
+<h2 id="how-does-appcanary-fit-in">How does Appcanary fit in?</h2>
+
+<p>Our mission is to help you do security basics right, so you can be free to worry about the hard stuff. We&rsquo;re building the <a href="https://appcanary.com">world&rsquo;s best patch management product</a> because we had a deep need for one ourselves, and it automated such a vital part of a security team&rsquo;s job.</p>
+
+<p>When I started writing this article, I didn&rsquo;t realize how well it fit into what we&rsquo;re doing with patch management. To do security right, you need to implement systems and continuously verify they are working correctly. <a href="https://appcanary.com">Appcanary</a> helps you verify your patch management program, the script above helps you verify your firewall. Both without any bullshit.</p>
+
+<h3 id="we-want-to-hear-from-you">We want to hear from you</h3>
+
+<p>Did I convince you to port scan your systems after reading the article? Are you using the script above? Something else? Let me know: <a href="mailto:max@appcanary.com">max@appcanary.com</a>.</p>
+
+<div class="footnotes">
+<hr>
+<ol>
+
+<li id="fn1">
+<p>If you&rsquo;re observant, you may have noticed that this version of nmap is much older than the one on my work computer. If you&rsquo;re really observant, you may have noticed that it has a <a href="https://appcanary.com/vulns/35319">vulnerability</a>.&nbsp;<a href="#fnref1" rev="footnote">&#8617;</a></p>
+</li>
+
+</ol>
+</div>
+
+
+      </div>
+      <hr>
+    </div>
+  </section>
+  <section>
+    <div class="entry">
+      <div class="post">
+        <h1 class="title"><a href="/2017/new-year-new-appcanary.html">New Year, New Appcanary Features</a></h1>
+
+        <div class="published-tags">By <span class="author"><a href="/author/max-veytsman.html">Max Veytsman</a></span> |
+          <span class="date">January 16, 2017</span> on <a href="/tags/announcements.html">Announcements</a>, <a href="/tags/product.html">Product</a></div>
+
+        <p>We&rsquo;ve been hard at work the past few months on lots of features touching every aspect of our product, and to ring in the new year, we&rsquo;re going to announce them all at once.</p>
+
+<h2 id="search-our-vulnerabilities">Search our vulnerabilities</h2>
+
+<p>You can now browse and search every vulnerability Appcanary knows about! It&rsquo;s pretty snazzy:</p>
+
+<p><img src="/images/vuln_browse.png" alt="browse our vulnerabilities" /></p>
+
+<h2 id="automatically-upgrade-packages">Automatically upgrade packages</h2>
+
+<p>We&rsquo;ve had this feature for Ubuntu, and now we&rsquo;re adding it for CentOS.</p>
+
+<p>If you have the appcanary agent installed, you can run <code>appcanary upgrade</code>, and
+we&rsquo;ll automatically upgrade all of your vulnerable packages to the lowest
+version that fixes all the vulnerabilities we know about.</p>
+
+<h2 id="resolve-vulnerabilities">Resolve vulnerabilities</h2>
+
+<p>There&rsquo;s now a &ldquo;marked resolved&rdquo; button that lets us know that you don&rsquo;t want to be notified about a vulnerability. This is used if a vulnerability doesn&rsquo;t affect you, or if you are accepting the risk based on some other mitigation&rsquo;s (i.e. you&rsquo;re not using the vulnerable feature of the package, the port in question is blocked by a firewall, etc). We give you the opportunity to record your reasoning and provide a full audit trail of every vulnerability you mark as resolved:</p>
+
+<p><img src="/images/audit_log.png" alt="audit log" /></p>
+
+<h2 id="brand-new-dashboard">Brand new dashboard</h2>
+
+<p>We just pushed a brand new UX for our dashboard. You can sort and search and sort all of your servers and monitors. Check it <a href="https://appcanary.com/dashboard">out</a>.</p>
+
+<p><img src="/images/new_dashboard.png" alt="new dashboard" /></p>
+
+<h2 id="the-appcanary-rubygem">The Appcanary rubygem</h2>
+
+<p>We released the <a href="https://rubygems.org/gems/appcanary">Appcanary gem</a>. This gives us tighter integration with ruby projects, you can either check your ruby project for vulnerabilities as a one-time check, or set up a monitor with notifications. You can see the source <a href="https://github.com/appcanary/appcanary.rb">here</a>.</p>
+
+<p>Our gem is still very early, so we very much want your feedback. Please let us know what you think at <a href="mailto:hello@appcanary.com">hello@appcanary.com</a></p>
+
+<h2 id="centos-6-support">CentOS 6 support</h2>
+
+<p>Last but not lease, we fully support CentOS 6 along with CentOS 7.</p>
+
+
+      </div>
+      <hr>
+    </div>
+  </section>
+  <section>
+    <div class="entry">
+      <div class="post">
+        <h1 class="title"><a href="/2017/http-security-headers.html">Everything you need to know about HTTP security headers</a></h1>
+
+        <div class="published-tags">By <span class="author"><a href="/author/max-veytsman.html">Max Veytsman</a></span> |
+          <span class="date">January 13, 2017</span> on <a href="/tags/security.html">Security</a>, <a href="/tags/programming.html">Programming</a>, <a href="/tags/web.html">Web</a></div>
+
+        <p>Some physicists 28 years ago needed a way to easily share experimental data and
+thus the web was born.  This was generally considered to be a good move.
+Unfortunately, everything physicists touch &mdash; from trigonometry to the
+strong nuclear force &mdash; eventually becomes weaponized and so too has the
+Hypertext Transfer Protocol. </p>
+
+<p>What can be attacked must be defended, and since tradition requires all security
+features to be a bolted-on afterthought, things… got a little complicated. </p>
+
+<p>This article explains what secure headers are and how to implement these headers
+in Rails, Django, Express.js, Go, Nginx, Apache and Varnish.</p>
+
+<p>Please note that some
+headers may be best configured in on your HTTP servers, while others should be
+set on the application layer. Use your own discretion here. You can test how well you&rsquo;re doing with Mozilla&rsquo;s
+<a href="https://observatory.mozilla.org/analyze.html?host=appcanary.com">Observatory</a>.</p>
+
+<p>Did we get anything wrong? Contact us at <a href="mailto:hello@appcanary.com">hello@appcanary.com</a>.</p>
+
+<h2>HTTP Security Headers</h2>
+
+<ul>
+<li><a href="#x-xss-protection">X-XSS-Protection</a>
+
+<ul>
+<li><a href="#x-xss-protection/why">Why?</a></li>
+<li><a href="#x-xss-protection/should">Should I use it?</a></li>
+<li><a href="#x-xss-protection/how">How?</a></li>
+<li><a href="#x-xss-protection/more">I want to know more</a></li>
+</ul></li>
+<li><a href="#csp">Content Security Policy</a>
+
+<ul>
+<li><a href="#csp/why">Why?</a></li>
+<li><a href="#csp/should">Should I use it?</a></li>
+<li><a href="#csp/how">How?</a></li>
+<li><a href="#csp/more">I want to know more</a></li>
+</ul></li>
+<li><a href="#hsts">HTTP Strict Transport Security (HSTS)</a>
+
+<ul>
+<li><a href="#hsts/why">Why?</a></li>
+<li><a href="#hsts/should">Should I use it?</a></li>
+<li><a href="#hsts/how">How?</a></li>
+<li><a href="#hsts/more">I want to know more</a></li>
+</ul></li>
+<li><a href="#hpkp">HTTP Public Key Pinning (HPKP)</a>
+
+<ul>
+<li><a href="#hpkp/why">Why?</a></li>
+<li><a href="#hpkp/should">Should I use it?</a></li>
+<li><a href="#hpkp/how">How?</a></li>
+<li><a href="#hpkp/more">I want to know more</a></li>
+</ul></li>
+<li><a href="#x-frame-options">X-Frame-Options</a>
+
+<ul>
+<li><a href="#x-frame-options/why">Why?</a></li>
+<li><a href="#x-frame-options/should">Should I use it?</a></li>
+<li><a href="#x-frame-options/how">How?</a></li>
+<li><a href="#x-frame-options/more">I want to know more</a></li>
+</ul></li>
+<li><a href="#x-content-type-options">X-Content-Type-Options</a>
+
+<ul>
+<li><a href="#x-content-type-options/why">Why?</a></li>
+<li><a href="#x-content-type-options/should">Should I use it?</a></li>
+<li><a href="#x-content-type-options/how">How?</a></li>
+<li><a href="#x-content-type-options/more">I want to know more</a></li>
+</ul></li>
+<li><a href="#referrer-policy">Referrer-Policy</a>
+
+<ul>
+<li><a href="#referrer-policy/why">Why?</a></li>
+<li><a href="#referrer-policy/should">Should I use it?</a></li>
+<li><a href="#referrer-policy/how">How?</a></li>
+<li><a href="#referrer-policy/more">I want to know more</a></li>
+</ul></li>
+<li><a href="#cookie-options">Cookie Options</a>
+
+<ul>
+<li><a href="#cookie-options/why">Why?</a></li>
+<li><a href="#cookie-options/should">Should I use it?</a></li>
+<li><a href="#cookie-options/how">How?</a></li>
+<li><a href="#cookie-options/more">I want to know more</a></li>
+</ul></li>
+</ul>
+
+<hr>
+
+<h2 id="x-xss-protection">X-XSS-Protection</h2>
+<pre class="highlight plaintext"><code>X-XSS-Protection: 0;
+X-XSS-Protection: 1;
+X-XSS-Protection: 1; mode=block
+</code></pre>
+
+<h3 id="x-xss-protection/why">Why?</h3>
+
+<p>Cross Site Scripting, commonly abbreviated XSS, is an attack where the attacker
+causes a page to load some malicious javascript.  <code>X-XSS-Protection</code> is a
+feature in Chrome and Internet Explorer that is designed to protect against
+&ldquo;reflected&rdquo; XSS attacks &mdash; where an attacker is sending the malicious
+payload as part of the request<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup>.</p>
+
+<p><code>X-XSS-Protection: 0</code> turns it off.<br/>
+<code>X-XSS-Protection: 1</code> will filter out scripts that came from the request - but
+will still render the page<br/> 
+<code>X-XSS-Protection: 1; mode=block</code> when triggered, will block the whole page from being rendered.</p>
+
+<h3 id=x-xss-protection/should"">Should I use it? </h3>
+
+<p>Yes. Set <code>X-XSS-Protection: 1; mode=block</code>. The &ldquo;filter bad scripts&rdquo; mechanism is problematic; see <a href="http://blog.innerht.ml/the-misunderstood-x-xss-protection/">here</a> for why.</p>
+
+<h3 id="x-xss-protection/how">How?</h3>
+
+<table><thead>
+<tr>
+<th>Platform</th>
+<th>What do I do?</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Rails 4 and 5</td>
+<td>On by default</td>
+</tr>
+<tr>
+<td>Django</td>
+<td><code>SECURE_BROWSER_XSS_FILTER = True</code></td>
+</tr>
+<tr>
+<td>Express.js</td>
+<td>Use <a href="https://helmetjs.github.io/docs/xss-filter/">helmet</a></td>
+</tr>
+<tr>
+<td>Go</td>
+<td>Use <a href="https://github.com/unrolled/secure">unrolled/secure</a></td>
+</tr>
+<tr>
+<td>Nginx</td>
+<td><code>add_header X-XSS-Protection &quot;1; mode=block&quot;;</code></td>
+</tr>
+<tr>
+<td>Apache</td>
+<td><code>Header always set X-XSS-Protection &quot;1; mode=block&quot;</code></td>
+</tr>
+<tr>
+<td>Varnish</td>
+<td><code>set resp.http.X-XSS-Protection = &quot;1; mode=block&quot;;</code></td>
+</tr>
+</tbody></table>
+
+<h3 id="x-xss-protection/more">I want to know more</h3>
+
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection">X-XSS-Protection - MDN</a></p>
+
+<hr>
+
+<h2 id="csp">Content Security Policy</h2>
+<pre class="highlight plaintext"><code>Content-Security-Policy: &lt;policy&gt;
+</code></pre>
+
+<h3 id="csp/why">Why?</h3>
+
+<p>Content Security Policy can be thought of as much more advanced version of the
+<code>X-XSS-Protection</code> header above. While <code>X-XSS-Protection</code> will block scripts
+that come from the request, it&rsquo;s not going to stop an XSS attack that involves
+storing a malicious script on your server or loading an external resource with a
+malicious script in it.</p>
+
+<p>CSP gives you a language to define where the browser can load resources from.
+You can white list origins for scripts, images, fonts, stylesheets, etc in a very
+granular manner. You can also compare any loaded content against a hash or
+signature.</p>
+
+<h3 id="csp/should">Should I use it?</h3>
+
+<p>Yes. It won&rsquo;t prevent all XSS attacks, but it&rsquo;s a significant mitigation against
+their impact, and an important aspect of defense-in-depth. That said, it can be
+hard to implement. If you&rsquo;re an intrepid reader and went ahead and checked the
+headers <a href="https://appcanary.com">appcanary.com</a> returns<sup id="fnref2"><a href="#fn2" rel="footnote">2</a></sup>, you&rsquo;ll see that we don&rsquo;t
+have CSP implemented yet. There are some rails development plugins we&rsquo;re using
+that are holding us back from a CSP implementation that will have an actually security impact.
+We&rsquo;re working on it, and will write about it in the next instalment!</p>
+
+<h3 id="csp/how">How?</h3>
+
+<p>Writing a CSP policy can be challenging.
+See
+<a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy">here</a> for
+a list of all the directives you can employ. A good place to start
+is <a href="https://csp.withgoogle.com/docs/adopting-csp.html">here</a>.</p>
+
+<table><thead>
+<tr>
+<th>Platform</th>
+<th>What do I do?</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Rails 4 and 5</td>
+<td>Use <a href="https://github.com/twitter/secureheaders">secureheaders</a></td>
+</tr>
+<tr>
+<td>Django</td>
+<td>Use <a href="https://github.com/mozilla/django-csp">django-csp</a></td>
+</tr>
+<tr>
+<td>Express.js</td>
+<td>Use <a href="https://github.com/helmetjs/csp">helmet/csp</a></td>
+</tr>
+<tr>
+<td>Go</td>
+<td>Use <a href="https://github.com/unrolled/secure">unrolled/secure</a></td>
+</tr>
+<tr>
+<td>Nginx</td>
+<td><code>add_header Content-Security-Policy &quot;&lt;policy&gt;&quot;;</code></td>
+</tr>
+<tr>
+<td>Apache</td>
+<td><code>Header always set Content-Security-Policy &quot;&lt;policy&gt;&quot;</code></td>
+</tr>
+<tr>
+<td>Varnish</td>
+<td><code>set resp.http.Content-Security-Policy = &quot;&lt;policy&gt;&quot;;</code></td>
+</tr>
+</tbody></table>
+
+<h3 id="csp/more">I want to know more</h3>
+
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy">Content-Security-Policy - MDN</a></li>
+<li><a href="https://content-security-policy.com/">CSP Quick Reference Guide</a></li>
+<li><a href="https://csp.withgoogle.com/docs/index.html">Google&rsquo;s CSP Guide</a></li>
+</ul>
+
+<hr>
+
+<h2 id="hsts">HTTP Strict Transport Security (HSTS)</h2>
+<pre class="highlight plaintext"><code>Strict-Transport-Security: max-age=&lt;expire-time&gt;
+Strict-Transport-Security: max-age=&lt;expire-time&gt;; includeSubDomains
+Strict-Transport-Security: max-age=&lt;expire-time&gt;; preload
+</code></pre>
+
+<h3 id="hsts/why">Why?</h3>
+
+<p>When we want to securely communicate with someone, we face two problems. The
+first problem is privacy; we want to make sure the messages we send can only
+be read by the recipient, and no one else. The other problem is that of
+authentication: how do we know the recipient is who they say they are?</p>
+
+<p>HTTPS solves the first problem with encryption, though it has some major issues
+with authentication (more on this later, see <a href="#http-public-key-pinning-hpkp">Public Key
+Pinning</a>). The HSTS header solves the
+meta-problem: how do you know if the person you&rsquo;re talking to actually supports
+encryption?</p>
+
+<p>HSTS mitigates an attack called
+<a href="https://moxie.org/software/sslstrip/">sslstrip</a>. Suppose you&rsquo;re using a hostile
+network, where a malicious attacker controls the wifi router. The attacker can
+disable encryption between you and the websites you&rsquo;re browsing. Even if the
+site you&rsquo;re accessing is only available over HTTPS, the attacker can
+man-in-the-middle the HTTP traffic and make it look like the site works over
+unencrypted HTTP. No need for SSL certs, just disable the encryption.</p>
+
+<p>Enter the HSTS. The <code>Strict-Transport-Security</code> header solves this by letting
+your browser know that it must always use encryption with your site. As long as
+your browser has seen an HSTS header &mdash; and it hasn&rsquo;t expired &mdash; it
+will not access the site unencrypted, and will error out if it&rsquo;s not available
+over HTTPS.</p>
+
+<h3 id="hsts/should">Should I use it? </h3>
+
+<p>Yes. Your app is only available over HTTPS, right? Trying to browse over regular
+old HTTP will redirect to the secure site, right? (Hint: Use
+<a href="https://letsencrypt.org/">letsencrypt</a> if you want to avoid the racket that are
+commercial certificate authorities.)</p>
+
+<p>The one downside of the HSTS header is that it allows for a <a href="http://www.radicalresearch.co.uk/lab/hstssupercookies">clever
+technique</a> to create
+supercookies that can fingerprint your users. As a website operator, you
+probably already track your users somewhat - but try to only use HSTS for good
+and not for supercookies.</p>
+
+<h3 id="hsts/how">How?</h3>
+
+<p>The two options are</p>
+
+<ul>
+<li><code>includeSubDomains</code> - HSTS applies to subdomains</li>
+<li><code>preload</code> - Google maintains a <a href="https://hstspreload.appspot.com/">service</a>
+that hardcodes<sup id="fnref3"><a href="#fn3" rel="footnote">3</a></sup> your site as being HTTPS only into browsers. This
+way, a user doesn&rsquo;t even have to visit your site: their browser already knows
+it should reject unencrypted connections.
+Getting off that list is hard, by the way, so only turn it on if you know you
+can support HTTPS forever on all your subdomains.</li>
+</ul>
+
+<table><thead>
+<tr>
+<th>Platform</th>
+<th>What do I do?</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Rails 4</td>
+<td><code>config.force_ssl = true</code><br/>Does not include subdomains by default. To set it:<br/><code>config.ssl_options = { hsts: { subdomains: true } }</code></td>
+</tr>
+<tr>
+<td>Rails 5</td>
+<td><code>config.force_ssl = true</code></td>
+</tr>
+<tr>
+<td>Django</td>
+<td><code>SECURE_HSTS_SECONDS = 31536000</code> <br/> <code>SECURE_HSTS_INCLUDE_SUBDOMAINS = True</code></td>
+</tr>
+<tr>
+<td>Express.js</td>
+<td>Use <a href="https://helmetjs.github.io/docs/hsts/">helmet</a></td>
+</tr>
+<tr>
+<td>Go</td>
+<td>Use <a href="https://github.com/unrolled/secure">unrolled/secure</a></td>
+</tr>
+<tr>
+<td>Nginx</td>
+<td><code>add_header Strict-Transport-Security &quot;max-age=31536000; includeSubdomains; &quot;;</code></td>
+</tr>
+<tr>
+<td>Apache</td>
+<td><code>Header always set Strict-Transport-Security &quot;max-age=31536000; includeSubdomains;</code></td>
+</tr>
+<tr>
+<td>Varnish</td>
+<td><code>set resp.http.Strict-Transport-Security = &quot;max-age=31536000; includeSubdomains; &quot;;</code></td>
+</tr>
+</tbody></table>
+
+<h3 id="hsts/more">I want to know more</h3>
+
+<ul>
+<li><a href="https://tools.ietf.org/html/rfc6797">RFC 6797</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security">Strict-Transport-Security - MDN</a></li>
+</ul>
+
+<hr>
+
+<h2 id="hpkp">HTTP Public Key Pinning (HPKP)</h2>
+<pre class="highlight plaintext"><code>Public-Key-Pins: pin-sha256=&lt;base64==&gt;; max-age=&lt;expireTime&gt;;
+Public-Key-Pins: pin-sha256=&lt;base64==&gt;; max-age=&lt;expireTime&gt;; includeSubDomains
+Public-Key-Pins: pin-sha256=&lt;base64==&gt;; max-age=&lt;expireTime&gt;; report-uri=&lt;reportURI&gt;
+</code></pre>
+
+<h3 id="hpkp/why">Why?</h3>
+
+<p>The HSTS header described above was designed to ensure that all connections to your
+website are encrypted. However, nowhere does it specify what key to use! </p>
+
+<p>Trust on the
+web is based on the certificate authority (CA) model. Your browser and operating system
+ship with the public keys of some trusted certificate authorities which are
+usually specialized companies and/or nation states. When a CA issues you a
+certificate for a given domain that means anyone who trusts that CA will
+automatically trust the SSL traffic you encrypt using that certificate.  The CAs
+are responsible for verifying that you actually own a domain (this can be
+anything from sending an email, to asking you to host a file, to investigating
+your company).</p>
+
+<p>Two CAs can issue a certificate for the same domain to two different people, and
+browsers will trust both. This creates a problem, especially since CAs <a href="https://technet.microsoft.com/library/security/2524375">can be
+and are</a> compromised.
+This allows attackers to MiTM any domain they want, even if that domain uses SSL
+&amp; HSTS!</p>
+
+<p>The HPKP header tries to mitigate this. This header lets you to &ldquo;pin&rdquo; a
+certificate. When a browser sees the header for the first time, it will save the
+certificate. For every request up to <code>max-age</code>, the browser will fail unless at
+least one certificate in the chain sent from the server has a fingerprint that
+was pinned.</p>
+
+<p>This means that you can pin to the CA or a intermediate certificate along with
+the leaf in order to not shoot yourself in the foot (more on this later).</p>
+
+<p>Much like HSTS above, the HPKP header also has some privacy implications.
+These were laid out in the <a href="https://tools.ietf.org/html/rfc7469#section-5">RFC</a>
+itself.</p>
+
+<h3 id="hpkp/should">Should I use it? </h3>
+
+<p>Probably not. </p>
+
+<p>HPKP is a very very sharp knife. Consider this: if you pin to the wrong
+certificate, or you lose your keys, or something else goes wrong, you&rsquo;ve locked
+your users out of your site. All you can do is wait for the pin to expire.</p>
+
+<p>This
+<a href="https://blog.qualys.com/ssllabs/2016/09/06/is-http-public-key-pinning-dead">article</a>
+lays out the case against it, and includes a fun way for attackers to use HPKP
+to hold their victims ransom.</p>
+
+<p>One alternative is using the <code>Public-Key-Pins-Report-Only</code> header, which will
+just report that something went wrong, but not lock anyone out. This allows you
+to at least know your users are being MiTMed with fake certificates.</p>
+
+<h3 id="hpkp/how">How?</h3>
+
+<p>The two options are</p>
+
+<ul>
+<li><code>includeSubDomains</code> - HPKP applies to subdomains</li>
+<li><code>report-uri</code> - Inavlid attempts will be reported here</li>
+</ul>
+
+<p>You have to generate a base64 encoded fingerprint for the key you pin to, and
+you <strong>have</strong> to use a backup key.  Check <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Public_Key_Pinning#Extracting_the_Base64_encoded_public_key_information">this
+guide</a>
+for how to do it.</p>
+
+<table><thead>
+<tr>
+<th>Platform</th>
+<th>What do I do?</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Rails 4 and 5</td>
+<td>Use <a href="https://github.com/twitter/secureheaders/blob/master/docs/HPKP.md">secureheaders</a></td>
+</tr>
+<tr>
+<td>Django</td>
+<td>Write custom middleware</td>
+</tr>
+<tr>
+<td>Express.js</td>
+<td>Use <a href="https://helmetjs.github.io/docs/hpkp/">helmet</a></td>
+</tr>
+<tr>
+<td>Go</td>
+<td>Use <a href="https://github.com/unrolled/secure">unrolled/secure</a></td>
+</tr>
+<tr>
+<td>Nginx</td>
+<td><code>add_header Public-Key-Pins &#39;pin-sha256=&quot;&lt;primary&gt;&quot;; pin-sha256=&quot;&lt;backup&gt;&quot;; max-age=5184000; includeSubDomains&#39;;</code></td>
+</tr>
+<tr>
+<td>Apache</td>
+<td><code>Header always set Public-Key-Pins &#39;pin-sha256=&quot;&lt;primary&gt;&quot;; pin-sha256=&quot;&lt;backup&gt;&quot;; max-age=5184000; includeSubDomains&#39;;</code></td>
+</tr>
+<tr>
+<td>Varnish</td>
+<td><code>set resp.http.Public-Key-Pins = &quot;pin-sha256=&quot;&lt;primary&gt;&quot;; pin-sha256=&quot;&lt;backup&gt;&quot;; max-age=5184000; includeSubDomains&quot;;</code></td>
+</tr>
+</tbody></table>
+
+<h3 id="hpkp/more">I want to know more</h3>
+
+<ul>
+<li><a href="https://tools.ietf.org/html/rfc7469">RFC 7469</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Public_Key_Pinning">HTTP Public Key Pinning (HPKP) - MDN</a></li>
+</ul>
+
+<hr>
+
+<h2 id="x-frame-options">X-Frame-Options</h2>
+<pre class="highlight plaintext"><code>X-Frame-Options: DENY
+X-Frame-Options: SAMEORIGIN
+X-Frame-Options: ALLOW-FROM https://example.com/
+</code></pre>
+
+<h3 id="x-frame-options/why">Why?</h3>
+
+<p>Before we started giving dumb names to vulnerabilities, we used to give dumb
+names to hacking techniques. &ldquo;Clickjacking&rdquo; is one of those dumb names. </p>
+
+<p>The idea goes like this: you create an invisible iframe, place it in focus and
+route user input into it. As an attacker, you can then trick people into playing
+a browser-based game while their clicks are being registered by a hidden iframe
+displaying twitter - forcing them to non-consensually retweet all of your
+tweets.</p>
+
+<p>It sounds dumb, but it&rsquo;s an effective attack.</p>
+
+<h3 id="x-frame-options/should">Should I use it?</h3>
+
+<p>Yes. Your app is a beautiful snowflake. Do you really want some
+<a href="https://techcrunch.com/2015/04/08/annotate-this/">genius</a> shoving it into an
+iframe so they can vandalize it?</p>
+
+<h3 id="x-frame-options/how">How?</h3>
+
+<p><code>X-Frame-Options</code> has three modes, which are pretty self explanatory.</p>
+
+<ul>
+<li><code>DENY</code> - No one can put this page in an iframe</li>
+<li><code>SAMEORIGIN</code> - The page can only be displayed in an iframe by someone on the same origin.</li>
+<li><code>ALLOW-FROM</code> - Specify a specific url that can put the page in an iframe</li>
+</ul>
+
+<p>One thing to remember is that you can stack iframes as deep as you want, and in
+that case, the behavior of <code>SAMEORIGIN</code> and <code>ALLOW-FROM</code> isn&rsquo;t
+<a href="https://tools.ietf.org/html/rfc7034#section-2.3.2.2">specified</a>. That is, if we
+have a triple-decker iframe sandwich and the innermost iframe has <code>SAMEORIGIN</code>,
+do we care about the origin of the iframe around it, or the topmost one on the
+page? ¯\_(ツ)_/¯.</p>
+
+<table><thead>
+<tr>
+<th>Platform</th>
+<th>What do I do?</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Rails 4 and 5</td>
+<td><code>SAMEORIGIN</code> is set by default.<br/><br/>To set <code>DENY</code>:<br/><code>config.action_dispatch.default_headers[&#39;X-Frame-Options&#39;] = &quot;DENY&quot;</code></td>
+</tr>
+<tr>
+<td>Django</td>
+<td><code>MIDDLEWARE = [ ... &#39;django.middleware.clickjacking.XFrameOptionsMiddleware&#39;, ... ]</code><br/> This defaults to <code>SAMEORIGIN</code>.<br/><br/>To set <code>DENY</code>: <code>X_FRAME_OPTIONS = &#39;DENY&#39;</code></td>
+</tr>
+<tr>
+<td>Express.js</td>
+<td>Use <a href="https://helmetjs.github.io/docs/frameguard/">helmet</a></td>
+</tr>
+<tr>
+<td>Go</td>
+<td>Use <a href="https://github.com/unrolled/secure">unrolled/secure</a></td>
+</tr>
+<tr>
+<td>Nginx</td>
+<td><code>add_header X-Frame-Options &quot;deny&quot;;</code></td>
+</tr>
+<tr>
+<td>Apache</td>
+<td><code>Header always set X-Frame-Options &quot;deny&quot;</code></td>
+</tr>
+<tr>
+<td>Varnish</td>
+<td><code>set resp.http.X-Frame-Options = &quot;deny&quot;;</code></td>
+</tr>
+</tbody></table>
+
+<h3 id="x-frame-options/more">I want to know more</h3>
+
+<ul>
+<li><a href="https://tools.ietf.org/html/rfc7034">RFC 7034</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options">X-Frame-Options - MDN</a></li>
+</ul>
+
+<hr>
+
+<h2 id="x-content-type-options">X-Content-Type-Options</h2>
+<pre class="highlight plaintext"><code>X-Content-Type-Options: nosniff;
+</code></pre>
+
+<h3 id="x-content-type-options/why">Why?</h3>
+
+<p>The problem this header solves is called &ldquo;MIME sniffing&rdquo;, which is actually a
+browser &ldquo;feature&rdquo;. </p>
+
+<p>In theory, every time your server responds to a request it is supposed to set a
+<code>Content-Type</code> header in order to tell the browser if it&rsquo;s getting some HTML, a
+cat gif, or a Flash cartoon from 2008. Unfortunately, the web has always been
+broken and has never really followed a spec for anything; back in the day lots
+of people didn&rsquo;t bother to set the content type header properly. </p>
+
+<p>As a result, browser vendors decided they should be really helpful and try to
+infer the content type by inspecting the content itself while completely ignore
+the content type header.  If it looks like a gif, display a gif!, even though
+the content type is <code>text/html</code>.  Likewise, if it looks like we got some HTML,
+we should render it as such even if the server said it&rsquo;s a gif.</p>
+
+<p>This is great, except when you&rsquo;re running a photo-sharing site, and users can
+upload photos that look like HTML with javascript included, and suddenly you
+have a stored XSS attack on your hand.</p>
+
+<p>The <code>X-Content-Type-Options</code> headers exist to tell the browser to shut up and
+set the damn content type to what I tell you, thank you.</p>
+
+<h3 id="x-content-type-options/should">Should I use it?</h3>
+
+<p>Yes, just make sure to set your content types correctly.</p>
+
+<h3 id="x-content-type-options/how">How?</h3>
+
+<table><thead>
+<tr>
+<th>Platform</th>
+<th>What do I do?</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Rails 4 and 5</td>
+<td>On by default</td>
+</tr>
+<tr>
+<td>Django</td>
+<td><code>SECURE_CONTENT_TYPE_NOSNIFF = True</code></td>
+</tr>
+<tr>
+<td>Express.js</td>
+<td>Use <a href="https://helmetjs.github.io/docs/dont-sniff-mimetype/">helmet</a></td>
+</tr>
+<tr>
+<td>Go</td>
+<td>Use <a href="https://github.com/unrolled/secure">unrolled/secure</a></td>
+</tr>
+<tr>
+<td>Nginx</td>
+<td><code>add_header X-Content-Type-Options nosniff;</code></td>
+</tr>
+<tr>
+<td>Apache</td>
+<td><code>Header always set X-Content-Type-Options nosniff</code></td>
+</tr>
+<tr>
+<td>Varnish</td>
+<td><code>set resp.http.X-Content-Type-Options = &quot;nosniff&quot;;</code></td>
+</tr>
+</tbody></table>
+
+<h3 id="x-content-type-options/more">I want to know more</h3>
+
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options">X-Content-Type-Options - MDN</a></li>
+</ul>
+
+<hr>
+
+<h2 id="referrer-policy">Referrer-Policy</h2>
+<pre class="highlight plaintext"><code>Referrer-Policy: "no-referrer" 
+Referrer-Policy: "no-referrer-when-downgrade" 
+Referrer-Policy: "origin" 
+Referrer-Policy: "origin-when-cross-origin"
+Referrer-Policy: "same-origin" 
+Referrer-Policy: "strict-origin" 
+Referrer-Policy: "strict-origin-when-cross-origin" 
+Referrer-Policy: "unsafe-url"
+</code></pre>
+
+<h3 id="referrer-policy/why">Why?</h3>
+
+<p>Ah, the <code>Referer</code> header. Great for analytics, bad for your users&rsquo; privacy. At
+some point the web got woke and decided that maybe it wasn&rsquo;t a good idea to send
+it all the time. And while we&rsquo;re at it, let&rsquo;s spell &ldquo;Referrer&rdquo;
+correctly<sup id="fnref4"><a href="#fn4" rel="footnote">4</a></sup>.</p>
+
+<p>The <code>Referrer-Policy</code> header allows you to specify when the browser will set a
+<code>Referer</code> header.</p>
+
+<h3 id="referrer-policy/should">Should I use it? </h3>
+
+<p>It&rsquo;s up to you, but it&rsquo;s probably a good idea. If you don&rsquo;t care about your
+users&rsquo; privacy, think of it as a way to keep your sweet sweet analytics to
+yourself and out of your competitors&rsquo; grubby hands.</p>
+
+<p>Set <code>Referrer-Policy: &quot;no-referrer&quot;</code></p>
+
+<h3 id="referrer-policy/how">How?</h3>
+
+<table><thead>
+<tr>
+<th>Platform</th>
+<th>What do I do?</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Rails 4 and 5</td>
+<td>Use <a href="https://github.com/twitter/secureheaders">secureheaders</a></td>
+</tr>
+<tr>
+<td>Django</td>
+<td>Write custom middleware</td>
+</tr>
+<tr>
+<td>Express.js</td>
+<td>Use <a href="https://helmetjs.github.io/docs/referrer-policy/">helmet</a></td>
+</tr>
+<tr>
+<td>Go</td>
+<td>Write custom middleware</td>
+</tr>
+<tr>
+<td>Nginx</td>
+<td><code>add_header Referrer-Policy &quot;no-referrer&quot;;</code></td>
+</tr>
+<tr>
+<td>Apache</td>
+<td><code>Header always set Referrer-Policy &quot;no-referrer&quot;</code></td>
+</tr>
+<tr>
+<td>Varnish</td>
+<td><code>set resp.http.Referrer-Policy = &quot;no-referrer&quot;;</code></td>
+</tr>
+</tbody></table>
+
+<h3 id="referrer-policy/more">I want to know more</h3>
+
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy">Referrer Policy - MDN</a></li>
+</ul>
+
+<hr>
+
+<h2 id="cookie-options">Cookie Options</h2>
+<pre class="highlight plaintext"><code>Set-Cookie: &lt;key&gt;=&lt;value&gt;; Expires=&lt;expiryDate&gt;; Secure; HttpOnly; SameSite=strict
+</code></pre>
+
+<h3 id="cookie-options/why">Why?</h3>
+
+<p>This isn&rsquo;t a security header per se, but there are three different options for
+cookies that you should be aware of.</p>
+
+<ul>
+<li><p>Cookies marked as <code>Secure</code> will only be served over HTTPS. This prevents
+someone from reading the cookies in a MiTM attack where they can force the
+browser to visit a given page.</p></li>
+<li><p><code>HttpOnly</code> is a misnomer, and has nothing to do with HTTPS (unlike <code>Secure</code>
+above). Cookies marked as <code>HttpOnly</code> can not be accessed from within
+javascript. So if there is an XSS flaw, the attacker can&rsquo;t immediately steal
+the cookies.</p></li>
+<li><p><code>SameSite</code> helps defend against Cross-Origin Request Forgery (CSRF) attacks.
+This is an attack where a different website the user may be visiting
+inadvertently tricks them into making a request against your site, i.e. by
+including an image to make a GET request, or using javascript to submit a form
+for a POST request. Generally, people defend against this
+using
+<a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)_Prevention_Cheat_Sheet">CSRF tokens</a>.
+A cookie marked as <code>SameSite</code> won&rsquo;t be sent to a different site.</p></li>
+</ul>
+
+<p>It has two modes, lax and strict. Lax mode allows the cookie to be sent in a
+  top-level context for GET requests (i.e. if you clicked a link). Strict
+  doesn&rsquo;t send any third-party cookies.</p>
+
+<h3 id="cookie-options/should">Should I use it?</h3>
+
+<p>You should absolutely set <code>Secure</code> and <code>HttpOnly</code>. Unfortunately, as of writing,
+SameSite cookies are <a href="http://caniuse.com/#search=samesite">available</a> only in
+Chrome and Opera, so you may want to ignore them for now.</p>
+
+<h3 id="cookie-options/how">How?</h3>
+
+<table><thead>
+<tr>
+<th>Platform</th>
+<th>What do I do?</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Rails 4 and 5</td>
+<td>Secure and HttpOnly enabled by default. For SameSite, use <a href="https://github.com/twitter/secureheaders">secureheaders</a></td>
+</tr>
+<tr>
+<td>Django</td>
+<td>Session cookies are HttpOnly by default. To set secure: <code>SESSION_COOKIE_SECURE = True</code>. <br/><br/> Not sure about SameSite.</td>
+</tr>
+<tr>
+<td>Express.js</td>
+<td><code>cookie: { secure: true, httpOnly: true, sameSite: true }</code></td>
+</tr>
+<tr>
+<td>Go</td>
+<td><code>http.Cookie{Name: &quot;foo&quot;, Value: &quot;bar&quot;, HttpOnly: true, Secure: true}</code> <br/><br/> For SameSite, see this <a href="https://github.com/golang/go/issues/15867">issue</a>.</td>
+</tr>
+<tr>
+<td>Nginx</td>
+<td>You probably won&rsquo;t set session cookies in Nginx</td>
+</tr>
+<tr>
+<td>Apache</td>
+<td>You probably won&rsquo;t set session cookies in Apache</td>
+</tr>
+</tbody></table>
+
+<h3 id="cookie-options/more">I want to know more</h3>
+
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#Secure_and_HttpOnly_cookies">Cookies - MDN</a></li>
+</ul>
+
+<hr>
+
+<p>Thanks to <a href="https://twitter.com/wolever">@wolever</a> for python advice.</p>
+
+<p>Thanks to <a href="https://twitter.com/therealgquintar">Guillaume Quintard</a> for Varnish comands.</p>
+
+<div class="footnotes">
+<hr>
+<ol>
+
+<li id="fn1">
+<p>This is opposed to &ldquo;stored&rdquo; XSS attacks, where the attacker is storing
+the malicious payload somehow, i.e. in a vulnerable comment field of a
+message board.&nbsp;<a href="#fnref1" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn2">
+<p>If you&rsquo;re going to point out in the Hacker News comments that
+this blog itself gets an F from the Mozilla observatory, you&rsquo;re right! On
+the other hand, it&rsquo;s serving static content, and we are comfortable avoiding
+XSS protection and strict SSL enforcement for static content. That, and it&rsquo;s
+served by github pages/cloudflare, so it&rsquo;s hard to get very granular about
+the headers we want set.&nbsp;<a href="#fnref2" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn3">
+<p>So if you&rsquo;re especially paranoid, you might be thinking &ldquo;what if I
+had some secret subdomain that I don&rsquo;t want leaking for some reason?&rdquo; You have
+DNS zone transfers disabled, so someone would have to know what they&rsquo;re looking
+for to find it, but now that it&rsquo;s in the preload list&hellip;&nbsp;<a href="#fnref3" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn4">
+<p>The <code>Referer</code> header is
+the <a href="http://www.hamsterdance.org/hamsterdance/">Hampster Dance</a> in that it&rsquo;s
+notorious for being misspelled. It would break the web to try to backport
+the correct spelling, so instead the W3C decided to go for the worst of both
+worlds and spell it correctly in <code>Referrer-Policy</code>.&nbsp;<a href="#fnref4" rev="footnote">&#8617;</a></p>
+</li>
+
+</ol>
+</div>
+
+
+      </div>
+      <hr>
+    </div>
+  </section>
+  <section>
     <div class="entry">
       <div class="post">
         <h1 class="title"><a href="/2016/unattended-upgrades.html">Good News: Ubuntu Now Ships With unattended-upgrades On By Default!</a></h1>
@@ -151,613 +1180,6 @@ Ubuntu releases. This particular user has a good reason for running 16.10.&nbsp;
 
 </ol>
 </div>
-
-
-      </div>
-      <hr>
-    </div>
-  </section>
-  <section>
-    <div class="entry">
-      <div class="post">
-        <h1 class="title"><a href="/2016/missing-clojure.html">We Left Clojure. Here's 5 Things I'll Miss.</a></h1>
-
-        <div class="published-tags">By <span class="author"><a href="/author/max-veytsman.html">Max Veytsman</a></span> |
-          <span class="date">November 07, 2016</span> on <a href="/tags/clojure.html">Clojure</a>, <a href="/tags/programming.html">Programming</a>, <a href="/tags/ruby.html">Ruby</a></div>
-
-        <p>On October 11th, Appcanary relied on about 8,500 lines of clojure code. On the
-12th we were down to zero. We replaced it by adding another 5,700 lines of Ruby to our codebase. 
-<a href="https://twitter.com/phillmv">Phill</a> will be discussing why we left, and what we learned both here and <a href="http://rubyconf.org/program#prop_19">at this year&rsquo;s RubyConf</a>. For now, I want to talk about what I&rsquo;ll miss.</p>
-
-<h3 id="1-the-joy-of-lisp">1) The joy of Lisp</h3>
-
-<p><a href="https://xkcd.com/297/"><img src="http://imgs.xkcd.com/comics/lisp_cycles.png" alt="XKCD #297" /></a></p>
-
-<p>There&rsquo;s something magical about writing lisp. Alan Kay called it the greatest
-single programming language ever devised. Paul Graham called it a
-secret weapon. You can find tens of thousands
-of words on the elegant, mind-expanding powers of lisp<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup>. I don&rsquo;t think
-my version of the Lisp wizardry blog post would be particularly original or
-unique, so if you want to know more about the agony and ecstasy of wielding
-parenthesis, read <a href="http://paulgraham.com/avg.html">Paul Graham</a>.</p>
-
-<p>What&rsquo;s great about Clojure is that while Ruby
-<a href="http://www.randomhacks.net/2005/12/03/why-ruby-is-an-acceptable-lisp/">might be an acceptable lisp</a>,
-and lisp might
-<a href="http://steve-yegge.blogspot.ca/2006/04/lisp-is-not-acceptable-lisp.html">not be an acceptable lisp</a>,
-Clojure is a more than acceptable lisp. If we avoid the minefield of type
-systems, Clojure addresses the other 4 problems Steve Yegge discusses in the previous link<sup id="fnref2"><a href="#fn2" rel="footnote">2</a></sup>.</p>
-
-<h3 id="2-immutability">2) Immutability</h3>
-
-<p>The core data structures in clojure are immutable. If I define <code>car</code> to be <code>&quot;a dirty van&quot;</code>,
-nothing can ever change that. I can name some other thing <code>car</code> later, but
-anything referencing that first <code>car</code> will always be referencing <code>&quot;a dirty van&quot;</code>.</p>
-
-<p>This is great for a host of reasons. For one, you get parallelization for free &mdash;
-since nothing will mutate your collection, mapping or reducing some function
-over it can be hadooped out to as many clouds as you want without changing your
-algorithms.</p>
-
-<p>It&rsquo;s also much easier to can reason about your code. There&rsquo;s a famous quote by Larry Wall:</p>
-
-<blockquote>
-<p>[Perl] would prefer that you stayed out of its living room because you weren&rsquo;t
-invited, not because it has a shotgun.</p>
-</blockquote>
-
-<p>He was talking about private methods, but the same is true for mutability in most languages. You call some method and who knows if it mutated a value you were using? You would prefer it not to, but you have no shotgun, and frankly it&rsquo;s so easy to mutate state without even knowing that you are. Consider Python:</p>
-<pre class="highlight python"><code><span class="n">str1</span> <span class="o">=</span> <span class="s">"My name "</span>
-<span class="n">str2</span> <span class="o">=</span> <span class="n">str1</span>
-<span class="n">str1</span> <span class="o">+=</span> <span class="s">"is Max"</span>
-<span class="k">print</span> <span class="n">str1</span>
-<span class="c"># "My name is Max"</span>
-<span class="k">print</span> <span class="n">str2</span>
-<span class="c"># "My name"</span>
-
-<span class="n">list1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
-<span class="n">list2</span> <span class="o">=</span> <span class="n">list1</span>
-<span class="n">list1</span> <span class="o">+=</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
-<span class="k">print</span> <span class="n">list1</span>
-<span class="c"># [1, 2, 3, 4, 5]</span>
-<span class="k">print</span> <span class="n">list2</span>
-<span class="c"># [1, 2, 3, 4, 5]</span>
-</code></pre>
-
-<p>Calling <code>+=</code> on a string returned a new one, while calling <code>+=</code> on a list
-mutated it in place! I have to remember which types are mutable, and whether
-<code>+=</code> will give me a new object or mutate the existing one depending on its type.
-Who knows what might happen when you start passing your variables by reference
-to somewhere else?</p>
-
-<p>Not having the choice to mutate state is as liberating as getting rid of your Facebook account.</p>
-
-<h3 id="3-data-first-programming">3) Data first programming</h3>
-
-<p>Walking away from object-oriented languages is very freeing. </p>
-
-<p>I want to design a model for the game of poker. I start by listing the
-nouns<sup id="fnref3"><a href="#fn3" rel="footnote">3</a></sup>: &ldquo;card&rdquo;, &ldquo;deck&rdquo;, &ldquo;hand&rdquo;, &ldquo;player&rdquo;, &ldquo;dealer&rdquo;, etc. Then I
-think of the verbs, &ldquo;deal&rdquo;, &ldquo;bet&rdquo;, &ldquo;fold&rdquo;, etc. </p>
-
-<p>Now what?
-<a href="http://stackoverflow.com/questions/19553838/oop-design-quesiton-with-a-card-game">Here&rsquo;s</a>
-a typical StackOverflow question demonstrating the confusion that comes with
-designing like this. Is the dealer a kind of player or a separate class? If
-players have hands of cards, how does the deck keep track of what cards are
-left? </p>
-
-<p>At the end of the day, the work of programming a poker game is codifying all of
-the actual rules of the game, and these will end up in a <code>Game</code> singleton that
-does most of the work anyway. </p>
-
-<p>If you start by thinking about data and the functions that operate on it,
-there&rsquo;s a natural way to solve hard problems from the top-down, which lets you quickly iterate your
-design (see below). You have some data structure that represents the game
-state, a structure representing possible actions a player can take, and a
-function to transform a game state and an action into the next game state. That
-function encodes the actual rules of poker (defined in lots of other, smaller
-functions).</p>
-
-<p>I find this style of programming very natural and satisfying. Of course, you can
-do this in any language; but I find Clojure draws me towards it, while OO
-languages push me away from it.</p>
-
-<h3 id="4-unit-testing">4) Unit Testing</h3>
-
-<p>The majority of your code is made up of pure functions. A pure function is one
-which always gives the same output for a given input &mdash; doesn&rsquo;t that sound
-easy to test? Instead of setting up test harnesses databases and mocks, you just
-write tests for your functions.</p>
-
-<p>Testing the edges of your code that talk to the outside world requires mocking,
-of course, and integration testing is never trivial. But the first thing you want to
-test is the super-complicated piece of business logic deep in your
-codebase. The business logic your business depends on, like for instance computing
-whether your version of OpenSSL is vulnerable to HeartBleed. </p>
-
-<p>Clojure pushes you
-to make that bit of code a pure function that&rsquo;s testable without setting
-up complicated state.</p>
-
-<h3 id="5-refactoring">5) Refactoring</h3>
-
-<p>Here&rsquo;s a typical clojure function</p>
-<pre class="highlight clojure"><code><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">foo</span><span class="w"> </span><span class="p">[</span><span class="n">a</span><span class="w"> </span><span class="n">b</span><span class="p">]</span><span class="w">
-  </span><span class="c1">;; some code here
-</span><span class="w">  </span><span class="p">(</span><span class="k">let</span><span class="w"> </span><span class="p">[</span><span class="n">c</span><span class="w"> </span><span class="p">(</span><span class="nf">some-function</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">b</span><span class="p">)]</span><span class="w">
-    </span><span class="c1">;; a ton of 
-</span><span class="w">    </span><span class="c1">;; complicated code here
-</span><span class="p">)))</span><span class="w">
-</span></code></pre>
-
-<p>In lisp-speak, a parenthesized block is called a &ldquo;form&rdquo;. The <code>foo</code> form is the outer form, and it contains the <code>let</code> form, which ostensibly contains other forms that do complicated things.</p>
-
-<p>I know that all the complicated code inside of the <code>let</code> form isn&rsquo;t going to
-mutate any state, and that it&rsquo;s only dependent on the <code>a</code> and <code>b</code> variables. This means that
-refactoring this code out into its own functions is as trivial as selecting
-everything between two matching parentheses and cutting and pasting it out. If
-you have an editor that supports paredit-style navigation of lisp forms, you can
-rearrange code at lightning speed.</p>
-
-<div class="footnotes">
-<hr>
-<ol>
-
-<li id="fn1">
-<p>My favourite essay of this ilk is Mark Tarver&rsquo;s melancholy
-<a href="http://www.shenlanguage.org/lambdassociates/htdocs/blog/bipolar.htm">The Bipolar Lisp Programmer</a>.
-He describes lisp as a language designed by and for brilliant failures. Back
-in university, I ate this shit up. My grades were obvious evidence of half the
-requirement of being a lisp programmer.&nbsp;<a href="#fnref1" rev="footnote">&#8617;</a></p>
-</li>
-
-<li id="fn2">
-<p>I&rsquo;m aware that clojure&rsquo;s <code>gensym</code> does not a hygenic macro system
-make. But, if you have strong opinions on hygenic macros as they relate to
-acceptable lisps, this article might not be for you.&nbsp;<a href="#fnref2" rev="footnote">&#8617;</a></p>
-</li>
-
-<li id="fn3">
-<p>For the record, I know that this isn&rsquo;t the &ldquo;right&rdquo; way to design OO
-programs, but the fact that I have to acknowledge this proves my point.&nbsp;<a href="#fnref3" rev="footnote">&#8617;</a></p>
-</li>
-
-</ol>
-</div>
-
-
-      </div>
-      <hr>
-    </div>
-  </section>
-  <section>
-    <div class="entry">
-      <div class="post">
-        <h1 class="title"><a href="/2016/mirai-botnet-security-broken.html">The Mirai Botnet is Proof the Security Industry is Broken</a></h1>
-
-        <div class="published-tags">By <span class="author"><a href="/author/max-veytsman.html">Max Veytsman</a></span> |
-          <span class="date">October 31, 2016</span> on <a href="/tags/security.html">security</a>, <a href="/tags/mirai.html">mirai</a>, <a href="/tags/botnet.html">botnet</a></div>
-
-        <p>Last Friday, my workday was rudely interrupted because I couldn&rsquo;t access Github.
-To add insult to injury I couldn&rsquo;t even complain about it on Twitter. I tried to
-drown my sorrows by listening to moody Leonard Cohen songs on Spotify, but
-alas&hellip;</p>
-
-<p>You&rsquo;ve probably heard of this. Huge tracts of the Internet were down because the DNS provider Dyn 
-faced a massive Denial of Service attack from the
-<a href="https://krebsonsecurity.com/2016/10/hacked-cameras-dvrs-powered-todays-massive-internet-outage/">Mirai botnet</a>, 
-which takes advantage of Internet of Things devices like cameras and DVRs.</p>
-
-<p><blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">&ldquo;Oh &amp; also, evil sorcerers crippled our divination network Friday by getting millions of coffee makers &amp; lightswitches to shout real loud&rdquo; <a href="https://t.co/OPhdOJLwc1">https://t.co/OPhdOJLwc1</a></p>&mdash; Max Gladstone (@maxgladstone) <a href="https://twitter.com/maxgladstone/status/790890882543288320">October 25, 2016</a></blockquote>
-<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script></p>
-
-<h3 id="so-what-39-s-new-about-mirai">So, what&rsquo;s new about Mirai?</h3>
-
-<p>I&rsquo;ve written about
-1988&rsquo;s <a href="https://blog.appcanary.com/2016/tale-of-two-worms.html">Morris worm</a>, 
-and I wanted to dig into the
-<a href="https://github.com/jgamblin/Mirai-Source-Code">source</a> of the Mirai botnet
-(helpfully published by the author) to see how far we&rsquo;ve come along in the past
-28 years.</p>
-
-<p>Can you guess how Mirai spreads? </p>
-
-<p>Was there new zeroday in the devices? Hey, maybe there was an old, unpatched
-vulnerability hanging &mdash; who has time to apply software updates to their toaster? 
-Maybe it was HeartBleed 👻?</p>
-
-<p>Nope.</p>
-
-<p>Mirai does one, and only one thing in order to break into new devices: it cycles through a bunch of default
-username/password combinations over telnet, like &ldquo;admin/admin&rdquo; and &ldquo;root/realtek&rdquo;. For a
-laugh, &ldquo;mother/fucker&rdquo; is in there too.</p>
-
-<p>Default credentials. Over telnet. That&rsquo;s how you get hundreds of thousands of
-<a href="http://dyn.com/blog/dyn-analysis-summary-of-friday-october-21-attack/">devices</a>.
-The Morris worm from 1988 tried a dictionary password attack too, but only after
-its buffer overflow and sendmail backdoor exploits failed. </p>
-
-<p>Oh, and Morris&rsquo; password dictionary was larger, too.</p>
-
-<h3 id="how-do-we-keep-getting-this-wrong">How do we keep getting this wrong?</h3>
-
-<p>Around the world, we spend $75 billion a year on information security.
-And for what, when we keep getting such basic things wrong? Suppose I waved a
-magic wand and cut the worldwide security budget in half. Would things really be
-that much worse? The security industry is addicted to selling expensive
-complicated products instead of doing the basics well. </p>
-
-<p>I was at a security conference the other week, and there was yet another crop of
-cyberapocalypse talks. The Internet of Things is a garbage fire. Industrial control
-systems are going to get us all killed. Users are clicking phishing links like
-sheep. We&rsquo;re all doomed. And somehow, it&rsquo;s always the fault of shitty
-programmers or dumb users. Let&rsquo;s all laugh at their fails.</p>
-
-<h3 id="it-39-s-all-bullshit">It&rsquo;s all bullshit.</h3>
-
-<p>We sell biometric authentication systems to people who need a good password
-manager. We sell live threat attribution intelligence with colorful maps to
-people who need to practice configuration management. We sell advanced
-in-cpu sandbox endpoint protection to people who need to institute a patching program.
-There&rsquo;s a reason why security practitioners get such a kick out of
-<a href="https://threatbutt.com/">ThreatButt</a>.</p>
-
-<p>There are lots of real, important, conceptually difficult problems in
-security. We don&rsquo;t really know how to write secure code, and it&rsquo;s all too
-easy to get socially engineered. But, right now, the vast majority of threats can be thwarted by <b>the basics</b>:</p>
-
-<ol>
-<li>Keep your systems patched</li>
-<li>Keep your systems properly configured.</li>
-<li>Make sure you have strong passwords and two factor authentication.</li>
-</ol>
-
-<p>Do the basics first. The basics matter. Then you can focus on the Sisyphean
-tasks that remain. Instead, here we are selling fancy bullshit and barely making
-any progress in 28 years. Lots of money in it, though.</p>
-
-<hr>
-
-<h4 id="paying-the-bills">Paying the Bills</h4>
-
-<p>Surprise, I also sell a security product! But I will say this: Appcanary
-isn&rsquo;t going to protect you from shipping millions of internet-accessible
-cameras with the same password. We won&rsquo;t even protect you from having your DNS
-provider DoSed.</p>
-
-<p>The major botnet of 2016 is <em>simpler</em> than the botnet of 1988. There&rsquo;s something
-wrong in how we do security, and at Appcanary, we think it&rsquo;s a complete lack of
-focus on the basics. </p>
-
-<p>The highest value, easiest thing you can do to improve your security is patch
-known vulnerabilities. Most breaches come from years-old vulnerabilities. </p>
-
-<p>Our product,
-<a href="https://appcanary.com/?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=broken">Appcanary</a>,
-monitors your apps and servers, and notifies you whenever a new vulnerability is
-discovered in a package you rely on.</p>
-
-<p><a href="https://appcanary.com/sign_up?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=broken">Sign up</a> today!</p>
-
-
-      </div>
-      <hr>
-    </div>
-  </section>
-  <section>
-    <div class="entry">
-      <div class="post">
-        <h1 class="title"><a href="/2016/tale-of-two-worms.html">A tale of two worms, three vulnerabilities, and one National Security Agency</a></h1>
-
-        <div class="published-tags">By <span class="author"><a href="/author/max-veytsman.html">Max Veytsman</a></span> |
-          <span class="date">August 24, 2016</span> on <a href="/tags/vihkal.html">vihkal</a>, <a href="/tags/security.html">security</a></div>
-
-        <p>Paranoia is natural for security practitioners. </p>
-
-<p>Hacking can feel like being initiated into a secret society of wizards.
-Once you&rsquo;re in, you get access to an
-<a href="https://docs.google.com/presentation/d/1Sv8IHkBtBEXjSW7WktEYg4EbAUHtVyXIZBrAGD3WR5Y/edit?pref=2&pli=1#slide=id.p" target="_blank">addictive drug</a>
-that gives you super powers. But there are other wizards out there; some are good
-but many practice black magic. And the NSA&rsquo;s school of the dark arts has a seemingly
-unlimited budget. </p>
-
-<p>It&rsquo;s natural to get a little paranoid. Experience shows you
-that with the right incantation you can turn crashes into working exploits. It
-follows that every time your computer crashes there could be someone in the
-shadows, chanting the right incantation. The paranoia can be all-consuming;
-just because you&rsquo;re paranoid doesn&rsquo;t mean they&rsquo;re not <a href="http://www.nytimes.com/2011/07/02/opinion/02hotchner.html?_r=0" target="_blank">out to get you</a>.</p>
-
-<p>In October 2013, a well known computer security expert named Dragos Ruiu came
-out with a <a href="http://arstechnica.com/security/2013/10/meet-badbios-the-mysterious-mac-and-pc-malware-that-jumps-airgaps/" target="_blank">story</a>. He found that his computers had been behaving oddly, and that the symptoms he was seeing were impossible to eradicate. This was some kind of worm, since the behavior would
-replicate across <a href="https://en.wikipedia.org/wiki/Air_gap_(networking)" target="_blank">air gapped</a> computers in his lab. He theorized that he
-was infected with a super advanced piece of malware that lived in the BIOS and
-could spread by sending ultrasonic frequencies from speaker to
-microphone, undetectable to the human ear. It looked like
-the work of the NSA or someone equally omnipotent. He dubbed it badBIOS. </p>
-
-<p>Everything Dragos claimed badBIOS could do is at least possible, and most security folks know this. Malware in the BIOS is feasible, and beyond being a <a href="https://www.wired.com/2015/03/researchers-uncover-way-hack-bios-undermine-secure-operating-systems/" target="_blank">research</a> topic, it&rsquo;s something we <a href="https://www.schneier.com/blog/archives/2015/02/the_equation_gr.html" target="_blank">know</a> the <a href="http://www.spiegel.de/international/world/catalog-reveals-nsa-has-back-doors-for-numerous-devices-a-940994.html" target="_blank">NSA does</a>. In fact, because of the hype, <a href="https://github.com/Katee/quietnet" target="_blank">many</a> <a href="https://www.anfractuosity.com/projects/ultrasound-networking/" target="_blank">people</a> developed ultrasound networking libraries just to demonstrate how viable it is. </p>
-
-<p>Dragos Ruiu imaged his computer and made a lot of data available to the
-community for peer review, but unfortunately no credible researcher<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup> has publicly confirmed his findings. Maybe there was something going on. Maybe he was seeing patterns in the noise. Either way, it says something about the world today that when you&rsquo;re a security expert and your computer starts behaving weirdly, the obvious culprit is the NSA.</p>
-
-<p>It made me think of a different worm, from a more innocent time.</p>
-
-<p><img src="/images/morris_worm.jpg" alt="Morris Worm" /></p>
-
-<h2 id="the-morris-worm">The Morris Worm</h2>
-
-<p>It&rsquo;s November 2nd 1988, almost exactly 25 years before badBIOS became a
-hashtag. Robert Tappan Morris, a graduate student at Cornell, executes some
-code he&rsquo;d been working on and goes to dinner. The aftermath was a
-self-replicating computer worm that infected 10% of the Internet<sup id="fnref2"><a href="#fn2" rel="footnote">2</a></sup> at
-the time &mdash; a whopping 6,000 computers!</p>
-
-<p>Morris claimed that he wrote his program to map the size of the Internet. And
-indeed, each infection would send a byte to a machine in Berkeley
-(hiding the trail to Morris, in Cornell, as the author). Unfortunately,
-there was a bug that caused it to propagate too aggressively: it infected the same
-computer multiple times, which resulted in a denial of service attack across the
-whole Internet. Furthermore, the code to report infections had a bug in it. It tried to
-send a UDP packet over a TCP socket, making it useless for reporting the Internet&rsquo;s size.</p>
-
-<p>An alternative explanation is that Morris was trying to bring to wider attention
-some long-standing bugs in the Internet. As Morris&rsquo; friend and future co-founder <a href="http://www.nytimes.com/1988/11/07/us/computer-invasion-back-door-ajar.html" target="_blank">put it</a>, in classic pg<sup id="fnref3"><a href="#fn3" rel="footnote">3</a></sup> style:</p>
-
-<blockquote>
-<p>Mr. Graham, who has known the younger Mr. Morris for several years, compared
-his exploit to that of Mathias Rust, the young German who flew light plane
-through Soviet air defenses in May 1987 and landed in Moscow.</p>
-
-<p>&ldquo;It&rsquo;s as if <a href="https://en.wikipedia.org/wiki/Mathias_Rust" target="_blank">Mathias Rust</a> had not just flown into Red Square, but built
-himself a stealth bomber by hand and then flown into Red Square,&rdquo; he said.</p>
-</blockquote>
-
-<h3 id="what-did-the-morris-worm-actually-do">What did the Morris Worm actually do?</h3>
-
-<p>The Morris Worm<sup id="fnref4"><a href="#fn4" rel="footnote">4</a></sup> exploited three separate vulnerabilities. It guessed
-passwords for <code>rsh</code>/<code>rexec</code>, it exploited a debug-mode backdoor in sendmail and it used &ldquo;one
-very neat trick&rdquo;. I&rsquo;ll go over each of these in detail, and you can find an archive (decompiled and commented) of the code for yourself <a href="https://github.com/arialdomartini/morris-worm" target="_blank">here</a>.</p>
-
-<h4 id="1-rsh-and-rexec">1. Rsh and Rexec</h4>
-
-<p><code>rsh</code> and <code>rexec</code> are remote shell protocols from the BSD era that are almost
-unused today (since supplanted by <code>ssh</code>). <code>rsh</code> can allow passwordless
-authentication if coming from a &ldquo;trusted&rdquo; host, which it determines via a list of addresses stored in a global <code>/etc/hosts.equiv</code> or
-per-user <code>.rhosts</code> file. When an
-<code>rsh</code> request comes from a user of a trusted machine, access is automatically
-granted. The worm used this to propagate, searching those two files &mdash; as well as the <code>.forward</code> file, which back then was used to forward your mail around the Internet &mdash; for trusted hosts.</p>
-
-<p>Even in 1988, people knew that leaving <code>rsh</code> open on an untrusted network like
-the Internet was a Bad Idea, and so the worm also propagated via <code>rexec</code>.
-Now, <code>rexec</code> uses password authentication, but Morris made an intelligent assumption:
-people tend to reuse passwords.
-Back then, <code>/etc/passwd</code> used to<sup id="fnref5"><a href="#fn5" rel="footnote">5</a></sup> store everyone&rsquo;s encrypted passwords. The
-worm shipped with an optimized implementation of
-<a href="https://en.wikipedia.org/wiki/Crypt_(Unix)" target="_blank"><code>crypt</code></a> and a dictionary, and went to town. Once it cracked a password, it tried it against
-all the likely hosts it could find.</p>
-
-<h4 id="2-sendmail-39-s-backdoor">2. Sendmail&rsquo;s Backdoor</h4>
-
-<p>In the absence of any friendly hosts, the Morris Worm would then exploit a
-backdoor in <a href="https://en.wikipedia.org/wiki/Sendmail" target="_blank">Sendmail</a>. You see, Sendmail had a &ldquo;debug&rdquo; mode that allowed anyone to route an
-email to any process, including the shell! Ironically, this was <a href="http://www.nytimes.com/1988/11/07/us/computer-invasion-back-door-ajar.html" target="_blank">apparently deliberate</a>:</p>
-
-<blockquote>
-<p>Eric Allman, a computer programmer who designed the mail program that Morris
-exploited, said yesterday that he created the back door to allow him to fine
-tune the program on a machine that an overzealous administrator would not give
-him access to. He said he forgot to remove the entry point before the program
-was widely distributed in 1985.</p>
-</blockquote>
-
-<p>(This wasn&rsquo;t even the first Sendmail backdoor. Sendmail used to ship with &ldquo;wizard mode&rdquo;, where sending the strings &ldquo;WIZ&rdquo; and &ldquo;SHELL&rdquo; gave you a root shell. By the time that Morris was writing his worm, wizard mode was disabled almost everywhere.)</p>
-
-<p>If you&rsquo;re wondering how sendmail could have backdoors like this, it seems that it was somewhat well known. This quote from a <a href="http://securitydigest.org/tcp-ip/archive/1988/11" target="_blank">mail</a> by <a href="https://en.wikipedia.org/wiki/Paul_Vixie" target="_blank">Paul Vixie</a> summarizes the situation.</p>
-<pre class="highlight plaintext"><code>From: vixie@decwrl.dec.com (Paul Vixie)
-Newsgroups: comp.protocols.tcp-ip,comp.unix.wizards
-Subject: Re: a holiday gift from Robert "wormer" Morris
-Message-ID: &lt;24@jove.dec.com&gt;
-Date: 6 Nov 88 19:36:10 GMT
-References: &lt;1698@cadre.dsl.PITTSBURGH.EDU&gt; &lt;2060@spdcc.COM&gt;
-Distribution: na
-Organization: DEC Western Research Lab
-Lines: 15
-
-
-# the hole [in sendmail] was so obvious that i surmise that Morris
-# was not the only one to discover it.  perhaps other less
-# reproductively minded arpanetters have been having a field
-# 'day' ever since this bsd release happened. 
-
-I've known about it for a long time.  I thought it was common knowledge
-and that the Internet was just a darned polite place.  (I think it _was_
-common knowledge among the people who like to diddle the sendmail source.)
-
-The bug in fingerd was a big surprise, though.  Overwriting a stack frame
-on a remote machine with executable code is One Very Neat Trick.
--- 
-Paul Vixie
-Work:    vixie@decwrl.dec.com    decwrl!vixie    +1 415 853 6600
-Play:    paul@vixie.sf.ca.us     vixie!paul      +1 415 864 7013
-</code></pre>
-
-<p>The Internet was a polite place, indeed.</p>
-
-<h4 id="3-one-very-neat-trick">3. One Very Neat Trick</h4>
-
-<p>The Very Neat Trick that Vixie was talking about is the now-standard
-<a href="https://en.wikipedia.org/wiki/Buffer_overflow" target="_blank">stack buffer overflow</a>. It&rsquo;s
-fascinating to read contemporary accounts that marvel at the cleverness of a class of
-bugs that are now ubiquitous &mdash; although, for me at least, they still haven&rsquo;t
-lost their magic<sup id="fnref6"><a href="#fn6" rel="footnote">6</a></sup>.</p>
-
-<p>Here&rsquo;s the main routine from the <code>fingerd</code> of that <a href="http://minnie.tuhs.org/cgi-bin/utree.pl?file=4.3BSD/usr/src/etc/fingerd.c" target="_blank">era</a>:</p>
-<pre class="highlight c"><code><span class="n">main</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span> <span class="n">argv</span><span class="p">)</span>
-    <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[];</span>
-<span class="p">{</span>
-    <span class="k">register</span> <span class="kt">char</span> <span class="o">*</span><span class="n">sp</span><span class="p">;</span>
-    <span class="kt">char</span> <span class="n">line</span><span class="p">[</span><span class="mi">512</span><span class="p">];</span>
-    <span class="k">struct</span> <span class="n">sockaddr_in</span> <span class="n">sin</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">pid</span><span class="p">,</span> <span class="n">status</span><span class="p">;</span>
-    <span class="kt">FILE</span> <span class="o">*</span><span class="n">fp</span><span class="p">;</span>
-    <span class="kt">char</span> <span class="o">*</span><span class="n">av</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
-
-    <span class="n">i</span> <span class="o">=</span> <span class="k">sizeof</span> <span class="p">(</span><span class="n">sin</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">getpeername</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">sin</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">i</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="n">fatal</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">"getpeername"</span><span class="p">);</span>
-    <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'\0'</span><span class="p">;</span>
-    <span class="n">gets</span><span class="p">(</span><span class="n">line</span><span class="p">);</span>
-    <span class="n">sp</span> <span class="o">=</span> <span class="n">line</span><span class="p">;</span>
-    <span class="c1">// ... snip ...
-</span>    <span class="c1">// build sp into arguments for finger 
-</span>    <span class="c1">// and call /usr/ucb/finger via execv before
-</span>    <span class="c1">// putchar'ing the result back to stdout
-</span>    <span class="k">return</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-<span class="p">}</span> 
-</code></pre>
-
-<p>If you have experience with reading C code,<sup id="fnref7"><a href="#fn7" rel="footnote">7</a></sup> you may have spotted the
-vulnerability. <code>gets(line)</code> reads STDIN and puts the contents into a 512 byte
-buffer. This means that sending more than 512 bytes will overwrite the stack
-with an attacker-controlled value.</p>
-
-<p>The worm sent 536 bytes of data, which overwrote the
-<a href="https://en.wikipedia.org/wiki/Call_stack#Stack_and_frame_pointers" target="_blank">stack frame</a>
-of the <code>main</code> function. This allowed Morris to overwrite the pointer to where
-<code>main</code> is returning to. He set that pointer to be <em>within</em> the 536 byte buffer
-he sent over the network. The beginning of the buffer contained
-<a href="https://en.wikipedia.org/wiki/Shellcode" target="_blank">shellcode</a> that called <code>/bin/sh</code>. Game over.</p>
-
-<h2 id="aftermath">Aftermath</h2>
-
-<p>Robert Tappan Morris was convicted and sentenced to three years probation, 400
-hours of community service and a $10,050 fine (about $20,000 in today&rsquo;s dollars)
-plus the cost of his supervision. He then went on to co-found a little startup
-called Viaweb. You may have heard the rest of that story.
-Today, Morris is a tenured professor at the Computer Science and Artificial
-Intelligence Laboratory at MIT and is one of the leaders of the Parallel and
-Distributed Systems Groups.</p>
-
-<p>Why did the paranoia around badBIOS make me think of the Morris Worm? If you read contemporary articles about the Morris Worm, they&rsquo;ll sometimes mention, but never emphasize, who Robert Morris&rsquo;s father was. The <a href="https://en.wikipedia.org/wiki/Robert_Morris_(cryptographer)" target="_blank">elder Robert Morris</a> just happened to be a computer security expert. While the young Robert Morris was writing his worm, Robert Morris Sr. was serving as Chief Scientist at the NSA&rsquo;s National Computer Security Center! </p>
-
-<p>The Internet grew up a lot since 1988, and not just in size. In 2013, your computer acting strangely is obviously a NSA-written malware that lives in your BIOS and propagates over sound waves imperceptible to the human ear. In 1988, son of an NSA security executive infects 10% of the Internet with a worm that uses an exotic new exploitation technique called a buffer overflow and&hellip; nothing.</p>
-
-<p>Just to be clear, I&rsquo;m not alleging any conspiracy between father and son, besides perhaps father making some calls after son&rsquo;s arrest. While the Morris worm was likely the first malicious use, buffer overflows were understood as a problem before 1988, if not widely. The way the media narrative handled the NSA connection in 1988 just says a lot about how the world of the Internet changed in 25 years.</p>
-
-<p>As for Dragos Ruiu, he&rsquo;s been quiet about badBIOS since 2013. I&rsquo;m not sure what he&rsquo;s doing these days besides <a href="https://cansecwest.com/" target="_blank">CanSecWest</a>, but in my heart of hearts, I like to picture him playing the saxophone amidst the detritus of his torn up apartment.</p>
-
-<p><a href="https://en.wikipedia.org/wiki/The_Conversation" target="_blank"><img src="/images/the_conversation.jpg"></a></p>
-
-<hr>
-
-<h4 id="paying-the-bills">Paying the Bills</h4>
-
-<p>We&rsquo;re trying our best, but we&rsquo;ll only be able to blog about a minuscule percentage of the world&rsquo;s vulnerabilities. And starting with 1988 means we have a lot of catching up to do. How will you ever find about the ones that actually affect you?</p>
-
-<p>Our product, <a href="https://appcanary.com/?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=morris">Appcanary</a>, monitors your apps and servers, and notifies you whenever a new vulnerability is discovered in a package you rely on. </p>
-
-<p><a href="https://appcanary.com/sign_up?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=morris">Sign up</a> today!</p>
-
-<hr>
-
-<div class="footnotes">
-<hr>
-<ol>
-
-<li id="fn1">
-<p>One of the things I wish that the security industry would do less of is blind appeals to authority, and I hate that I made one here. Unfortunately, I don&rsquo;t have the skills or time to make my own analysis of Ruiu&rsquo;s data, so I just have to trust the Thought Leaders on this one. &nbsp;<a href="#fnref1" rev="footnote">&#8617;</a></p>
-</li>
-
-<li id="fn2">
-<p>The 60,000 computer-strong Internet was of course one of many networks at the time. The Internet was the one that was global and used TCP/IP &mdash; the Internet protocols. Therein lies the pedant&rsquo;s case against the <a href="https://twitter.com/APStylebook/status/716279065888563200" target="_blank">AP&rsquo;s capitalization</a> of the word &ldquo;Internet&rdquo;.&nbsp;<a href="#fnref2" rev="footnote">&#8617;</a></p>
-</li>
-
-<li id="fn3">
-<p>Disclosure time: years after giving that quote, Paul Graham and Robert Morris went on to found Y Combinator along with Jessica Livingston and Trevor Blackwell. YC in turn is an investor in <a href="https://www.appcanary.com">Appcanary</a>. Robert Morris and I have never met, though we did once meet with Paul Graham. &nbsp;<a href="#fnref3" rev="footnote">&#8617;</a></p>
-</li>
-
-<li id="fn4">
-<p>My favourite paper on the analysis of the worm is <a href="http://denninginstitute.com/modules/acmpkp/security/texts/INTWORM.PDF" target="_blank">With Microscope and Tweezers</a> from MIT&rsquo;s Eichin and Rochlis. They spend a page passionately arguing that it&rsquo;s a virus by using a complicated appeal to the difference between lytic and lysogenic viruses with references to three separate biology textbooks!&nbsp;<a href="#fnref4" rev="footnote">&#8617;</a></p>
-</li>
-
-<li id="fn5">
-<p>I assumed that <code>/etc/shadow</code> came about as a consequence of the Morris Worm, but it <a href="https://en.wikipedia.org/wiki/Passwd#History" target="_blank">seems</a> that it was originally implemented in SunOS earlier in the 80&rsquo;s, and then took 2 years after the Morris Worm to make it into BSD.&nbsp;<a href="#fnref5" rev="footnote">&#8617;</a></p>
-</li>
-
-<li id="fn6">
-<p>Exploits really are magic, and it goes without saying that exploit users have chosen the <a href="https://en.wikipedia.org/wiki/Left-hand_path_and_right-hand_path" target="_blank">Left-Hand Path</a> to wizardhood. If the <a href="https://mitpress.mit.edu/sicp/full-text/book/book.html" target="_blank">cover of SICP</a> is to be believed, the Right-Hand Path is available through careful study of functional programming and Lisps. Perhaps this is the true reason why Morris and Graham were such effective collaborators.&nbsp;<a href="#fnref6" rev="footnote">&#8617;</a></p>
-</li>
-
-<li id="fn7">
-<p>On the other hand, this C code is over 30 years old. When I ran it through the gcc on my machine,I was very happy to see that it complained bitterly but still compiled it. One exercise for the reader is finding where the network operation actually happens. <code>main</code> takes input and output from STDIN/STDOUT, but there&rsquo;s an uninitialized <code>struct sockaddr_in sin</code> that we call <code>getpeername</code> on. How is a network socket piped to standard input/output and who is initializing the <code>sin</code> struct? I actually haven&rsquo;t been able to figure this part out. If you know, please tell <a href="mailto:max@appcanary.com">me</a>! The full code listing is <a href="http://minnie.tuhs.org/cgi-bin/utree.pl?file=4.3BSD/usr/src/etc/fingerd.c" target="_blank">here</a>.&nbsp;<a href="#fnref7" rev="footnote">&#8617;</a></p>
-
-<p><strong>Update 08/29/2016</strong> Dave Vandervies emailed me with an explanation!</p>
-
-<blockquote>
-<p>fingerd was meant to be run from inetd (see <a href="http://minnie.tuhs.org/cgi-bin/utree.pl?file=4.3BSD/etc/inetd.conf" target="_blank">here</a>),
-which sets up the network connection and invokes the actual server process
-with its stdin and stdout attached to the network socket.</p>
-
-<p><br/>
-As for the getpeername, the address is an out parameter; this call looks up
-the peer address of stdin (fd 0), and will fail (and fingerd will error out
-on that) if it isn&rsquo;t a socket (see
-<a href="http://man.openbsd.org/OpenBSD-current/man2/getpeername.2">here</a>).
-Since the actual address doesn&rsquo;t get used, that appears to be the purpose of the
-call here.</p>
-</blockquote>
-</li>
-
-</ol>
-</div>
-
-
-      </div>
-      <hr>
-    </div>
-  </section>
-  <section>
-    <div class="entry">
-      <div class="post">
-        <h1 class="title"><a href="/2016/making-appcanary-easier.html">Making Appcanary easier to use</a></h1>
-
-        <div class="published-tags">By <span class="author"><a href="/author/max-veytsman.html">Max Veytsman</a></span> |
-          <span class="date">July 14, 2016</span> on <a href="/tags/announcements.html">Announcements</a>, <a href="/tags/product.html">Product</a></div>
-
-        <p>I&rsquo;m excited to announce that we&rsquo;ve added two features that make Appcanary a heck of a lot easier to use!</p>
-
-<h2 id="add-monitors-by-uploading-a-file">Add monitors by uploading a file</h2>
-
-<p>Our Monitor API is great if you want to track a set of Linux packages or your Gemfile. We give you a dashboard showing which packages are vulnerable, and email you whenever new vulnerabilities that affect you come out. However, there&rsquo;s always a bunch of setup to get a new API going.</p>
-
-<p>With that in mind, we made the interface a lot more user friendly! You can now upload a file to watch directly through the website. Just go to <a href="https://appcanary.com/monitors/new">add monitors</a> to be able to upload a file directly. Monitors support Ruby&rsquo;s <code>Gemfile.lock</code>, <code>/var/lib/dpkg/status</code> for Ubuntu and Debian, and the output of <code>rpm -qa</code> for Centos and Amazon Linux!</p>
-
-<h2 id="automatically-upgrade-vulnerable-packages">Automatically upgrade vulnerable packages</h2>
-
-<p>A few of our customers told us that knowing about vulnerabilities is nice, but you know what would be <em>great</em>? If we could somehow <em>patch</em> them automatically. We thought about it and said, sure, why not!</p>
-
-<p>If you have the Appcanary <a href="(https://appcanary.com/servers/new)">agent</a> installed on an Ubuntu server, and you&rsquo;re running the latest version, you can run </p>
-<pre class="highlight plaintext"><code>appcanary upgrade
-</code></pre>
-
-<p>in order to install updates for any packages we know to be vulnerable.</p>
-
-<p>You can also run</p>
-<pre class="highlight plaintext"><code>appcanary upgrade -dry-run
-</code></pre>
-
-<p>in order to see what the agent will do, without it actually touching your system. </p>
-
-<p>Now you can manage vulnerabilities, learn about new ones that affect you, and apply patches, all through Appcanary!</p>
-
-<h4 id="if-you-haven-39-t-tried-us-yet">If you haven&rsquo;t tried us yet</h4>
-
-<p>Stay on top of the security vulnerabilities that affect you, today.</p>
-
-<p><a href="https://appcanary.com/?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=making_easier">Appcanary</a>, monitors your apps and servers, and notifies you whenever a new vulnerability is discovered in a package you rely on. And now it will help you patch vulnerable packages as well.</p>
-
-<p><a href="https://appcanary.com/sign_up?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=making_easier">Sign up</a> today!</p>
 
 
       </div>

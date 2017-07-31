@@ -1,0 +1,239 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/stylesheets/application.css" rel="stylesheet" />
+    <link href="/images/favicon.ico" rel="icon" type="image/ico" />
+
+      <title>Appcanary - Hacking your Elixir Editor</title>
+    <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="/feed.xml" />
+  </head>
+  <body>
+    <script src="//use.typekit.net/dkz5zwp.js"></script>
+<script>try{Typekit.load({ async: false });}catch(e){}</script>
+
+
+    <div class="topbar"></div>
+    <div id="header">
+      <div class="preamble">
+        <a href="https://blog.appcanary.com"><img class="logo" src="/images/appcanary.png" alt="Appcanary logo"></a>
+        <p>
+          <b><a href="https://appcanary.com">Appcanary</a></b> makes sure you never run vulnerable software on your servers.
+          <br/>
+          Like our blog? Subscribe to our <a href="https://appcanary.us10.list-manage.com/subscribe?u=303b378f377508300c0b5469a&id=dc58e8f56f">newsletter</a> or <a href="https://podcast.appcanary.com">podcast</a>.<br/>
+          Browse the <a href="/archive.html">archive</a>, or follow us on <a href="https://twitter.com/appcanary">twitter</a>, <a href="https://github.com/appcanary">github</a> or <a href="/feed.xml">rss</a>.
+        </p>
+      </div>
+    </div>
+
+      <section>
+    <div class="entry">
+      <div class="post">
+        <h1 class="title"><a href="/2017/hacking-your-elixir-editor.html">Hacking your Elixir Editor</a></h1>
+        <div class="published-tags">By <span class="author"><a href="/author/max-veytsman.html">Max Veytsman</a></span> |
+          <span class="date">July 28, 2017</span> on <a href="/tags/elixir.html">Elixir</a>, <a href="/tags/security.html">Security</a></div>
+
+        <p>I&rsquo;ve been playing with Elixir recently, and came across a remote code execution bug in the developer tools. You know, as one does.</p>
+
+<p>Before we continue, a warning: if you use Vim and have ever edited Elixir files <strong>stop what you&rsquo;re doing and upgrade <a href="https://github.com/slashmili/alchemist.vim">alchemist.vim</a> to 2.8.0</strong>. Seriously, go do it, right now.</p>
+
+<p>Done? Okay, let&rsquo;s take it from the top. If you want to implement nice editor support for a language, and provide things like code-completion or jump-to-definition, you need some way to introspect both the source code being edited and the language&rsquo;s runtime environment to figure out what suggestions to give to your users. </p>
+
+<p>There&rsquo;s a package called <a href="https://github.com/tonini/alchemist.el">alchemist</a> that provides Elixir support for Emacs. It has nice features like code-completion, and jump-to-definition, and, thereofre, it understands Elixir code and can read through a project&rsquo;s dependencies and stuff like that. A common pattern when writing editor plugins is to build a little background program in the language you&rsquo;re targeting that can introspect the runtime and tell the editor where symbols are defined and help with code completion. Alchemist does this with <a href="https://github.com/tonini/alchemist-server">alchemist-server</a>.</p>
+
+<p>Alchemist-server is also used by the Vim plugin, <a href="https://github.com/slashmili/alchemist.vim">alchemist.vim</a>. While Emacs talks to alchemist-server via STDIN/STDOUT, the Vim plugin uses a TCP server to process commands from Vim.</p>
+
+<h1 id="the-bug">The bug</h1>
+
+<p>I can&rsquo;t claim credit for the original bug. It was <a href="https://github.com/tonini/alchemist-server/issues/14">reported</a> by <a href="https://github.com/ivan">Ivan Kozik</a> back in February. </p>
+
+<p>The issue is that alchemist-server accepted <code>EVAL</code> as a command and listened unauthenticated on all interfaces. This means that anyone in the same coffee shop as you can eval arbitrary Elixir code on your computer if they can guess the <a href="https://en.wikipedia.org/wiki/Ephemeral_port">ephemeral port</a> the server is running on. </p>
+
+<p>This is really bad, and unfortunately had not been addressed since the issue was reported. I think this bug wasn&rsquo;t patched immediately for three reasons:</p>
+
+<ol>
+<li>There wasn&rsquo;t consensus on what the correct fix was. Do we listen on localhost only? On a socket? Sign and MAC the command? If we do that, what key do we use?</li>
+<li>The severity of the bug wasn&rsquo;t made clear. While it exposed you to a remote attacker over the same network, Ivan initially thought that you would need a <a href="https://en.wikipedia.org/wiki/DNS_rebinding">DNS rebinding</a> attack to exploit the bug via a browser. This is theoretical and hard to explain, let alone pull off<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup>.</li>
+</ol>
+
+<p>This is a super serious bug, and I wanted to see this bug fixed as quickly as possible. I subscribe to the Church of <a href="https://www.nostarch.com/gtfo">Proof of Concept or GTFO</a>, so it was time to demonstrate just bad this bug actually was.</p>
+
+<h1 id="the-original-exploit">The original exploit</h1>
+
+<p>Ivan&rsquo;s original exploit takes advantage of the fact that alchemist-server uses <code>eval-string</code> to process arguments in several cases and it contains a <code>EVAL</code> command for evaluating files, probably for loading modified files into your repl environment. He sends a command that uses the <code>eval-string</code>ed portion to write a malicious Elixir script to a file and then executes it, with the results returned to the user.</p>
+
+<p>Assuiming <code>PORT</code> is the ephemeral port the server is running on, his exploit looks like this:</p>
+<pre class="highlight shell"><code><span class="nb">echo</span> <span class="s1">'EVAL File.write!("/tmp/payload", 
+"File.read!(Path.expand(~s(~/.ssh/id_rsa)))");
+{:eval, "/tmp/payload"}'</span> | nc 127.0.0.1 PORT
+</code></pre>
+
+<ul>
+<li><code>EVAL</code> is a command for the Elixir server.</li>
+<li><code>File.write!(&quot;/tmp/payload&quot;, &quot;File.read!(Path.expand(~s(~/.ssh/id_rsa)))&quot;);</code> is the part that&rsquo;s processed by <code>eval-string</code>. It writes a malicious elixir script to <code>/tmp/payload</code>. The script itself returns the contents of the user&rsquo;s ssh private key.</li>
+<li><code>{:eval, &quot;/tmp/payload&quot;}</code> tells the server to evaluate the file in which the malicious script was written.</li>
+</ul>
+
+<h1 id="the-danger-of-line-based-protocols">The danger of line based protocols</h1>
+
+<p>I know what you&rsquo;re thinking: &ldquo;it&rsquo;s really too bad that alchemist-server is evaling things to begin with&rdquo;. And, you&rsquo;re dead wrong. </p>
+
+<p>It&rsquo;s perfectly fine for developer tools to execute code sent to them by a user; actually, most developer tools are designed specifically to evaluate arbitrary code in one way or another. The problem is that it&rsquo;s accepting code to be evaled over <em>a TCP connection</em>.</p>
+
+<p>First, I booted up the server, and then started talking to it using netcat:</p>
+<pre class="highlight shell"><code><span class="gp">$ </span><span class="nb">echo</span> <span class="s1">'PING'</span> | nc localhost 59533
+PONG
+END-OF-PING
+
+<span class="gp">$ </span><span class="nb">echo</span> <span class="s2">"NOTAREALCOMMAND"</span> | nc localhost 59555
+<span class="c"># No output</span>
+
+<span class="gp">$ </span><span class="nb">printf</span> <span class="s2">"NOTAREALCOMMAND</span><span class="se">\n</span><span class="s2">PING</span><span class="se">\n</span><span class="s2">"</span> | nc localhost 59609
+PONG
+END-OF-PING
+</code></pre>
+
+<p>This is where things get real bad for alchemist-server. We&rsquo;re dealing with a line based protocol, and what&rsquo;s more, it&rsquo;s ignoring<sup id="fnref2"><a href="#fn2" rel="footnote">2</a></sup> commands it doesn&rsquo;t understand. You know what else is a line-based protocol? HTTP. </p>
+
+<p>That means we can get a browser to issue a request to localhost and alchemist-server will ignore all the headers and HTTP formalities and happily execute an EVAL command if we put it on its own line.</p>
+
+<p>Interestingly enough, this is a case where security considerations outweigh <a href="https://en.wikipedia.org/wiki/Robustness_principle">Postel&rsquo;s Principle</a>:</p>
+
+<blockquote>
+<p>Be conservative in what you do, be liberal in what you accept from others</p>
+</blockquote>
+
+<p>In this case, being liberal in what you accept leads to accepting messages from places you really shouldn&rsquo;t.</p>
+
+<h1 id="cross-origin-resource-sharing">Cross-origin resource sharing</h1>
+
+<p>We&rsquo;ve established that the server will accept HTTP requests from a browser. Now the trick is to get the browser to send one. I decided to use Javascript to send an <a href="https://developer.mozilla.org/en/docs/Web/API/XMLHttpRequest">XHR</a> so that I had a good chance of being able to process the response from the server. If I just wanted to execute some code on a victim&rsquo;s machine, embedding a form or an image with the right payload would have worked too.</p>
+
+<p>In order to use XHR, we need to get around Cross-Origin Resource Sharing (CORS). This is the policy that governs under what conditions a browser will make a request to a resource, and under what conditions the output will be returned back to the Javascript function that made the request. There is a default policy, and it can be changed by the server using special headers<sup id="fnref3"><a href="#fn3" rel="footnote">3</a></sup>.</p>
+
+<p>The first thing that happens is that the browser decides if it can make a request. If the request contains these special headers, or uses an HTTP method other than GET, HEAD, or POST, the browser will send a <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS#Preflighted_requests">preflighted request</a>. This is an OPTIONS request that asks the server if it will accept the upcoming request.</p>
+
+<p>We don&rsquo;t want this, so we have to send a so-called &ldquo;simple request&rdquo;. A POST request with a content-type of &ldquo;text/plain&rdquo; and <code>EVAL ...</code> in the data is &ldquo;simple&rdquo; and not be preflighted.</p>
+
+<p>The next step is getting passed the Access-Control header. By default, your browser won&rsquo;t return the results of an XHR request unless it&rsquo;s to the same origin as the script that&rsquo;s making it, or the server has an Access-Control header that allows the script&rsquo;s origin. One thing to note is that this is happening <em>after</em> the request is made. So, if I have some malicious code that will ransomware your computer, it will still be executed, even if the browser script that made the request won&rsquo;t be able to see the response. It&rsquo;s especially unimportant in the case of remote code execution, because I can exfiltrate data by having my malicious payload make a request back to me by itself.</p>
+
+<p>Nevertheless, setting up a server to listen to the response requires effort, and I wanted a seamless POC. Luckily, our malicious payload&rsquo;s response was going to be interpreted as a HTTP response to the browser, so all I had to do was return a string that looks like:</p>
+<pre class="highlight plaintext"><code>HTTP/1.1 200 OK
+Access-Control-Allow-Origin: *
+
+The browser will now see this as a response to its XHR request.
+</code></pre>
+
+<h1 id="boom">Boom</h1>
+
+<p>And here&rsquo;s the full payload</p>
+<pre class="highlight elixir"><code><span class="c1"># Write the following script to /tmp/payload</span>
+<span class="no">EVAL</span> <span class="no">File</span><span class="o">.</span><span class="n">write!</span><span class="p">(</span><span class="sd">"</span><span class="s2">/tmp/payload"</span><span class="p">,</span>
+  <span class="c1"># HTTP response header</span>
+  <span class="err">~</span><span class="no">S</span><span class="o">|</span><span class="no">IO</span><span class="o">.</span><span class="n">puts</span> <span class="sd">"</span><span class="s2">HTTP/1.1 200 OK"</span>
+  <span class="c1"># \n - encoded in a way that won't be parsed as a new line</span>
+  <span class="o">&lt;&gt;</span> <span class="no">List</span><span class="o">.</span><span class="n">to_string</span><span class="p">([</span><span class="m">10</span><span class="p">])</span>
+  <span class="c1"># CORS header</span>
+  <span class="o">&lt;&gt;</span> <span class="sd">"</span><span class="s2">Access-Control-Allow-Origin: *"</span>
+  <span class="c1"># \r\n\r\n - see above</span>
+  <span class="o">&lt;&gt;</span> <span class="no">List</span><span class="o">.</span><span class="n">to_string</span><span class="p">([</span><span class="m">13</span><span class="p">,</span><span class="m">10</span><span class="p">,</span><span class="m">13</span><span class="p">,</span><span class="m">10</span><span class="p">])</span>
+  <span class="c1"># Insert the contents of /etc/passwrd</span>
+  <span class="o">&lt;&gt;</span> <span class="no">File</span><span class="o">.</span><span class="n">read!</span><span class="p">(</span><span class="no">Path</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="err">~</span><span class="n">s</span><span class="p">(</span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">passwd</span><span class="p">)))</span>
+  <span class="c1"># \r\n\r\n - see above</span>
+  <span class="o">&lt;&gt;</span> <span class="no">List</span><span class="o">.</span><span class="n">to_string</span><span class="p">([</span><span class="m">13</span><span class="p">,</span><span class="m">10</span><span class="p">,</span><span class="m">13</span><span class="p">,</span><span class="m">10</span><span class="p">])</span><span class="o">|</span><span class="p">);</span>
+  <span class="c1"># Execute the above script and return the result</span>
+<span class="p">{</span><span class="ss">:eval</span><span class="p">,</span> <span class="sd">"</span><span class="s2">/tmp/payload"</span><span class="p">}</span>
+</code></pre>
+
+<p>This is what it looks like when wrapped in HTML/Javascript:</p>
+
+<video src="/videos/alchemist_server.webm" width="640" height="360" controls>
+</video>
+
+<p>Thanks for reading, and make sure you update your alchemist-server!</p>
+
+<div class="footnotes">
+<hr>
+<ol>
+
+<li id="fn1">
+<p>Case in point, the <a href="http://searchsecurity.techtarget.com/definition/DNS-rebinding-attack">first google hit</a> confuses for DNS rebinding confuses the attack technique with something you can do with it &mdash; using javascript to exploit default passwords on home routers from a browser.&nbsp;<a href="#fnref1" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn2">
+<p>You may have noticed, I used <code>printf</code> not <code>echo</code> in the last example so that my <code>\n</code>s would be rendered correctly.&nbsp;<a href="#fnref2" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn3">
+<p>If you want to learn more about other security releated headers, you can read my <a href="https://blog.appcanary.com/2017/http-security-headers.html">guide</a>&nbsp;<a href="#fnref3" rev="footnote">&#8617;</a></p>
+</li>
+
+</ol>
+</div>
+
+
+      </div>
+    </div>
+  </section>
+
+
+    <script type="text/javascript">
+ /* <![CDATA[ */
+ var google_conversion_id = 928841383;
+ var google_custom_params = window.google_tag_params;
+ var google_remarketing_only = true;
+ /* ]]> */
+</script>
+
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+<noscript>
+    <div style="display:inline;">
+        <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/928841383/?value=0&amp;guid=ON&amp;script=0"/>
+    </div>
+</noscript>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61163522-3', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+<!-- Twitter universal website tag code -->
+<script>
+ !function(e,n,u,a){e.twq||(a=e.twq=function(){a.exe?a.exe.apply(a,arguments):
+                                               a.queue.push(arguments);},a.version='1',a.queue=[],t=n.createElement(u),
+                            t.async=!0,t.src='//static.ads-twitter.com/uwt.js',s=n.getElementsByTagName(u)[0],
+                            s.parentNode.insertBefore(t,s))}(window,document,'script');
+ // Insert Twitter Pixel ID and Standard Event data below
+ twq('init','nve06');
+ twq('track','PageView');
+</script>
+<!-- End Twitter universal website tag code -->
+
+<!-- Facebook Pixel Code -->
+<script>
+ !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+                                                             n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+   n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+   t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+                                                                          document,'script','https://connect.facebook.net/en_US/fbevents.js');
+ fbq('init', '1378208595579873'); // Insert your pixel ID here.
+ fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+            src="https://www.facebook.com/tr?id=1378208595579873&ev=PageView&noscript=1"
+          /></noscript>
+<!-- DO NOT MODIFY -->
+<!-- End Facebook Pixel Code -->
+
+    
+  </body>
+</html>

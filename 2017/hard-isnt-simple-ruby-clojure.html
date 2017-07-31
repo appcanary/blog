@@ -1,0 +1,229 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/stylesheets/application.css" rel="stylesheet" />
+    <link href="/images/favicon.ico" rel="icon" type="image/ico" />
+
+      <title>Appcanary - Simple Ain't Easy, but Hard Ain't Simple: Leaving Clojure for Ruby</title>
+    <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="/feed.xml" />
+  </head>
+  <body>
+    <script src="//use.typekit.net/dkz5zwp.js"></script>
+<script>try{Typekit.load({ async: false });}catch(e){}</script>
+
+
+    <div class="topbar"></div>
+    <div id="header">
+      <div class="preamble">
+        <a href="https://blog.appcanary.com"><img class="logo" src="/images/appcanary.png" alt="Appcanary logo"></a>
+        <p>
+          <b><a href="https://appcanary.com">Appcanary</a></b> makes sure you never run vulnerable software on your servers.
+          <br/>
+          Like our blog? Subscribe to our <a href="https://appcanary.us10.list-manage.com/subscribe?u=303b378f377508300c0b5469a&id=dc58e8f56f">newsletter</a> or <a href="https://podcast.appcanary.com">podcast</a>.<br/>
+          Browse the <a href="/archive.html">archive</a>, or follow us on <a href="https://twitter.com/appcanary">twitter</a>, <a href="https://github.com/appcanary">github</a> or <a href="/feed.xml">rss</a>.
+        </p>
+      </div>
+    </div>
+
+      <section>
+    <div class="entry">
+      <div class="post">
+        <h1 class="title"><a href="/2017/hard-isnt-simple-ruby-clojure.html">Simple Ain't Easy, but Hard Ain't Simple: Leaving Clojure for Ruby</a></h1>
+        <div class="published-tags">By <span class="author"><a href="/author/phillip-mendonca-vieira.html">Phillip Mendonça-Vieira</a></span> |
+          <span class="date">May 22, 2017</span> on <a href="/tags/programming.html">Programming</a>, <a href="/tags/ruby.html">Ruby</a>, <a href="/tags/clojure.html">Clojure</a></div>
+
+        <p>In November 2016, I delivered a talk at RubyConf where I told the story of how we built the first version in Appcanary in Clojure, and then threw it away. </p>
+
+<p>Here is the talk:</p>
+
+<div style="position:relative;height:0;padding-bottom:56.25%"><iframe src="https://www.youtube.com/embed/doZ0XAc9Wtc?ecver=2" width="640" height="360" frameborder="0" style="position:absolute;width:100%;height:100%;left:0" allowfullscreen></iframe></div>
+
+<p><small>Jump to 12:10 to start at the section where I begin to talk about my specific problems with Clojure.</small></p>
+
+<p>But, that talk is over a half hour long, and who has time for that?</p>
+
+<h3 id="three-important-ideas-you-should-take-away">Three important ideas you should take away:</h3>
+
+<ol>
+<li><p>If you&rsquo;re starting a project where you&rsquo;re really pressed for time, you should be biased towards tools you know really well. If you have a startup, you&rsquo;re supposed to be solving a <em>business problem</em>. Don&rsquo;t make your life harder than it has to be by also having to learn new tools.</p></li>
+<li><p>Avoid building a distributed system for as long as you can. They introduce a lot of expensive complexity that is hard for small teams to pay. Micro services are useful for larger teams, but the way you code and deploy your apps should be a reflection of your team&rsquo;s organization and ability to coordinate.</p></li>
+<li><p>I personally found it really hard to get into Clojure. I got the sense that Clojure as a community doesn&rsquo;t value &ldquo;developer happiness&rdquo;, and I think it should! Tools should try to make your life easier at every opportunity.</p></li>
+</ol>
+
+<p><hr></p>
+
+<p>We had <a href="/2016/missing-clojure.html">mentioned the talk before</a>, but I had avoided actually posting it on this blog for two reasons:</p>
+
+<ol>
+<li>I&rsquo;ve rewatched it a bunch of times and can think of a half dozen things I&rsquo;d do differently now.</li>
+<li>Some people in the Clojure community got <em>really mad</em>.</li>
+</ol>
+
+<h2 id="oops">Oops</h2>
+
+<p>A lot of otherwise well-meaning people looked at the talk and decided that I was a) a bit of an asshole and b) probably incompetent. So many people expressed that view that I felt compelled to ask Confreaks to turn off the comments<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup>.</p>
+
+<p>I don&rsquo;t really blame them.</p>
+
+<p>Developer tools do not exist in isolation; they are often only useful to the extent there is a live community surrounding them. This requires such a degree of investment that many programmers will inevitably come to integrate their favourite programming languages into a part of their identity. When some outsider comes along and criticizes your community and identity, it can be very hard to be charitable to what they have to say.</p>
+
+<p>It was a good learning experience, though. I came to understand that <strong>I did not work hard enough to establish that I was coming from a place of kindness</strong>, and that my talk was <strong>not</strong> a big fuck you! to the community.</p>
+
+<p>I came into the language and its environment with an open heart and invested a ton of resources into it, but, largely because of my specific context and a few mistakes we made early on, continuing to invest in Clojure didn&rsquo;t make sense for us.</p>
+
+<p><hr></p>
+
+<h2 id="further-discussion">Further discussion</h2>
+
+<p>So, much to my surprise, my talk became relevant recently when some peeps in the Clojure community looked around and made an observation:</p>
+
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">folks, I&rsquo;m calling it, clojure&rsquo;s dying more than it is growing</p>&mdash; 🌹dsa zack🌹 (@ZackMaril) <a href="https://twitter.com/ZackMaril/status/863915988424589312">May 15, 2017</a></blockquote>
+
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<p>Enabled by Twitter&rsquo;s recent decision to not count usernames towards character limits, this thread gained a whole life of its own. I don&rsquo;t know how to do justice to the whole range of topics that were discussed; Twitter itself hasn&rsquo;t quite figured out how to display threads properly. </p>
+
+<p>I think some of the ideas brought up deserve a little more investigation, and so I have summarized parts of the discussion in order to address them. Here it goes:</p>
+
+<h3 id="the-thread">The Thread</h3>
+
+<p>The hype cycle has moved away from Clojure, <a href="https://twitter.com/ZackMaril/status/863916529674354688">and the community feels like it&rsquo;s shrinking</a> - <a href="https://twitter.com/ztellman/status/864243503999602688">though there are many more jobs coming up</a>. </p>
+
+<p>It&rsquo;s actually kinda hard to make a <a href="https://twitter.com/ztellman/status/864244372933443585">good business case</a> for Clojure, since <a href="https://twitter.com/ZackMaril/status/864244440931500033">the JVM makes small tools prohibitive</a> and, if you do like the JVM, <a href="https://twitter.com/cemerick/status/864931671388409856">you now have a lot of options</a>. In theory, <a href="https://twitter.com/ericnormand/status/864940158159912960">you should be way more productive in Clojure</a>, but it&rsquo;s <a href="https://twitter.com/CursiveIDE/status/865162192265461764">hard to tell how true that is</a>.</p>
+
+<p>That said, <a href="https://twitter.com/mark_engelberg/status/865370061489356800">are people actually leaving Clojure</a>? Well, <a href="https://twitter.com/ztellman/status/865372517786984448">there was a talk recently on that very topic</a>, and though it may have been written by an <a href="https://twitter.com/timbaldridge/status/865640256220962816">incompetent</a> and <a href="https://twitter.com/timbaldridge/status/865654433870356480">mean jerk</a><sup id="fnref2"><a href="#fn2" rel="footnote">2</a></sup>, it makes some <a href="https://twitter.com/cemerick/status/865657364317298690">good points</a>.</p>
+
+<p>In the end, what <em>is</em> a <a href="https://twitter.com/phillmv/status/865690983274430464">reasonable expectation for developers new to Clojure</a>? Lisps are a <a href="https://twitter.com/timbaldridge/status/865667405862715392">very different</a> paradigm. <a href="https://twitter.com/timbaldridge/status/865667555494551552">Things work differently here</a>. Developers get paid to <a href="https://twitter.com/timbaldridge/status/865698644724375552">solve or automate problems</a>, and people <a href="https://twitter.com/potetm/status/866027765350506496">waste tons of time</a> trying to be &ldquo;happy&rdquo;. Clojure encourages people to reflect on their work, and <a href="https://twitter.com/potetm/status/866028663644598274">aggressively pare it down</a>. After all, <a href="https://twitter.com/potetm/status/866027314009829376">simple isn&rsquo;t easy</a>!</p>
+
+<p><hr></p>
+
+<p>OKAY, WOW, are you still with me? Incredible. </p>
+
+<p>It&rsquo;s hard for me to write about Clojureland nowadays since it&rsquo;s been a whole year since I last typed <code>lein repl</code>, but I&rsquo;m about to say something slightly hyperbolic and slightly uncharitable because it&rsquo;s more memorable, so please bear with me. It&rsquo;s a little over the top, but I promise I&rsquo;m coming from a place of love.</p>
+
+<p>Here it goes. Ready?</p>
+
+<h2 id="quot-simple-easy-quot-is-one-of-the-most-toxic-ideas-ever-introduced-to-programming">&ldquo;Simple != Easy&rdquo; Is One Of The Most Toxic Ideas Ever Introduced To Programming</h2>
+
+<p>For those of you outside of Clojureland, this is a reference to well-known 2011 Rich Hickey talk titled &ldquo;<a href="https://www.infoq.com/presentations/Simple-Made-Easy">Simple Made Easy</a>&rdquo;. </p>
+
+<p>Rich&rsquo;s thesis is that the best, most conceptually simple solution to a problem isn&rsquo;t automatically also going to be <em>simple to use</em>.</p>
+
+<p>Often, when we say something is <em>easy</em>, we actually just mean that it is familiar to us, and that we&rsquo;ve used something like it before. Just because we don&rsquo;t have to engage our brain doesn&rsquo;t mean a concept or framework or artifact isn&rsquo;t <em>complex</em>. </p>
+
+<p>Often the simplest solution may be very different from what you were expecting, and may therefore require some elbow grease.</p>
+
+<p>I thought that talk was really insightful when I first watched it. Math, for example, is a place where you can dedicate a lifetime of mental energy to simple but hard things. And it&rsquo;s true that many easy things are needlessly complex. But, having seen how people refer to it over the years, I&rsquo;ve since soured on the concept.</p>
+
+<h3 id="in-practice-39-simple-made-easy-39-is-an-elaborate-excuse-for-making-software-that-is-hard-to-use">In practice, &lsquo;Simple Made Easy&rsquo; is an elaborate excuse for making software that is hard to use.</h3>
+
+<p>By separating &ldquo;simplicity&rdquo; from &ldquo;ease of use&rdquo;, and then establishing the <em>primacy of simplicity</em>, it gives people an ideological out to discount improving the user interface of our tools and artifacts.</p>
+
+<p>If your chief goal is simplicity, and beauty, and elegance, then it&rsquo;s not really your fault if people don&rsquo;t &ldquo;get it&rdquo;. It blinds us to critiques of our software: if we don&rsquo;t value the accessibility of our tools then it becomes very difficult to distinguish &ldquo;there are a lot of arbitrary barriers preventing my understanding&rdquo; from &ldquo;I&rsquo;m lazy and couldn&rsquo;t be bothered to try hard enough&rdquo;<sup id="fnref3"><a href="#fn3" rel="footnote">3</a></sup>.</p>
+
+<p>Establishing this narrow view of &ldquo;simplicity&rdquo; as wholly separate from &ldquo;easy to use&rdquo; prevents us from being able to optimize for ease-of-use, aka developer experience.</p>
+
+<p>In my talk I called the Clojureland ecosystem &ldquo;user-hostile&rdquo;. This contrasts sharply with the community, who are by and large very sweet and personable and well-meaning. </p>
+
+<p>Undoubtedly, I chafed because Clojureland tools were <strong>unfamiliar</strong>, yes. But past a certain point they were also <em>unfriendly</em>, because in their error messages and affordances and failure conditions they assumed a rather high tolerance for digging through code and high-level knowledge of Clojure&rsquo;s concepts and idioms and runtime quirks.</p>
+
+<p>So we went back to Ruby, which we knew really well.</p>
+
+<p>But here is the rub: Ruby&rsquo;s tooling is <a href="http://www.virtuouscode.com/2015/07/08/ruby-is-defined-by-terrible-tools/">terrible</a>. The interpreter is slow and finicky and it used to leak memory like a sieve. There is no static introspection, the meta programming features are basic and slow and it is trivially easy to bleed state and complect the hell out of your programs. It was great compared to Java or PHP in 2004. In 2017, the world is different.</p>
+
+<p>But, do you know what Ruby really has got going for it? Ruby is <a href="http://www.artima.com/intv/rubyP.html">designed to be fun and make programmers happy</a>. I think this is such a dope design philosophy that I&rsquo;ll go one step further:</p>
+
+<h2 id="all-programming-languages-should-strive-to-be-fun-and-make-programmers-happy">All programming languages should strive to be fun and make programmers happy.</h2>
+
+<p>I think this is by far the most important contribution Ruby brought to programming, and as Ruby has stabilized and become less exciting and people have moved on, it has been incredible to <a href="https://twitter.com/sarahmei/status/849065056746827776">ex-Rubyists bring these values with them to their new communities</a>.</p>
+
+<p>You can see this attitude in Elixir, in Rust, in Ember. Our tools should help you achieve success. Our tools should get out of the way. Our tools should Just Work.</p>
+
+<p>The truth is, programming can be complex, but it is also often needlessly hard. Programmers are the end-users of programming tools, and to ignore their experience using them is just plain bad design. We should strive to be as maximally welcoming as we can, for every level of experience.</p>
+
+<div class="footnotes">
+<hr>
+<ol>
+
+<li id="fn1">
+<p>I called it &ldquo;abuse&rdquo; elsewhere, which is maybe a bit much. People were mostly just somewhat rude. It&rsquo;s just not&hellip; pleasant to have a bunch of people calling you incompetent over and over again ¯\_(ツ)_/¯.&nbsp;<a href="#fnref1" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn2">
+<p>I am exaggerating and bear no ill will ;).&nbsp;<a href="#fnref2" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn3">
+<p>By far the most common response to my talk was, but are you sure you tried hard enough? If you keep trying, you&rsquo;ll get it. Just work harder at it. There&rsquo;s a hidden insinuation: maybe you&rsquo;re not smart enough to get it. I&rsquo;d like to think that I am.&nbsp;<a href="#fnref3" rev="footnote">&#8617;</a></p>
+</li>
+
+</ol>
+</div>
+
+
+      </div>
+    </div>
+  </section>
+
+
+    <script type="text/javascript">
+ /* <![CDATA[ */
+ var google_conversion_id = 928841383;
+ var google_custom_params = window.google_tag_params;
+ var google_remarketing_only = true;
+ /* ]]> */
+</script>
+
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+<noscript>
+    <div style="display:inline;">
+        <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/928841383/?value=0&amp;guid=ON&amp;script=0"/>
+    </div>
+</noscript>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61163522-3', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+<!-- Twitter universal website tag code -->
+<script>
+ !function(e,n,u,a){e.twq||(a=e.twq=function(){a.exe?a.exe.apply(a,arguments):
+                                               a.queue.push(arguments);},a.version='1',a.queue=[],t=n.createElement(u),
+                            t.async=!0,t.src='//static.ads-twitter.com/uwt.js',s=n.getElementsByTagName(u)[0],
+                            s.parentNode.insertBefore(t,s))}(window,document,'script');
+ // Insert Twitter Pixel ID and Standard Event data below
+ twq('init','nve06');
+ twq('track','PageView');
+</script>
+<!-- End Twitter universal website tag code -->
+
+<!-- Facebook Pixel Code -->
+<script>
+ !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+                                                             n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+   n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+   t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+                                                                          document,'script','https://connect.facebook.net/en_US/fbevents.js');
+ fbq('init', '1378208595579873'); // Insert your pixel ID here.
+ fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+            src="https://www.facebook.com/tr?id=1378208595579873&ev=PageView&noscript=1"
+          /></noscript>
+<!-- DO NOT MODIFY -->
+<!-- End Facebook Pixel Code -->
+
+    
+  </body>
+</html>

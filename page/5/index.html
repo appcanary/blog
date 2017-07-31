@@ -22,13 +22,233 @@
         <p>
           <b><a href="https://appcanary.com">Appcanary</a></b> makes sure you never run vulnerable software on your servers.
           <br/>
-          Like our blog? Subscribe to our <a href="https://appcanary.us10.list-manage.com/subscribe?u=303b378f377508300c0b5469a&id=dc58e8f56f">newsletter</a>.<br/>
+          Like our blog? Subscribe to our <a href="https://appcanary.us10.list-manage.com/subscribe?u=303b378f377508300c0b5469a&id=dc58e8f56f">newsletter</a> or <a href="https://podcast.appcanary.com">podcast</a>.<br/>
           Browse the <a href="/archive.html">archive</a>, or follow us on <a href="https://twitter.com/appcanary">twitter</a>, <a href="https://github.com/appcanary">github</a> or <a href="/feed.xml">rss</a>.
         </p>
       </div>
     </div>
 
       <section>
+    <div class="entry">
+      <div class="post">
+        <h1 class="title"><a href="/2016/datomic-intro-talk.html">A Gentle Intro to Datomic</a></h1>
+
+        <div class="published-tags">By <span class="author"><a href="/author/max-veytsman.html">Max Veytsman</a></span> |
+          <span class="date">February 09, 2016</span> on <a href="/tags/clojure.html">Clojure</a>, <a href="/tags/datomic.html">Datomic</a>, <a href="/tags/programming.html">Programming</a>, <a href="/tags/talks.html">Talks</a></div>
+
+        <p>We use <a href="http://www.datomic.com/">Datomic</a> as one of our datastores, and have been really enjoying it so far.</p>
+
+<p>I gave a talk to my local <a href="http://www.meetup.com/Clojure-Toronto/">Clojure meetup</a> that provided a gentle introduction to Datomic and highlighted some cool features.</p>
+
+<p>The slides are below:</p>
+
+<script async="" class="speakerdeck-embed" data-id="dd426e5c924f44eb9050c554137ae030" data-ratio="1.77777777777778" src="//speakerdeck.com/assets/embed.js"></script>
+
+
+      </div>
+      <hr>
+    </div>
+  </section>
+  <section>
+    <div class="entry">
+      <div class="post">
+        <h1 class="title"><a href="/2016/state-management-downtime.html">How being lazy about state management in Clojure caused us downtime</a></h1>
+
+        <div class="published-tags">By <span class="author"><a href="/author/max-veytsman.html">Max Veytsman</a></span> |
+          <span class="date">February 02, 2016</span> on <a href="/tags/clojure.html">Clojure</a>, <a href="/tags/programming.html">Programming</a>, <a href="/tags/developer-diary.html">Developer Diary</a>, <a href="/tags/bugs.html">Bugs</a></div>
+
+        <p>On November 10th, we suffered some downtime as our backend application mysteriously crashed and had to be restarted. After looking at our process monitoring service, I found a very suspicious graph:</p>
+
+<p><img src="/images/system.process.threads.png" alt="image" /></p>
+
+<p>Somehow, we managed to spin up more then 30,000 threads right before the application crashed. This was very likely the cause of the failure, but how did it happen?</p>
+
+<p>An easy way to get an idea of where a thread leak is coming from is to look at the thread names. In Java you can do this with <code>jstack -l $PID</code>.</p>
+
+<p>To get a list of all thread names of a Java application sorted by most common name, you can do:</p>
+<pre class="highlight plaintext"><code>jstack -l $PID | grep daemon |  awk '{ print $1 }' | sort | uniq -c |   sort -nr
+</code></pre>
+
+<p>Which on our end yielded something like this:</p>
+<pre class="highlight plaintext"><code>  30000 "Analytics"
+      2 "Datomic
+      2 "C2
+      1 "worker-4"
+      1 "worker-3"
+      1 "worker-2"
+      1 "worker-1"
+      1 "Timer-0"
+      1 "Thread-5"
+      1 "Thread-4
+      1 "Thread-3
+      1 "Thread-2
+      1 "Thread-1
+      1 "Thread-0
+</code></pre>
+
+<p>Hmm&hellip;</p>
+
+<h3 id="background">Background</h3>
+
+<p>Our backend is written in Clojure and we use Stuart Sierra&rsquo;s <a href="https://github.com/stuartsierra/component">component</a> framework to manage most of our application&rsquo;s state and lifecycle. Normally this should prevent runaway threads, but unfortunately for us our analytics client&rsquo;s state was managed independently of the framework. To explain why, I need to first delve a little in to how component works.</p>
+
+<p>Regardless of how beautiful and functional it may be, any application that talks to the outside world will need to manage some state representing these external resources. We need to manage our database connections, our clients for external APIs, our background workers, etc.</p>
+
+<p>One way to deal with this in Clojureland is to create a global singleton object for representing each stateful piece, possibly wrapped in an <code>atom</code>. This feels lacking, though. You still need a way to initialize all these singletons on startup, and having mutable singletons everywhere goes against what I would consider good Clojure style.</p>
+
+<p>Component solves this problem by implementing dependency injection in a Clojurelike way. You define a graph that represents each stateful piece, how they depend on each other, and how each piece starts and stops. On system start, component boots each piece in the right order, passing along references to dependencies when they&rsquo;re needed.</p>
+
+<p>For example, Appcanary&rsquo;s dependency graph looks (something) like this:</p>
+<pre class="highlight clojure"><code><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">canary-system</span><span class="w">
+  </span><span class="p">[]</span><span class="w">
+  </span><span class="c1">;;Initialize logging
+</span><span class="w">  </span><span class="p">(</span><span class="nf">component/system-map</span><span class="w">
+   </span><span class="no">:datomic</span><span class="w"> </span><span class="p">(</span><span class="nf">new-datomic</span><span class="w"> </span><span class="p">(</span><span class="nf">env</span><span class="w"> </span><span class="no">:datomic-uri</span><span class="p">))</span><span class="w">
+   </span><span class="no">:scheduler</span><span class="w"> </span><span class="p">(</span><span class="nf">new-scheduler</span><span class="p">)</span><span class="w">
+   </span><span class="no">:mailer</span><span class="w"> </span><span class="p">(</span><span class="nf">component/using</span><span class="w">  </span><span class="p">(</span><span class="nf">new-mailer</span><span class="w"> </span><span class="p">(</span><span class="nf">env</span><span class="w"> </span><span class="no">:mandrill-key</span><span class="p">))</span><span class="w">
+                             </span><span class="p">[</span><span class="no">:datomic</span><span class="w"> </span><span class="no">:scheduler</span><span class="p">])</span><span class="w">
+   </span><span class="no">:web-server</span><span class="w"> </span><span class="p">(</span><span class="nf">component/using</span><span class="w"> </span><span class="p">(</span><span class="nf">new-web-server</span><span class="w"> </span><span class="p">(</span><span class="nf">env</span><span class="w"> </span><span class="no">:http-ip</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nf">Integer.</span><span class="w"> </span><span class="p">(</span><span class="nf">env</span><span class="w"> </span><span class="no">:http-port</span><span class="p">))</span><span class="w"> </span><span class="n">canary-api</span><span class="p">)</span><span class="w">
+                             </span><span class="p">[</span><span class="no">:datomic</span><span class="p">])))</span><span class="w">
+</span></code></pre>
+
+<p>The <code>mailer</code> depends on <code>datomic</code> and the <code>scheduler</code>, the web server depends on <code>datomic</code>, and both <code>datomic</code> and the <code>scheduler</code> don&rsquo;t depend on anything.</p>
+
+<p>Like all the other components, the <code>new-datomic</code> function is a constructor for a record that knows how to start and stop itself. On system start, all the components are started, and the dependencies are filled in.</p>
+
+<h3 id="sometimes-component-feels-like-overkill">Sometimes component feels like overkill</h3>
+
+<p>Component is great, but it didn&rsquo;t fit our analytics engine usecase. We use <a href="https://segment.io">segment.io</a> to handle our app analytics, and we needed to maintain a client to talk to it. An analytics event can potentially be called from anywhere in the app, but it&rsquo;s cumbersome to pass an analytics client reference to every component, and into every analytics call. If every component depends on something, it feels like maybe it should be a global singleton. Futhermore, I don&rsquo;t want my components to know much about the analytics client at all; I just want them to know how to trigger events.</p>
+
+<p>What I want to have is an analytics namespace which contains all the events I may want to trigger, and wraps the client inside all of them. This lets me  do something like <code>(analytics/user-added-server user)</code> inside of the code that handles server creation.</p>
+
+<p>(One thing to note is that while there is a clojure segment.io <a href="https://github.com/ardoq/analytics-clj">client</a>, it&rsquo;s based off a 1.x release of the underlying <a href="https://github.com/segmentio/analytics-java">java library</a>, while we wanted to use features only available in the 2.0 release. Because of that, I wrote an analytics namespace that called the java library directly).</p>
+
+<p>The first pass of creating the client looked something like this:</p>
+<pre class="highlight clojure"><code><span class="p">(</span><span class="nf">defonce</span><span class="w"> </span><span class="n">client</span><span class="w">
+  </span><span class="p">(</span><span class="nf">.build</span><span class="w"> </span><span class="p">(</span><span class="nf">Analytics/builder</span><span class="w"> </span><span class="p">(</span><span class="nf">env</span><span class="w"> </span><span class="no">:segment-api-key</span><span class="p">))))</span><span class="w">
+
+</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">track</span><span class="w">
+  </span><span class="s">"Wrapper for analytics/track"</span><span class="w">
+  </span><span class="p">[</span><span class="n">id</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="n">properties</span><span class="w"> </span><span class="p">{</span><span class="no">:keys</span><span class="w"> </span><span class="p">[</span><span class="n">timestamp</span><span class="p">]</span><span class="w"> </span><span class="no">:as</span><span class="w"> </span><span class="n">options</span><span class="p">}]</span><span class="w">
+  </span><span class="p">(</span><span class="nb">when</span><span class="w"> </span><span class="p">(</span><span class="nf">production?</span><span class="p">)</span><span class="w">
+    </span><span class="p">(</span><span class="nf">.enqueue</span><span class="w"> </span><span class="n">client</span><span class="w">
+              </span><span class="c1">;; Java interop to build the analytics message here)))
+</span></code></pre>
+
+<p>There&rsquo;s only one problem with the above code: the segment api key is loaded from an environment variable. </p>
+
+<p>We deploy appcanary in a pretty standard way &ndash; we compile an uberjar and rsync it to the server. API keys live in environment variables, and the production API key is only going to live on the production server. So, at compile time, we have no way of knowing what the segment api key is. As a result, the analytics client needs to be built at runtime and not compile time in order to have access to the api key.</p>
+
+<h3 id="this-is-where-i-get-lazy">This is where I get lazy</h3>
+
+<p>The obvious thing to do to build the analytics client at runtime is to wrap it as a function:</p>
+<pre class="highlight clojure"><code><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">client</span><span class="w">
+  </span><span class="p">[]</span><span class="w">
+  </span><span class="p">(</span><span class="nf">.build</span><span class="w"> </span><span class="p">(</span><span class="nf">Analytics/builder</span><span class="w"> </span><span class="p">(</span><span class="nf">env</span><span class="w"> </span><span class="no">:segment-api-key</span><span class="p">))))</span><span class="w">
+
+</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">track</span><span class="w">
+  </span><span class="s">"Wrapper for analytics/track"</span><span class="w">
+  </span><span class="p">[</span><span class="n">id</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="n">properties</span><span class="w"> </span><span class="p">{</span><span class="no">:keys</span><span class="w"> </span><span class="p">[</span><span class="n">timestamp</span><span class="p">]</span><span class="w"> </span><span class="no">:as</span><span class="w"> </span><span class="n">options</span><span class="p">}]</span><span class="w">
+  </span><span class="p">(</span><span class="nb">when</span><span class="w"> </span><span class="p">(</span><span class="nf">production?</span><span class="p">)</span><span class="w">
+    </span><span class="p">(</span><span class="nf">.enqueue</span><span class="w"> </span><span class="p">(</span><span class="nf">client</span><span class="p">)</span><span class="w">
+              </span><span class="c1">;; Java interop to build the analytics message here)))
+</span></code></pre>
+
+<p>I saw three downsides here:</p>
+
+<ol>
+<li>We&rsquo;ll lose some efficiency from not reusing the TCP connection to segment.io</li>
+<li>It&rsquo;s possible that we&rsquo;ll have to waste a bit of time authenticating the analytics client on each call</li>
+<li>We&rsquo;ll spawn an extra client object per call, which will be garbage collected right away as it goes out of scope immediately after the <code>track</code> call</li>
+</ol>
+
+<p>The above three things aren&rsquo;t intrinsically bad, and it seemed like optimizing the performance of your analytics engine early on was a wasteful thing to do in a fast-paced startup environment.</p>
+
+<p>What I didn&rsquo;t consider is that the java library uses <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ExecutorService.html"><code>ExecutorService</code></a> to manage a threadpool, and <code>shutdown</code> must be called explicitly. Otherwise, the threads are put on hold instead of being marked for GC (see also <a href="http://stackoverflow.com/questions/16122987/reason-for-calling-shutdown-on-executorservice">this stackoverflow</a>).</p>
+
+<p>The fact that each client spawns a thread that isn&rsquo;t cleaned up by garbage collection was not <a href="https://segment.com/docs/libraries/java/">documented</a> unfortunately.</p>
+
+<h3 id="outcome">Outcome</h3>
+
+<p>Every analytics call we made spawned another threadpool, which caused the thread count to grow proportionally with user activity. We hit 40,000 threads before our application crashed.</p>
+
+<h3 id="tl-dr">TL;DR:</h3>
+
+<p>We spawned a new client object on every analytics call, not realizing that the underlying library uses a thread pool that&rsquo;s not shutdown on garbage collection. This is how we ended up killing the server by hitting 40,000 threads</p>
+
+
+      </div>
+      <hr>
+    </div>
+  </section>
+  <section>
+    <div class="entry">
+      <div class="post">
+        <h1 class="title"><a href="/2016/maven-central-security.html">Maven Central Security</a></h1>
+
+        <div class="published-tags">By <span class="author"><a href="/author/max-veytsman.html">Max Veytsman</a></span> |
+          <span class="date">January 29, 2016</span> on <a href="/tags/java.html">Java</a>, <a href="/tags/maven.html">Maven</a>, <a href="/tags/clojure.html">Clojure</a>, <a href="/tags/programming.html">Programming</a>, <a href="/tags/security.html">Security</a>, <a href="/tags/talks.html">Talks</a></div>
+
+        <p>The security of your package manager is very important to us at appcanary, and it’s important to make sure the packages you’re downloading are secure in transit.</p>
+
+<p>Back in the summer of 2014, I discovered that <a href="http://search.maven.org/">Maven Central</a>  wasn’t using TLS or any signature verification when serving up java packages.</p>
+
+<p>I gave a talk at <a href="http://bangbangcon.com/index.html">!!con 2015</a> about what I did to help convince them to start using encryption.</p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/6NdLZl16OkA" frameborder="0" allowfullscreen></iframe>
+
+
+      </div>
+      <hr>
+    </div>
+  </section>
+  <section>
+    <div class="entry">
+      <div class="post">
+        <h1 class="title"><a href="/2015/hello-appcanary.html">Hello Appcanary</a></h1>
+
+        <div class="published-tags">By <span class="author"><a href="/author/team-appcanary.html">Team Appcanary</a></span> |
+          <span class="date">October 26, 2015</span> on <a href="/tags/retrospective.html">Retrospective</a></div>
+
+        <p>Dear friends,&nbsp;</p>
+
+<p><strong>tl;dr</strong> We launched <a href="https://appcanary.com">Appcanary</a>, we’re shutting down Gemcanary Dec 31st 2015, we have great plans for the future, we love you.</p>
+
+<p><img src="/images/gemcanary_comic.jpg" alt="image" /></p>
+
+<p>We’ve been busy. We got to spend the summer in sunny California attending Y Combinator. We learned a lot, it was well worth it.</p>
+
+<p>During the summer, we launched the first version of our product, <a href="https://appcanary.com">Appcanary</a>. We help companies to track the security of the software components they rely on. Simply run our agent on your servers, and keep tabs on the packages on your systems. It’s pretty cool! There are a lot of moving parts.</p>
+
+<p>In the meantime, we courted a small cadre of investors who believe in our ideas about the future. We’re pretty excited for what we’ll be able to do over the next couple of years.</p>
+
+<p>We also released <a href="https://isitvulnerable.com">isitvulnerable.com</a>. It’s a free tool that lets you drag and drop your gemfile and check for vulnerable dependencies. </p>
+
+<p>Once, we even managed to go to the beach.</p>
+
+<p><a href="https://instagram.com/p/5Y8-dqSz3u"></a>
+<img src="/images/big_sur.jpg" alt="image" /></p>
+
+<p>In a nutshell, we want to change the way software and operation engineers engage with security. Right now people largely don’t, or have to deal with lots of snakeoil. It’s hard to know what to think. We think we can drastically improve how we keep our systems safe. We have lots of things to share with you soon!</p>
+
+<p>For now though, we’d like to announce that we’re sunsetting&nbsp;<a href="https://gemcanary.com">Gemcanary</a>, the free, Ruby-only, Github-only service we created in 2013. The service will shut down December 31st, 2015.&nbsp;</p>
+
+<p>We started Gemcanary all the way back in February 2013. Things were different back then; we ran a fledgeling consultancy, Edward Snowden was about to book a flight to Hong Kong, and Heartbleed was still hidden away in our openssls.</p>
+
+<p>We’ve since spent a lot of time breaking and building apps. We became a real startup. And, frankly, we think our customers will be better served by not requiring such tight integration with Github.</p>
+
+<p>If you enjoyed the service, you’ll be happy to note that we provide the same value and more via&nbsp;<a href="https://appcanary.com">Appcanary</a>. While Gemcanary could never tell you about Heartbleed, Appcanary will let you keep tabs on all of your infrastructure’s dependencies.</p>
+
+<p>Regards,</p>
+
+<p><a href="https://twitter.com/phillmv">@phillmv</a> and <a href="https://twitter.com/mveytsman">@mveytsman</a>. Comic by <a href="https://twitter.com/0sn">Nick Wolfe</a>.</p>
+
+
+      </div>
+      <hr>
+    </div>
+  </section>
+  <section>
     <div class="entry">
       <div class="post">
         <h1 class="title"><a href="/2015/hello-world.html">Hello World</a></h1>

