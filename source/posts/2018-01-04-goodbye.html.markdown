@@ -1,0 +1,68 @@
+---
+title: Goodbye Appcanary. Hello GitHub!
+author: team
+date: 2018-01-04
+layout: post
+published: false
+---
+
+From when we cofounded [Rubysec](https://www.rubysec.com), to building (the now defunct) [Gemcanary](2015/hello-appcanary.html), to [starting Appcanary](https://blog.appcanary.com/2015/hello-world.html), our goal from the beginning was to improve the world’s security by preventing the use of vulnerable software. At the time, this required placing a bet on building a certain kind of business, and for a variety of reasons that bet didn’t work out.
+
+However, this doesn't mean that we're giving up on the mission!
+
+Today, we’re excited to announce that we’re going to be able to build tools that impact almost every software developer on the planet — we’re joining GitHub. There, we’ll be working on expanding GitHub’s security tooling, like their recently announced [vulnerable dependency alerting](https://github.com/blog/2470-introducing-security-alerts-on-github).
+
+This means that we will be shutting Appcanary down. We've stopped accepting new signups, and in order to help our customers transition, we will officially stop operating the service on **June 1st, 2018**.
+
+To our customers, we are sorry for the inconvenience and we would like to thank you for your trust over the past two and a half years. We’d also like to thank our investors, advisors and friends who have supported us.
+
+We’ll have more to say when the time comes. We look forward to our paths crossing again via our continued work on the GitHub platform.
+
+If you are interested in learning more about GitHub, please visit: 
+
+* [GitHub.com](https://github.com)
+* [GitHub Security Alerts](https://github.com/blog/2470-introducing-security-alerts-on-github)
+
+Thank you,
+
+Max Veytsman and Phill Mendonça-Vieira
+
+<hr>
+
+## Questions you may have:
+
+**What is happening to the Appcanary products - API, Agent, and Monitor alerting?**
+
+All three products will be sunsetting on **June 1st, 2018**.
+
+If you are currently a paying customer, you can continue to use and pay for the service until then. You may also, of course, cancel the service at any time by going to [the billing page](https://appcanary.com/billing) and disabling the agent from your servers.
+
+We are not going to be accepting any new customers for these products.
+
+**What is happening the the public vulnerability page?**
+
+[The vulnerability browser](https://appcanary.com/vulns) will continue to operate until **June 1st, 2018**.
+
+**What is happening to isitvulnerable.com?**
+
+It will also continue to work until **June 1st, 2018**, although we recommend you use [Github Security Alerts](https://github.com/blog/2470-introducing-security-alerts-on-github) instead.
+
+**Wait, does this mean that GitHub will know about my security vulnerabilities?**
+
+No. Appcanary will not be sharing any data that can be used to identify our customers' vulnerabilities with GitHub.
+
+**Who do you recommend using instead of Appcanary?**
+
+Ruby coverage is live in GitHub’s Security Alerts feature. Today you can get PHP coverage from security partners like Gemnasium (and soon Snyk) in the [GitHub Marketplace](https://github.com/marketplace).
+
+For Ubuntu, Debian, CentOS, Amazon Linux, and Alpine Linux coverage, we recommend [Spacewalk](https://spacewalkproject.github.io/), [Landscape](https://landscape.canonical.com/), [CoreOS Clair](https://coreos.com/clair/docs/latest/), [Nessus Agents](https://www.tenable.com/products/nessus/nessus-agents), or [ThreatStack](https://www.threatstack.com/).
+
+**What is GitHub’s Security Alerts offering?**
+
+GitHub currently sends alerts to public repositories and private repositories that have opted in about publicly disclosed CVEs for Javascript and Ruby. GitHub is soon adding Python support and expanding vulnerability coverage to include more of Appcanary’s database.
+
+
+
+**Who do we contact for product support until the product sunsets?**
+
+You can still reach us via the normal support channels or by emailing hello@appcanary.com
