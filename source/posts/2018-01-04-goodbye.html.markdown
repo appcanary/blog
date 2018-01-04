@@ -3,7 +3,7 @@ title: Goodbye Appcanary. Hello GitHub!
 author: team
 date: 2018-01-04
 layout: post
-published: false
+published: true
 ---
 
 <meta name="twitter:card" content="summary"/>
