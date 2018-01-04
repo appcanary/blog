@@ -6,9 +6,12 @@ layout: post
 published: false
 ---
 
+<img src="/images/appcanary-joins-github.png">
+
 From when we cofounded [Rubysec](https://www.rubysec.com), to building (the now defunct) [Gemcanary](2015/hello-appcanary.html), to [starting Appcanary](https://blog.appcanary.com/2015/hello-world.html), our goal from the beginning was to improve the world’s security by preventing the use of vulnerable software. At the time, this required placing a bet on building a certain kind of business, and for a variety of reasons that bet didn’t work out.
 
 However, this doesn't mean that we're giving up on the mission!
+
 
 Today, we’re excited to announce that we’re going to be able to build tools that impact almost every software developer on the planet — we’re joining GitHub. There, we’ll be working on expanding GitHub’s security tooling, like their recently announced [vulnerable dependency alerting](https://github.com/blog/2470-introducing-security-alerts-on-github).
 
