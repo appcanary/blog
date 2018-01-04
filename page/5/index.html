@@ -31,6 +31,128 @@
       <section>
     <div class="entry">
       <div class="post">
+        <h1 class="title"><a href="/2016/two-new-apis.html">Two new APIs from Appcanary</a></h1>
+
+        <div class="published-tags">By <span class="author"><a href="/author/max-veytsman.html">Max Veytsman</a></span> |
+          <span class="date">April 06, 2016</span> on <a href="/tags/announcements.html">Announcements</a>, <a href="/tags/product.html">Product</a></div>
+
+        <p>After the success of our <a href="http://blog.appcanary.com/2016/new-api-centos-support.html">check</a> API, we found that our users told us:</p>
+
+<blockquote>
+<p>&ldquo;I love your API so much! But can I use it register the packages my app uses and get emailed if new vulnerabilities that affect me come out? Oh, and it would be nice if I could pragmatically query the servers I have agents running on too!&rdquo;</p>
+</blockquote>
+
+<p>So we went ahead and built both.</p>
+
+<h2 id="the-monitor-api">The Monitor API</h2>
+
+<p>The &ldquo;Monitor&rdquo; API lets you register a Gemfile or an Ubuntu/CentOS package list to be emailed when new vulnerabilities are discovered. It like what our agent does, but in situations where it doesn&rsquo;t make sense like when you use Docker or deploy on a PaaS like Heroku.</p>
+
+<p>You can register a new monitor by:</p>
+<pre class="highlight shell"><code>curl -H <span class="s2">"Authorization: Token YOURTOKENHERE"</span> <span class="se">\</span>
+     -X POST -F <span class="nv">file</span><span class="o">=</span>@./Gemfile.lock <span class="se">\</span>
+     https://appcanary.com/api/v2/monitors/my-great-app?platform<span class="o">=</span>ruby
+</code></pre>
+
+<p>and you&rsquo;ll get a response like:</p>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"monitor"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"attributes"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"my-server"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"uuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"56eac124-35c2-49bd-ab02-45de56c03ef4"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"vulnerable"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<p>And, you&rsquo;ll be emailed about any vulnerabilities that affect your app as soon as we find out about them!</p>
+
+<p>You can also list, inspect, or delete monitors via the API. More information <a href="https://appcanary.com/docs#create-monitor">here</a>.</p>
+
+<h2 id="the-server-api">The Server API</h2>
+
+<p>The &ldquo;Server&rdquo; API allows you to navigate the servers you have the Appcanary agent running on via API, and list any vulnerabilities that affect them!</p>
+
+<p>I can see the servers I have agents running on with:
+<code>bash
+curl -H &quot;Authorization: Token YOURTOKENHERE&quot; \
+      https://appcanary.com/api/v2/servers
+</code></p>
+
+<p>and you&rsquo;ll get a response like:</p>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"server"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"attributes"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"server1"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"uuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"55a5baeb-2ad4-4787-8784-a062d254900e"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"hostname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"server1"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"last-heartbeat-at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-03-27T03:33:02.185Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"vulnerable"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"apps"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"app"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"attributes"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+              </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+              </span><span class="nt">"path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/var/lib/dpkg/status"</span><span class="p">,</span><span class="w">
+              </span><span class="nt">"uuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"55a5baec-3e5c-4cca-832c-06aaa36418f6"</span><span class="p">,</span><span class="w">
+              </span><span class="nt">"vulnerable"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"app"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"attributes"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+              </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+              </span><span class="nt">"path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/var/www/myapp/current/Gemfile.lock"</span><span class="p">,</span><span class="w">
+              </span><span class="nt">"uuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"55a5baec-027d-4618-b8de-12638281f34c"</span><span class="p">,</span><span class="w">
+              </span><span class="nt">"vulnerable"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+          </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"server"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"attributes"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"server2"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"uuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"560b0e75-1317-481c-98bb-15e6ae5978b6"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"hostname"</span><span class="p">:</span><span class="w"> </span><span class="s2">"database"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"last-heartbeat-at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-03-08T00:21:31.105Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"vulnerable"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"apps"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"app"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"attributes"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+              </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+              </span><span class="nt">"path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/var/lib/dpkg/status"</span><span class="p">,</span><span class="w">
+              </span><span class="nt">"uuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"560b0e77-0a26-41fd-bc35-38b5aac33709"</span><span class="p">,</span><span class="w">
+              </span><span class="nt">"vulnerable"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+          </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<p>You can also inspect or delete any server with an agent on it via the API.</p>
+
+<p>Our API fully supports <strong>Ruby</strong>, <strong>Ubuntu</strong>, and <strong>CentOS 7</strong>! Learn more about how to use it by visiting <a href="https://appcanary.com/docs">the docs page</a>.</p>
+
+<p>You can <a href="https://appcanary.com/sign_up">sign up</a> for Appcanary to use our APIs today!</p>
+
+
+      </div>
+      <hr>
+    </div>
+  </section>
+  <section>
+    <div class="entry">
+      <div class="post">
         <h1 class="title"><a href="/2016/new-api-centos-support.html">Hello, new Appcanary API and CentOS support!</a></h1>
 
         <div class="published-tags">By <span class="author"><a href="/author/max-veytsman.html">Max Veytsman</a></span> |
@@ -337,27 +459,6 @@
 <h3 id="tl-dr">TL;DR:</h3>
 
 <p>We spawned a new client object on every analytics call, not realizing that the underlying library uses a thread pool that&rsquo;s not shutdown on garbage collection. This is how we ended up killing the server by hitting 40,000 threads</p>
-
-
-      </div>
-      <hr>
-    </div>
-  </section>
-  <section>
-    <div class="entry">
-      <div class="post">
-        <h1 class="title"><a href="/2016/maven-central-security.html">Maven Central Security</a></h1>
-
-        <div class="published-tags">By <span class="author"><a href="/author/max-veytsman.html">Max Veytsman</a></span> |
-          <span class="date">January 29, 2016</span> on <a href="/tags/java.html">Java</a>, <a href="/tags/maven.html">Maven</a>, <a href="/tags/clojure.html">Clojure</a>, <a href="/tags/programming.html">Programming</a>, <a href="/tags/security.html">Security</a>, <a href="/tags/talks.html">Talks</a></div>
-
-        <p>The security of your package manager is very important to us at appcanary, and it’s important to make sure the packages you’re downloading are secure in transit.</p>
-
-<p>Back in the summer of 2014, I discovered that <a href="http://search.maven.org/">Maven Central</a>  wasn’t using TLS or any signature verification when serving up java packages.</p>
-
-<p>I gave a talk at <a href="http://bangbangcon.com/index.html">!!con 2015</a> about what I did to help convince them to start using encryption.</p>
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/6NdLZl16OkA" frameborder="0" allowfullscreen></iframe>
 
 
       </div>

@@ -5,7 +5,89 @@
   <id>https://blog.appcanary.com</id>
   <link href="https://blog.appcanary.com"/>
   <link href="https://blog.appcanary.com/feed.xml" rel="self"/>
-  <updated>2017-09-17T20:00:00-04:00</updated>
+  <updated>2018-01-03T19:00:00-05:00</updated>
+  <entry>
+    <title>Goodbye Appcanary. Hello GitHub!</title>
+    <link rel="alternate" href="https://blog.appcanary.com/2018/goodbye.html"/>
+    <id>https://blog.appcanary.com/2018/goodbye.html</id>
+    <published>2018-01-03T19:00:00-05:00</published>
+    <updated>2018-01-04T07:46:35-05:00</updated>
+    <author>
+      <name>Team Appcanary</name>
+    </author>
+    <content type="html">&lt;p&gt;&lt;meta name="twitter:card" content="summary"/&gt;
+&lt;meta name="twitter:site" content="@appcanary" /&gt;
+&lt;meta name="twitter:title" content="Goodbye Appcanary. Hello GitHub!" /&gt;
+&lt;meta name="twitter:description" content="Today, we’re excited to announce that we’re going to be able to build tools that impact almost every software developer on the planet — we’re joining GitHub." /&gt;
+&lt;meta name="twitter:image" content="https://blog.appcanary.com/images/appcanary-joins-github-yellow.png" /&gt;
+&lt;meta property="og:title" content="Goodbye Appcanary. Hello GitHub!" /&gt;
+&lt;meta property="og:description" content="Today, we’re excited to announce that we’re going to be able to build tools that impact almost every software developer on the planet — we’re joining GitHub. " /&gt;
+&lt;meta property="og:image" content="https://blog.appcanary.com/images/appcanary-joins-github-yellow.png" /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/images/appcanary-joins-github.png"&gt;&lt;/p&gt;
+
+&lt;p&gt;From when we cofounded &lt;a href="https://www.rubysec.com"&gt;Rubysec&lt;/a&gt;, to building (the now defunct) &lt;a href="2015/hello-appcanary.html"&gt;Gemcanary&lt;/a&gt;, to &lt;a href="https://blog.appcanary.com/2015/hello-world.html"&gt;starting Appcanary&lt;/a&gt;, our goal from the beginning was to improve the world’s security by preventing the use of vulnerable software. At the time, this required placing a bet on building a certain kind of business, and for a variety of reasons that bet didn’t work out.&lt;/p&gt;
+
+&lt;p&gt;However, this doesn&amp;rsquo;t mean that we&amp;rsquo;re giving up on the mission!&lt;/p&gt;
+
+&lt;p&gt;Today, we’re excited to announce that we’re going to be able to build tools that impact almost every software developer on the planet — we’re joining GitHub. There, we’ll be working on expanding GitHub’s security tooling, like their recently announced &lt;a href="https://github.com/blog/2470-introducing-security-alerts-on-github"&gt;vulnerable dependency alerting&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;This means that we will be shutting Appcanary down. We&amp;rsquo;ve stopped accepting new signups, and in order to help our customers transition, we will officially stop operating the service on &lt;strong&gt;June 1st, 2018&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;To our customers, we are sorry for the inconvenience and we would like to thank you for your trust over the past two and a half years. We’d also like to thank our investors, advisors and friends who have supported us.&lt;/p&gt;
+
+&lt;p&gt;We’ll have more to say when the time comes. We look forward to our paths crossing again via our continued work on the GitHub platform.&lt;/p&gt;
+
+&lt;p&gt;If you are interested in learning more about GitHub, please visit: &lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://github.com"&gt;GitHub.com&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/blog/2470-introducing-security-alerts-on-github"&gt;GitHub Security Alerts&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Thank you,&lt;/p&gt;
+
+&lt;p&gt;Max Veytsman and Phill Mendonça-Vieira&lt;/p&gt;
+
+&lt;p&gt;&lt;hr&gt;&lt;/p&gt;
+
+&lt;h2 id="questions-you-may-have"&gt;Questions you may have:&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;What is happening to the Appcanary products - API, Agent, and Monitor alerting?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;All three products will be sunsetting on &lt;strong&gt;June 1st, 2018&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;If you are currently a paying customer, you can continue to use and pay for the service until then. You may also, of course, cancel the service at any time by going to &lt;a href="https://appcanary.com/billing"&gt;the billing page&lt;/a&gt; and disabling the agent from your servers.&lt;/p&gt;
+
+&lt;p&gt;We are not going to be accepting any new customers for these products.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;What is happening the the public vulnerability page?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://appcanary.com/vulns"&gt;The vulnerability browser&lt;/a&gt; will continue to operate until &lt;strong&gt;June 1st, 2018&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;What is happening to isitvulnerable.com?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;It will also continue to work until &lt;strong&gt;June 1st, 2018&lt;/strong&gt;, although we recommend you use &lt;a href="https://github.com/blog/2470-introducing-security-alerts-on-github"&gt;Github Security Alerts&lt;/a&gt; instead.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Wait, does this mean that GitHub will know about my security vulnerabilities?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;No. Appcanary will not be sharing any data that can be used to identify our customers&amp;rsquo; vulnerabilities with GitHub.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Who do you recommend using instead of Appcanary?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Ruby coverage is live in GitHub’s Security Alerts feature. Today you can get PHP coverage from security partners like Gemnasium (and soon Snyk) in the &lt;a href="https://github.com/marketplace"&gt;GitHub Marketplace&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;For Ubuntu, Debian, CentOS, Amazon Linux, and Alpine Linux coverage, we recommend &lt;a href="https://spacewalkproject.github.io/"&gt;Spacewalk&lt;/a&gt;, &lt;a href="https://landscape.canonical.com/"&gt;Landscape&lt;/a&gt;, &lt;a href="https://coreos.com/clair/docs/latest/"&gt;CoreOS Clair&lt;/a&gt;, &lt;a href="https://www.tenable.com/products/nessus/nessus-agents"&gt;Nessus Agents&lt;/a&gt;, or &lt;a href="https://www.threatstack.com/"&gt;ThreatStack&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;What is GitHub’s Security Alerts offering?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;GitHub currently sends alerts to public repositories and private repositories that have opted in about publicly disclosed CVEs for Javascript and Ruby. GitHub is soon adding Python support and expanding vulnerability coverage to include more of Appcanary’s database.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Who do we contact for product support until the product sunsets?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;You can still reach us via the normal support channels or by emailing hello@appcanary.com&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Podcast Episode 6 - Clojure, Ruby, Joy and Developer Happiness</title>
     <link rel="alternate" href="https://blog.appcanary.com/2017/clojure-ruby-joy-developer-happiness.html"/>
@@ -259,144 +341,6 @@ The browser will now see this as a response to its XHR request.
 &lt;li&gt;&lt;p&gt;&lt;a href="http://www.cbc.ca/news/canada/ottawa/shopify-ceo-tobi-lutke-defends-decision-to-host-breitbart-1.3973798"&gt;Shopify CEO digs in against Breitbart backlash&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
 &lt;li&gt;&lt;p&gt;&lt;a href="https://www.inc.com/sonya-mann/trump-shopify/breitbart.html"&gt;Shopify Backlash Shows Even Second-Degree Trump Ties Can Be Trouble&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Simple Ain't Easy, but Hard Ain't Simple: Leaving Clojure for Ruby</title>
-    <link rel="alternate" href="https://blog.appcanary.com/2017/hard-isnt-simple-ruby-clojure.html"/>
-    <id>https://blog.appcanary.com/2017/hard-isnt-simple-ruby-clojure.html</id>
-    <published>2017-05-21T20:00:00-04:00</published>
-    <updated>2017-07-27T16:58:14-04:00</updated>
-    <author>
-      <name>Phillip Mendonça-Vieira</name>
-    </author>
-    <content type="html">&lt;p&gt;In November 2016, I delivered a talk at RubyConf where I told the story of how we built the first version in Appcanary in Clojure, and then threw it away. &lt;/p&gt;
-
-&lt;p&gt;Here is the talk:&lt;/p&gt;
-
-&lt;div style="position:relative;height:0;padding-bottom:56.25%"&gt;&lt;iframe src="https://www.youtube.com/embed/doZ0XAc9Wtc?ecver=2" width="640" height="360" frameborder="0" style="position:absolute;width:100%;height:100%;left:0" allowfullscreen&gt;&lt;/iframe&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;small&gt;Jump to 12:10 to start at the section where I begin to talk about my specific problems with Clojure.&lt;/small&gt;&lt;/p&gt;
-
-&lt;p&gt;But, that talk is over a half hour long, and who has time for that?&lt;/p&gt;
-
-&lt;h3 id="three-important-ideas-you-should-take-away"&gt;Three important ideas you should take away:&lt;/h3&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;If you&amp;rsquo;re starting a project where you&amp;rsquo;re really pressed for time, you should be biased towards tools you know really well. If you have a startup, you&amp;rsquo;re supposed to be solving a &lt;em&gt;business problem&lt;/em&gt;. Don&amp;rsquo;t make your life harder than it has to be by also having to learn new tools.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Avoid building a distributed system for as long as you can. They introduce a lot of expensive complexity that is hard for small teams to pay. Micro services are useful for larger teams, but the way you code and deploy your apps should be a reflection of your team&amp;rsquo;s organization and ability to coordinate.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;I personally found it really hard to get into Clojure. I got the sense that Clojure as a community doesn&amp;rsquo;t value &amp;ldquo;developer happiness&amp;rdquo;, and I think it should! Tools should try to make your life easier at every opportunity.&lt;/p&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;&lt;hr&gt;&lt;/p&gt;
-
-&lt;p&gt;We had &lt;a href="/2016/missing-clojure.html"&gt;mentioned the talk before&lt;/a&gt;, but I had avoided actually posting it on this blog for two reasons:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;I&amp;rsquo;ve rewatched it a bunch of times and can think of a half dozen things I&amp;rsquo;d do differently now.&lt;/li&gt;
-&lt;li&gt;Some people in the Clojure community got &lt;em&gt;really mad&lt;/em&gt;.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id="oops"&gt;Oops&lt;/h2&gt;
-
-&lt;p&gt;A lot of otherwise well-meaning people looked at the talk and decided that I was a) a bit of an asshole and b) probably incompetent. So many people expressed that view that I felt compelled to ask Confreaks to turn off the comments&lt;sup id="fnref1"&gt;&lt;a href="#fn1" rel="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
-
-&lt;p&gt;I don&amp;rsquo;t really blame them.&lt;/p&gt;
-
-&lt;p&gt;Developer tools do not exist in isolation; they are often only useful to the extent there is a live community surrounding them. This requires such a degree of investment that many programmers will inevitably come to integrate their favourite programming languages into a part of their identity. When some outsider comes along and criticizes your community and identity, it can be very hard to be charitable to what they have to say.&lt;/p&gt;
-
-&lt;p&gt;It was a good learning experience, though. I came to understand that &lt;strong&gt;I did not work hard enough to establish that I was coming from a place of kindness&lt;/strong&gt;, and that my talk was &lt;strong&gt;not&lt;/strong&gt; a big fuck you! to the community.&lt;/p&gt;
-
-&lt;p&gt;I came into the language and its environment with an open heart and invested a ton of resources into it, but, largely because of my specific context and a few mistakes we made early on, continuing to invest in Clojure didn&amp;rsquo;t make sense for us.&lt;/p&gt;
-
-&lt;p&gt;&lt;hr&gt;&lt;/p&gt;
-
-&lt;h2 id="further-discussion"&gt;Further discussion&lt;/h2&gt;
-
-&lt;p&gt;So, much to my surprise, my talk became relevant recently when some peeps in the Clojure community looked around and made an observation:&lt;/p&gt;
-
-&lt;blockquote class="twitter-tweet" data-lang="en"&gt;&lt;p lang="en" dir="ltr"&gt;folks, I&amp;rsquo;m calling it, clojure&amp;rsquo;s dying more than it is growing&lt;/p&gt;&amp;mdash; 🌹dsa zack🌹 (@ZackMaril) &lt;a href="https://twitter.com/ZackMaril/status/863915988424589312"&gt;May 15, 2017&lt;/a&gt;&lt;/blockquote&gt;
-
-&lt;script async src="//platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;
-
-&lt;p&gt;Enabled by Twitter&amp;rsquo;s recent decision to not count usernames towards character limits, this thread gained a whole life of its own. I don&amp;rsquo;t know how to do justice to the whole range of topics that were discussed; Twitter itself hasn&amp;rsquo;t quite figured out how to display threads properly. &lt;/p&gt;
-
-&lt;p&gt;I think some of the ideas brought up deserve a little more investigation, and so I have summarized parts of the discussion in order to address them. Here it goes:&lt;/p&gt;
-
-&lt;h3 id="the-thread"&gt;The Thread&lt;/h3&gt;
-
-&lt;p&gt;The hype cycle has moved away from Clojure, &lt;a href="https://twitter.com/ZackMaril/status/863916529674354688"&gt;and the community feels like it&amp;rsquo;s shrinking&lt;/a&gt; - &lt;a href="https://twitter.com/ztellman/status/864243503999602688"&gt;though there are many more jobs coming up&lt;/a&gt;. &lt;/p&gt;
-
-&lt;p&gt;It&amp;rsquo;s actually kinda hard to make a &lt;a href="https://twitter.com/ztellman/status/864244372933443585"&gt;good business case&lt;/a&gt; for Clojure, since &lt;a href="https://twitter.com/ZackMaril/status/864244440931500033"&gt;the JVM makes small tools prohibitive&lt;/a&gt; and, if you do like the JVM, &lt;a href="https://twitter.com/cemerick/status/864931671388409856"&gt;you now have a lot of options&lt;/a&gt;. In theory, &lt;a href="https://twitter.com/ericnormand/status/864940158159912960"&gt;you should be way more productive in Clojure&lt;/a&gt;, but it&amp;rsquo;s &lt;a href="https://twitter.com/CursiveIDE/status/865162192265461764"&gt;hard to tell how true that is&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;That said, &lt;a href="https://twitter.com/mark_engelberg/status/865370061489356800"&gt;are people actually leaving Clojure&lt;/a&gt;? Well, &lt;a href="https://twitter.com/ztellman/status/865372517786984448"&gt;there was a talk recently on that very topic&lt;/a&gt;, and though it may have been written by an &lt;a href="https://twitter.com/timbaldridge/status/865640256220962816"&gt;incompetent&lt;/a&gt; and &lt;a href="https://twitter.com/timbaldridge/status/865654433870356480"&gt;mean jerk&lt;/a&gt;&lt;sup id="fnref2"&gt;&lt;a href="#fn2" rel="footnote"&gt;2&lt;/a&gt;&lt;/sup&gt;, it makes some &lt;a href="https://twitter.com/cemerick/status/865657364317298690"&gt;good points&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;In the end, what &lt;em&gt;is&lt;/em&gt; a &lt;a href="https://twitter.com/phillmv/status/865690983274430464"&gt;reasonable expectation for developers new to Clojure&lt;/a&gt;? Lisps are a &lt;a href="https://twitter.com/timbaldridge/status/865667405862715392"&gt;very different&lt;/a&gt; paradigm. &lt;a href="https://twitter.com/timbaldridge/status/865667555494551552"&gt;Things work differently here&lt;/a&gt;. Developers get paid to &lt;a href="https://twitter.com/timbaldridge/status/865698644724375552"&gt;solve or automate problems&lt;/a&gt;, and people &lt;a href="https://twitter.com/potetm/status/866027765350506496"&gt;waste tons of time&lt;/a&gt; trying to be &amp;ldquo;happy&amp;rdquo;. Clojure encourages people to reflect on their work, and &lt;a href="https://twitter.com/potetm/status/866028663644598274"&gt;aggressively pare it down&lt;/a&gt;. After all, &lt;a href="https://twitter.com/potetm/status/866027314009829376"&gt;simple isn&amp;rsquo;t easy&lt;/a&gt;!&lt;/p&gt;
-
-&lt;p&gt;&lt;hr&gt;&lt;/p&gt;
-
-&lt;p&gt;OKAY, WOW, are you still with me? Incredible. &lt;/p&gt;
-
-&lt;p&gt;It&amp;rsquo;s hard for me to write about Clojureland nowadays since it&amp;rsquo;s been a whole year since I last typed &lt;code&gt;lein repl&lt;/code&gt;, but I&amp;rsquo;m about to say something slightly hyperbolic and slightly uncharitable because it&amp;rsquo;s more memorable, so please bear with me. It&amp;rsquo;s a little over the top, but I promise I&amp;rsquo;m coming from a place of love.&lt;/p&gt;
-
-&lt;p&gt;Here it goes. Ready?&lt;/p&gt;
-
-&lt;h2 id="quot-simple-easy-quot-is-one-of-the-most-toxic-ideas-ever-introduced-to-programming"&gt;&amp;ldquo;Simple != Easy&amp;rdquo; Is One Of The Most Toxic Ideas Ever Introduced To Programming&lt;/h2&gt;
-
-&lt;p&gt;For those of you outside of Clojureland, this is a reference to well-known 2011 Rich Hickey talk titled &amp;ldquo;&lt;a href="https://www.infoq.com/presentations/Simple-Made-Easy"&gt;Simple Made Easy&lt;/a&gt;&amp;rdquo;. &lt;/p&gt;
-
-&lt;p&gt;Rich&amp;rsquo;s thesis is that the best, most conceptually simple solution to a problem isn&amp;rsquo;t automatically also going to be &lt;em&gt;simple to use&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;Often, when we say something is &lt;em&gt;easy&lt;/em&gt;, we actually just mean that it is familiar to us, and that we&amp;rsquo;ve used something like it before. Just because we don&amp;rsquo;t have to engage our brain doesn&amp;rsquo;t mean a concept or framework or artifact isn&amp;rsquo;t &lt;em&gt;complex&lt;/em&gt;. &lt;/p&gt;
-
-&lt;p&gt;Often the simplest solution may be very different from what you were expecting, and may therefore require some elbow grease.&lt;/p&gt;
-
-&lt;p&gt;I thought that talk was really insightful when I first watched it. Math, for example, is a place where you can dedicate a lifetime of mental energy to simple but hard things. And it&amp;rsquo;s true that many easy things are needlessly complex. But, having seen how people refer to it over the years, I&amp;rsquo;ve since soured on the concept.&lt;/p&gt;
-
-&lt;h3 id="in-practice-39-simple-made-easy-39-is-an-elaborate-excuse-for-making-software-that-is-hard-to-use"&gt;In practice, &amp;lsquo;Simple Made Easy&amp;rsquo; is an elaborate excuse for making software that is hard to use.&lt;/h3&gt;
-
-&lt;p&gt;By separating &amp;ldquo;simplicity&amp;rdquo; from &amp;ldquo;ease of use&amp;rdquo;, and then establishing the &lt;em&gt;primacy of simplicity&lt;/em&gt;, it gives people an ideological out to discount improving the user interface of our tools and artifacts.&lt;/p&gt;
-
-&lt;p&gt;If your chief goal is simplicity, and beauty, and elegance, then it&amp;rsquo;s not really your fault if people don&amp;rsquo;t &amp;ldquo;get it&amp;rdquo;. It blinds us to critiques of our software: if we don&amp;rsquo;t value the accessibility of our tools then it becomes very difficult to distinguish &amp;ldquo;there are a lot of arbitrary barriers preventing my understanding&amp;rdquo; from &amp;ldquo;I&amp;rsquo;m lazy and couldn&amp;rsquo;t be bothered to try hard enough&amp;rdquo;&lt;sup id="fnref3"&gt;&lt;a href="#fn3" rel="footnote"&gt;3&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
-
-&lt;p&gt;Establishing this narrow view of &amp;ldquo;simplicity&amp;rdquo; as wholly separate from &amp;ldquo;easy to use&amp;rdquo; prevents us from being able to optimize for ease-of-use, aka developer experience.&lt;/p&gt;
-
-&lt;p&gt;In my talk I called the Clojureland ecosystem &amp;ldquo;user-hostile&amp;rdquo;. This contrasts sharply with the community, who are by and large very sweet and personable and well-meaning. &lt;/p&gt;
-
-&lt;p&gt;Undoubtedly, I chafed because Clojureland tools were &lt;strong&gt;unfamiliar&lt;/strong&gt;, yes. But past a certain point they were also &lt;em&gt;unfriendly&lt;/em&gt;, because in their error messages and affordances and failure conditions they assumed a rather high tolerance for digging through code and high-level knowledge of Clojure&amp;rsquo;s concepts and idioms and runtime quirks.&lt;/p&gt;
-
-&lt;p&gt;So we went back to Ruby, which we knew really well.&lt;/p&gt;
-
-&lt;p&gt;But here is the rub: Ruby&amp;rsquo;s tooling is &lt;a href="http://www.virtuouscode.com/2015/07/08/ruby-is-defined-by-terrible-tools/"&gt;terrible&lt;/a&gt;. The interpreter is slow and finicky and it used to leak memory like a sieve. There is no static introspection, the meta programming features are basic and slow and it is trivially easy to bleed state and complect the hell out of your programs. It was great compared to Java or PHP in 2004. In 2017, the world is different.&lt;/p&gt;
-
-&lt;p&gt;But, do you know what Ruby really has got going for it? Ruby is &lt;a href="http://www.artima.com/intv/rubyP.html"&gt;designed to be fun and make programmers happy&lt;/a&gt;. I think this is such a dope design philosophy that I&amp;rsquo;ll go one step further:&lt;/p&gt;
-
-&lt;h2 id="all-programming-languages-should-strive-to-be-fun-and-make-programmers-happy"&gt;All programming languages should strive to be fun and make programmers happy.&lt;/h2&gt;
-
-&lt;p&gt;I think this is by far the most important contribution Ruby brought to programming, and as Ruby has stabilized and become less exciting and people have moved on, it has been incredible to &lt;a href="https://twitter.com/sarahmei/status/849065056746827776"&gt;ex-Rubyists bring these values with them to their new communities&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;You can see this attitude in Elixir, in Rust, in Ember. Our tools should help you achieve success. Our tools should get out of the way. Our tools should Just Work.&lt;/p&gt;
-
-&lt;p&gt;The truth is, programming can be complex, but it is also often needlessly hard. Programmers are the end-users of programming tools, and to ignore their experience using them is just plain bad design. We should strive to be as maximally welcoming as we can, for every level of experience.&lt;/p&gt;
-
-&lt;div class="footnotes"&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-
-&lt;li id="fn1"&gt;
-&lt;p&gt;I called it &amp;ldquo;abuse&amp;rdquo; elsewhere, which is maybe a bit much. People were mostly just somewhat rude. It&amp;rsquo;s just not&amp;hellip; pleasant to have a bunch of people calling you incompetent over and over again ¯\_(ツ)_/¯.&amp;nbsp;&lt;a href="#fnref1" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-
-&lt;li id="fn2"&gt;
-&lt;p&gt;I am exaggerating and bear no ill will ;).&amp;nbsp;&lt;a href="#fnref2" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-
-&lt;li id="fn3"&gt;
-&lt;p&gt;By far the most common response to my talk was, but are you sure you tried hard enough? If you keep trying, you&amp;rsquo;ll get it. Just work harder at it. There&amp;rsquo;s a hidden insinuation: maybe you&amp;rsquo;re not smart enough to get it. I&amp;rsquo;d like to think that I am.&amp;nbsp;&lt;a href="#fnref3" rev="footnote"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-
-&lt;/ol&gt;
-&lt;/div&gt;
 </content>
   </entry>
 </feed>
