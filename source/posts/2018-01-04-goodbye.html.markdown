@@ -6,14 +6,14 @@ layout: post
 published: true
 ---
 
-<meta name="twitter:card" content="summary"/>
+<meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:site" content="@appcanary" />
 <meta name="twitter:title" content="Goodbye Appcanary. Hello GitHub!" />
 <meta name="twitter:description" content="Today, we’re excited to announce that we’re going to be able to build tools that impact almost every software developer on the planet — we’re joining GitHub." />
-<meta name="twitter:image" content="https://blog.appcanary.com/images/appcanary-joins-github-yellow.png" />
+<meta name="twitter:image" content="https://blog.appcanary.com/images/appcanary-joins-github-white.png" />
 <meta property="og:title" content="Goodbye Appcanary. Hello GitHub!" />
 <meta property="og:description" content="Today, we’re excited to announce that we’re going to be able to build tools that impact almost every software developer on the planet — we’re joining GitHub. " />
-<meta property="og:image" content="https://blog.appcanary.com/images/appcanary-joins-github-yellow.png" />
+<meta property="og:image" content="https://blog.appcanary.com/images/appcanary-joins-github-white.png" />
 
 <img src="/images/appcanary-joins-github.png">
 
