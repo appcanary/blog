@@ -11,7 +11,7 @@
     <link rel="alternate" href="https://blog.appcanary.com/2018/goodbye.html"/>
     <id>https://blog.appcanary.com/2018/goodbye.html</id>
     <published>2018-01-03T19:00:00-05:00</published>
-    <updated>2018-01-04T09:26:32-05:00</updated>
+    <updated>2018-01-04T09:30:48-05:00</updated>
     <author>
       <name>Team Appcanary</name>
     </author>
@@ -19,14 +19,14 @@
 &lt;meta name="twitter:site" content="@appcanary" /&gt;
 &lt;meta name="twitter:title" content="Goodbye Appcanary. Hello GitHub!" /&gt;
 &lt;meta name="twitter:description" content="Today, we’re excited to announce that we’re going to be able to build tools that impact almost every software developer on the planet — we’re joining GitHub." /&gt;
-&lt;meta name="twitter:image" content="https://blog.appcanary.com/images/appcanary-joins-github-white.png" /&gt;
+&lt;meta name="twitter:image" content="https://blog.appcanary.com/images/appcanary-joins-github-white2.png" /&gt;
 &lt;meta property="og:title" content="Goodbye Appcanary. Hello GitHub!" /&gt;
-&lt;meta property="og:description" content="Today, we’re excited to announce that we’re going to be able to build tools that impact almost every software developer on the planet — we’re joining GitHub. " /&gt;
-&lt;meta property="og:image" content="https://blog.appcanary.com/images/appcanary-joins-github-white.png" /&gt;&lt;/p&gt;
+&lt;meta property="og:description" content="aToday, we’re excited to announce that we’re going to be able to build tools that impact almost every software developer on the planet — we’re joining GitHub. " /&gt;
+&lt;meta property="og:image" content="https://blog.appcanary.com/images/appcanary-joins-github-white2.png" /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;img src="/images/appcanary-joins-github.png"&gt;&lt;/p&gt;
 
-&lt;p&gt;From when we co-founded &lt;a href="https://www.rubysec.com"&gt;Rubysec&lt;/a&gt;, to building (the now defunct) &lt;a href="2015/hello-appcanary.html"&gt;Gemcanary&lt;/a&gt;, to &lt;a href="https://blog.appcanary.com/2015/hello-world.html"&gt;starting Appcanary&lt;/a&gt;, our goal from the beginning was to improve the world’s security by preventing the use of vulnerable software. At the time, this required placing a bet on building a certain kind of business, and for a variety of reasons that bet didn’t work out.&lt;/p&gt;
+&lt;p&gt;From when we cofounded &lt;a href="https://www.rubysec.com"&gt;Rubysec&lt;/a&gt;, to building (the now defunct) &lt;a href="2015/hello-appcanary.html"&gt;Gemcanary&lt;/a&gt;, to &lt;a href="https://blog.appcanary.com/2015/hello-world.html"&gt;starting Appcanary&lt;/a&gt;, our goal from the beginning was to improve the world’s security by preventing the use of vulnerable software. At the time, this required placing a bet on building a certain kind of business, and for a variety of reasons that bet didn’t work out.&lt;/p&gt;
 
 &lt;p&gt;However, this doesn&amp;rsquo;t mean that we&amp;rsquo;re giving up on the mission!&lt;/p&gt;
 
