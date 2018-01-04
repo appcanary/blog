@@ -5,7 +5,62 @@
   <id>https://blog.appcanary.com</id>
   <link href="https://blog.appcanary.com"/>
   <link href="https://blog.appcanary.com/rss" rel="self"/>
-  <updated>2017-07-27T20:00:00-04:00</updated>
+  <updated>2017-09-17T20:00:00-04:00</updated>
+  <entry>
+    <title>Podcast Episode 6 - Clojure, Ruby, Joy and Developer Happiness</title>
+    <link rel="alternate" href="https://blog.appcanary.com/2017/clojure-ruby-joy-developer-happiness.html"/>
+    <id>https://blog.appcanary.com/2017/clojure-ruby-joy-developer-happiness.html</id>
+    <published>2017-09-17T20:00:00-04:00</published>
+    <updated>2018-01-03T17:02:57-05:00</updated>
+    <author>
+      <name>Phillip Mendonça-Vieira</name>
+    </author>
+    <content type="html">&lt;p&gt;Max and Phill revisit leaving Clojure, and what joy and developer happiness actually means. Produced by &lt;a href="https://twitter.com/katiejensen"&gt;Katie Jensen&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;You can follow along on &lt;a href="https://itunes.apple.com/ca/podcast/appcanary-podcast/id1215405635"&gt;iTunes&lt;/a&gt;, or subscribe directly to &lt;a href="https://podcast.appcanary.com/podcast.rss"&gt;the feed&lt;/a&gt;. &lt;/p&gt;
+
+&lt;audio controls preload="metadata" style="width: 100%;"&gt;
+    &lt;source src="https://podcast.appcanary.com/mp3/appcanary-ep6.mp3" type="audio/mpeg"&gt;
+    Your browser does not support the audio element.
+&lt;/audio&gt;
+
+&lt;h3 id="show-notes"&gt;Show Notes&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://blog.appcanary.com/2017/hard-isnt-simple-ruby-clojure.html"&gt;Simple Ain&amp;rsquo;t Easy, but Hard Ain&amp;rsquo;t Simple: Leaving Clojure for Ruby&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://lambdaisland.com/blog/25-05-2017-simple-and-happy-is-clojure-dying-and-what-has-ruby-got-to-do-with-it"&gt;Simple and Happy; is Clojure dying, and what has Ruby got to do with it?&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+  </entry>
+  <entry>
+    <title>Podcast Episode 5 - Spies and Voter Data</title>
+    <link rel="alternate" href="https://blog.appcanary.com/2017/canada-c51-gop-voter-data.html"/>
+    <id>https://blog.appcanary.com/2017/canada-c51-gop-voter-data.html</id>
+    <published>2017-07-31T20:00:00-04:00</published>
+    <updated>2018-01-03T17:02:57-05:00</updated>
+    <author>
+      <name>Phillip Mendonça-Vieira</name>
+    </author>
+    <content type="html">&lt;p&gt;Phill and Max discuss new spying powers in Canada, and the leak of GOP voter data. Produced by &lt;a href="https://twitter.com/katiejensen"&gt;Katie Jensen&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;You can follow along on &lt;a href="https://itunes.apple.com/ca/podcast/appcanary-podcast/id1215405635"&gt;iTunes&lt;/a&gt;, or subscribe directly to &lt;a href="https://podcast.appcanary.com/podcast.rss"&gt;the feed&lt;/a&gt;. &lt;/p&gt;
+
+&lt;audio controls preload="metadata" style="width: 100%;"&gt;
+    &lt;source src="https://podcast.appcanary.com/mp3/appcanary-ep5.mp3" type="audio/mpeg"&gt;
+    Your browser does not support the audio element.
+&lt;/audio&gt;
+
+&lt;h3 id="show-notes"&gt;Show Notes&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://news.vice.com/story/the-trudeau-government-peels-back-bill-c-51-mostly"&gt;The Trudeau government peels back bill C-51 — mostly&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://ipolitics.ca/2017/06/20/goodale-pitches-panel-of-experts-in-major-national-security-reform-bill/"&gt;CSE getting &amp;lsquo;proactive&amp;rsquo; mandate overhaul in major national security reform bill&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.nationalobserver.com/2017/06/20/news/goodale-asks-parliament-expand-electronic-spying-powers"&gt;Goodale asks Parliament to expand electronic spying powers&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href="http://www.cbc.ca/news/canada/manitoba/canada-csis-metadata-collection-privacy-concerns-bill-c51-1.3798564"&gt;CSIS, Bill C-51 and Canada&amp;rsquo;s growing metadata collection mess&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href="https://www.upguard.com/breaches/the-rnc-files"&gt;The RNC Files: Inside the Largest US Voter Data Leak&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+  </entry>
   <entry>
     <title>Hacking your Elixir Editor</title>
     <link rel="alternate" href="https://blog.appcanary.com/2017/hacking-your-elixir-editor.html"/>
@@ -342,65 +397,6 @@ The browser will now see this as a response to its XHR request.
 
 &lt;/ol&gt;
 &lt;/div&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Podcast Episode 2 - Casinos and Pseudorandom Generators</title>
-    <link rel="alternate" href="https://blog.appcanary.com/2017/podcast-casinos-pseudorandom.html"/>
-    <id>https://blog.appcanary.com/2017/podcast-casinos-pseudorandom.html</id>
-    <published>2017-04-06T20:00:00-04:00</published>
-    <updated>2017-05-16T15:08:44-04:00</updated>
-    <author>
-      <name>Phillip Mendonça-Vieira</name>
-    </author>
-    <content type="html">&lt;p&gt;Here in episode 2 of the Appcanary podcast, Max and I discuss a Russian casino hacking ring, and pseudorandom number generators. Produced by &lt;a href="https://twitter.com/katiejensen"&gt;Katie Jensen&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;You can follow along on &lt;a href="https://itunes.apple.com/ca/podcast/appcanary-podcast/id1215405635"&gt;iTunes&lt;/a&gt;, or subscribe directly to &lt;a href="https://podcast.appcanary.com/podcast.rss"&gt;the feed&lt;/a&gt;. &lt;/p&gt;
-
-&lt;audio controls preload="metadata" style="width: 100%;"&gt;
-    &lt;source src="https://podcast.appcanary.com/mp3/appcanary-ep2.mp3" type="audio/mpeg"&gt;
-    Your browser does not support the audio element.
-&lt;/audio&gt;
-
-&lt;h3 id="show-notes"&gt;Show Notes&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;a href="https://www.wired.com/2017/02/russians-engineer-brilliant-slot-machine-cheat-casinos-no-fix/"&gt;Russians Engineer a Brilliant Slot Machine Cheat-And Casinos Have No Fix&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;a href="http://news.nationalpost.com/g00/news/world/gambler-with-remarkable-9-6-million-scheme-to-win-at-baccarat-has-to-pay-it-back-judge-rules"&gt;Gambler who won $9.6 million with ‘remarkable’ baccarat scheme has to pay it back, judge rules&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;a href="http://mashable.com/2017/01/13/rudy-giuliani-cyber-website-trump/"&gt;Rudy Giuliani, Cyber Czar&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Appcanary Podcast Episode 1 - MongoDB, Ransomware and Algorithms</title>
-    <link rel="alternate" href="https://blog.appcanary.com/2017/podcast-mongodb-opacity-algorithms.html"/>
-    <id>https://blog.appcanary.com/2017/podcast-mongodb-opacity-algorithms.html</id>
-    <published>2017-03-12T20:00:00-04:00</published>
-    <updated>2017-05-16T15:08:44-04:00</updated>
-    <author>
-      <name>Phillip Mendonça-Vieira</name>
-    </author>
-    <content type="html">&lt;p&gt;Max and I are both avid podcast consumers, and we thought it&amp;rsquo;d be fun and interesting to produce a podcast. So&amp;hellip; we did!&lt;/p&gt;
-
-&lt;p&gt;You can follow along on &lt;a href="https://itunes.apple.com/ca/podcast/appcanary-podcast/id1215405635"&gt;iTunes&lt;/a&gt;, or subscribe directly to &lt;a href="https://podcast.appcanary.com/podcast.rss"&gt;the feed&lt;/a&gt;. &lt;/p&gt;
-
-&lt;p&gt;In our inaugural episode, we discuss MongoDB ransomware, and the opacity of algorithms. Produced by &lt;a href="https://twitter.com/katiejensen"&gt;Katie Jensen&lt;/a&gt;.&lt;/p&gt;
-
-&lt;audio controls preload="metadata" style=" width:300px;"&gt;
-    &lt;source src="https://podcast.appcanary.com/mp3/appcanary-ep1.mp3" type="audio/mpeg"&gt;
-    Your browser does not support the audio element.
-&lt;/audio&gt;
-
-&lt;h3 id="show-notes"&gt;Show Notes&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;a href="https://blog.appcanary.com/2017/improve-security-port-scan-yourself.html"&gt;Improve Your Security: Port Scan Yourself&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;a href="http://journals.sagepub.com/doi/abs/10.1177/2053951715622512"&gt;How the machine ‘thinks’: Understanding opacity in machine learning algorithms&lt;/a&gt;, by Jenna Burrell (Big Data &amp;amp; Society, Jan 6th 2016)&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;a href="https://www.propublica.org/article/machine-bias-risk-assessments-in-criminal-sentencing"&gt;Machine Bias&lt;/a&gt; - Julia Angwin, Jeff Larson, Surya Mattu and Lauren Kirchner (Pro Publica, May 23rd 2016)&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Benjamin Walker&amp;rsquo;s &lt;a href="https://toe.prx.org/"&gt;Theory of Everything&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;a href="https://www.buzzfeed.com/craigsilverman/how-macedonia-became-a-global-hub-for-pro-trump-misinfo?utm_term=.sipLg3Ewn7#.ucL3vZkmXD"&gt;Macedonian Teens &amp;amp; Fake News&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;a href="http://www.theverge.com/2016/10/28/13453344/comma-ai-self-driving-car-comma-one-kit-canceled"&gt;Geohot&amp;rsquo;s self-driving car&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
 </content>
   </entry>
 </feed>

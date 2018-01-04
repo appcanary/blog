@@ -31,6 +31,168 @@
       <section>
     <div class="entry">
       <div class="post">
+        <h1 class="title"><a href="/2016/new-api-centos-support.html">Hello, new Appcanary API and CentOS support!</a></h1>
+
+        <div class="published-tags">By <span class="author"><a href="/author/max-veytsman.html">Max Veytsman</a></span> |
+          <span class="date">March 07, 2016</span> on <a href="/tags/announcements.html">Announcements</a>, <a href="/tags/product.html">Product</a></div>
+
+        <p>A lot of our users have told us, </p>
+
+<blockquote>
+<p>&ldquo;Gosh, I love knowing exactly which packages I have to update in order to keep my apps and servers secure. Have you thought about an API?&rdquo;</p>
+</blockquote>
+
+<p>We listened carefully to that feedback, and it is with pride and pleasure that we&rsquo;re announcing our new beta! We&rsquo;re still busy improving it, so we won&rsquo;t charge you for it for now.</p>
+
+<p>Once you <a href="https://appcanary.com/sign_up">sign up</a>, all you have to do is issue a curl:</p>
+<pre class="highlight shell"><code>curl -H <span class="s2">"Authorization: Token YOURTOKENHERE"</span> <span class="se">\</span>
+     -X POST -F <span class="nv">file</span><span class="o">=</span>@./Gemfile.lock <span class="se">\</span>
+     https://appcanary.com/api/v2/check/ruby
+</code></pre>
+
+<p>and you&rsquo;ll get a response like:</p>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"vulnerable"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"artifact-version"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"attributes"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rack"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rubygem"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.6.0"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"vulnerabilities"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="nt">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Potential Denial of Service Vulnerability in Rack"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Carefully crafted requests can cause a `SystemStackError` and potentially \ncause a denial of service attack. \n\nAll users running an affected release should upgrade."</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"criticality"</span><span class="p">:</span><span class="w"> </span><span class="s2">"high"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"cve"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+              </span><span class="s2">"CVE-2015-3225"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="nt">"osvdb"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+            </span><span class="nt">"patched-versions"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+              </span><span class="s2">"~&lt; 1.5.4"</span><span class="p">,</span><span class="w">
+              </span><span class="s2">"~&lt; 1.4.6"</span><span class="p">,</span><span class="w">
+              </span><span class="s2">"&gt;= 1.6.2"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="nt">"unaffected-versions"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+            </span><span class="nt">"uuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"55807540-053f-40f0-9266-a3d1ca6a5838"</span><span class="p">,</span><span class="w">
+            </span><span class="nt">"upgrade-to"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+              </span><span class="s2">"&gt;= 1.6.2"</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+          </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<p>Our API fully supports <strong>Ruby</strong>, <strong>Ubuntu</strong>, and <strong>CentOS 7</strong>! You can learn more about how to use it by visiting <a href="https://appcanary.com/docs">the docs page</a>.</p>
+
+<p>Which reminds us,</p>
+
+<h2 id="we-now-support-centos-7">We now support CentOS 7!</h2>
+
+<p>Appcanary now fully supports <strong>CentoOS 7</strong>. If you install our agent on a CentOS 7 server, we will email you notifications whenever any rpm package you have installed on your system has a known vulnerability.</p>
+
+<p>If you&rsquo;re not a current user and want to try out Appcanary&rsquo;s API and/or use us to monitor your CentOS 7 servers, you can <a href="https://appcanary.com/signup">sign up</a>!</p>
+
+<p>You can always let us know what you think at <a href="mailto:hello@appcanary.com">hello@appcanary.com</a>.</p>
+
+
+      </div>
+      <hr>
+    </div>
+  </section>
+  <section>
+    <div class="entry">
+      <div class="post">
+        <h1 class="title"><a href="/2016/slippery-exception-clojure-ruby.html">Slippery exceptions in Clojure and Ruby</a></h1>
+
+        <div class="published-tags">By <span class="author"><a href="/author/phillip-mendonca-vieira.html">Phillip Mendonça-Vieira</a></span> |
+          <span class="date">February 16, 2016</span> on <a href="/tags/clojure.html">Clojure</a>, <a href="/tags/ruby.html">Ruby</a>, <a href="/tags/programming.html">Programming</a>, <a href="/tags/bugs.html">Bugs</a>, <a href="/tags/developer-diary.html">Developer Diary</a></div>
+
+        <p>Recently I spent a couple of hours banging my head against code that looks like this:</p>
+<pre class="highlight clojure"><code><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">parse-file</span><span class="w">
+  </span><span class="p">[</span><span class="n">contents</span><span class="p">]</span><span class="w">
+  </span><span class="p">(</span><span class="nb">remove</span><span class="w"> </span><span class="nb">nil?</span><span class="w">
+          </span><span class="p">(</span><span class="nf">code-that</span><span class="w"> </span><span class="n">throws-an-exception</span><span class="p">)))</span><span class="w">
+
+</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">consume-manifest</span><span class="w">
+  </span><span class="p">[</span><span class="n">contents</span><span class="w"> </span><span class="n">kind</span><span class="p">]</span><span class="w">
+  </span><span class="p">(</span><span class="nf">try+</span><span class="w">
+    </span><span class="p">(</span><span class="nf">parse-file</span><span class="w"> </span><span class="n">kind</span><span class="w"> </span><span class="n">contents</span><span class="p">)</span><span class="w">
+
+    </span><span class="p">(</span><span class="nf">catch</span><span class="w"> </span><span class="n">java.lang.Exception</span><span class="w"> </span><span class="n">e</span><span class="w">
+      </span><span class="p">(</span><span class="nf">throw+</span><span class="w"> </span><span class="p">{</span><span class="no">:type</span><span class="w"> </span><span class="no">::bad-parse</span><span class="w"> </span><span class="no">:message</span><span class="w"> </span><span class="s">"Invalid file."</span><span class="p">}))))</span><span class="w">
+
+</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">check</span><span class="w">
+  </span><span class="p">[</span><span class="n">file</span><span class="w"> </span><span class="n">kind</span><span class="p">]</span><span class="w">
+  </span><span class="p">(</span><span class="nf">try+</span><span class="w">
+    </span><span class="p">(</span><span class="k">let</span><span class="w"> </span><span class="p">[</span><span class="n">artifacts</span><span class="w"> </span><span class="p">(</span><span class="nf">consume-manifest</span><span class="w"> </span><span class="p">(</span><span class="nb">slurp</span><span class="w"> </span><span class="n">file</span><span class="p">)</span><span class="w"> </span><span class="n">kind</span><span class="p">]</span><span class="w">
+      </span><span class="p">(</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nf">not-empty</span><span class="w"> </span><span class="n">artifacts</span><span class="p">)</span><span class="w">
+        </span><span class="err">…</span><span class="w"> </span><span class="n">etc</span><span class="w">
+</span></code></pre>
+
+<p>And much to my surprise, I kept getting the kind of exception <code>parse-file</code> generates deep within the <code>check</code> function, right up against <code>(not-empty artifacts)</code>.</p>
+
+<p>I&rsquo;ve grown somewhat used to Clojure exceptions being unhelpful, but this was taking the cake. Coming from Ruby and pretty much every other language, this brushed up rudely against my expectations. </p>
+
+<p>You can tell that exceptions in Clojure are unloved, given how cumbersome handling them natively is. We&rsquo;d had some trouble in the past getting <a href="https://github.com/scgilardi/slingshot">slingshot</a> to behave properly, so I zero&#39;ed in on there. Don&rsquo;t all exceptions in Java descend from <code>Exception</code>?</p>
+
+<p>Stepping through <code>check</code> in the <a href="cursive-ide.com">Cursive</a> debugger, I could see that the exception generated was a pure java exception, not a slingshot exception generated by <code>throw+</code> in <code>consume-manifest</code>. This meant that the exception was slipping straight through uncaught. But calling <code>consume-manifest</code> directly in my repl was causing it to work as intended.</p>
+
+<p>What the hell was going on?</p>
+
+<p><a href="https://twitter.com/mveytsman">Max</a> took one look at it and set me straight. &ldquo;Oh. <a href="https://clojuredocs.org/clojure.core/remove"><code>remove</code></a> is lazy, so the exception isn&rsquo;t being throw until the lazy sequence is accessed.&rdquo;</p>
+
+<p>Excuse me? I had an angry expression on my face. He looked sheepish.</p>
+
+<p>&ldquo;How else would a lazy data structure work?&rdquo;</p>
+
+<p>Well. I would expect a <code>catch java.lang.Exception</code> to <em>catch every exception</em>.</p>
+
+<p>&ldquo;Right, well, hear me out. What if you had the following Ruby?&rdquo;</p>
+<pre class="highlight ruby"><code><span class="k">def</span> <span class="nf">lazy_parse</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+  <span class="no">File</span><span class="p">.</span><span class="nf">open</span><span class="p">(</span><span class="n">filename</span><span class="p">).</span><span class="nf">each_line</span><span class="p">.</span><span class="nf">each_with_index</span><span class="p">.</span><span class="nf">lazy</span><span class="p">.</span><span class="nf">map</span> <span class="k">do</span> <span class="o">|</span><span class="n">line</span><span class="p">,</span> <span class="n">i</span><span class="o">|</span>
+    <span class="k">raise</span> <span class="s2">"You can't catch me, I'm the exception man"</span> <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">5</span>
+    <span class="n">line</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="k">def</span> <span class="nf">consume_file</span>
+  <span class="k">begin</span>
+    <span class="n">lazy_parse</span><span class="p">(</span><span class="s2">"Gemfile.lock"</span><span class="p">)</span>
+  <span class="k">rescue</span>
+    <span class="nb">puts</span> <span class="s2">"Woops, an exception. Good thing we caught it."</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="n">file</span> <span class="o">=</span> <span class="n">consume_file</span>
+<span class="nb">puts</span> <span class="n">file</span><span class="p">.</span><span class="nf">first</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</code></pre>
+
+<p>(Did you know that Ruby has had <a href="http://railsware.com/blog/2012/03/13/ruby-2-0-enumerablelazy/">lazy enumerables</a> for almost four years now? Worth reading <a href="http://patshaughnessy.net/2013/4/3/ruby-2-0-works-hard-so-you-can-be-lazy">Shaughnessy as well</a>.)</p>
+
+<p>That shut me up good. And in case you were wondering, the stack trace is also useless in Ruby; there simply isn&rsquo;t any context for it to preserve. Frankly, I&rsquo;ve just never had to think about lazy data structures in Rubyland; they&rsquo;ve not been super popular. </p>
+
+<p>It&rsquo;s hard to reason about this. I want to write wrapper functions that make my code safe to consume downstream. This isn&rsquo;t feasible for any functions iterating over potentially infinite lazy sequences, but fortunately for us we need to fit this file into memory anyways. In Ruby we&rsquo;d have to forcibly iterate over every element of the sequence and check for exceptions, but Clojure makes this easy with <a href="https://clojuredocs.org/clojure.core/doall"><code>doall</code></a>:</p>
+<pre class="highlight clojure"><code><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">parse-file</span><span class="w">
+  </span><span class="p">[</span><span class="n">contents</span><span class="p">]</span><span class="w">
+  </span><span class="p">(</span><span class="nb">doall</span><span class="w"> </span><span class="p">(</span><span class="nb">remove</span><span class="w"> </span><span class="nb">nil?</span><span class="w">
+                 </span><span class="p">(</span><span class="nf">code-that</span><span class="w"> </span><span class="n">throws-an-exception</span><span class="p">))))</span><span class="w">
+</span></code></pre>
+
+<p>And now, things behave as intended.</p>
+
+
+      </div>
+      <hr>
+    </div>
+  </section>
+  <section>
+    <div class="entry">
+      <div class="post">
         <h1 class="title"><a href="/2016/datomic-intro-talk.html">A Gentle Intro to Datomic</a></h1>
 
         <div class="published-tags">By <span class="author"><a href="/author/max-veytsman.html">Max Veytsman</a></span> |
@@ -202,86 +364,15 @@
       <hr>
     </div>
   </section>
-  <section>
-    <div class="entry">
-      <div class="post">
-        <h1 class="title"><a href="/2015/hello-appcanary.html">Hello Appcanary</a></h1>
-
-        <div class="published-tags">By <span class="author"><a href="/author/team-appcanary.html">Team Appcanary</a></span> |
-          <span class="date">October 26, 2015</span> on <a href="/tags/retrospective.html">Retrospective</a></div>
-
-        <p>Dear friends,&nbsp;</p>
-
-<p><strong>tl;dr</strong> We launched <a href="https://appcanary.com">Appcanary</a>, we’re shutting down Gemcanary Dec 31st 2015, we have great plans for the future, we love you.</p>
-
-<p><img src="/images/gemcanary_comic.jpg" alt="image" /></p>
-
-<p>We’ve been busy. We got to spend the summer in sunny California attending Y Combinator. We learned a lot, it was well worth it.</p>
-
-<p>During the summer, we launched the first version of our product, <a href="https://appcanary.com">Appcanary</a>. We help companies to track the security of the software components they rely on. Simply run our agent on your servers, and keep tabs on the packages on your systems. It’s pretty cool! There are a lot of moving parts.</p>
-
-<p>In the meantime, we courted a small cadre of investors who believe in our ideas about the future. We’re pretty excited for what we’ll be able to do over the next couple of years.</p>
-
-<p>We also released <a href="https://isitvulnerable.com">isitvulnerable.com</a>. It’s a free tool that lets you drag and drop your gemfile and check for vulnerable dependencies. </p>
-
-<p>Once, we even managed to go to the beach.</p>
-
-<p><a href="https://instagram.com/p/5Y8-dqSz3u"></a>
-<img src="/images/big_sur.jpg" alt="image" /></p>
-
-<p>In a nutshell, we want to change the way software and operation engineers engage with security. Right now people largely don’t, or have to deal with lots of snakeoil. It’s hard to know what to think. We think we can drastically improve how we keep our systems safe. We have lots of things to share with you soon!</p>
-
-<p>For now though, we’d like to announce that we’re sunsetting&nbsp;<a href="https://gemcanary.com">Gemcanary</a>, the free, Ruby-only, Github-only service we created in 2013. The service will shut down December 31st, 2015.&nbsp;</p>
-
-<p>We started Gemcanary all the way back in February 2013. Things were different back then; we ran a fledgeling consultancy, Edward Snowden was about to book a flight to Hong Kong, and Heartbleed was still hidden away in our openssls.</p>
-
-<p>We’ve since spent a lot of time breaking and building apps. We became a real startup. And, frankly, we think our customers will be better served by not requiring such tight integration with Github.</p>
-
-<p>If you enjoyed the service, you’ll be happy to note that we provide the same value and more via&nbsp;<a href="https://appcanary.com">Appcanary</a>. While Gemcanary could never tell you about Heartbleed, Appcanary will let you keep tabs on all of your infrastructure’s dependencies.</p>
-
-<p>Regards,</p>
-
-<p><a href="https://twitter.com/phillmv">@phillmv</a> and <a href="https://twitter.com/mveytsman">@mveytsman</a>. Comic by <a href="https://twitter.com/0sn">Nick Wolfe</a>.</p>
-
-
-      </div>
-      <hr>
-    </div>
-  </section>
-  <section>
-    <div class="entry">
-      <div class="post">
-        <h1 class="title"><a href="/2015/hello-world.html">Hello World</a></h1>
-
-        <div class="published-tags">By <span class="author"><a href="/author/team-appcanary.html">Team Appcanary</a></span> |
-          <span class="date">July 26, 2015</span></div>
-
-        <ol>
-<li><p>In 2015, building web applications involves more moving parts than ever before. The average web app depends on the interaction of hundreds of distinct open source software libraries.</p></li>
-<li><p>The easiest way to hack someone is through publically disclosed vulnerabilities they never patched.</p></li>
-<li><p>Due to a variety of technological but mostly social problems, it is really time consuming and expensive to find out about new vulns that affect us and keep our web apps patched. We mostly rely on email, twitter and hacker news as distribution channels.</p></li>
-<li><p>This sucks.</p></li>
-<li><p>We&rsquo;re going to fix this. There&rsquo;s no reason anybody should be running vulnerable software.</p></li>
-</ol>
-
-<p>Visit our page to <a href="https://appcanary.com">find out more</a>.</p>
-
-<p>Sincerely,
-<a href="https://twitter.com/phillmv">@phillmv</a> and <a href="https://twitter.com/mveytsman">@mveytsman</a>.</p>
-
-
-      </div>
-      <hr>
-    </div>
-  </section>
 
   <section>
     <div class="pagination">
       <div class="paginators">
           <a href="/page/4/" class="newer-posts">← Newer Posts</a>
 
-          <span class="page-number">Page 5 of 5</span>
+          <span class="page-number">Page 5 of 6</span>
 
+          <a href="/page/6/" class="older-posts">Older Posts →</a>
       </div>
     </div>
   </section>

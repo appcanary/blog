@@ -31,6 +31,158 @@
       <section>
     <div class="entry">
       <div class="post">
+        <h1 class="title"><a href="/2016/making-appcanary-easier.html">Making Appcanary easier to use</a></h1>
+
+        <div class="published-tags">By <span class="author"><a href="/author/max-veytsman.html">Max Veytsman</a></span> |
+          <span class="date">July 14, 2016</span> on <a href="/tags/announcements.html">Announcements</a>, <a href="/tags/product.html">Product</a></div>
+
+        <p>I&rsquo;m excited to announce that we&rsquo;ve added two features that make Appcanary a heck of a lot easier to use!</p>
+
+<h2 id="add-monitors-by-uploading-a-file">Add monitors by uploading a file</h2>
+
+<p>Our Monitor API is great if you want to track a set of Linux packages or your Gemfile. We give you a dashboard showing which packages are vulnerable, and email you whenever new vulnerabilities that affect you come out. However, there&rsquo;s always a bunch of setup to get a new API going.</p>
+
+<p>With that in mind, we made the interface a lot more user friendly! You can now upload a file to watch directly through the website. Just go to <a href="https://appcanary.com/monitors/new">add monitors</a> to be able to upload a file directly. Monitors support Ruby&rsquo;s <code>Gemfile.lock</code>, <code>/var/lib/dpkg/status</code> for Ubuntu and Debian, and the output of <code>rpm -qa</code> for Centos and Amazon Linux!</p>
+
+<h2 id="automatically-upgrade-vulnerable-packages">Automatically upgrade vulnerable packages</h2>
+
+<p>A few of our customers told us that knowing about vulnerabilities is nice, but you know what would be <em>great</em>? If we could somehow <em>patch</em> them automatically. We thought about it and said, sure, why not!</p>
+
+<p>If you have the Appcanary <a href="(https://appcanary.com/servers/new)">agent</a> installed on an Ubuntu server, and you&rsquo;re running the latest version, you can run </p>
+<pre class="highlight plaintext"><code>appcanary upgrade
+</code></pre>
+
+<p>in order to install updates for any packages we know to be vulnerable.</p>
+
+<p>You can also run</p>
+<pre class="highlight plaintext"><code>appcanary upgrade -dry-run
+</code></pre>
+
+<p>in order to see what the agent will do, without it actually touching your system. </p>
+
+<p>Now you can manage vulnerabilities, learn about new ones that affect you, and apply patches, all through Appcanary!</p>
+
+<h4 id="if-you-haven-39-t-tried-us-yet">If you haven&rsquo;t tried us yet</h4>
+
+<p>Stay on top of the security vulnerabilities that affect you, today.</p>
+
+<p><a href="https://appcanary.com/?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=making_easier">Appcanary</a>, monitors your apps and servers, and notifies you whenever a new vulnerability is discovered in a package you rely on. And now it will help you patch vulnerable packages as well.</p>
+
+<p><a href="https://appcanary.com/sign_up?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=making_easier">Sign up</a> today!</p>
+
+
+      </div>
+      <hr>
+    </div>
+  </section>
+  <section>
+    <div class="entry">
+      <div class="post">
+        <h1 class="title"><a href="/2016/vikhal-symantec.html">Vulnerabilities I Have Known and Loved #1: Symantec's Bad Week</a></h1>
+
+        <div class="published-tags">By <span class="author"><a href="/author/max-veytsman.html">Max Veytsman</a></span> |
+          <span class="date">July 07, 2016</span> on <a href="/tags/vihkal.html">vihkal</a>, <a href="/tags/security.html">security</a></div>
+
+        <p><strong>tl;dr:</strong> If you use software with &ldquo;Symantec&rdquo; or &ldquo;Norton&rdquo; somewhere in its name, <strong>stop what you&rsquo;re doing and <a href="https://www.symantec.com/support-center/upgrades">upgrade</a></strong>.</p>
+
+<p>Back in my security consulting days, a mentor taught me One Weird Trick to
+increase conversions on your phishing campaign.  It goes like this: set up an email server, get as many employee addresses you can find, and spoof a mass message that reads:</p>
+
+<blockquote>
+<p>Hello this is your boss. </p>
+
+<p>I&rsquo;m going to fire someone next week and you get to vote on who! To get your arch-nemisis fired, please log into this website that looks exactly like our company portal, but has one character in the domain name mispelled. </p>
+
+<p>Thanks, Your Boss.</p>
+</blockquote>
+
+<p>Then you sit back and count how many people fell for it.</p>
+
+<p>The executive who hired you is happy because they get to demonstrate the value of increasing their
+security budget. The consultancy you work for is happy, because they get to upsell a bunch of &ldquo;security awareness
+training&rdquo;. </p>
+
+<p>Soon, you&rsquo;ll be spending three days telling your victims about the
+importance of that little green lock in their browser&rsquo;s address bar (but only
+when it&rsquo;s in the right place!) and that they should never ever click on links,
+never open attachments, and if at all possible, stop using computers altogether. Everybody wins.</p>
+
+<p>Obviously, everyone at this stage wants to increase the conversion rate<sup id="fnref1"><a href="#fn1" rel="footnote">1</a></sup> of these phishing emails. This is where The One Weird Trick comes in: after you send out your first campaign, you craft another one. Before you know it, everyone on your list receives a helpful tip from the IT Helpdesk:</p>
+
+<blockquote>
+<p>Hi, </p>
+
+<p>We&rsquo;ve heard reports of a phishing campaign being waged against us. Don&rsquo;t open those emails! It&rsquo;s critically important that you reset your password to protect against those evil hackers who tried to phish us. </p>
+
+<p>Click here to do it!</p>
+</blockquote>
+
+<p>It turns out that round two gets <em>way</em> more clicks than round one. Most people will figure out that email #1 is a little fishy. Email #2 manages to reaffirm that, and so they dutifully click, like lambs to slaughter.</p>
+
+<p>This is the phishing equivalent of the Double Tap. No, not the one from <a href="https://www.youtube.com/watch?v=w4sWxsrEFFs">Zombieland</a>. The Double Tap I&rsquo;m talking about is a controversial <a href="http://www.businessinsider.com/drone-double-tap-first-responders-2012-9">military technique</a> where after attacking a target, you follow up by sending another missile at the first responders. You do some damage, and then attack the response to that damage.</p>
+
+<h3 id="symantec-is-having-a-bad-week">Symantec is Having a Bad Week</h3>
+
+<p>Last week <a href="https://twitter.com/taviso">Tavis Ormandy</a> dropped 8 vulns against every single Symantec/Norton antivirus product. Judging by <a href="http://fortune.com/2016/07/02/symantec-security-irony/">the press</a>, things are <a href="http://www.pcworld.com/article/3089463/security/wormable-flaws-in-symantec-products-expose-millions-of-computers-to-hacking.html">not looking good</a> for them.</p>
+
+<p>You can find a writeup up on the <a href="http://googleprojectzero.blogspot.ca/2016/06/how-to-compromise-enterprise-endpoint.html">Google Project Zero
+blog</a>, and the issues for all 8 vulnerabilities can <a href="https://bugs.chromium.org/p/project-zero/issues/list?can=1&amp;q=label%3AVendor-Symantec">be found here</a>. They&rsquo;re all remotely exploitable,<sup id="fnref2"><a href="#fn2" rel="footnote">2</a></sup> and they all should give an attacker remote code execution as root/SYSTEM (and in ring 0 for one of them to boot!)</p>
+
+<p>If you&rsquo;re using a Symantec product I can&rsquo;t stress this enough: <strong>stop what you&rsquo;re doing and <a href="https://www.symantec.com/support-center/upgrades">upgrade</a></strong>.</p>
+
+<p>These vulnerabilities reminded me of phishing and the Double Tap for two reasons. First, every one of these vulns can be exploited by just sending an email. Since the product is an antivirus, so it&rsquo;s going to scan every file that touches your disk and every email you get for viruses. You don&rsquo;t have to get your target to click a link or even open the message you sent &mdash; Symantec will happily try to parse every email you receive. </p>
+
+<p>Second, the <a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=823&amp;can=1&amp;q=label%3AVendor-Symantec">stack overflow in Symantec&rsquo;s PowerPoint parser</a> depends on a Double Tap-like attack! This parser is used to extract metadata and macros from PowerPoint decks (and presumably scan them for known malware) by exposing an I/O abstraction layer &mdash; which it then caches for performance. Tavis found that he could get that cache into a misaligned state, which resulted in the stack buffer overflow. </p>
+
+<p>This vulnerable codepath is in something called “Bloodhound Heuristics”, which Symantec promotes as a more advanced set of malware detection checks. Since they&rsquo;re not always run, you&rsquo;d think that the vulnerability wouldn&rsquo;t be very exploitable. And yet, it can be targetted every time! Under the default configuration, the system dynamically decides which set of checks to run. All Tavis had to do was try a bunch of known PowerPoint malware, see which one triggered the automatic mode to turn on &ldquo;Bloodhound Heuristics,&rdquo; and put his payload into them.</p>
+
+<p>The exploit pretends to be a certain kind of known malware in order to trigger some special aggressive checks, which are the exploit&rsquo;s true target. The Double Tap!</p>
+
+<h3 id="vulnerability-management">Vulnerability Management</h3>
+
+<p>While the above vulnerability is pretty cool, the Symantec bugs that are most interesting to us at Appcanary are <a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=810">CVE-2016-2207</a> and <a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=816">CVE-2016-2211</a>. </p>
+
+<p>Symantec was shipping its product with out of date versions of <a href="http://www.cabextract.org.uk/libmspack/">libmspack</a> and <a href="http://www.rarlab.com/rar_add.htm">unrarsrc</a>. Out of date versions that have dozens of known vulnerabilities with public exploits! All Tavis had to do was download public exploits for these known vulnerabilities, and he had an attack against Symantec.</p>
+
+<p>Ironically, Symantec sells a product called Enterprise Vulnerability Management! This is a hard problem for everyone. At Appcanary, we&rsquo;re working on solving it.</p>
+
+<h3 id="p-s">P.S.</h3>
+
+<p>Do you have suggestions for vulnerabilities you&rsquo;d like me to write about? You can let me know at <a href="mailto:max@appcanary.com">max@appcanary.com</a>.</p>
+
+<hr>
+
+<h4 id="paying-the-bills">Paying the Bills</h4>
+
+<p>One quarter of the critical vulnerabilities found in Symantec&rsquo;s products last week were there because they relied on out-of-date libraries with known security holes.</p>
+
+<p>Our product, <a href="https://appcanary.com/?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=symantec">Appcanary</a>, monitors your apps and servers, and notifies you whenever a new vulnerability is discovered in a package you rely on. </p>
+
+<p><a href="https://appcanary.com/sign_up?utm_source=blog&amp;utm_medium=web&amp;utm_campaign=symantec">Sign up</a> today!</p>
+
+<div class="footnotes">
+<hr>
+<ol>
+
+<li id="fn1">
+<p>You know, it&rsquo;s interesting that before I became the CEO of a startup, the only time I thought about &ldquo;conversion rates&rdquo; of emails in my career was when I was involved in phishing campaigns.&nbsp;<a href="#fnref1" rev="footnote">&#8617;</a></p>
+</li>
+
+<li id="fn2">
+<p>I&rsquo;m going to well-actually myself here so you don&rsquo;t have to. Tavis gives a clear path to exploit for 6 of the 8. Of the two that are left, <a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=821">one</a> is a lack of bounds checking on an array index, and the <a href="https://bugs.chromium.org/p/project-zero/issues/detail?id=819">other</a> is an integer overflow bug. I&rsquo;m going to go out on a limb and say I think both can lead to code execution. I can&rsquo;t fault the researcher for not going further though; after you find the first 6 remote code executions, you stop feeling the need to keep proving the point&hellip;&nbsp;<a href="#fnref2" rev="footnote">&#8617;</a></p>
+</li>
+
+</ol>
+</div>
+
+
+      </div>
+      <hr>
+    </div>
+  </section>
+  <section>
+    <div class="entry">
+      <div class="post">
         <h1 class="title"><a href="/2016/encrypt-or-compress.html">Should you encrypt or compress first?</a></h1>
 
         <div class="published-tags">By <span class="author"><a href="/author/max-veytsman.html">Max Veytsman</a></span> |
@@ -301,175 +453,13 @@ curl -H &quot;Authorization: Token YOURTOKENHERE&quot; \
       <hr>
     </div>
   </section>
-  <section>
-    <div class="entry">
-      <div class="post">
-        <h1 class="title"><a href="/2016/new-api-centos-support.html">Hello, new Appcanary API and CentOS support!</a></h1>
-
-        <div class="published-tags">By <span class="author"><a href="/author/max-veytsman.html">Max Veytsman</a></span> |
-          <span class="date">March 07, 2016</span> on <a href="/tags/announcements.html">Announcements</a>, <a href="/tags/product.html">Product</a></div>
-
-        <p>A lot of our users have told us, </p>
-
-<blockquote>
-<p>&ldquo;Gosh, I love knowing exactly which packages I have to update in order to keep my apps and servers secure. Have you thought about an API?&rdquo;</p>
-</blockquote>
-
-<p>We listened carefully to that feedback, and it is with pride and pleasure that we&rsquo;re announcing our new beta! We&rsquo;re still busy improving it, so we won&rsquo;t charge you for it for now.</p>
-
-<p>Once you <a href="https://appcanary.com/sign_up">sign up</a>, all you have to do is issue a curl:</p>
-<pre class="highlight shell"><code>curl -H <span class="s2">"Authorization: Token YOURTOKENHERE"</span> <span class="se">\</span>
-     -X POST -F <span class="nv">file</span><span class="o">=</span>@./Gemfile.lock <span class="se">\</span>
-     https://appcanary.com/api/v2/check/ruby
-</code></pre>
-
-<p>and you&rsquo;ll get a response like:</p>
-<pre class="highlight json"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"vulnerable"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-    </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"artifact-version"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"attributes"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rack"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rubygem"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.6.0"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"vulnerabilities"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-          </span><span class="p">{</span><span class="w">
-            </span><span class="nt">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Potential Denial of Service Vulnerability in Rack"</span><span class="p">,</span><span class="w">
-            </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Carefully crafted requests can cause a `SystemStackError` and potentially \ncause a denial of service attack. \n\nAll users running an affected release should upgrade."</span><span class="p">,</span><span class="w">
-            </span><span class="nt">"criticality"</span><span class="p">:</span><span class="w"> </span><span class="s2">"high"</span><span class="p">,</span><span class="w">
-            </span><span class="nt">"cve"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-              </span><span class="s2">"CVE-2015-3225"</span><span class="w">
-            </span><span class="p">],</span><span class="w">
-            </span><span class="nt">"osvdb"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
-            </span><span class="nt">"patched-versions"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-              </span><span class="s2">"~&lt; 1.5.4"</span><span class="p">,</span><span class="w">
-              </span><span class="s2">"~&lt; 1.4.6"</span><span class="p">,</span><span class="w">
-              </span><span class="s2">"&gt;= 1.6.2"</span><span class="w">
-            </span><span class="p">],</span><span class="w">
-            </span><span class="nt">"unaffected-versions"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
-            </span><span class="nt">"uuid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"55807540-053f-40f0-9266-a3d1ca6a5838"</span><span class="p">,</span><span class="w">
-            </span><span class="nt">"upgrade-to"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-              </span><span class="s2">"&gt;= 1.6.2"</span><span class="w">
-            </span><span class="p">]</span><span class="w">
-          </span><span class="p">}</span><span class="w">
-        </span><span class="p">]</span><span class="w">
-      </span><span class="p">}</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-  </span><span class="p">]</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-
-<p>Our API fully supports <strong>Ruby</strong>, <strong>Ubuntu</strong>, and <strong>CentOS 7</strong>! You can learn more about how to use it by visiting <a href="https://appcanary.com/docs">the docs page</a>.</p>
-
-<p>Which reminds us,</p>
-
-<h2 id="we-now-support-centos-7">We now support CentOS 7!</h2>
-
-<p>Appcanary now fully supports <strong>CentoOS 7</strong>. If you install our agent on a CentOS 7 server, we will email you notifications whenever any rpm package you have installed on your system has a known vulnerability.</p>
-
-<p>If you&rsquo;re not a current user and want to try out Appcanary&rsquo;s API and/or use us to monitor your CentOS 7 servers, you can <a href="https://appcanary.com/signup">sign up</a>!</p>
-
-<p>You can always let us know what you think at <a href="mailto:hello@appcanary.com">hello@appcanary.com</a>.</p>
-
-
-      </div>
-      <hr>
-    </div>
-  </section>
-  <section>
-    <div class="entry">
-      <div class="post">
-        <h1 class="title"><a href="/2016/slippery-exception-clojure-ruby.html">Slippery exceptions in Clojure and Ruby</a></h1>
-
-        <div class="published-tags">By <span class="author"><a href="/author/phillip-mendonca-vieira.html">Phillip Mendonça-Vieira</a></span> |
-          <span class="date">February 16, 2016</span> on <a href="/tags/clojure.html">Clojure</a>, <a href="/tags/ruby.html">Ruby</a>, <a href="/tags/programming.html">Programming</a>, <a href="/tags/bugs.html">Bugs</a>, <a href="/tags/developer-diary.html">Developer Diary</a></div>
-
-        <p>Recently I spent a couple of hours banging my head against code that looks like this:</p>
-<pre class="highlight clojure"><code><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">parse-file</span><span class="w">
-  </span><span class="p">[</span><span class="n">contents</span><span class="p">]</span><span class="w">
-  </span><span class="p">(</span><span class="nb">remove</span><span class="w"> </span><span class="nb">nil?</span><span class="w">
-          </span><span class="p">(</span><span class="nf">code-that</span><span class="w"> </span><span class="n">throws-an-exception</span><span class="p">)))</span><span class="w">
-
-</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">consume-manifest</span><span class="w">
-  </span><span class="p">[</span><span class="n">contents</span><span class="w"> </span><span class="n">kind</span><span class="p">]</span><span class="w">
-  </span><span class="p">(</span><span class="nf">try+</span><span class="w">
-    </span><span class="p">(</span><span class="nf">parse-file</span><span class="w"> </span><span class="n">kind</span><span class="w"> </span><span class="n">contents</span><span class="p">)</span><span class="w">
-
-    </span><span class="p">(</span><span class="nf">catch</span><span class="w"> </span><span class="n">java.lang.Exception</span><span class="w"> </span><span class="n">e</span><span class="w">
-      </span><span class="p">(</span><span class="nf">throw+</span><span class="w"> </span><span class="p">{</span><span class="no">:type</span><span class="w"> </span><span class="no">::bad-parse</span><span class="w"> </span><span class="no">:message</span><span class="w"> </span><span class="s">"Invalid file."</span><span class="p">}))))</span><span class="w">
-
-</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">check</span><span class="w">
-  </span><span class="p">[</span><span class="n">file</span><span class="w"> </span><span class="n">kind</span><span class="p">]</span><span class="w">
-  </span><span class="p">(</span><span class="nf">try+</span><span class="w">
-    </span><span class="p">(</span><span class="k">let</span><span class="w"> </span><span class="p">[</span><span class="n">artifacts</span><span class="w"> </span><span class="p">(</span><span class="nf">consume-manifest</span><span class="w"> </span><span class="p">(</span><span class="nb">slurp</span><span class="w"> </span><span class="n">file</span><span class="p">)</span><span class="w"> </span><span class="n">kind</span><span class="p">]</span><span class="w">
-      </span><span class="p">(</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nf">not-empty</span><span class="w"> </span><span class="n">artifacts</span><span class="p">)</span><span class="w">
-        </span><span class="err">…</span><span class="w"> </span><span class="n">etc</span><span class="w">
-</span></code></pre>
-
-<p>And much to my surprise, I kept getting the kind of exception <code>parse-file</code> generates deep within the <code>check</code> function, right up against <code>(not-empty artifacts)</code>.</p>
-
-<p>I&rsquo;ve grown somewhat used to Clojure exceptions being unhelpful, but this was taking the cake. Coming from Ruby and pretty much every other language, this brushed up rudely against my expectations. </p>
-
-<p>You can tell that exceptions in Clojure are unloved, given how cumbersome handling them natively is. We&rsquo;d had some trouble in the past getting <a href="https://github.com/scgilardi/slingshot">slingshot</a> to behave properly, so I zero&#39;ed in on there. Don&rsquo;t all exceptions in Java descend from <code>Exception</code>?</p>
-
-<p>Stepping through <code>check</code> in the <a href="cursive-ide.com">Cursive</a> debugger, I could see that the exception generated was a pure java exception, not a slingshot exception generated by <code>throw+</code> in <code>consume-manifest</code>. This meant that the exception was slipping straight through uncaught. But calling <code>consume-manifest</code> directly in my repl was causing it to work as intended.</p>
-
-<p>What the hell was going on?</p>
-
-<p><a href="https://twitter.com/mveytsman">Max</a> took one look at it and set me straight. &ldquo;Oh. <a href="https://clojuredocs.org/clojure.core/remove"><code>remove</code></a> is lazy, so the exception isn&rsquo;t being throw until the lazy sequence is accessed.&rdquo;</p>
-
-<p>Excuse me? I had an angry expression on my face. He looked sheepish.</p>
-
-<p>&ldquo;How else would a lazy data structure work?&rdquo;</p>
-
-<p>Well. I would expect a <code>catch java.lang.Exception</code> to <em>catch every exception</em>.</p>
-
-<p>&ldquo;Right, well, hear me out. What if you had the following Ruby?&rdquo;</p>
-<pre class="highlight ruby"><code><span class="k">def</span> <span class="nf">lazy_parse</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-  <span class="no">File</span><span class="p">.</span><span class="nf">open</span><span class="p">(</span><span class="n">filename</span><span class="p">).</span><span class="nf">each_line</span><span class="p">.</span><span class="nf">each_with_index</span><span class="p">.</span><span class="nf">lazy</span><span class="p">.</span><span class="nf">map</span> <span class="k">do</span> <span class="o">|</span><span class="n">line</span><span class="p">,</span> <span class="n">i</span><span class="o">|</span>
-    <span class="k">raise</span> <span class="s2">"You can't catch me, I'm the exception man"</span> <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">5</span>
-    <span class="n">line</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-
-<span class="k">def</span> <span class="nf">consume_file</span>
-  <span class="k">begin</span>
-    <span class="n">lazy_parse</span><span class="p">(</span><span class="s2">"Gemfile.lock"</span><span class="p">)</span>
-  <span class="k">rescue</span>
-    <span class="nb">puts</span> <span class="s2">"Woops, an exception. Good thing we caught it."</span>
-  <span class="k">end</span>
-<span class="k">end</span>
-
-<span class="n">file</span> <span class="o">=</span> <span class="n">consume_file</span>
-<span class="nb">puts</span> <span class="n">file</span><span class="p">.</span><span class="nf">first</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-</code></pre>
-
-<p>(Did you know that Ruby has had <a href="http://railsware.com/blog/2012/03/13/ruby-2-0-enumerablelazy/">lazy enumerables</a> for almost four years now? Worth reading <a href="http://patshaughnessy.net/2013/4/3/ruby-2-0-works-hard-so-you-can-be-lazy">Shaughnessy as well</a>.)</p>
-
-<p>That shut me up good. And in case you were wondering, the stack trace is also useless in Ruby; there simply isn&rsquo;t any context for it to preserve. Frankly, I&rsquo;ve just never had to think about lazy data structures in Rubyland; they&rsquo;ve not been super popular. </p>
-
-<p>It&rsquo;s hard to reason about this. I want to write wrapper functions that make my code safe to consume downstream. This isn&rsquo;t feasible for any functions iterating over potentially infinite lazy sequences, but fortunately for us we need to fit this file into memory anyways. In Ruby we&rsquo;d have to forcibly iterate over every element of the sequence and check for exceptions, but Clojure makes this easy with <a href="https://clojuredocs.org/clojure.core/doall"><code>doall</code></a>:</p>
-<pre class="highlight clojure"><code><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">parse-file</span><span class="w">
-  </span><span class="p">[</span><span class="n">contents</span><span class="p">]</span><span class="w">
-  </span><span class="p">(</span><span class="nb">doall</span><span class="w"> </span><span class="p">(</span><span class="nb">remove</span><span class="w"> </span><span class="nb">nil?</span><span class="w">
-                 </span><span class="p">(</span><span class="nf">code-that</span><span class="w"> </span><span class="n">throws-an-exception</span><span class="p">))))</span><span class="w">
-</span></code></pre>
-
-<p>And now, things behave as intended.</p>
-
-
-      </div>
-      <hr>
-    </div>
-  </section>
 
   <section>
     <div class="pagination">
       <div class="paginators">
           <a href="/page/3/" class="newer-posts">← Newer Posts</a>
 
-          <span class="page-number">Page 4 of 5</span>
+          <span class="page-number">Page 4 of 6</span>
 
           <a href="/page/5/" class="older-posts">Older Posts →</a>
       </div>
