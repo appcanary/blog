@@ -19,7 +19,7 @@ gem 'builder', '~> 3.2.2'
 
 # Code syntax highlighting
 gem 'middleman-syntax', '~> 2.1.0'
-gem 'redcarpet', '~> 3.3.4'
+gem 'redcarpet', '~> 3.5.1'
 
 # For "summary"-Helper
 gem 'nokogiri', '~> 1.6.7.1'
