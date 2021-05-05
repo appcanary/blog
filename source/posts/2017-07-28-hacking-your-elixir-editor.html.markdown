@@ -11,7 +11,7 @@ I've been playing with Elixir recently, and came across a remote code execution 
 
 Before we continue, a warning: if you use Vim and have ever edited Elixir files **stop what you're doing and upgrade [alchemist.vim](https://github.com/slashmili/alchemist.vim) to 2.8.0**. Seriously, go do it, right now.
 
-Done? Okay, let's take it from the top. If you want to implement nice editor support for a language, and provide things like code-completion or jump-to-definition, you need some way to introspect both the source code being edited and the language's runtime environment to figure out what suggestions to give to your users. 
+Done? Okay, let's take it from the top. If you want to implement nice editor support for a language, and provide things like code-completion or jump-to-definition, you need some way to introspect both the source code being edited and the language's runtime environment to figure out what suggestions to give to your users.
 
 There's a package called [alchemist](https://github.com/tonini/alchemist.el) that provides Elixir support for Emacs. It has nice features like code-completion, and jump-to-definition, and, thereofre, it understands Elixir code and can read through a project's dependencies and stuff like that. A common pattern when writing editor plugins is to build a little background program in the language you're targeting that can introspect the runtime and tell the editor where symbols are defined and help with code completion. Alchemist does this with [alchemist-server](https://github.com/tonini/alchemist-server).
 
@@ -19,9 +19,9 @@ Alchemist-server is also used by the Vim plugin, [alchemist.vim](https://github.
 
 # The bug
 
-I can't claim credit for the original bug. It was [reported](https://github.com/tonini/alchemist-server/issues/14) by [Ivan Kozik](https://github.com/ivan) back in February. 
+I can't claim credit for the original bug. It was [reported](https://github.com/tonini/alchemist-server/issues/14) by [Ivan Kozik](https://github.com/ivan) back in February.
 
-The issue is that alchemist-server accepted `EVAL` as a command and listened unauthenticated on all interfaces. This means that anyone in the same coffee shop as you can eval arbitrary Elixir code on your computer if they can guess the [ephemeral port](https://en.wikipedia.org/wiki/Ephemeral_port) the server is running on. 
+The issue is that alchemist-server accepted `EVAL` as a command and listened unauthenticated on all interfaces. This means that anyone in the same coffee shop as you can eval arbitrary Elixir code on your computer if they can guess the [ephemeral port](https://en.wikipedia.org/wiki/Ephemeral_port) the server is running on.
 
 This is really bad, and unfortunately had not been addressed since the issue was reported. I think this bug wasn't patched immediately for three reasons:
 
@@ -37,18 +37,18 @@ Ivan's original exploit takes advantage of the fact that alchemist-server uses `
 Assuiming `PORT` is the ephemeral port the server is running on, his exploit looks like this:
 
 ```bash
-echo 'EVAL File.write!("/tmp/payload", 
+echo 'EVAL File.write!("/tmp/payload",
 "File.read!(Path.expand(~s(~/.ssh/id_rsa)))");
 {:eval, "/tmp/payload"}' | nc 127.0.0.1 PORT
  ```
- 
+
 - `EVAL` is a command for the Elixir server.
 - `File.write!("/tmp/payload", "File.read!(Path.expand(~s(~/.ssh/id_rsa)))");` is the part that's processed by `eval-string`. It writes a malicious elixir script to `/tmp/payload`. The script itself returns the contents of the user's ssh private key.
 - `{:eval, "/tmp/payload"}` tells the server to evaluate the file in which the malicious script was written.
 
 # The danger of line based protocols
 
-I know what you're thinking: "it's really too bad that alchemist-server is evaling things to begin with". And, you're dead wrong. 
+I know what you're thinking: "it's really too bad that alchemist-server is evaling things to begin with". And, you're dead wrong.
 
 It's perfectly fine for developer tools to execute code sent to them by a user; actually, most developer tools are designed specifically to evaluate arbitrary code in one way or another. The problem is that it's accepting code to be evaled over _a TCP connection_.
 
@@ -67,7 +67,7 @@ PONG
 END-OF-PING
 ```
 
-This is where things get real bad for alchemist-server. We're dealing with a line based protocol, and what's more, it's ignoring[^printf] commands it doesn't understand. You know what else is a line-based protocol? HTTP. 
+This is where things get real bad for alchemist-server. We're dealing with a line based protocol, and what's more, it's ignoring[^printf] commands it doesn't understand. You know what else is a line-based protocol? HTTP.
 
 That means we can get a browser to issue a request to localhost and alchemist-server will ignore all the headers and HTTP formalities and happily execute an EVAL command if we put it on its own line.
 
@@ -122,7 +122,7 @@ EVAL File.write!("/tmp/payload",
 
 This is what it looks like when wrapped in HTML/Javascript:
 
-<video src="/videos/alchemist_server.webm" width="640" height="360" controls>
+<video preload="none" src="/videos/alchemist_server.webm" width="640" height="360" controls>
 </video>
 
 Thanks for reading, and make sure you update your alchemist-server!

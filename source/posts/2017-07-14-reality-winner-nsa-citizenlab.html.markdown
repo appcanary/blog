@@ -9,9 +9,9 @@ tags: Podcast, NSA, Citizenlab
 
 Max and Phill talk about Reality Winner's bad opsec and the huge phishing campaign unearthed by Citizenlab. Produced by [Katie Jensen](https://twitter.com/katiejensen).
 
-You can follow along on <a href="https://itunes.apple.com/ca/podcast/appcanary-podcast/id1215405635">iTunes</a>, or subscribe directly to <a href="https://podcast.appcanary.com/podcast.rss">the feed</a>. 
+You can follow along on <a href="https://itunes.apple.com/ca/podcast/appcanary-podcast/id1215405635">iTunes</a>, or subscribe directly to <a href="https://podcast.appcanary.com/podcast.rss">the feed</a>.
 
-<audio controls preload="metadata" style="width: 100%;">
+<audio controls preload="none" style="width: 100%;">
 	<source src="https://podcast.appcanary.com/mp3/appcanary-ep4.mp3" type="audio/mpeg">
 	Your browser does not support the audio element.
 </audio>

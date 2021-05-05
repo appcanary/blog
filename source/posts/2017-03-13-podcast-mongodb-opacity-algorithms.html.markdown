@@ -8,11 +8,11 @@ tags: Podcast
 
 Max and I are both avid podcast consumers, and we thought it'd be fun and interesting to produce a podcast. So... we did!
 
-You can follow along on <a href="https://itunes.apple.com/ca/podcast/appcanary-podcast/id1215405635">iTunes</a>, or subscribe directly to <a href="https://podcast.appcanary.com/podcast.rss">the feed</a>. 
+You can follow along on <a href="https://itunes.apple.com/ca/podcast/appcanary-podcast/id1215405635">iTunes</a>, or subscribe directly to <a href="https://podcast.appcanary.com/podcast.rss">the feed</a>.
 
 In our inaugural episode, we discuss MongoDB ransomware, and the opacity of algorithms. Produced by [Katie Jensen](https://twitter.com/katiejensen).
 
-<audio controls preload="metadata" style=" width:300px;">
+<audio controls preload="none" style=" width:300px;">
 	<source src="https://podcast.appcanary.com/mp3/appcanary-ep1.mp3" type="audio/mpeg">
 	Your browser does not support the audio element.
 </audio>
