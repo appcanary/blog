@@ -39,7 +39,7 @@
 
 <p>Before we continue, a warning: if you use Vim and have ever edited Elixir files <strong>stop what you&rsquo;re doing and upgrade <a href="https://github.com/slashmili/alchemist.vim">alchemist.vim</a> to 2.8.0</strong>. Seriously, go do it, right now.</p>
 
-<p>Done? Okay, let&rsquo;s take it from the top. If you want to implement nice editor support for a language, and provide things like code-completion or jump-to-definition, you need some way to introspect both the source code being edited and the language&rsquo;s runtime environment to figure out what suggestions to give to your users. </p>
+<p>Done? Okay, let&rsquo;s take it from the top. If you want to implement nice editor support for a language, and provide things like code-completion or jump-to-definition, you need some way to introspect both the source code being edited and the language&rsquo;s runtime environment to figure out what suggestions to give to your users.</p>
 
 <p>There&rsquo;s a package called <a href="https://github.com/tonini/alchemist.el">alchemist</a> that provides Elixir support for Emacs. It has nice features like code-completion, and jump-to-definition, and, thereofre, it understands Elixir code and can read through a project&rsquo;s dependencies and stuff like that. A common pattern when writing editor plugins is to build a little background program in the language you&rsquo;re targeting that can introspect the runtime and tell the editor where symbols are defined and help with code completion. Alchemist does this with <a href="https://github.com/tonini/alchemist-server">alchemist-server</a>.</p>
 
@@ -47,9 +47,9 @@
 
 <h1 id="the-bug">The bug</h1>
 
-<p>I can&rsquo;t claim credit for the original bug. It was <a href="https://github.com/tonini/alchemist-server/issues/14">reported</a> by <a href="https://github.com/ivan">Ivan Kozik</a> back in February. </p>
+<p>I can&rsquo;t claim credit for the original bug. It was <a href="https://github.com/tonini/alchemist-server/issues/14">reported</a> by <a href="https://github.com/ivan">Ivan Kozik</a> back in February.</p>
 
-<p>The issue is that alchemist-server accepted <code>EVAL</code> as a command and listened unauthenticated on all interfaces. This means that anyone in the same coffee shop as you can eval arbitrary Elixir code on your computer if they can guess the <a href="https://en.wikipedia.org/wiki/Ephemeral_port">ephemeral port</a> the server is running on. </p>
+<p>The issue is that alchemist-server accepted <code>EVAL</code> as a command and listened unauthenticated on all interfaces. This means that anyone in the same coffee shop as you can eval arbitrary Elixir code on your computer if they can guess the <a href="https://en.wikipedia.org/wiki/Ephemeral_port">ephemeral port</a> the server is running on.</p>
 
 <p>This is really bad, and unfortunately had not been addressed since the issue was reported. I think this bug wasn&rsquo;t patched immediately for three reasons:</p>
 
@@ -65,7 +65,7 @@
 <p>Ivan&rsquo;s original exploit takes advantage of the fact that alchemist-server uses <code>eval-string</code> to process arguments in several cases and it contains a <code>EVAL</code> command for evaluating files, probably for loading modified files into your repl environment. He sends a command that uses the <code>eval-string</code>ed portion to write a malicious Elixir script to a file and then executes it, with the results returned to the user.</p>
 
 <p>Assuiming <code>PORT</code> is the ephemeral port the server is running on, his exploit looks like this:</p>
-<pre class="highlight shell"><code><span class="nb">echo</span> <span class="s1">'EVAL File.write!("/tmp/payload", 
+<pre class="highlight shell"><code><span class="nb">echo</span> <span class="s1">'EVAL File.write!("/tmp/payload",
 "File.read!(Path.expand(~s(~/.ssh/id_rsa)))");
 {:eval, "/tmp/payload"}'</span> | nc 127.0.0.1 PORT
 </code></pre>
@@ -78,7 +78,7 @@
 
 <h1 id="the-danger-of-line-based-protocols">The danger of line based protocols</h1>
 
-<p>I know what you&rsquo;re thinking: &ldquo;it&rsquo;s really too bad that alchemist-server is evaling things to begin with&rdquo;. And, you&rsquo;re dead wrong. </p>
+<p>I know what you&rsquo;re thinking: &ldquo;it&rsquo;s really too bad that alchemist-server is evaling things to begin with&rdquo;. And, you&rsquo;re dead wrong.</p>
 
 <p>It&rsquo;s perfectly fine for developer tools to execute code sent to them by a user; actually, most developer tools are designed specifically to evaluate arbitrary code in one way or another. The problem is that it&rsquo;s accepting code to be evaled over <em>a TCP connection</em>.</p>
 
@@ -95,7 +95,7 @@ PONG
 END-OF-PING
 </code></pre>
 
-<p>This is where things get real bad for alchemist-server. We&rsquo;re dealing with a line based protocol, and what&rsquo;s more, it&rsquo;s ignoring<sup id="fnref2"><a href="#fn2" rel="footnote">2</a></sup> commands it doesn&rsquo;t understand. You know what else is a line-based protocol? HTTP. </p>
+<p>This is where things get real bad for alchemist-server. We&rsquo;re dealing with a line based protocol, and what&rsquo;s more, it&rsquo;s ignoring<sup id="fnref2"><a href="#fn2" rel="footnote">2</a></sup> commands it doesn&rsquo;t understand. You know what else is a line-based protocol? HTTP.</p>
 
 <p>That means we can get a browser to issue a request to localhost and alchemist-server will ignore all the headers and HTTP formalities and happily execute an EVAL command if we put it on its own line.</p>
 
@@ -149,7 +149,7 @@ The browser will now see this as a response to its XHR request.
 
 <p>This is what it looks like when wrapped in HTML/Javascript:</p>
 
-<video src="/videos/alchemist_server.webm" width="640" height="360" controls>
+<video preload="none" src="/videos/alchemist_server.webm" width="640" height="360" controls>
 </video>
 
 <p>Thanks for reading, and make sure you update your alchemist-server!</p>

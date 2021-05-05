@@ -11,7 +11,7 @@
     <link rel="alternate" href="https://blog.appcanary.com/2018/goodbye.html"/>
     <id>https://blog.appcanary.com/2018/goodbye.html</id>
     <published>2018-01-03T19:00:00-05:00</published>
-    <updated>2018-01-04T09:30:48-05:00</updated>
+    <updated>2018-02-05T12:32:31-05:00</updated>
     <author>
       <name>Team Appcanary</name>
     </author>
@@ -93,15 +93,15 @@
     <link rel="alternate" href="https://blog.appcanary.com/2017/clojure-ruby-joy-developer-happiness.html"/>
     <id>https://blog.appcanary.com/2017/clojure-ruby-joy-developer-happiness.html</id>
     <published>2017-09-17T20:00:00-04:00</published>
-    <updated>2018-01-03T17:02:57-05:00</updated>
+    <updated>2021-05-05T00:08:06-04:00</updated>
     <author>
       <name>Phillip Mendonça-Vieira</name>
     </author>
     <content type="html">&lt;p&gt;Max and Phill revisit leaving Clojure, and what joy and developer happiness actually means. Produced by &lt;a href="https://twitter.com/katiejensen"&gt;Katie Jensen&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;You can follow along on &lt;a href="https://itunes.apple.com/ca/podcast/appcanary-podcast/id1215405635"&gt;iTunes&lt;/a&gt;, or subscribe directly to &lt;a href="https://podcast.appcanary.com/podcast.rss"&gt;the feed&lt;/a&gt;. &lt;/p&gt;
+&lt;p&gt;You can follow along on &lt;a href="https://itunes.apple.com/ca/podcast/appcanary-podcast/id1215405635"&gt;iTunes&lt;/a&gt;, or subscribe directly to &lt;a href="https://podcast.appcanary.com/podcast.rss"&gt;the feed&lt;/a&gt;.&lt;/p&gt;
 
-&lt;audio controls preload="metadata" style="width: 100%;"&gt;
+&lt;audio controls preload="none" style="width: 100%;"&gt;
     &lt;source src="https://podcast.appcanary.com/mp3/appcanary-ep6.mp3" type="audio/mpeg"&gt;
     Your browser does not support the audio element.
 &lt;/audio&gt;
@@ -119,15 +119,15 @@
     <link rel="alternate" href="https://blog.appcanary.com/2017/canada-c51-gop-voter-data.html"/>
     <id>https://blog.appcanary.com/2017/canada-c51-gop-voter-data.html</id>
     <published>2017-07-31T20:00:00-04:00</published>
-    <updated>2018-01-03T17:02:57-05:00</updated>
+    <updated>2021-05-05T00:08:03-04:00</updated>
     <author>
       <name>Phillip Mendonça-Vieira</name>
     </author>
     <content type="html">&lt;p&gt;Phill and Max discuss new spying powers in Canada, and the leak of GOP voter data. Produced by &lt;a href="https://twitter.com/katiejensen"&gt;Katie Jensen&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;You can follow along on &lt;a href="https://itunes.apple.com/ca/podcast/appcanary-podcast/id1215405635"&gt;iTunes&lt;/a&gt;, or subscribe directly to &lt;a href="https://podcast.appcanary.com/podcast.rss"&gt;the feed&lt;/a&gt;. &lt;/p&gt;
+&lt;p&gt;You can follow along on &lt;a href="https://itunes.apple.com/ca/podcast/appcanary-podcast/id1215405635"&gt;iTunes&lt;/a&gt;, or subscribe directly to &lt;a href="https://podcast.appcanary.com/podcast.rss"&gt;the feed&lt;/a&gt;.&lt;/p&gt;
 
-&lt;audio controls preload="metadata" style="width: 100%;"&gt;
+&lt;audio controls preload="none" style="width: 100%;"&gt;
     &lt;source src="https://podcast.appcanary.com/mp3/appcanary-ep5.mp3" type="audio/mpeg"&gt;
     Your browser does not support the audio element.
 &lt;/audio&gt;
@@ -148,7 +148,7 @@
     <link rel="alternate" href="https://blog.appcanary.com/2017/hacking-your-elixir-editor.html"/>
     <id>https://blog.appcanary.com/2017/hacking-your-elixir-editor.html</id>
     <published>2017-07-27T20:00:00-04:00</published>
-    <updated>2017-07-31T00:52:41-04:00</updated>
+    <updated>2021-05-05T00:16:24-04:00</updated>
     <author>
       <name>Max Veytsman</name>
     </author>
@@ -156,7 +156,7 @@
 
 &lt;p&gt;Before we continue, a warning: if you use Vim and have ever edited Elixir files &lt;strong&gt;stop what you&amp;rsquo;re doing and upgrade &lt;a href="https://github.com/slashmili/alchemist.vim"&gt;alchemist.vim&lt;/a&gt; to 2.8.0&lt;/strong&gt;. Seriously, go do it, right now.&lt;/p&gt;
 
-&lt;p&gt;Done? Okay, let&amp;rsquo;s take it from the top. If you want to implement nice editor support for a language, and provide things like code-completion or jump-to-definition, you need some way to introspect both the source code being edited and the language&amp;rsquo;s runtime environment to figure out what suggestions to give to your users. &lt;/p&gt;
+&lt;p&gt;Done? Okay, let&amp;rsquo;s take it from the top. If you want to implement nice editor support for a language, and provide things like code-completion or jump-to-definition, you need some way to introspect both the source code being edited and the language&amp;rsquo;s runtime environment to figure out what suggestions to give to your users.&lt;/p&gt;
 
 &lt;p&gt;There&amp;rsquo;s a package called &lt;a href="https://github.com/tonini/alchemist.el"&gt;alchemist&lt;/a&gt; that provides Elixir support for Emacs. It has nice features like code-completion, and jump-to-definition, and, thereofre, it understands Elixir code and can read through a project&amp;rsquo;s dependencies and stuff like that. A common pattern when writing editor plugins is to build a little background program in the language you&amp;rsquo;re targeting that can introspect the runtime and tell the editor where symbols are defined and help with code completion. Alchemist does this with &lt;a href="https://github.com/tonini/alchemist-server"&gt;alchemist-server&lt;/a&gt;.&lt;/p&gt;
 
@@ -164,9 +164,9 @@
 
 &lt;h1 id="the-bug"&gt;The bug&lt;/h1&gt;
 
-&lt;p&gt;I can&amp;rsquo;t claim credit for the original bug. It was &lt;a href="https://github.com/tonini/alchemist-server/issues/14"&gt;reported&lt;/a&gt; by &lt;a href="https://github.com/ivan"&gt;Ivan Kozik&lt;/a&gt; back in February. &lt;/p&gt;
+&lt;p&gt;I can&amp;rsquo;t claim credit for the original bug. It was &lt;a href="https://github.com/tonini/alchemist-server/issues/14"&gt;reported&lt;/a&gt; by &lt;a href="https://github.com/ivan"&gt;Ivan Kozik&lt;/a&gt; back in February.&lt;/p&gt;
 
-&lt;p&gt;The issue is that alchemist-server accepted &lt;code&gt;EVAL&lt;/code&gt; as a command and listened unauthenticated on all interfaces. This means that anyone in the same coffee shop as you can eval arbitrary Elixir code on your computer if they can guess the &lt;a href="https://en.wikipedia.org/wiki/Ephemeral_port"&gt;ephemeral port&lt;/a&gt; the server is running on. &lt;/p&gt;
+&lt;p&gt;The issue is that alchemist-server accepted &lt;code&gt;EVAL&lt;/code&gt; as a command and listened unauthenticated on all interfaces. This means that anyone in the same coffee shop as you can eval arbitrary Elixir code on your computer if they can guess the &lt;a href="https://en.wikipedia.org/wiki/Ephemeral_port"&gt;ephemeral port&lt;/a&gt; the server is running on.&lt;/p&gt;
 
 &lt;p&gt;This is really bad, and unfortunately had not been addressed since the issue was reported. I think this bug wasn&amp;rsquo;t patched immediately for three reasons:&lt;/p&gt;
 
@@ -182,7 +182,7 @@
 &lt;p&gt;Ivan&amp;rsquo;s original exploit takes advantage of the fact that alchemist-server uses &lt;code&gt;eval-string&lt;/code&gt; to process arguments in several cases and it contains a &lt;code&gt;EVAL&lt;/code&gt; command for evaluating files, probably for loading modified files into your repl environment. He sends a command that uses the &lt;code&gt;eval-string&lt;/code&gt;ed portion to write a malicious Elixir script to a file and then executes it, with the results returned to the user.&lt;/p&gt;
 
 &lt;p&gt;Assuiming &lt;code&gt;PORT&lt;/code&gt; is the ephemeral port the server is running on, his exploit looks like this:&lt;/p&gt;
-&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s1"&gt;'EVAL File.write!("/tmp/payload", 
+&lt;pre class="highlight shell"&gt;&lt;code&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s1"&gt;'EVAL File.write!("/tmp/payload",
 "File.read!(Path.expand(~s(~/.ssh/id_rsa)))");
 {:eval, "/tmp/payload"}'&lt;/span&gt; | nc 127.0.0.1 PORT
 &lt;/code&gt;&lt;/pre&gt;
@@ -195,7 +195,7 @@
 
 &lt;h1 id="the-danger-of-line-based-protocols"&gt;The danger of line based protocols&lt;/h1&gt;
 
-&lt;p&gt;I know what you&amp;rsquo;re thinking: &amp;ldquo;it&amp;rsquo;s really too bad that alchemist-server is evaling things to begin with&amp;rdquo;. And, you&amp;rsquo;re dead wrong. &lt;/p&gt;
+&lt;p&gt;I know what you&amp;rsquo;re thinking: &amp;ldquo;it&amp;rsquo;s really too bad that alchemist-server is evaling things to begin with&amp;rdquo;. And, you&amp;rsquo;re dead wrong.&lt;/p&gt;
 
 &lt;p&gt;It&amp;rsquo;s perfectly fine for developer tools to execute code sent to them by a user; actually, most developer tools are designed specifically to evaluate arbitrary code in one way or another. The problem is that it&amp;rsquo;s accepting code to be evaled over &lt;em&gt;a TCP connection&lt;/em&gt;.&lt;/p&gt;
 
@@ -212,7 +212,7 @@ PONG
 END-OF-PING
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;This is where things get real bad for alchemist-server. We&amp;rsquo;re dealing with a line based protocol, and what&amp;rsquo;s more, it&amp;rsquo;s ignoring&lt;sup id="fnref2"&gt;&lt;a href="#fn2" rel="footnote"&gt;2&lt;/a&gt;&lt;/sup&gt; commands it doesn&amp;rsquo;t understand. You know what else is a line-based protocol? HTTP. &lt;/p&gt;
+&lt;p&gt;This is where things get real bad for alchemist-server. We&amp;rsquo;re dealing with a line based protocol, and what&amp;rsquo;s more, it&amp;rsquo;s ignoring&lt;sup id="fnref2"&gt;&lt;a href="#fn2" rel="footnote"&gt;2&lt;/a&gt;&lt;/sup&gt; commands it doesn&amp;rsquo;t understand. You know what else is a line-based protocol? HTTP.&lt;/p&gt;
 
 &lt;p&gt;That means we can get a browser to issue a request to localhost and alchemist-server will ignore all the headers and HTTP formalities and happily execute an EVAL command if we put it on its own line.&lt;/p&gt;
 
@@ -266,7 +266,7 @@ The browser will now see this as a response to its XHR request.
 
 &lt;p&gt;This is what it looks like when wrapped in HTML/Javascript:&lt;/p&gt;
 
-&lt;video src="/videos/alchemist_server.webm" width="640" height="360" controls&gt;
+&lt;video preload="none" src="/videos/alchemist_server.webm" width="640" height="360" controls&gt;
 &lt;/video&gt;
 
 &lt;p&gt;Thanks for reading, and make sure you update your alchemist-server!&lt;/p&gt;
@@ -296,15 +296,15 @@ The browser will now see this as a response to its XHR request.
     <link rel="alternate" href="https://blog.appcanary.com/2017/reality-winner-nsa-citizenlab.html"/>
     <id>https://blog.appcanary.com/2017/reality-winner-nsa-citizenlab.html</id>
     <published>2017-07-13T20:00:00-04:00</published>
-    <updated>2017-07-27T16:58:14-04:00</updated>
+    <updated>2021-05-05T00:07:36-04:00</updated>
     <author>
       <name>Phillip Mendonça-Vieira</name>
     </author>
     <content type="html">&lt;p&gt;Max and Phill talk about Reality Winner&amp;rsquo;s bad opsec and the huge phishing campaign unearthed by Citizenlab. Produced by &lt;a href="https://twitter.com/katiejensen"&gt;Katie Jensen&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;You can follow along on &lt;a href="https://itunes.apple.com/ca/podcast/appcanary-podcast/id1215405635"&gt;iTunes&lt;/a&gt;, or subscribe directly to &lt;a href="https://podcast.appcanary.com/podcast.rss"&gt;the feed&lt;/a&gt;. &lt;/p&gt;
+&lt;p&gt;You can follow along on &lt;a href="https://itunes.apple.com/ca/podcast/appcanary-podcast/id1215405635"&gt;iTunes&lt;/a&gt;, or subscribe directly to &lt;a href="https://podcast.appcanary.com/podcast.rss"&gt;the feed&lt;/a&gt;.&lt;/p&gt;
 
-&lt;audio controls preload="metadata" style="width: 100%;"&gt;
+&lt;audio controls preload="none" style="width: 100%;"&gt;
     &lt;source src="https://podcast.appcanary.com/mp3/appcanary-ep4.mp3" type="audio/mpeg"&gt;
     Your browser does not support the audio element.
 &lt;/audio&gt;
@@ -322,15 +322,15 @@ The browser will now see this as a response to its XHR request.
     <link rel="alternate" href="https://blog.appcanary.com/2017/podcast-breitbart-shopify.html"/>
     <id>https://blog.appcanary.com/2017/podcast-breitbart-shopify.html</id>
     <published>2017-05-25T20:00:00-04:00</published>
-    <updated>2017-07-27T16:58:14-04:00</updated>
+    <updated>2021-05-05T00:07:33-04:00</updated>
     <author>
       <name>Phillip Mendonça-Vieira</name>
     </author>
     <content type="html">&lt;p&gt;Here in episode 3, Max and Phill discuss, over breakfast, what Shopify should or should not do with regard to Breitbart. Produced by &lt;a href="https://twitter.com/katiejensen"&gt;Katie Jensen&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;You can follow along on &lt;a href="https://itunes.apple.com/ca/podcast/appcanary-podcast/id1215405635"&gt;iTunes&lt;/a&gt;, or subscribe directly to &lt;a href="https://podcast.appcanary.com/podcast.rss"&gt;the feed&lt;/a&gt;. &lt;/p&gt;
+&lt;p&gt;You can follow along on &lt;a href="https://itunes.apple.com/ca/podcast/appcanary-podcast/id1215405635"&gt;iTunes&lt;/a&gt;, or subscribe directly to &lt;a href="https://podcast.appcanary.com/podcast.rss"&gt;the feed&lt;/a&gt;.&lt;/p&gt;
 
-&lt;audio controls preload="metadata" style="width: 100%;"&gt;
+&lt;audio controls preload="none" style="width: 100%;"&gt;
     &lt;source src="https://podcast.appcanary.com/mp3/appcanary-ep3.mp3" type="audio/mpeg"&gt;
     Your browser does not support the audio element.
 &lt;/audio&gt;
